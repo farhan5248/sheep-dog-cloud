@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sheep-dog-dev-db
+  labels:
+    app: sheep-dog-dev
+spec:
+  selector:
+    matchLabels:
+      app: sheep-dog-dev-db
+  template:
+    metadata:
+      labels:
+        app: sheep-dog-dev-db
+    spec:
+      containers:
+        - name: sheep-dog-dev-db
+          image: farhan5248/sheep-dog-dev-db:latest
+          imagePullPolicy: "Always"
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sheep-dog-dev-secrets
+                  key: MYSQL_ROOT_PASSWORD
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: sheep-dog-dev-storage
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - "mysql -u root -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'"
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+      volumes:
+        - name: sheep-dog-dev-storage
+          persistentVolumeClaim:
+            claimName: sheep-dog-dev-db-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sheep-dog-dev-svc
+  labels:
+    app: sheep-dog-dev
+spec:
+  selector:
+    matchLabels:
+      app: sheep-dog-dev-svc
+  template:
+    metadata:
+      labels:
+        app: sheep-dog-dev-svc
+    spec:
+      containers:
+        - name: sheep-dog-dev-svc
+          image: farhan5248/sheep-dog-dev-svc:latest
+          imagePullPolicy: "Always"
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://sheep-dog-dev-db:3306/mbt
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"

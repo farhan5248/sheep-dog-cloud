@@ -1,0 +1,38 @@
+name: Publish Sheep Dog Dev Service Release
+
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  sheep-dog-dev-svc:
+    uses: ./.github/workflows/release.yml
+    with:
+      project: 'sheep-dog-dev-svc'
+      plugin: 'Maven'
+    secrets: inherit
+
+  sheep-dog-dev-svc-maven-plugin:
+    needs: [sheep-dog-dev-svc]
+    uses: ./.github/workflows/release.yml
+    with:
+      project: 'sheep-dog-dev-svc-maven-plugin'
+      plugin: 'Maven'
+    secrets: inherit   
+
+  deploy-to-minikube:
+    needs: [sheep-dog-dev-svc-maven-plugin]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      namespace: 'release'   
+    secrets: inherit
+         
+  merge-into-develop:
+    needs: [sheep-dog-dev-svc-maven-plugin]
+    uses: ./.github/workflows/merge.yml
+    with:
+      source: 'main'
+      target: 'develop'
+    secrets: inherit  

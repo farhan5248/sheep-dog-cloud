@@ -1,0 +1,53 @@
+services:
+  sheep-dog-dev-db:
+    image: farhan5248/sheep-dog-dev-db:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    healthcheck:
+      test: "mysql -u root -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'"
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    ports:
+      - 30306:3306
+    labels:
+      stack.name: "sheep-dog-dev-stack"
+    networks:
+      - sheepdognet
+  sheep-dog-dev-mq:
+    image: apache/activemq-artemis:latest-alpine
+    restart: unless-stopped
+    environment:
+      ARTEMIS_USER: ${ARTEMIS_USER}
+      ARTEMIS_PASSWORD: ${ARTEMIS_PASSWORD}
+    ports:
+      - 30616:61616
+      - 30161:8161
+    labels:
+      stack.name: "sheep-dog-dev-stack"
+    networks:
+      - sheepdognet
+  sheep-dog-dev-svc:
+    image: farhan5248/sheep-dog-dev-svc:latest
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      sheep-dog-dev-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://sheep-dog-dev-db:3306/mbt
+    ports:
+      - 30080:8080
+    labels:
+      stack.name: "sheep-dog-dev-stack"
+    networks:
+      - sheepdognet
+networks:
+  sheepdognet:
+    driver: bridge

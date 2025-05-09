@@ -32,6 +32,7 @@ jobs:
     uses: farhan5248/sheep-dog-ops/.github/workflows/deploy.yml@main
     with:
       namespace: 'snapshot'   
+	  project: 'sheep-dog-dev-svc'
     secrets: inherit
   
   merge-into-main:

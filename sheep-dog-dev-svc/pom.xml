@@ -17,7 +17,6 @@
 		<java.version>21</java.version>
 		<sheep-dog-dev.version>1.48-SNAPSHOT</sheep-dog-dev.version>
 		<docker.registry.github>ghcr.io</docker.registry.github>
-		<docker.registry.dockerhub>docker.io</docker.registry.dockerhub>
 	</properties>
 
 	<scm>
@@ -270,15 +269,6 @@
 				<version>1.18.0</version>
 				<configuration>
 					<images>
-						<image>
-							<build>
-								<contextDir>${project.basedir}</contextDir>
-								<dockerFile>docker/springboot.dockerfile</dockerFile>
-							</build>
-							<alias>${docker.registry.dockerhub}/${project.artifactId}</alias>
-							<name>${docker.registry.dockerhub}/farhan5248/%a:%l</name>
-							<registry>${docker.registry.dockerhub}</registry>
-						</image>
 						<image>
 							<build>
 								<contextDir>${project.basedir}</contextDir>

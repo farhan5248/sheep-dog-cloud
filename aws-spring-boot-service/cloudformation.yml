@@ -1,37 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'CloudFormation template for deploying the AWS Spring Boot Service'
+Description: Fully self-contained template to deploy a Dockerized Spring Boot service on AWS ECS Fargate
 
 Parameters:
-  EnvironmentName:
-    Description: Environment name (e.g., dev, test, prod)
+  DockerImage:
+    Description: Docker image URI (e.g., from Docker Hub or ECR)
     Type: String
-    Default: dev
-    AllowedValues:
-      - dev
-      - test
-      - prod
-  
-  InstanceType:
-    Description: EC2 instance type
-    Type: String
-    Default: t2.micro
-    AllowedValues:
-      - t2.micro
-      - t2.small
-      - t2.medium
-  
-  KeyName:
-    Description: Name of an existing EC2 KeyPair to enable SSH access
-    Type: AWS::EC2::KeyPair::KeyName
-    ConstraintDescription: Must be the name of an existing EC2 KeyPair
-
-  S3BucketName:
-    Description: Name of the S3 bucket to create for application data
-    Type: String
-    Default: aws-spring-boot-service-data
+    Default: <your-docker-image>
 
 Resources:
-  # VPC and Networking
   VPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -40,42 +16,42 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName}-vpc
+          Value: springboot-vpc
 
   PublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [0, !GetAZs '']
       CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName}-public-subnet-1
+          Value: springboot-public-subnet-1
 
   PublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [1, !GetAZs '']
       CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName}-public-subnet-2
+          Value: springboot-public-subnet-2
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName}-igw
+          Value: springboot-igw
 
-  InternetGatewayAttachment:
+  AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -83,59 +59,48 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName}-public-routes
+          Value: springboot-public-rt
 
-  DefaultPublicRoute:
+  PublicRoute:
     Type: AWS::EC2::Route
-    DependsOn: InternetGatewayAttachment
+    DependsOn: AttachGateway
     Properties:
       RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
 
-  PublicSubnet1RouteTableAssociation:
+  SubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
 
-  PublicSubnet2RouteTableAssociation:
+  SubnetRouteTableAssociation2:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
 
-  # Security Group
-  ApplicationSecurityGroup:
+  SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Security group for the application
+      GroupDescription: Allow HTTP access
       VpcId: !Ref VPC
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 8080
           ToPort: 8080
           CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: springboot-sg
 
-  # S3 Bucket
-  ApplicationS3Bucket:
-    Type: AWS::S3::Bucket
+  ECSCluster:
+    Type: AWS::ECS::Cluster
     Properties:
-      BucketName: !Ref S3BucketName
-      AccessControl: Private
-      VersioningConfiguration:
-        Status: Enabled
+      ClusterName: springboot-ecs-cluster
 
-  # IAM Role for EC2
-  EC2Role:
+  TaskExecutionRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -143,73 +108,45 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              Service: ec2.amazonaws.com
+              Service: ecs-tasks.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      RoleName: springboot-ecs-task-execution-role
 
-  EC2InstanceProfile:
-    Type: AWS::IAM::InstanceProfile
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
     Properties:
-      Roles:
-        - !Ref EC2Role
+      Family: springboot-task
+      Cpu: '256'
+      Memory: '512'
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+      ContainerDefinitions:
+        - Name: springboot-container
+          Image: !Ref DockerImage
+          PortMappings:
+            - ContainerPort: 8080
 
-  # EC2 Instance
-  EC2Instance:
-    Type: AWS::EC2::Instance
+  Service:
+    Type: AWS::ECS::Service
     Properties:
-      InstanceType: !Ref InstanceType
-      SecurityGroupIds:
-        - !GetAtt ApplicationSecurityGroup.GroupId
-      KeyName: !Ref KeyName
-      ImageId: ami-0c55b159cbfafe1f0  # Amazon Linux 2 AMI (adjust for your region)
-      SubnetId: !Ref PublicSubnet1
-      IamInstanceProfile: !Ref EC2InstanceProfile
-      UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash -xe
-          yum update -y
-          amazon-linux-extras install java-openjdk11 -y
-          mkdir -p /opt/app
-          aws s3 cp s3://${S3BucketName}/aws-spring-boot-service-0.0.1-SNAPSHOT.jar /opt/app/
-          java -jar /opt/app/aws-spring-boot-service-0.0.1-SNAPSHOT.jar
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName}-app-instance
+      Cluster: !Ref ECSCluster
+      DesiredCount: 1
+      LaunchType: FARGATE
+      TaskDefinition: !Ref TaskDefinition
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - !Ref PublicSubnet1
+            - !Ref PublicSubnet2
+          SecurityGroups:
+            - !Ref SecurityGroup
+      ServiceName: springboot-service
 
 Outputs:
-  VPC:
-    Description: VPC ID
-    Value: !Ref VPC
-    Export:
-      Name: !Sub ${EnvironmentName}-vpc-id
-
-  PublicSubnets:
-    Description: List of public subnet IDs
-    Value: !Join [",", [!Ref PublicSubnet1, !Ref PublicSubnet2]]
-    Export:
-      Name: !Sub ${EnvironmentName}-public-subnets
-
-  SecurityGroup:
-    Description: Security group ID
-    Value: !GetAtt ApplicationSecurityGroup.GroupId
-    Export:
-      Name: !Sub ${EnvironmentName}-security-group
-
-  S3BucketName:
-    Description: S3 bucket name
-    Value: !Ref ApplicationS3Bucket
-    Export:
-      Name: !Sub ${EnvironmentName}-s3-bucket
-
-  EC2InstancePublicIP:
-    Description: Public IP address of the EC2 instance
-    Value: !GetAtt EC2Instance.PublicIp
-    Export:
-      Name: !Sub ${EnvironmentName}-ec2-public-ip
-
-  EC2InstancePublicDNS:
-    Description: Public DNS name of the EC2 instance
-    Value: !GetAtt EC2Instance.PublicDnsName
-    Export:
-      Name: !Sub ${EnvironmentName}-ec2-public-dns
+  ServiceInfo:
+    Description: 'Service is running on port 8080 of the ECS Fargate task (public IP assigned)'
+    Value: 'Check the ECS task public IP in the AWS Console after deployment.'

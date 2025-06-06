@@ -2,7 +2,7 @@
 echo Deploying Spring Boot service to AWS ECS
 
 REM Set variables
-set STACK_NAME=sheep-dog-aws
+set STACK_NAME=sheep-dog-aws-ecs
 set REGION=us-east-1
 set IMAGE_URL=ghcr.io/farhan5248/sheep-dog-aws:latest
 
@@ -20,9 +20,9 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-echo Deploying CloudFormation stack...
+echo Deploying CloudFormation stack for ECS...
 aws cloudformation deploy ^
-    --template-file ../cloudformation.yml ^
+    --template-file ../cloudformation-ecs.yml ^
     --stack-name %STACK_NAME% ^
     --parameter-overrides DockerImageUrl=%IMAGE_URL% ^
     --capabilities CAPABILITY_IAM ^

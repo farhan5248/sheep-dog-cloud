@@ -29,6 +29,7 @@ echo   - iam:PassRole
 echo   - ec2:*
 echo   - elasticloadbalancing:*
 echo   - ecs:*
+echo   - eks:*
 echo   - ecr:*
 echo   - logs:*
 echo   - application-autoscaling:*
@@ -40,6 +41,8 @@ echo   3. Select your user
 echo   4. Click "Add permissions" and choose "Attach policies directly"
 echo   5. Search for and attach these AWS managed policies:
 echo      - AmazonECS-FullAccess
+echo      - AmazonEKSClusterPolicy
+echo      - AmazonEKS-FullAccess
 echo      - AmazonECR-FullAccess
 echo      - AmazonEC2ContainerRegistryFullAccess
 echo      - CloudWatchLogsFullAccess
@@ -79,6 +82,16 @@ if /i "%TEST_PERMISSIONS%"=="Y" (
         echo You still don't have ECS permissions.
     ) else (
         echo ECS permissions look good!
+    )
+    
+    echo.
+    echo Testing EKS permissions...
+    aws eks list-clusters --max-items 1
+    
+    if %ERRORLEVEL% neq 0 (
+        echo You still don't have EKS permissions.
+    ) else (
+        echo EKS permissions look good!
     )
 )
 

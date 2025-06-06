@@ -41,6 +41,7 @@
                 "ec2:*",
                 "elasticloadbalancing:*",
                 "ecs:*",
+                "eks:*",
                 "ecr:*",
                 "logs:*",
                 "application-autoscaling:*"

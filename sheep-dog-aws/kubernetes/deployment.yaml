@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sheep-dog-aws
+  labels:
+    app: sheep-dog-aws
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sheep-dog-aws
+  template:
+    metadata:
+      labels:
+        app: sheep-dog-aws
+    spec:
+      containers:
+        - name: sheep-dog-aws
+          image: ghcr.io/farhan5248/sheep-dog-aws:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"

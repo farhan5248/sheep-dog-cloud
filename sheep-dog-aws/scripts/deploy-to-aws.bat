@@ -2,9 +2,9 @@
 echo Deploying Spring Boot service to AWS ECS
 
 REM Set variables
-set STACK_NAME=aws-hello-world-cline
+set STACK_NAME=sheep-dog-aws
 set REGION=us-east-1
-set IMAGE_URL=ghcr.io/farhan5248/aws-hello-world-cline:latest
+set IMAGE_URL=ghcr.io/farhan5248/sheep-dog-aws:latest
 
 echo Checking if AWS CLI is installed...
 aws --version

@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.farhan</groupId>
-    <artifactId>aws-hello-world-cline</artifactId>
+    <artifactId>sheep-dog-aws</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>aws-hello-world-cline</name>
+    <name>sheep-dog-aws</name>
     <description>Spring Boot Hello World service for AWS ECS</description>
     
     <properties>

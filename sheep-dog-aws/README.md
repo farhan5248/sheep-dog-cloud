@@ -1,11 +1,11 @@
-# AWS Hello World Spring Boot Service
+# Sheep Dog AWS Spring Boot Service
 
 This is a simple Spring Boot service with a "greeting" resource that can be deployed to AWS ECS as a Docker service.
 
 ## Project Structure
 
 ```
-aws-hello-world-cline/
+sheep-dog-aws/
 ├── src/                           # Source code
 │   ├── main/
 │   │   ├── java/                  # Java code
@@ -213,7 +213,7 @@ The CloudFormation template (`cloudformation.yml`) creates the following resourc
 ## GitHub Container Registry
 
 The Docker image is stored in GitHub Container Registry at:
-`ghcr.io/farhan5248/aws-hello-world-cline:latest`
+`ghcr.io/farhan5248/sheep-dog-aws:latest`
 
 ## Notes
 

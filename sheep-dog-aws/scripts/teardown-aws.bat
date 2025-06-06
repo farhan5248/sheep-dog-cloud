@@ -2,7 +2,7 @@
 echo Tearing down AWS ECS deployment
 
 REM Set variables
-set STACK_NAME=aws-hello-world-cline
+set STACK_NAME=sheep-dog-aws
 set REGION=us-east-1
 
 echo Checking if AWS CLI is installed...

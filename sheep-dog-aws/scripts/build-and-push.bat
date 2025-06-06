@@ -2,7 +2,7 @@
 echo Building and pushing Docker image to GitHub Container Registry
 
 REM Set variables
-set IMAGE_NAME=ghcr.io/farhan5248/aws-hello-world-cline
+set IMAGE_NAME=ghcr.io/farhan5248/sheep-dog-aws
 set VERSION=latest
 
 echo Building Spring Boot application with Maven...

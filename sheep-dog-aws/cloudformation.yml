@@ -4,7 +4,7 @@ Description: "CloudFormation template for deploying a Spring Boot service to AWS
 Parameters:
   DockerImageUrl:
     Type: String
-    Default: ghcr.io/farhan5248/aws-hello-world-cline:latest
+    Default: ghcr.io/farhan5248/sheep-dog-aws:latest
     Description: The URL of the Docker image to deploy
 
   ContainerPort:

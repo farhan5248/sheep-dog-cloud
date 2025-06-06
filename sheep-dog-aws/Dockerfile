@@ -2,7 +2,7 @@ FROM openjdk:11-jre-slim
 
 WORKDIR /app
 
-COPY target/aws-hello-world-cline-0.0.1-SNAPSHOT.jar app.jar
+COPY target/sheep-dog-aws-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 

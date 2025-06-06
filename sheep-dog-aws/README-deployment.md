@@ -46,22 +46,30 @@ cd scripts
 
 ## 3. Local Kubernetes Deployment (e.g., Minikube)
 
-If you already have a Kubernetes cluster running locally (like Minikube), you can deploy directly:
+If you already have a Kubernetes cluster running locally (like Minikube), you can deploy directly using Kustomize:
 
 ```bash
 cd kubernetes
 # Make sure your kubectl is configured to use the correct cluster
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
+kubectl apply -k overlays/dev/
 ```
+
+This will deploy the application with the host configured as `aws.sheepdogdev.io` in the Ingress resource.
 
 ## Deployment Files
 
 - `cloudformation-ecs.yml`: CloudFormation template for ECS deployment
 - `cloudformation-eks.yml`: CloudFormation template for EKS deployment
 - `kubernetes/`: Directory containing Kubernetes manifests
-  - `deployment.yaml`: Kubernetes Deployment configuration
-  - `service.yaml`: Kubernetes Service configuration (LoadBalancer type)
+  - `base/`: Base Kubernetes manifests
+    - `deployment.yaml`: Kubernetes Deployment configuration
+    - `service.yaml`: Kubernetes Service configuration
+    - `ingress.yaml`: Kubernetes Ingress configuration
+    - `kustomization.yaml`: Kustomize configuration for base resources
+  - `overlays/`: Environment-specific overlays
+    - `dev/`: Development environment overlay
+      - `kustomization.yaml`: Kustomize configuration for dev environment
+      - `ingress-patch.yaml`: Patch to set the host to aws.sheepdogdev.io
   - `README.md`: Detailed instructions for Kubernetes deployment
 
 ## Deployment Scripts

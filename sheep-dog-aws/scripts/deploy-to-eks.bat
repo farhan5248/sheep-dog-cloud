@@ -4,7 +4,6 @@ echo Deploying Spring Boot service to AWS EKS
 REM Set variables
 set STACK_NAME=sheep-dog-aws-eks
 set REGION=us-east-1
-set IMAGE_URL=ghcr.io/farhan5248/sheep-dog-aws:latest
 
 echo Checking if AWS CLI is installed...
 aws --version
@@ -20,6 +19,14 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
+echo Checking if kustomize is installed...
+kubectl kustomize --help > nul 2>&1
+if %ERRORLEVEL% neq 0 (
+    echo Kustomize functionality is not available. It should be included with kubectl v1.14+.
+    echo If you're using an older version, please install kustomize separately.
+    exit /b 1
+)
+
 echo Checking if you are logged in to AWS...
 aws sts get-caller-identity
 if %ERRORLEVEL% neq 0 (
@@ -31,7 +38,6 @@ echo Deploying CloudFormation stack for EKS...
 aws cloudformation deploy ^
     --template-file ../cloudformation-eks.yml ^
     --stack-name %STACK_NAME% ^
-    --parameter-overrides DockerImageUrl=%IMAGE_URL% ^
     --capabilities CAPABILITY_IAM ^
     --region %REGION%
 
@@ -51,9 +57,12 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-echo Deploying application to EKS...
-kubectl apply -f ../kubernetes/deployment.yaml
-kubectl apply -f ../kubernetes/service.yaml
+echo Deploying application to EKS using Kustomize...
+echo Creating namespace if it doesn't exist...
+kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
+
+echo Applying Kustomize overlay...
+kubectl apply -k ../kubernetes/overlays/dev/
 
 if %ERRORLEVEL% neq 0 (
     echo Failed to deploy application to EKS.
@@ -65,6 +74,9 @@ echo This may take a few minutes...
 timeout /t 30
 
 echo Getting service URL...
-kubectl get service sheep-dog-aws-service -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
+kubectl get service -n dev sheep-dog-aws-service -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
+
+echo Getting Ingress URL...
+kubectl get ingress -n dev sheep-dog-aws-ingress -o jsonpath="{.spec.rules[0].host}"
 
 echo Deployment completed successfully!

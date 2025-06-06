@@ -60,8 +60,7 @@ if /i "%1"=="eks" (
         aws eks update-kubeconfig --name %CLUSTER_NAME% --region %REGION%
 
         echo Deleting Kubernetes resources...
-        kubectl delete -f ../kubernetes/service.yaml
-        kubectl delete -f ../kubernetes/deployment.yaml
+        kubectl delete -k ../kubernetes/overlays/dev/
         
         echo Waiting for Kubernetes resources to be deleted...
         timeout /t 10

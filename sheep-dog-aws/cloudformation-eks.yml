@@ -2,30 +2,15 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: "CloudFormation template for deploying a Spring Boot service to AWS EKS"
 
 Parameters:
-  DockerImageUrl:
-    Type: String
-    Default: ghcr.io/farhan5248/sheep-dog-aws:latest
-    Description: The URL of the Docker image to deploy
-
-  ContainerPort:
-    Type: Number
-    Default: "8080"
-    Description: The port the container exposes
-
   DesiredCount:
     Type: Number
     Default: "2"
-    Description: The number of containers to run
+    Description: The number of nodes to run in the EKS cluster
 
   MaxCount:
     Type: Number
     Default: "4"
-    Description: The maximum number of containers to run
-
-  HealthCheckPath:
-    Type: String
-    Default: /actuator/health
-    Description: The path to check for container health
+    Description: The maximum number of nodes to run in the EKS cluster
 
   KubernetesVersion:
     Type: String
@@ -134,14 +119,6 @@ Resources:
           FromPort: 0
           ToPort: 65535
           SourceSecurityGroupId: !Ref ClusterSecurityGroup
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: !Ref ContainerPort
-          ToPort: !Ref ContainerPort
-          CidrIp: 0.0.0.0/0
 
   # IAM Roles for EKS
   EKSClusterRole:
@@ -205,15 +182,7 @@ Resources:
       InstanceTypes:
         - t3.medium
       AmiType: AL2_x86_64
-      RemoteAccess:
-        Ec2SshKey: !Ref AWS::NoValue
 
-  # CloudWatch Logs
-  CloudWatchLogsGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub /aws/eks/${AWS::StackName}/cluster
-      RetentionInDays: 14
 
 Outputs:
   ClusterName:
@@ -227,15 +196,3 @@ Outputs:
     Value: !GetAtt EKSCluster.Endpoint
     Export:
       Name: !Sub ${AWS::StackName}-ClusterEndpoint
-
-  ClusterArn:
-    Description: The ARN of the EKS cluster
-    Value: !GetAtt EKSCluster.Arn
-    Export:
-      Name: !Sub ${AWS::StackName}-ClusterArn
-
-  NodeInstanceRoleArn:
-    Description: The ARN of the node instance role
-    Value: !GetAtt NodeInstanceRole.Arn
-    Export:
-      Name: !Sub ${AWS::StackName}-NodeInstanceRoleArn

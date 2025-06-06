@@ -42,8 +42,8 @@ echo   4. Click "Add permissions" and choose "Attach policies directly"
 echo   5. Search for and attach these AWS managed policies:
 echo      - AmazonECS-FullAccess
 echo      - AmazonEKSClusterPolicy
-echo      - AmazonEKS-FullAccess
-echo      - AmazonECR-FullAccess
+echo      - AmazonEKSServicePolicy
+echo      - AmazonEKS_CNI_Policy
 echo      - AmazonEC2ContainerRegistryFullAccess
 echo      - CloudWatchLogsFullAccess
 echo      - AmazonVPCFullAccess

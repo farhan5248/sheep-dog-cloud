@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sheep-dog-aws-db
+  labels:
+    app: sheep-dog-aws-db
+spec:
+  selector:
+    app: sheep-dog-aws-db
+  ports:
+    - port: 3306
+      targetPort: 3306
+  type: ClusterIP

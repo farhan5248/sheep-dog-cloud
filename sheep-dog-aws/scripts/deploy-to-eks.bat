@@ -1,8 +1,18 @@
 @echo off
 echo Deploying Spring Boot service to AWS EKS
 
+REM Check if suffix is provided
+set SUFFIX=%1
+set BASE_STACK_NAME=sheep-dog-aws-eks
+
 REM Set variables
-set STACK_NAME=sheep-dog-aws-eks
+if "%SUFFIX%"=="" (
+    set STACK_NAME=%BASE_STACK_NAME%
+    echo Using default stack name: %STACK_NAME%
+) else (
+    set STACK_NAME=%BASE_STACK_NAME%-%SUFFIX%
+    echo Using stack name with suffix: %STACK_NAME%
+)
 set REGION=us-east-1
 
 echo Checking if AWS CLI is installed...

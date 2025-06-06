@@ -37,6 +37,15 @@ This will:
 - Configure kubectl to connect to the cluster
 - Deploy the application using Kubernetes manifests
 
+To update the EKS deployment with new Docker images or Kubernetes configuration changes:
+
+```bash
+cd scripts
+./update-eks.bat [options]
+```
+
+See `scripts/README-update-eks.md` for detailed usage instructions and options.
+
 To tear down the EKS deployment:
 
 ```bash
@@ -76,6 +85,7 @@ This will deploy the application with the host configured as `aws.sheepdogdev.io
 
 - `scripts/deploy-to-ecs.bat`: Script to deploy to AWS ECS
 - `scripts/deploy-to-eks.bat`: Script to deploy to AWS EKS
+- `scripts/update-eks.bat`: Script to update an existing EKS deployment with new Docker images or Kubernetes configuration changes
 - `scripts/teardown-stack.bat`: Unified script to tear down either ECS or EKS deployments
 
 ## Configuration

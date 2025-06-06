@@ -1,23 +1,36 @@
 @echo off
 echo Tearing down AWS CloudFormation stack
 
-REM Check if stack name is provided
+REM Check if deployment type is provided
 if "%1"=="" (
-    echo Usage: teardown-stack.bat [ecs^|eks]
+    echo Usage: teardown-stack.bat [ecs^|eks] [suffix]
     echo Example: teardown-stack.bat ecs
+    echo Example with suffix: teardown-stack.bat eks 1
     exit /b 1
 )
 
+REM Get suffix if provided
+set SUFFIX=%2
+
 REM Set variables based on deployment type
 if /i "%1"=="ecs" (
-    set STACK_NAME=sheep-dog-aws-ecs
+    set BASE_STACK_NAME=sheep-dog-aws-ecs
     echo Tearing down ECS deployment...
 ) else if /i "%1"=="eks" (
-    set STACK_NAME=sheep-dog-aws-eks
+    set BASE_STACK_NAME=sheep-dog-aws-eks
     echo Tearing down EKS deployment...
 ) else (
     echo Invalid deployment type. Use 'ecs' or 'eks'.
     exit /b 1
+)
+
+REM Apply suffix if provided
+if "%SUFFIX%"=="" (
+    set STACK_NAME=%BASE_STACK_NAME%
+    echo Using default stack name: %STACK_NAME%
+) else (
+    set STACK_NAME=%BASE_STACK_NAME%-%SUFFIX%
+    echo Using stack name with suffix: %STACK_NAME%
 )
 
 set REGION=us-east-1

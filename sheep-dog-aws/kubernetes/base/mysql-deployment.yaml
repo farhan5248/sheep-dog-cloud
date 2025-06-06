@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sheep-dog-aws-db
+  labels:
+    app: sheep-dog-aws-db
+spec:
+  selector:
+    matchLabels:
+      app: sheep-dog-aws-db
+  template:
+    metadata:
+      labels:
+        app: sheep-dog-aws-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_DATABASE
+              value: greetings
+            - name: MYSQL_USER
+              value: greetings
+            - name: MYSQL_PASSWORD
+              value: greetings
+            - name: MYSQL_ROOT_PASSWORD
+              value: rootpassword
+          ports:
+            - containerPort: 3306
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-data
+          emptyDir: {}

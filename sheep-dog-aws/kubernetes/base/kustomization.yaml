@@ -4,3 +4,5 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
+  - mysql-deployment.yaml
+  - mysql-service.yaml

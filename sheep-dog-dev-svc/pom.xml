@@ -269,6 +269,17 @@
 				<version>1.18.0</version>
 				<configuration>
 					<images>
+						<!-- Dependencies image -->
+						<image>
+							<build>
+								<contextDir>${project.basedir}</contextDir>
+								<dockerFile>docker/dependencies.dockerfile</dockerFile>
+							</build>
+							<alias>${docker.registry.github}/${project.artifactId}-dependencies</alias>
+							<name>${docker.registry.github}/farhan5248/%a-dependencies:%l</name>
+							<registry>${docker.registry.github}</registry>
+						</image>
+						<!-- Application image -->
 						<image>
 							<build>
 								<contextDir>${project.basedir}</contextDir>

@@ -1,9 +1,11 @@
-FROM openjdk:11-jre-slim
+FROM ghcr.io/farhan5248/sheep-dog-aws-dependencies:latest
 
 WORKDIR /app
 
-COPY target/sheep-dog-aws-0.0.1-SNAPSHOT.jar app.jar
+# Copy only application code and metadata
+COPY target/extracted-dependencies/META-INF /app/META-INF
+COPY target/extracted-dependencies/BOOT-INF/classes /app/classes
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-cp", "app/classes:app/lib/*", "org.farhan.greeting.GreetingApplication"]

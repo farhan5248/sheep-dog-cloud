@@ -26,6 +26,14 @@ spec:
               value: greetings
             - name: SPRING_DATASOURCE_PASSWORD
               value: greetings
+            - name: SPRING_ARTEMIS_HOST
+              value: sheep-dog-aws-artemis
+            - name: SPRING_ARTEMIS_PORT
+              value: "61616"
+            - name: SPRING_ARTEMIS_USER
+              value: artemis
+            - name: SPRING_ARTEMIS_PASSWORD
+              value: artemis
           livenessProbe:
             httpGet:
               path: /actuator/health

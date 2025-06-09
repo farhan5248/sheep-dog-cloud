@@ -116,3 +116,50 @@ This script will guide you through setting up the required permissions for both 
 - EKS permissions (for EKS deployment)
 - ECR permissions (for container registry)
 - CloudWatch Logs permissions
+
+## Troubleshooting
+
+### VPC and Load Balancer Deletion Issues
+
+If you encounter issues where CloudFormation cannot delete the VPC when tearing down a stack, it's likely due to missing specific permissions for VPC resources and/or Elastic Load Balancers. The CloudFormation stack requires explicit permissions to delete these resources and their dependencies.
+
+#### Common Issue: Load Balancer Preventing VPC Deletion
+
+A common issue is that the Elastic Load Balancer (ELB) cannot be deleted due to missing permissions, which then prevents the VPC from being deleted. This is particularly common with the ECS deployment which uses an Application Load Balancer.
+
+To fix these issues:
+
+1. Ensure your IAM policy includes the specific VPC deletion permissions listed in `scripts/cloudformation-policy.json`:
+   - `ec2:DeleteVpc`
+   - `ec2:DeleteSubnet`
+   - `ec2:DeleteRouteTable`
+   - `ec2:DeleteNetworkAcl`
+   - `ec2:DeleteSecurityGroup`
+   - `ec2:DeleteInternetGateway`
+   - `ec2:DetachInternetGateway`
+   - And other network interface and VPC endpoint related permissions
+
+2. Ensure your IAM policy includes the specific Load Balancer deletion permissions:
+   - `elasticloadbalancing:DeleteLoadBalancer`
+   - `elasticloadbalancing:DeleteTargetGroup`
+   - `elasticloadbalancing:DeleteListener`
+   - `elasticloadbalancing:DeregisterTargets`
+   - And other load balancer related permissions
+
+The updated policy in `scripts/cloudformation-policy.json` includes all necessary permissions to properly delete both VPC and Load Balancer resources when tearing down the CloudFormation stack.
+
+#### Troubleshooting Steps
+
+If you still encounter issues:
+
+1. Check if the load balancer is still present:
+   ```bash
+   aws elbv2 describe-load-balancers --query "LoadBalancers[?contains(LoadBalancerName, 'sheep-dog-aws')].LoadBalancerName" --output text
+   ```
+
+2. If found, try manually deleting it:
+   ```bash
+   aws elbv2 delete-load-balancer --load-balancer-arn YOUR_LOAD_BALANCER_ARN
+   ```
+
+3. Then try deleting the CloudFormation stack again.

@@ -14,7 +14,7 @@ Parameters:
 
   KubernetesVersion:
     Type: String
-    Default: "1.27"
+    Default: "1.28"
     Description: The Kubernetes version to use for the EKS cluster
 
 Resources:
@@ -180,7 +180,7 @@ Resources:
         - !Ref PublicSubnet1
         - !Ref PublicSubnet2
       InstanceTypes:
-        - t3.medium
+        - t3.micro
       AmiType: AL2_x86_64
 
 

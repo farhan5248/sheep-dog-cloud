@@ -6,3 +6,5 @@ resources:
   - ingress.yaml
   - mysql-deployment.yaml
   - mysql-service.yaml
+  - artemis-deployment.yaml
+  - artemis-service.yaml

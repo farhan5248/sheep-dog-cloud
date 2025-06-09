@@ -88,6 +88,37 @@ aws cloudformation wait stack-delete-complete --stack-name %STACK_NAME% --region
 
 if %ERRORLEVEL% neq 0 (
     echo Failed to delete CloudFormation stack.
+    
+    echo.
+    echo ========================================================================
+    echo TROUBLESHOOTING VPC AND LOAD BALANCER DELETION ISSUES
+    echo ========================================================================
+    echo.
+    echo If the stack deletion failed, it's often due to load balancer or VPC deletion issues:
+    echo.
+    echo 1. Check for load balancers that might be preventing deletion:
+    echo    - Run: aws elbv2 describe-load-balancers --query "LoadBalancers[?contains(LoadBalancerName, '%STACK_NAME%')].LoadBalancerName" --output text
+    echo    - If found, get the ARN: aws elbv2 describe-load-balancers --names LOAD_BALANCER_NAME --query "LoadBalancers[0].LoadBalancerArn" --output text
+    echo    - Delete it manually: aws elbv2 delete-load-balancer --load-balancer-arn LOAD_BALANCER_ARN
+    echo.
+    echo 2. Check for target groups:
+    echo    - Run: aws elbv2 describe-target-groups --query "TargetGroups[?contains(TargetGroupName, '%STACK_NAME%')].TargetGroupName" --output text
+    echo    - Delete them: aws elbv2 delete-target-group --target-group-arn TARGET_GROUP_ARN
+    echo.
+    echo 3. Ensure you have the necessary permissions:
+    echo    - Check if your IAM policy includes specific VPC and Load Balancer deletion permissions
+    echo    - See scripts/cloudformation-policy.json for the required permissions
+    echo.
+    echo 4. Check for resources that might be preventing VPC deletion:
+    echo    - Run: aws ec2 describe-network-interfaces --filters Name=vpc-id,Values=YOUR_VPC_ID
+    echo    - Look for any network interfaces not managed by CloudFormation
+    echo.
+    echo 5. Check for VPC endpoints:
+    echo    - Run: aws ec2 describe-vpc-endpoints --filters Name=vpc-id,Values=YOUR_VPC_ID
+    echo.
+    echo 6. For more information, see the Troubleshooting section in README-deployment.md
+    echo.
+    
     exit /b 1
 )
 

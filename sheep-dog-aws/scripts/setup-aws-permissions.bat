@@ -33,6 +33,37 @@ echo   - eks:*
 echo   - ecr:*
 echo   - logs:*
 echo   - application-autoscaling:*
+echo   - Specific VPC deletion permissions:
+echo     - ec2:DeleteVpc
+echo     - ec2:DeleteSubnet
+echo     - ec2:DeleteRouteTable
+echo     - ec2:DeleteNetworkAcl
+echo     - ec2:DeleteSecurityGroup
+echo     - ec2:DeleteInternetGateway
+echo     - ec2:DetachInternetGateway
+echo     - ec2:RevokeSecurityGroupIngress
+echo     - ec2:RevokeSecurityGroupEgress
+echo     - ec2:DescribeNetworkInterfaces
+echo     - ec2:DetachNetworkInterface
+echo     - ec2:DeleteNetworkInterface
+echo     - ec2:DeleteVpcEndpoints
+echo     - ec2:DescribeVpcEndpoints
+echo     - ec2:DescribeDhcpOptions
+echo     - ec2:DeleteDhcpOptions
+echo     - ec2:DescribeVpcAttribute
+echo     - ec2:ModifyVpcAttribute
+echo   - Specific Load Balancer deletion permissions:
+echo     - elasticloadbalancing:DeleteLoadBalancer
+echo     - elasticloadbalancing:DeleteTargetGroup
+echo     - elasticloadbalancing:DeleteListener
+echo     - elasticloadbalancing:DeregisterTargets
+echo     - elasticloadbalancing:DescribeLoadBalancers
+echo     - elasticloadbalancing:DescribeTargetGroups
+echo     - elasticloadbalancing:DescribeListeners
+echo     - elasticloadbalancing:DescribeTargetHealth
+echo     - elasticloadbalancing:ModifyLoadBalancerAttributes
+echo     - elasticloadbalancing:RemoveListenerCertificates
+echo     - elasticloadbalancing:RemoveTags
 echo.
 echo OPTION 2: Set up the permissions manually through the AWS Console:
 echo   1. Log in to the AWS Management Console

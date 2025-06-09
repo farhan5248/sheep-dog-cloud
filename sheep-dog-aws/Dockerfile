@@ -6,4 +6,10 @@ COPY target/extracted-dependencies/BOOT-INF/classes /app/classes
 
 EXPOSE 8080
 
+# Set environment variables for JMS
+ENV SPRING_ARTEMIS_HOST=${ARTEMIS_HOST}
+ENV SPRING_ARTEMIS_PORT=${ARTEMIS_PORT}
+ENV SPRING_ARTEMIS_USER=${ARTEMIS_USER}
+ENV SPRING_ARTEMIS_PASSWORD=${ARTEMIS_PASSWORD}
+
 ENTRYPOINT ["java", "-cp", "app/classes:app/lib/*", "org.farhan.greeting.GreetingApplication"]

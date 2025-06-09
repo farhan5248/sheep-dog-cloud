@@ -29,10 +29,10 @@ spec:
             - containerPort: 3306
           resources:
             limits:
-              memory: "384Mi"
+              memory: "512Mi"
               cpu: "500m"
             requests:
-              memory: "192Mi"
+              memory: "256Mi"
               cpu: "250m"
           volumeMounts:
             - name: mysql-data

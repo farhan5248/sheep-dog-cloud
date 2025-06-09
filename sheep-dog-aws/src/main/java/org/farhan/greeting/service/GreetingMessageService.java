@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.jms.JMSException;
-import javax.jms.Queue;
+import jakarta.jms.JMSException;
+import jakarta.jms.Queue;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -42,7 +42,7 @@ public class GreetingMessageService {
         try {
             Queue queue = jmsTemplate.getConnectionFactory()
                     .createConnection()
-                    .createSession(false, javax.jms.Session.AUTO_ACKNOWLEDGE)
+                    .createSession(false, jakarta.jms.Session.AUTO_ACKNOWLEDGE)
                     .createQueue(JmsConfig.GREETING_QUEUE);
             
             while (System.currentTimeMillis() - startTime < timeoutMillis) {

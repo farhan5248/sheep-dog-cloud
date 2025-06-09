@@ -67,7 +67,7 @@ public class GreetingMessageServiceTest {
             
             // Small delay to ensure different timestamps
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

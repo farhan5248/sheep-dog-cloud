@@ -3,6 +3,8 @@ package org.farhan.greeting.controller;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import org.farhan.greeting.model.Greeting;
 import org.farhan.greeting.repository.GreetingRepository;
+import org.farhan.greeting.service.GreetingMessageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,9 @@ public class GreetingControllerTest {
     
     @MockBean
     private GreetingRepository greetingRepository;
+    
+    @MockBean
+    private GreetingMessageService messageService;
     
     private List<Greeting> mockGreetings;
     
@@ -62,6 +68,10 @@ public class GreetingControllerTest {
         });
         
         when(greetingRepository.findAllByOrderByCreatedTimeDesc()).thenReturn(mockGreetings);
+        
+        // Setup mock message service behavior
+        doNothing().when(messageService).sendGreeting(any(Greeting.class));
+        when(messageService.waitForQueueToClear(anyInt())).thenReturn(true);
     }
 
     @Test
@@ -73,8 +83,9 @@ public class GreetingControllerTest {
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].content", is("Hello, World!")));
         
-        // Verify repository interactions
-        verify(greetingRepository, times(1)).save(any(Greeting.class));
+        // Verify message service and repository interactions
+        verify(messageService, times(1)).sendGreeting(any(Greeting.class));
+        verify(messageService, times(1)).waitForQueueToClear(anyInt());
         verify(greetingRepository, times(1)).findAllByOrderByCreatedTimeDesc();
     }
 
@@ -87,8 +98,9 @@ public class GreetingControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").isNumber());
         
-        // Verify that the greeting was saved with the correct content
-        verify(greetingRepository, times(1)).save(any(Greeting.class));
+        // Verify message service and repository interactions
+        verify(messageService, times(1)).sendGreeting(any(Greeting.class));
+        verify(messageService, times(1)).waitForQueueToClear(anyInt());
         verify(greetingRepository, times(1)).findAllByOrderByCreatedTimeDesc();
     }
     
@@ -104,8 +116,9 @@ public class GreetingControllerTest {
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].content").isString());
         
-        // Verify repository interactions
-        verify(greetingRepository, times(1)).save(any(Greeting.class));
+        // Verify message service and repository interactions
+        verify(messageService, times(1)).sendGreeting(any(Greeting.class));
+        verify(messageService, times(1)).waitForQueueToClear(anyInt());
         verify(greetingRepository, times(1)).findAllByOrderByCreatedTimeDesc();
     }
 }

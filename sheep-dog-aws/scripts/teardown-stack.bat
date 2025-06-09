@@ -72,11 +72,39 @@ if /i "%1"=="eks" (
         echo Configuring kubectl to connect to the EKS cluster...
         aws eks update-kubeconfig --name %CLUSTER_NAME% --region %REGION%
 
+        echo Deleting all LoadBalancer services to ensure proper cleanup...
+        kubectl get svc --all-namespaces -o json > services.json
+        for /f "tokens=*" %%i in ('type services.json ^| findstr "LoadBalancer"') do (
+            echo Found LoadBalancer service: %%i
+            REM Extract namespace and service name and delete it
+            kubectl get svc --all-namespaces | findstr "LoadBalancer" | for /f "tokens=1,2" %%a in ('more') do (
+                echo Deleting service %%b in namespace %%a
+                kubectl delete svc %%b -n %%a
+            )
+        )
+        del services.json
+
+        echo Waiting for load balancers to be fully deleted...
+        timeout /t 60
+
+        echo Checking for lingering load balancers...
+        aws elbv2 describe-load-balancers --query "LoadBalancers[?contains(LoadBalancerName, '%STACK_NAME%')].LoadBalancerName" --output text
+        if not "%ERRORLEVEL%"=="0" (
+            echo WARNING: Found lingering load balancers that may prevent VPC deletion.
+            echo You may need to delete these manually before proceeding.
+            echo Continue anyway? (y/n)
+            set /p CONTINUE=
+            if /i "%CONTINUE%" neq "y" (
+                echo Operation cancelled.
+                exit /b 0
+            )
+        )
+
         echo Deleting Kubernetes resources...
         kubectl delete -k ../kubernetes/overlays/dev/
         
         echo Waiting for Kubernetes resources to be deleted...
-        timeout /t 10
+        timeout /t 30
     )
 )
 

@@ -148,6 +148,20 @@ To fix these issues:
 
 The updated policy in `scripts/cloudformation-policy.json` includes all necessary permissions to properly delete both VPC and Load Balancer resources when tearing down the CloudFormation stack.
 
+#### Implemented Solutions
+
+To prevent VPC and load balancer deletion issues, we've implemented two key approaches:
+
+1. **Improved CloudFormation Deletion Order (EKS)**:
+   - Added `DependsOn` attributes to ensure resources are deleted in the correct order
+   - The VPC now depends on the EKS Node Group and Cluster, ensuring it's deleted last
+   - Added explicit `DeletionPolicy` and `UpdateReplacePolicy` attributes to critical resources
+
+2. **Pre-deletion Hook for Load Balancers (EKS)**:
+   - The `teardown-stack.bat` script now explicitly deletes Kubernetes LoadBalancer services before deleting the CloudFormation stack
+   - Includes a wait period to ensure load balancers are fully deleted
+   - Checks for lingering load balancers before proceeding with stack deletion
+
 #### Troubleshooting Steps
 
 If you still encounter issues:
@@ -162,4 +176,10 @@ If you still encounter issues:
    aws elbv2 delete-load-balancer --load-balancer-arn YOUR_LOAD_BALANCER_ARN
    ```
 
-3. Then try deleting the CloudFormation stack again.
+3. For EKS deployments, manually delete Kubernetes services of type LoadBalancer:
+   ```bash
+   kubectl get svc --all-namespaces | grep LoadBalancer
+   kubectl delete svc SERVICE_NAME -n NAMESPACE
+   ```
+
+4. Wait a few minutes for AWS to clean up the load balancer resources, then try deleting the CloudFormation stack again.

@@ -1,8 +1,8 @@
 FROM ghcr.io/farhan5248/sheep-dog-aws-dependencies:latest
 
 # Copy only application code and metadata
-COPY target/extracted-dependencies/META-INF /app/META-INF
-COPY target/extracted-dependencies/BOOT-INF/classes /app/classes
+COPY maven/target/dependency/META-INF /app/META-INF
+COPY maven/target/dependency/BOOT-INF/classes /app/classes
 
 EXPOSE 8080
 

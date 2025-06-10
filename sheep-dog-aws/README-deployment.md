@@ -2,27 +2,6 @@
 
 This project supports multiple deployment options for the Sheep Dog AWS application:
 
-## 1. AWS ECS Deployment
-
-Deploy the application to AWS Elastic Container Service (ECS) using Fargate:
-
-```bash
-cd scripts
-./deploy-to-ecs.bat
-```
-
-This will:
-- Create a CloudFormation stack with all necessary resources
-- Deploy the Docker container to ECS Fargate
-- Set up auto-scaling, load balancing, and networking
-
-To tear down the ECS deployment:
-
-```bash
-cd scripts
-./teardown-stack.bat ecs
-```
-
 ## 2. AWS EKS Deployment
 
 Deploy the application to AWS Elastic Kubernetes Service (EKS):
@@ -67,7 +46,6 @@ This will deploy the application with the host configured as `aws.sheepdogdev.io
 
 ## Deployment Files
 
-- `cloudformation-ecs.yml`: CloudFormation template for ECS deployment
 - `cloudformation-eks.yml`: CloudFormation template for EKS deployment
 - `kubernetes/`: Directory containing Kubernetes manifests
   - `base/`: Base Kubernetes manifests
@@ -83,7 +61,6 @@ This will deploy the application with the host configured as `aws.sheepdogdev.io
 
 ## Deployment Scripts
 
-- `scripts/deploy-to-ecs.bat`: Script to deploy to AWS ECS
 - `scripts/deploy-to-eks.bat`: Script to deploy to AWS EKS
 - `scripts/update-eks.bat`: Script to update an existing EKS deployment with new Docker images or Kubernetes configuration changes
 - `scripts/teardown-stack.bat`: Unified script to tear down either ECS or EKS deployments

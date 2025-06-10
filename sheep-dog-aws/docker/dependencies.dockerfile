@@ -7,4 +7,4 @@ ENV ARTEMIS_USER=artemis
 ENV ARTEMIS_PASSWORD=artemis
 
 # Extract and copy only the dependencies
-COPY target/extracted-dependencies/BOOT-INF/lib /app/lib
+COPY maven/target/dependency/BOOT-INF/lib /app/lib

@@ -5,7 +5,6 @@ import org.farhan.greeting.model.Greeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
-
 import jakarta.jms.JMSException;
 import jakarta.jms.Queue;
 import java.util.concurrent.TimeUnit;

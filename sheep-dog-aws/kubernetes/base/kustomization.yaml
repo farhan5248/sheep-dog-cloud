@@ -8,4 +8,4 @@ resources:
   - mysql-service.yaml
   - artemis-deployment.yaml
   - artemis-service.yaml
-  - logs-pvc.yaml
+#  - logs-pvc.yaml

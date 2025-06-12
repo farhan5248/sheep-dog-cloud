@@ -1,36 +1,17 @@
 @echo off
 echo Updating EKS cluster with new Docker image or Kubernetes configuration changes
 
-REM Set variables
-set STACK_NAME=sheep-dog-aws-eks
+set SUFFIX=%1
+set BASE_STACK_NAME=sheep-dog-aws-eks
 set REGION=us-east-1
-set BUILD_IMAGE=false
-set APPLY_CONFIG=true
 
-REM Parse command line arguments
-:parse_args
-if "%~1"=="" goto :end_parse_args
-if /i "%~1"=="--build-image" (
-    set BUILD_IMAGE=true
-    shift
-    goto :parse_args
+if "%SUFFIX%"=="" (
+    echo Usage: aws-setup-stack.bat [suffix]
+    echo Example with suffix: aws-setup-stack.bat 1
+    exit /b 1
+) else (
+    set STACK_NAME=%BASE_STACK_NAME%-%SUFFIX%
 )
-if /i "%~1"=="--no-config" (
-    set APPLY_CONFIG=false
-    shift
-    goto :parse_args
-)
-if /i "%~1"=="--help" (
-    echo Usage: update-eks.bat [options]
-    echo Options:
-    echo   --build-image    Build and push Docker image before updating
-    echo   --no-config      Skip applying Kubernetes configuration changes
-    echo   --help           Display this help message
-    exit /b 0
-)
-shift
-goto :parse_args
-:end_parse_args
 
 echo Checking if AWS CLI is installed...
 aws --version
@@ -78,52 +59,19 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-if "%BUILD_IMAGE%"=="true" (
-    echo Building and pushing Docker image...
-    cd ..
-    
-    echo Building Spring Boot application with Maven...
-    call mvn clean package -DskipTests
-    
-    echo Building and pushing Docker images...
-    set DEPENDENCIES_IMAGE_NAME=ghcr.io/farhan5248/sheep-dog-aws-dependencies
-    set APP_IMAGE_NAME=ghcr.io/farhan5248/sheep-dog-aws
-    set VERSION=latest
-    
-    echo Building dependencies Docker image...
-    docker build -t %DEPENDENCIES_IMAGE_NAME%:%VERSION% -f dependencies.dockerfile .
-    
-    echo Building application Docker image...
-    docker build -t %APP_IMAGE_NAME%:%VERSION% .
-    
-    echo Logging in to GitHub Container Registry...
-    echo Please enter your GitHub Personal Access Token when prompted
-    docker login ghcr.io -u farhan5248
-    
-    echo Pushing dependencies Docker image to GitHub Container Registry...
-    docker push %DEPENDENCIES_IMAGE_NAME%:%VERSION%
-    
-    echo Pushing application Docker image to GitHub Container Registry...
-    docker push %APP_IMAGE_NAME%:%VERSION%
-    
-    cd scripts
-)
+echo Updating Kubernetes configuration...
+echo Creating namespace if it doesn't exist...
+kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
 
-if "%APPLY_CONFIG%"=="true" (
-    echo Updating Kubernetes configuration...
-    echo Creating namespace if it doesn't exist...
-    kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
-    
-    echo Applying Kustomize overlay...
-    cd ..
-    kubectl apply -k kubernetes/overlays/dev/
-    
-    if %ERRORLEVEL% neq 0 (
-        echo Failed to apply Kubernetes configuration.
-        exit /b 1
-    )
-    cd scripts
+echo Applying Kustomize overlay...
+cd ..
+kubectl apply -k kubernetes/overlays/dev/
+
+if %ERRORLEVEL% neq 0 (
+    echo Failed to apply Kubernetes configuration.
+    exit /b 1
 )
+cd scripts
 
 echo Restarting deployment to pull the latest image...
 kubectl rollout restart deployment sheep-dog-aws -n dev

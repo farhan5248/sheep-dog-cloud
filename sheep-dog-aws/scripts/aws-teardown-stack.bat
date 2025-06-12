@@ -1,18 +1,19 @@
 @echo off
 echo Tearing down AWS CloudFormation stack
 
-REM Check if deployment type is provided
-if "%1"=="" (
-    echo Usage: teardown-stack.bat [suffix]
-    echo Example with suffix: teardown-stack.bat 1
+set SUFFIX=%1
+set BASE_STACK_NAME=sheep-dog-aws-eks
+set REGION=us-east-1
+
+if "%SUFFIX%"=="" (
+    echo Usage: aws-teardown-stack.bat [suffix]
+    echo Example with suffix: aws-teardown-stack.bat 1
     exit /b 1
 ) else (
-    set SUFFIX=%1
-    set BASE_STACK_NAME=sheep-dog-aws-eks
     set STACK_NAME=%BASE_STACK_NAME%-%SUFFIX%
-    set REGION=us-east-1
-    echo Using stack name with suffix: %STACK_NAME%
 )
+
+echo Using stack name with suffix: %STACK_NAME%
 
 echo Checking if AWS CLI is installed...
 aws --version
@@ -70,12 +71,7 @@ if not "%CLUSTER_NAME%"=="" (
     if not "%ERRORLEVEL%"=="0" (
         echo WARNING: Found lingering load balancers that may prevent VPC deletion.
         echo You may need to delete these manually before proceeding.
-        echo Continue anyway? (y/n)
-        set /p CONTINUE=
-        if /i "%CONTINUE%" neq "y" (
-            echo Operation cancelled.
-            exit /b 0
-        )
+        exit /b 0
     )
 
     echo Deleting Kubernetes resources...

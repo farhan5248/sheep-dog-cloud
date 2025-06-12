@@ -19,7 +19,19 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           env:
+            - name: LOG_LEVEL
+              value: "INFO"  # Set to DEBUG to enable debug logging
+            - name: LOG_PATH
+              value: "/logs"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://sheep-dog-aws-db:3306/greetings
             - name: SPRING_DATASOURCE_USERNAME
@@ -34,6 +46,9 @@ spec:
               value: artemis
             - name: SPRING_ARTEMIS_PASSWORD
               value: artemis
+          volumeMounts:
+            - name: logs-volume
+              mountPath: /logs
           resources:
             limits:
               memory: "512Mi"
@@ -41,3 +56,7 @@ spec:
             requests:
               memory: "256Mi"
               cpu: "250m"
+      volumes:
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: sheep-dog-aws-logs-pvc

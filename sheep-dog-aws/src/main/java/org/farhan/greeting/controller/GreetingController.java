@@ -63,9 +63,9 @@ public class GreetingController {
         List<Greeting> greetings = greetingRepository.findAllByOrderByCreatedTimeDesc();
 
         // Log the order for debugging
-        logger.info("Greetings in order:");
+        logger.debug("Greetings in order:");
         for (Greeting g : greetings) {
-            logger.info("{}: {} - {}", g.getId(), g.getContent(), g.getCreatedTime());
+            logger.debug("{}: {} - {}", g.getId(), g.getContent(), g.getCreatedTime());
         }
 
         return greetings;

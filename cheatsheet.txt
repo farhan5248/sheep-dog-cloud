@@ -16,26 +16,3 @@ kubectl exec -ti -n dev <pod-name> -- bash
 kubectl exec -it -n dev <pod-name> -- cat /logs/sheep-dog-aws.log
 kubectl exec -it -n dev <pod-name> -- tail -f /logs/sheep-dog-aws.log
 kubectl config current-context
-
-ebs.csi.aws.com_ebs-csi-controller-57bcdc6ffd-snxsz_f679a358-27d4-4c41-a44d-b6eec7a1cf36
-
-failed to provision volume with StorageClass "gp2": rpc error: code = Internal desc = Could not create volume "pvc-263c2b54-6c27-4a35-a778-93be881735db": could not create volume in EC2: WebIdentityErr: failed to retrieve credentials caused by: AccessDenied: Not authorized to perform sts:AssumeRoleWithWebIdentity status code: 403, request id: f0076789-fd41-4a1b-838c-a54d4a55c1ef
-
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Federated": "arn:aws:iam::013372624673:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/E324CFEF0065FF86E7B555E978143EE3"
-            },
-            "Action": "sts:AssumeRoleWithWebIdentity",
-            "Condition": {
-                "StringEquals": {
-                    "oidc.eks.us-east-1.amazonaws.com/id/E324CFEF0065FF86E7B555E978143EE3:sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa",
-                    "oidc.eks.us-east-1.amazonaws.com/id/E324CFEF0065FF86E7B555E978143EE3:aud": "sts.amazonaws.com"
-                }
-            }
-        }
-    ]
-}

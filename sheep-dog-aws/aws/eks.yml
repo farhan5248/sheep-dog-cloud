@@ -4,7 +4,7 @@ Description: "CloudFormation template for deploying a Spring Boot service to AWS
 Parameters:
   DesiredCount:
     Type: Number
-    Default: "1"
+    Default: "2"
     Description: The number of nodes to run in the EKS cluster
 
   MaxCount:
@@ -183,50 +183,6 @@ Resources:
       InstanceTypes:
         - t3a.medium
       AmiType: AL2_x86_64
-
-  # EKS OIDC Provider
-  EKSClusterOIDCProvider:
-    Type: AWS::IAM::OIDCProvider
-    DependsOn: EKSCluster
-    Properties:
-      Url: !GetAtt EKSCluster.OpenIdConnectIssuerUrl
-      ClientIdList:
-        - sts.amazonaws.com
-      ThumbprintList:
-        - 9e99a48a9960b14926bb7f3b02e22da2b0ab7280
-
-  # IAM Role for EBS CSI Driver
-  EBSCSIDriverRole:
-    Type: AWS::IAM::Role
-    DependsOn: 
-      - EKSClusterOIDCProvider
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal: 
-              Federated: "arn:aws:iam::${AWS::AccountId}:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/E324CFEF0065FF86E7B555E978143EE3"
-            Action: sts:AssumeRoleWithWebIdentity 
-            Condition:
-              StringEquals:
-                oidc.eks.us-east-1.amazonaws.com/id/E324CFEF0065FF86E7B555E978143EE3:sub: system:serviceaccount:kube-system:ebs-csi-controller-sa
-                oidc.eks.us-east-1.amazonaws.com/id/E324CFEF0065FF86E7B555E978143EE3:aud: sts.amazonaws.com
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
-
-  # EBS CSI Driver Add-on
-  EBSCSIDriverAddon:
-    Type: AWS::EKS::Addon
-    DependsOn: 
-      - EKSNodeGroup
-      - EBSCSIDriverRole
-    Properties:
-      AddonName: aws-ebs-csi-driver
-      ClusterName: !Ref EKSCluster
-      ServiceAccountRoleArn: !GetAtt EBSCSIDriverRole.Arn
-      AddonVersion: v1.44.0-eksbuild.1
-      ResolveConflicts: OVERWRITE
 
 Outputs:
   ClusterName:

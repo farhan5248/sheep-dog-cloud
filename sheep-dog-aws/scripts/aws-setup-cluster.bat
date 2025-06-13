@@ -1,4 +1,5 @@
 @echo off
+echo %time%
 echo Updating EKS cluster with new Docker image or Kubernetes configuration changes
 
 set SUFFIX=%1
@@ -84,6 +85,10 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
+echo Waiting for service to get an external IP...
+echo This may take a few minutes...
+timeout /t 30
+
 echo Getting service URL...
 kubectl get service -n dev sheep-dog-aws-service -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
 echo.
@@ -93,3 +98,5 @@ kubectl get ingress -n dev sheep-dog-aws-ingress -o jsonpath="{.spec.rules[0].ho
 echo.
 
 echo EKS cluster update completed successfully!
+
+echo %time%

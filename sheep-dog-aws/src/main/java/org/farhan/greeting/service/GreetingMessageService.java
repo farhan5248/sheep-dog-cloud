@@ -1,7 +1,10 @@
 package org.farhan.greeting.service;
 
 import org.farhan.greeting.config.JmsConfig;
+import org.farhan.greeting.exception.MessageConsumingException;
 import org.farhan.greeting.model.Greeting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class GreetingMessageService {
+
+    private static final Logger logger = LoggerFactory.getLogger(GreetingMessageConsumer.class);
 
     private final JmsTemplate jmsTemplate;
 
@@ -37,35 +42,37 @@ public class GreetingMessageService {
     public boolean waitForQueueToClear(int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeoutMillis = TimeUnit.SECONDS.toMillis(timeoutSeconds);
-        
+
         try {
             Queue queue = jmsTemplate.getConnectionFactory()
                     .createConnection()
                     .createSession(false, jakarta.jms.Session.AUTO_ACKNOWLEDGE)
                     .createQueue(JmsConfig.GREETING_QUEUE);
-            
+
             while (System.currentTimeMillis() - startTime < timeoutMillis) {
                 // Check queue depth
                 int queueSize = getQueueSize(queue);
                 if (queueSize == 0) {
                     return true;
                 }
-                
+
                 // Wait a bit before checking again
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                    logger.warn("Queue clearing interrupted", e);
                     return false;
                 }
             }
-            
+
             return false; // Timeout occurred
         } catch (JMSException e) {
-            throw new RuntimeException("Error checking queue status", e);
+            logger.error("Error checking queue status", e);
+            throw new MessageConsumingException("Error checking queue status", e);
         }
     }
-    
+
     /**
      * Get the current size of the queue
      * 

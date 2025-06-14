@@ -18,6 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
+import org.farhan.greeting.exception.MessagePublishingException;
 import org.farhan.greeting.model.Greeting;
 import org.farhan.greeting.repository.GreetingRepository;
 import org.farhan.greeting.service.GreetingMessageService;
@@ -34,41 +35,33 @@ public class GreetingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    
+
     @MockitoBean
     private GreetingRepository greetingRepository;
-    
+
     @MockitoBean
     private GreetingMessageService messageService;
-    
+
     private List<Greeting> mockGreetings;
-    
+
     @BeforeEach
     public void setup() {
         // Create mock data
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        
+
         Greeting greeting1 = new Greeting();
         greeting1.setId(1L);
         greeting1.setContent("Hello, World!");
         greeting1.setCreatedTime(now);
-        
+
         Greeting greeting2 = new Greeting();
         greeting2.setId(2L);
         greeting2.setContent("Hello, Spring!");
         greeting2.setCreatedTime(now.minusMinutes(5));
-        
+
         mockGreetings = Arrays.asList(greeting1, greeting2);
-        
-        // Setup mock repository behavior
-        when(greetingRepository.save(any(Greeting.class))).thenAnswer(invocation -> {
-            Greeting savedGreeting = invocation.getArgument(0);
-            savedGreeting.setId(3L); // Simulate auto-generated ID
-            return savedGreeting;
-        });
-        
         when(greetingRepository.findAllByOrderByCreatedTimeDesc()).thenReturn(mockGreetings);
-        
+
         // Setup mock message service behavior
         doNothing().when(messageService).sendGreeting(any(Greeting.class));
         when(messageService.waitForQueueToClear(anyInt())).thenReturn(true);
@@ -82,7 +75,7 @@ public class GreetingControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].content", is("Hello, World!")));
-        
+
         // Verify message service and repository interactions
         verify(messageService, times(1)).sendGreeting(any(Greeting.class));
         verify(messageService, times(1)).waitForQueueToClear(anyInt());
@@ -90,20 +83,31 @@ public class GreetingControllerTest {
     }
 
     @Test
+    public void testResourceNotFoundException() throws Exception {
+        // Mock repository to throw exception
+        when(greetingRepository.findAllByOrderByCreatedTimeDesc())
+                .thenThrow(new MessagePublishingException("Failed to get queue data"));
+
+        mockMvc.perform(get("/greeting"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Failed to get queue data")));
+    }
+
+    @Test
     public void testGreetingWithCustomParameter() throws Exception {
-        String name = "Spring";
-        mockMvc.perform(get("/greeting").param("name", name))
+        mockMvc.perform(get("/greeting").param("name", "Spring"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").isNumber());
-        
+
         // Verify message service and repository interactions
         verify(messageService, times(1)).sendGreeting(any(Greeting.class));
         verify(messageService, times(1)).waitForQueueToClear(anyInt());
         verify(greetingRepository, times(1)).findAllByOrderByCreatedTimeDesc();
     }
-    
+
     @Test
     public void testGreetingResponseStructure() throws Exception {
         mockMvc.perform(get("/greeting"))
@@ -115,7 +119,7 @@ public class GreetingControllerTest {
                 .andExpect(jsonPath("$[0].createdTime").exists())
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].content").isString());
-        
+
         // Verify message service and repository interactions
         verify(messageService, times(1)).sendGreeting(any(Greeting.class));
         verify(messageService, times(1)).waitForQueueToClear(anyInt());

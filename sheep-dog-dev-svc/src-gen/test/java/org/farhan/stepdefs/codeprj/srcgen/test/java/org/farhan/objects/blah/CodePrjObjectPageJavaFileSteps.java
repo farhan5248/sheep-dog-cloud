@@ -19,9 +19,4 @@ public class CodePrjObjectPageJavaFileSteps extends TestSteps {
     public void willBeCreatedAsFollows(String docString) {
         object.assertInputOutputs("Content", docString);
     }
-
-    @Given("^The code-prj project, src-gen/test/java/org/farhan/objects/blah/ObjectPage.java file will be present$")
-    public void willBePresent() {
-        object.assertInputOutputs("Present");
-    }
 }

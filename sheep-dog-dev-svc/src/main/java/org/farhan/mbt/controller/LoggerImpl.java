@@ -1,4 +1,4 @@
-package org.farhan.mbt.service;
+package org.farhan.mbt.controller;
 
 import org.slf4j.Logger;
 

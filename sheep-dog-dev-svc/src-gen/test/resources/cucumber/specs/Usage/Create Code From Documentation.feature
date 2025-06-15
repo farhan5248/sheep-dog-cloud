@@ -1,10 +1,19 @@
 @sheep-dog-dev @round-trip
-Feature: DocumentToCode
+Feature: Create Code From Documentation
 
   \@sheep-dog-dev
   \@round-trip
+  This is the most common usage of the sheep-dog plugin, create test automation code from documentation.
+  The sheep-dog plugin will create feature files, step definition glue code and Java interfaces from the documentation.
+  The feature files will be created in the src-gen/test/resources/cucumber/specs directory.
+  The step definition glue code will be created in the src-gen/test/java/org/farhan/stepdefs directory.
+  The interfaces will be created in the src-gen/test/java/org/farhan/objects directory.
 
-  Scenario: Create a feature file from adoc file
+  Background: Create some asciidoc files
+
+    I tried to put the various language features to show how they're mapped to the cucumber feature files and java code.
+    You always need the Test-Suite and Step-Object files.
+    The Test-Suite is what is tagged and the Step-Object has all the relevant step definitions.
 
     Given The spec-prj project, src/test/resources/asciidoc/specs/app/Process.asciidoc file is created as follows
           """
@@ -79,8 +88,11 @@ Feature: DocumentToCode
           | Content
           |===
           """
-     When The maven plugin, asciidoctor-to-uml goal is executed
-      And The maven plugin, uml-to-cucumber goal is executed
+      And The maven plugin, asciidoctor-to-uml goal is executed
+
+  Scenario: Create cucumber files from asciidoc files
+
+     When The maven plugin, uml-to-cucumber goal is executed
      Then The code-prj project, src-gen/test/resources/cucumber/specs/app/Process.feature file will be created as follows
           """
           @tag1
@@ -156,6 +168,84 @@ Feature: DocumentToCode
           
               public BlahObjectPageSteps() {
                   super("ObjectPage", "blah", "Object");
+              }
+          
+              @Given("^The blah application, Object page is created as follows$")
+              public void isCreatedAsFollows(DataTable dataTable) {
+                  object.setInputOutputs(dataTable);
+              }
+          
+              @Given("^The blah application, Object page is invalid$")
+              public void isInvalid() {
+                  object.setInputOutputs("Invalid");
+              }
+          
+              @Given("^The blah application, Object page is valid$")
+              public void isValid() {
+                  object.setInputOutputs("Valid");
+              }
+          }
+          """
+
+  Scenario: Create java files which use Spring
+
+    Instead of running the uml-to-cucumber goal, you can run the spring one to create glue code that works with Spring.
+
+      And The maven plugin, uml-to-cucumber-spring goal is executed
+     Then The code-prj project, src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java file will be created as follows
+          """
+          package org.farhan.stepdefs.blah;
+          
+          import io.cucumber.datatable.DataTable;
+          import io.cucumber.java.en.Given;
+          import org.farhan.common.TestSteps;
+          import org.farhan.objects.blah.ObjectPage;
+          
+          public class BlahObjectPageSteps extends TestSteps {
+          
+              public BlahObjectPageSteps(ObjectPage object) {
+                  super(object, "blah", "Object");
+              }
+          
+              @Given("^The blah application, Object page is created as follows$")
+              public void isCreatedAsFollows(DataTable dataTable) {
+                  object.setInputOutputs(dataTable);
+              }
+          
+              @Given("^The blah application, Object page is invalid$")
+              public void isInvalid() {
+                  object.setInputOutputs("Invalid");
+              }
+          
+              @Given("^The blah application, Object page is valid$")
+              public void isValid() {
+                  object.setInputOutputs("Valid");
+              }
+          }
+          """
+
+  Scenario: Create java files which use Guice
+
+    You can also run the uml-to-cucumber-guice goal to create code that uses Guice.
+
+      And The maven plugin, uml-to-cucumber-guice goal is executed
+     Then The code-prj project, src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java file will be created as follows
+          """
+          package org.farhan.stepdefs.blah;
+          
+          import com.google.inject.Inject;
+          import io.cucumber.datatable.DataTable;
+          import io.cucumber.guice.ScenarioScoped;
+          import io.cucumber.java.en.Given;
+          import org.farhan.common.TestSteps;
+          import org.farhan.objects.blah.ObjectPage;
+          
+          @ScenarioScoped
+          public class BlahObjectPageSteps extends TestSteps {
+          
+              @Inject
+              public BlahObjectPageSteps(ObjectPage object) {
+                  super(object, "blah", "Object");
               }
           
               @Given("^The blah application, Object page is created as follows$")

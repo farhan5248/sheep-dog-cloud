@@ -1,12 +1,13 @@
 @sheep-dog-dev @round-trip
-Feature: CodeToCode
+Feature: Format Cucumber Files
 
   \@sheep-dog-dev
   \@round-trip
+  TODO Make more changes to the source file to demonstrate all the formatting changes.
 
-  Background: Create a feature file
+  Scenario: Format a feature file
 
-    The formatting of the data and example tables is intentionally different to make sure that the file is regenerated
+    The table formatting is off, this is intentional to check that the formatting works.
 
     Given The code-prj project, src-gen/test/resources/cucumber/specs/Process.feature file is created as follows
           """
@@ -48,9 +49,6 @@ Feature: CodeToCode
       And The maven plugin, uml-to-cucumber goal is executed with
           | Tags |
           | tag1 |
-
-  Scenario: Feature file is preserved
-
      Then The code-prj project, src-gen/test/resources/cucumber/specs/Process.feature file will be created as follows
           """
           @tag2 @tag3

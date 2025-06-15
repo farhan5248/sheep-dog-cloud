@@ -2,7 +2,8 @@ package org.farhan.common;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
-import org.farhan.mbt.service.ModelTransformerResponse;
+
+import org.farhan.mbt.model.ModelTransformerResponse;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

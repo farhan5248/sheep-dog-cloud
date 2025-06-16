@@ -1,6 +1,61 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: sheep-dog-dev-amq
+  labels:
+    app: sheep-dog-dev
+spec:
+  selector:
+    matchLabels:
+      app: sheep-dog-dev-amq
+  template:
+    metadata:
+      labels:
+        app: sheep-dog-dev-amq
+    spec:
+      containers:
+        - name: sheep-dog-dev-amq
+          image: apache/activemq-artemis:2.41.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 61616  # JMS port
+              name: jms
+            - containerPort: 8161   # Web console port
+              name: console
+          env:
+            - name: ARTEMIS_USERNAME
+              value: artemis
+            - name: ARTEMIS_PASSWORD
+              value: artemis
+            - name: ENABLE_JMX_EXPORTER
+              value: "true"
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+          readinessProbe:
+            tcpSocket:
+              port: 61616
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 61616
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          volumeMounts:
+            - name: data-volume
+              mountPath: /var/lib/artemis/data
+      volumes:
+        - name: data-volume
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: sheep-dog-dev-db
   labels:
     app: sheep-dog-dev
@@ -16,7 +71,7 @@ spec:
       containers:
         - name: sheep-dog-dev-db
           image: ghcr.io/farhan5248/sheep-dog-dev-db:latest
-          imagePullPolicy: "Always"
+          imagePullPolicy: "IfNotPresent"
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: "root"
@@ -24,7 +79,7 @@ spec:
             - containerPort: 3306
           volumeMounts:
             - mountPath: /var/lib/mysql
-              name: sheep-dog-dev-storage
+              name: data-volume
           livenessProbe:
             exec:
               command:
@@ -43,7 +98,7 @@ spec:
               memory: "256Mi"
               cpu: "250m"
       volumes:
-        - name: sheep-dog-dev-storage
+        - name: data-volume
           persistentVolumeClaim:
             claimName: sheep-dog-dev-db-pvc
 ---
@@ -73,6 +128,14 @@ spec:
               value: "/logs"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://sheep-dog-dev-db:3306/mbt
+            - name: SPRING_ARTEMIS_HOST
+              value: sheep-dog-dev-amq
+            - name: SPRING_ARTEMIS_PORT
+              value: "61616"
+            - name: SPRING_ARTEMIS_USER
+              value: artemis
+            - name: SPRING_ARTEMIS_PASSWORD
+              value: artemis
           ports:
             - containerPort: 8080
           livenessProbe:

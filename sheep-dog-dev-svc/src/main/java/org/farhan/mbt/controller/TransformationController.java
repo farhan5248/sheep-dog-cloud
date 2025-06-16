@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransformationController implements ApplicationListener<ApplicationReadyEvent> {
 
 	Logger logger = LoggerFactory.getLogger(TransformationController.class);
+	// TODO this repo and any mojo should be in the service layer, not the
+	// controller
 	private final ObjectRepository repository;
 	private final TransformationService service;
 
@@ -119,10 +121,12 @@ public class TransformationController implements ApplicationListener<Application
 		logger.info("Starting runConvertAsciidoctorToUML");
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
-		TransformableFile mtr = service.convertObject(
+		// TODO temp hack, nothing should be returned, update test code to not expect a
+		// return value
+		TransformableFile mtr = new TransformableFile(fileName, contents, tags);
+		service.convertSourceObject(
 				new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)),
-				fileName, contents);
-		logger.debug("response: " + mtr.toString());
+				mtr);
 		logger.info("Ending runConvertAsciidoctorToUML");
 		return mtr;
 	}
@@ -134,10 +138,10 @@ public class TransformationController implements ApplicationListener<Application
 		logger.info("Starting runConvertCucumberToUML");
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
-		TransformableFile mtr = service.convertObject(
+		TransformableFile mtr = new TransformableFile(fileName, contents, tags);
+		service.convertSourceObject(
 				new ConvertCucumberToUML(tags, repository, new LoggerImpl(logger)),
-				fileName, contents);
-		logger.debug("response: " + mtr.toString());
+				mtr);
 		logger.info("Ending runConvertCucumberToUML");
 		return mtr;
 	}

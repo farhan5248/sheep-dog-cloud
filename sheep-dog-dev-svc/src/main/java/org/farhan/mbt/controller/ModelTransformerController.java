@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @ConfigurationProperties(prefix = "sheepdog")
 @RestController
+@RequestMapping("/sheep-dog-dev-svc")
 public class ModelTransformerController implements ApplicationListener<ApplicationReadyEvent> {
 
 	Logger logger = LoggerFactory.getLogger(ModelTransformerController.class);
@@ -155,6 +157,7 @@ public class ModelTransformerController implements ApplicationListener<Applicati
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		logger.info("Starting onApplicationEvent");
 		logger.info("spring.datasource.url:" + url);
+		// TODO initialise the EMF stuff here
 		logger.info("Ending onApplicationEvent");
 	}
 

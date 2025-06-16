@@ -12,7 +12,7 @@ public class LoggerImpl implements org.farhan.mbt.convert.Logger {
 
 	@Override
 	public void debug(String message) {
-		log.info(message);
+		log.debug(message);
 	}
 
 }

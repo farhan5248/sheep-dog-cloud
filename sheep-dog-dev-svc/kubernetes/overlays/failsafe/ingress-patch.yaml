@@ -1,16 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sheep-dog-aws-ingress
+  name: sheep-dog-dev-ingress
 spec:
   rules:
-    - host: aws.sheepdogdev.io
+    - host: dev.sheepdogdev.io
       http:
         paths:
-          - path: "/greeting"
+          - path: "/sheep-dog-dev-svc"
             pathType: Prefix
             backend:
               service:
-                name: sheep-dog-aws-service
+                name: sheep-dog-dev-svc
                 port:
                   number: 80

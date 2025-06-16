@@ -257,7 +257,7 @@
 							<arguments>
 								<argument>apply</argument>
 								<argument>-k</argument>
-								<argument>../sheep-dog-dev-svc/docker/overlays/failsafe</argument>
+								<argument>../sheep-dog-dev-svc/kubernetes/overlays/failsafe</argument>
 							</arguments>
 						</configuration>
 					</execution>

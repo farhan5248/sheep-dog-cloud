@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -301,7 +303,7 @@
 					</execution>
 					<execution>
 						<id>push-image</id>
-						<phase>install</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>push</goal>
 						</goals>
@@ -324,23 +326,22 @@
 							<arguments>
 								<argument>apply</argument>
 								<argument>-k</argument>
-								<argument>docker/overlays/failsafe</argument>
+								<argument>kubernetes/overlays/failsafe</argument>
 							</arguments>
 						</configuration>
 					</execution>
 					<execution>
-						<id>stop-stack</id>
-						<phase>post-integration-test</phase>
+						<id>restart-stack</id>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
 						<configuration>
 							<executable>kubectl</executable>
 							<arguments>
-								<argument>delete</argument>
-								<argument>deployments</argument>
-								<argument>-l</argument>
-								<argument>app=sheep-dog-dev</argument>
+								<argument>rollout</argument>
+								<argument>restart</argument>
+								<argument>deployment</argument>
 								<argument>-n</argument>
 								<argument>failsafe</argument>
 							</arguments>

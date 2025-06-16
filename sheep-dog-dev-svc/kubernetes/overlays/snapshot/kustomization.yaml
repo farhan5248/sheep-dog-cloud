@@ -1,8 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: failsafe
+namespace: snapshot
 resources:
-  - ../../../../sheep-dog-dev-svc/docker/base
+  - ../../../../sheep-dog-dev-svc/kubernetes/base
 patches:
   - path: ingress-patch.yaml
     target:

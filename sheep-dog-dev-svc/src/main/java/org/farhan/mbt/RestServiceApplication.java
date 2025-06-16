@@ -1,4 +1,4 @@
-package org.farhan.mbt.service;
+package org.farhan.mbt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

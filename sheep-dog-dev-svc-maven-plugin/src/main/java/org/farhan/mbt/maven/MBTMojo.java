@@ -43,7 +43,7 @@ public abstract class MBTMojo extends AbstractMojo {
 	public int timeout;
 
 	private String getHost() {
-		return "http://" + host + ":" + port + "/";
+		return "http://" + host + ":" + port + "/sheep-dog-dev-svc/";
 	}
 
 	private void clearObjects(String goal) {

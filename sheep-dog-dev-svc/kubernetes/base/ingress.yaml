@@ -9,7 +9,7 @@ spec:
     - host: sheepdogdev.io
       http:
         paths:
-          - path: "/"
+          - path: "/sheep-dog-dev-svc"
             pathType: Prefix
             backend:
               service:

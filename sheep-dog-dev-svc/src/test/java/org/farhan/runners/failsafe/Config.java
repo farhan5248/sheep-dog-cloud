@@ -6,7 +6,7 @@ import io.cucumber.spring.CucumberContextConfiguration;
 import java.io.File;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.farhan.mbt.service.RestServiceApplication;
+import org.farhan.mbt.RestServiceApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 

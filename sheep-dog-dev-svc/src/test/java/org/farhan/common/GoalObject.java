@@ -28,7 +28,7 @@ public class GoalObject extends TestObject {
 	private int timeout;
 
 	private String getHost() {
-		return "http://" + serverHost + ":" + serverPort + "/";
+		return "http://" + serverHost + ":" + serverPort + "/sheep-dog-dev-svc/";
 	}
 
 	private void clearObjects(String goal) {
@@ -61,7 +61,8 @@ public class GoalObject extends TestObject {
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() - startTime < timeout) {
 			try {
-				ResponseEntity<String> response = restTemplate.getForEntity(getHost() + "actuator/health",
+				ResponseEntity<String> response = restTemplate.getForEntity(
+						"http://" + serverHost + ":" + serverPort + "/" + "actuator/health",
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK &&
 						response.getBody().contains("\"status\":\"UP\"")) {

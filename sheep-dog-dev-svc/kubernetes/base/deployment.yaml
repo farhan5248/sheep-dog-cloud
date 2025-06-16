@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: sheep-dog-dev-db
-          image: farhan5248/sheep-dog-dev-db:latest
+          image: ghcr.io/farhan5248/sheep-dog-dev-db:latest
           imagePullPolicy: "Always"
           env:
             - name: MYSQL_ROOT_PASSWORD
@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
         - name: sheep-dog-dev-svc
-          image: farhan5248/sheep-dog-dev-svc:latest
+          image: ghcr.io/farhan5248/sheep-dog-dev-svc:latest
           imagePullPolicy: "Always"
           env:
             - name: SPRING_DATASOURCE_URL
@@ -82,6 +82,9 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
+          volumeMounts:
+            - name: logs-volume
+              mountPath: /logs
           resources:
             limits:
               memory: "512Mi"
@@ -89,3 +92,7 @@ spec:
             requests:
               memory: "256Mi"
               cpu: "250m"
+      volumes:
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: sheep-dog-dev-svc-pvc

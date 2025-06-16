@@ -6,10 +6,10 @@ metadata:
     app: sheep-dog-aws
 spec:
   rules:
-    - host: sheepdogaws.io
+    - host: aws.sheepdogdev.io
       http:
         paths:
-          - path: "/"
+          - path: "/greeting"
             pathType: Prefix
             backend:
               service:

@@ -1,11 +1,14 @@
 package org.farhan.common;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
-import org.farhan.mbt.model.ModelTransformerResponse;
+import org.farhan.mbt.model.TransformableFile;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -42,19 +45,21 @@ public class GoalObject extends TestObject {
 		parameters.put("tags", attributes.get("tags"));
 		parameters.put("fileName", fileName);
 		return restTemplate.postForObject(getHost() + "run" + goal + "?tags={tags}&fileName={fileName}", contents,
-				ModelTransformerResponse.class, parameters).content();
+				TransformableFile.class, parameters).getFileContent();
 	}
 
-	private String[] getObjectNames(String goal) {
+	private List<TransformableFile> getObjectNames(String goal) {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		parameters.put("tags", attributes.get("tags"));
-		String fileList = restTemplate.getForObject(getHost() + "get" + goal + "ObjectNames?tags={tags}",
-				ModelTransformerResponse.class, parameters).fileName();
-		if (!fileList.isBlank()) {
-			return fileList.split("\n");
-		} else {
-			return new String[0];
-		}
+
+		ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(
+				getHost() + "get" + goal + "ObjectNames?tags={tags}",
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<TransformableFile>>() {
+				}, parameters);
+		List<TransformableFile> fileList = response.getBody();
+		return fileList;
 	}
 
 	private void waitForService() throws Exception {
@@ -106,10 +111,11 @@ public class GoalObject extends TestObject {
 					}
 				}
 			} else {
-				for (String fileName : getObjectNames(goal)) {
-					String content = convertObject(goal, fileName, sr.contains(fileName) ? sr.get(fileName) : null);
+				for (TransformableFile tf : getObjectNames(goal)) {
+					String content = convertObject(goal, tf.getFileName(),
+							sr.contains(tf.getFileName()) ? sr.get(tf.getFileName()) : null);
 					if (!content.isEmpty()) {
-						sr.put(fileName, content);
+						sr.put(tf.getFileName(), content);
 					}
 				}
 			}

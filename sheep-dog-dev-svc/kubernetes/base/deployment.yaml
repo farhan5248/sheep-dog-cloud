@@ -70,6 +70,10 @@ spec:
           image: ghcr.io/farhan5248/sheep-dog-dev-svc:latest
           imagePullPolicy: "Always"
           env:
+            - name: LOG_LEVEL
+              value: "INFO"  # Set to DEBUG to enable debug logging
+            - name: LOG_PATH
+              value: "/logs"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://sheep-dog-dev-db:3306/mbt
           ports:

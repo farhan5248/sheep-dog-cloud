@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class GreetingMessageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GreetingMessageConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(GreetingMessageService.class);
 
     private final JmsTemplate jmsTemplate;
 

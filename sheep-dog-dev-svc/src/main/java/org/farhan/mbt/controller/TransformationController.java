@@ -1,9 +1,6 @@
 package org.farhan.mbt.controller;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-import org.farhan.mbt.convert.Converter;
+import java.util.List;
 import org.farhan.mbt.convert.ConvertAsciidoctorToUML;
 import org.farhan.mbt.convert.ConvertCucumberToUML;
 import org.farhan.mbt.convert.ConvertUMLToAsciidoctor;
@@ -11,7 +8,8 @@ import org.farhan.mbt.convert.ConvertUMLToCucumber;
 import org.farhan.mbt.convert.ConvertUMLToCucumberGuice;
 import org.farhan.mbt.convert.ConvertUMLToCucumberSpring;
 import org.farhan.mbt.convert.ObjectRepository;
-import org.farhan.mbt.model.ModelTransformerResponse;
+import org.farhan.mbt.model.TransformableFile;
+import org.farhan.mbt.service.TransformationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,127 +28,80 @@ import org.springframework.web.bind.annotation.RestController;
 @ConfigurationProperties(prefix = "sheepdog")
 @RestController
 @RequestMapping("/sheep-dog-dev-svc")
-public class ModelTransformerController implements ApplicationListener<ApplicationReadyEvent> {
+public class TransformationController implements ApplicationListener<ApplicationReadyEvent> {
 
-	Logger logger = LoggerFactory.getLogger(ModelTransformerController.class);
-	private final ObjectRepository fa;
+	Logger logger = LoggerFactory.getLogger(TransformationController.class);
+	private final ObjectRepository repository;
+	private final TransformationService service;
 
 	@Value("${spring.datasource.url}")
 	private String url;
 
 	@Autowired
-	public ModelTransformerController(ObjectRepository fa) {
-		this.fa = fa;
+	public TransformationController(ObjectRepository repository, TransformationService service) {
+		this.repository = repository;
+		this.service = service;
 	}
 
 	@DeleteMapping("/clearConvertAsciidoctorToUMLObjects")
-	public ModelTransformerResponse clearConvertAsciidoctorToUMLObjects(
+	public void clearConvertAsciidoctorToUMLObjects(
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting clearConvertAsciidoctorToUMLObjects");
 		logger.info("tags:" + tags);
-		ModelTransformerResponse mtr = clearObjects(new ConvertAsciidoctorToUML(tags, fa, new LoggerImpl(logger)));
-		logger.debug("response: " + mtr.toString());
+		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)));
 		logger.info("Ending clearConvertAsciidoctorToUMLObjects");
-		return mtr;
 	}
 
 	@DeleteMapping("/clearConvertCucumberToUMLObjects")
-	public ModelTransformerResponse clearConvertCucumberToUMLObjects(
+	public void clearConvertCucumberToUMLObjects(
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting clearConvertCucumberToUMLObjects");
 		logger.info("tags:" + tags);
-		ModelTransformerResponse mtr = clearObjects(new ConvertAsciidoctorToUML(tags, fa, new LoggerImpl(logger)));
-		logger.debug("response: " + mtr.toString());
+		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)));
 		logger.info("Ending clearConvertCucumberToUMLObjects");
-		return mtr;
-	}
-
-	private ModelTransformerResponse clearObjects(Converter mojo) {
-		try {
-			mojo.clearProjects();
-			return new ModelTransformerResponse("", "");
-		} catch (Exception e) {
-			logger.error(getStackTraceAsString(e));
-			return new ModelTransformerResponse("exception", getStackTraceAsString(e));
-		}
-	}
-
-	private ModelTransformerResponse convertObject(Converter mojo, String fileName, String contents) {
-		try {
-			return new ModelTransformerResponse(fileName, mojo.convertFile(fileName, contents == null ? "" : contents));
-		} catch (Exception e) {
-			logger.error(getStackTraceAsString(e));
-			return new ModelTransformerResponse("exception", getStackTraceAsString(e));
-		}
 	}
 
 	@GetMapping("/getConvertUMLToAsciidoctorObjectNames")
-	public ModelTransformerResponse getConvertUMLToAsciidoctorObjectNames(
+	public List<TransformableFile> getConvertUMLToAsciidoctorObjectNames(
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToAsciidoctorObjectNames");
-		ModelTransformerResponse mtr = getObjectNames(new ConvertUMLToAsciidoctor(tags, fa, new LoggerImpl(logger)),
+		List<TransformableFile> fileList = service.getObjectNames(
+				new ConvertUMLToAsciidoctor(tags, repository, new LoggerImpl(logger)),
 				tags);
-		logger.debug("response: " + mtr.toString());
 		logger.info("Ending getConvertUMLToAsciidoctorObjectNames");
-		return mtr;
+		return fileList;
 	}
 
 	@GetMapping("/getConvertUMLToCucumberGuiceObjectNames")
-	public ModelTransformerResponse getConvertUMLToCucumberGuiceObjectNames(
+	public List<TransformableFile> getConvertUMLToCucumberGuiceObjectNames(
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberGuiceObjectNames");
-		ModelTransformerResponse mtr = getObjectNames(new ConvertUMLToCucumberGuice(tags, fa, new LoggerImpl(logger)),
+		List<TransformableFile> fileList = service.getObjectNames(
+				new ConvertUMLToCucumberGuice(tags, repository, new LoggerImpl(logger)),
 				tags);
-		logger.debug("response: " + mtr.toString());
 		logger.info("Ending getConvertUMLToCucumberGuiceObjectNames");
-		return mtr;
+		return fileList;
 	}
 
 	@GetMapping("/getConvertUMLToCucumberObjectNames")
-	public ModelTransformerResponse getConvertUMLToCucumberObjectNames(
+	public List<TransformableFile> getConvertUMLToCucumberObjectNames(
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberObjectNames");
-		ModelTransformerResponse mtr = getObjectNames(new ConvertUMLToCucumber(tags, fa, new LoggerImpl(logger)), tags);
-		logger.debug("response: " + mtr.toString());
+		List<TransformableFile> fileList = service.getObjectNames(
+				new ConvertUMLToCucumber(tags, repository, new LoggerImpl(logger)), tags);
 		logger.info("Ending getConvertUMLToCucumberObjectNames");
-		return mtr;
+		return fileList;
 	}
 
 	@GetMapping("/getConvertUMLToCucumberSpringObjectNames")
-	public ModelTransformerResponse getConvertUMLToCucumberSpringObjectNames(
+	public List<TransformableFile> getConvertUMLToCucumberSpringObjectNames(
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberSpringObjectNames");
-		ModelTransformerResponse mtr = getObjectNames(new ConvertUMLToCucumberSpring(tags, fa, new LoggerImpl(logger)),
+		List<TransformableFile> fileList = service.getObjectNames(
+				new ConvertUMLToCucumberSpring(tags, repository, new LoggerImpl(logger)),
 				tags);
-		logger.debug("response: " + mtr.toString());
 		logger.info("Ending getConvertUMLToCucumberSpringObjectNames");
-		return mtr;
-	}
-
-	private ModelTransformerResponse getObjectNames(Converter mojo, String tags) {
-		String fileList = "";
-		ModelTransformerResponse mtr;
-		try {
-			// TODO this is temp, there should be a separate class like the ObjectRepository
-			// if not the object repo itself. For a given tag, it should keep track of the
-			// source files and output files checksums
-			for (String fileName : (mojo).getFileNames()) {
-				// TODO append to a string list for now but later make a proper JSON object
-				fileList += "\n" + fileName;
-			}
-			fileList = fileList.replaceFirst("\n", "");
-			mtr = new ModelTransformerResponse(fileList, "");
-		} catch (Exception e) {
-			logger.error(getStackTraceAsString(e));
-			return new ModelTransformerResponse("exception", getStackTraceAsString(e));
-		}
-		return mtr;
-	}
-
-	private String getStackTraceAsString(Exception e) {
-		StringWriter sw = new StringWriter();
-		e.printStackTrace(new PrintWriter(sw));
-		return sw.toString();
+		return fileList;
 	}
 
 	@Override
@@ -162,13 +113,14 @@ public class ModelTransformerController implements ApplicationListener<Applicati
 	}
 
 	@PostMapping("/runConvertAsciidoctorToUML")
-	public ModelTransformerResponse runConvertAsciidoctorToUML(
+	public TransformableFile runConvertAsciidoctorToUML(
 			@RequestParam(value = "tags", defaultValue = "") String tags,
 			@RequestParam(value = "fileName") String fileName, @RequestBody String contents) {
 		logger.info("Starting runConvertAsciidoctorToUML");
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
-		ModelTransformerResponse mtr = convertObject(new ConvertAsciidoctorToUML(tags, fa, new LoggerImpl(logger)),
+		TransformableFile mtr = service.convertObject(
+				new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertAsciidoctorToUML");
@@ -176,13 +128,14 @@ public class ModelTransformerController implements ApplicationListener<Applicati
 	}
 
 	@PostMapping("/runConvertCucumberToUML")
-	public ModelTransformerResponse runConvertCucumberToUML(
+	public TransformableFile runConvertCucumberToUML(
 			@RequestParam(value = "tags", defaultValue = "") String tags,
 			@RequestParam(value = "fileName") String fileName, @RequestBody String contents) {
 		logger.info("Starting runConvertCucumberToUML");
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
-		ModelTransformerResponse mtr = convertObject(new ConvertCucumberToUML(tags, fa, new LoggerImpl(logger)),
+		TransformableFile mtr = service.convertObject(
+				new ConvertCucumberToUML(tags, repository, new LoggerImpl(logger)),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertCucumberToUML");
@@ -190,13 +143,14 @@ public class ModelTransformerController implements ApplicationListener<Applicati
 	}
 
 	@PostMapping("/runConvertUMLToAsciidoctor")
-	public ModelTransformerResponse runConvertUMLToAsciidoctor(
+	public TransformableFile runConvertUMLToAsciidoctor(
 			@RequestParam(value = "tags", defaultValue = "") String tags,
 			@RequestParam(value = "fileName") String fileName, @RequestBody(required = false) String contents) {
 		logger.info("Starting runConvertUMLToAsciidoctor");
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
-		ModelTransformerResponse mtr = convertObject(new ConvertUMLToAsciidoctor(tags, fa, new LoggerImpl(logger)),
+		TransformableFile mtr = service.convertObject(
+				new ConvertUMLToAsciidoctor(tags, repository, new LoggerImpl(logger)),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToAsciidoctor");
@@ -204,13 +158,14 @@ public class ModelTransformerController implements ApplicationListener<Applicati
 	}
 
 	@PostMapping("/runConvertUMLToCucumber")
-	public ModelTransformerResponse runConvertUMLToCucumber(
+	public TransformableFile runConvertUMLToCucumber(
 			@RequestParam(value = "tags", defaultValue = "") String tags,
 			@RequestParam(value = "fileName") String fileName, @RequestBody(required = false) String contents) {
 		logger.info("Starting runConvertUMLToCucumber");
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
-		ModelTransformerResponse mtr = convertObject(new ConvertUMLToCucumber(tags, fa, new LoggerImpl(logger)),
+		TransformableFile mtr = service.convertObject(
+				new ConvertUMLToCucumber(tags, repository, new LoggerImpl(logger)),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumber");
@@ -218,13 +173,14 @@ public class ModelTransformerController implements ApplicationListener<Applicati
 	}
 
 	@PostMapping("/runConvertUMLToCucumberGuice")
-	public ModelTransformerResponse runConvertUMLToCucumberGuice(
+	public TransformableFile runConvertUMLToCucumberGuice(
 			@RequestParam(value = "tags", defaultValue = "") String tags,
 			@RequestParam(value = "fileName") String fileName, @RequestBody(required = false) String contents) {
 		logger.info("Starting runConvertUMLToCucumberGuice");
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
-		ModelTransformerResponse mtr = convertObject(new ConvertUMLToCucumberGuice(tags, fa, new LoggerImpl(logger)),
+		TransformableFile mtr = service.convertObject(
+				new ConvertUMLToCucumberGuice(tags, repository, new LoggerImpl(logger)),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumberGuice");
@@ -232,13 +188,14 @@ public class ModelTransformerController implements ApplicationListener<Applicati
 	}
 
 	@PostMapping("/runConvertUMLToCucumberSpring")
-	public ModelTransformerResponse runConvertUMLToCucumberSpring(
+	public TransformableFile runConvertUMLToCucumberSpring(
 			@RequestParam(value = "tags", defaultValue = "") String tags,
 			@RequestParam(value = "fileName") String fileName, @RequestBody(required = false) String contents) {
 		logger.info("Starting runConvertUMLToCucumberSpring");
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
-		ModelTransformerResponse mtr = convertObject(new ConvertUMLToCucumberSpring(tags, fa, new LoggerImpl(logger)),
+		TransformableFile mtr = service.convertObject(
+				new ConvertUMLToCucumberSpring(tags, repository, new LoggerImpl(logger)),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumberSpring");

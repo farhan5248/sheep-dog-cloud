@@ -262,18 +262,17 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>stop-stack</id>
-						<phase>post-integration-test</phase>
+						<id>restart-stack</id>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
 						<configuration>
 							<executable>kubectl</executable>
 							<arguments>
-								<argument>delete</argument>
-								<argument>deployments</argument>
-								<argument>-l</argument>
-								<argument>app=sheep-dog-dev</argument>
+								<argument>rollout</argument>
+								<argument>restart</argument>
+								<argument>deployment</argument>
 								<argument>-n</argument>
 								<argument>failsafe</argument>
 							</arguments>

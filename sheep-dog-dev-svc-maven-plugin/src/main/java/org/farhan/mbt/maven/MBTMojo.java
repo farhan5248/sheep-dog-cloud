@@ -76,7 +76,7 @@ public abstract class MBTMojo extends AbstractMojo {
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() - startTime < timeout) {
 			try {
-				ResponseEntity<String> response = restTemplate.getForEntity(getHost() + "actuator/health",
+				ResponseEntity<String> response = restTemplate.getForEntity("http://" + host + ":" + port + "/" + "actuator/health",
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("\"status\":\"UP\"")) {
 					return;

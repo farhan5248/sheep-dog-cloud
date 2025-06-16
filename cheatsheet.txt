@@ -18,4 +18,5 @@ kubectl exec -ti -n dev <pod-name> -- bash
 kubectl exec -it -n dev <pod-name> -- cat /logs/sheep-dog-aws.log
 kubectl exec -it -n dev <pod-name> -- tail -f /logs/sheep-dog-aws.log
 kubectl config current-context
+kubectl config get-contexts
 kubectl config use-context minikube

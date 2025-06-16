@@ -1,4 +1,4 @@
 cd ..
-call mvn clean
-call mvn install -DskipTests
+call kubectl config use-context minikube
+call mvn clean install
 cd scripts

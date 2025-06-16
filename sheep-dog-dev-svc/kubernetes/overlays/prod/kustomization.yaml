@@ -1,6 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: failsafe
+namespace: prod
 resources:
   - ../../../../sheep-dog-dev-svc/kubernetes/base
 patches:
@@ -12,3 +12,11 @@ patches:
     target:
       kind: Service
       name: sheep-dog-dev-db
+  - path: db-pvc-patch.yaml
+    target:
+      kind: PersistentVolumeClaim
+      name: sheep-dog-dev-db-pvc
+  - path: svc-pvc-patch.yaml
+    target:
+      kind: PersistentVolumeClaim
+      name: sheep-dog-dev-svc-pvc 

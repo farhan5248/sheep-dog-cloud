@@ -76,10 +76,10 @@ if %ERRORLEVEL% neq 0 (
 cd scripts
 
 echo Restarting deployment to pull the latest image...
-kubectl rollout restart deployment sheep-dog-aws -n %NAMESPACE%
+kubectl rollout restart deployment sheep-dog-dev-svc -n %NAMESPACE%
 
 echo Waiting for rollout to complete...
-kubectl rollout status deployment sheep-dog-aws -n %NAMESPACE%
+kubectl rollout status deployment sheep-dog-dev-svc -n %NAMESPACE%
 
 if %ERRORLEVEL% neq 0 (
     echo Deployment rollout failed.

@@ -6,6 +6,7 @@ import io.cucumber.spring.CucumberContextConfiguration;
 import java.io.File;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ActiveProfiles("failsafe")
 @CucumberContextConfiguration
 @ContextConfiguration(classes = Config.class)
+@TestPropertySource("classpath:application-failsafe.properties")
 public class Config {
 
 	public void deleteDir(File aDir) {

@@ -2,12 +2,15 @@ package org.farhan.mbt.maven;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -57,26 +60,29 @@ public abstract class MBTMojo extends AbstractMojo {
 		parameters.put("tags", tags);
 		parameters.put("fileName", fileName);
 		return restTemplate.postForObject(getHost() + "run" + goal + "?tags={tags}&fileName={fileName}", contents,
-				ModelTransformerResponse.class, parameters).content();
+				TransformableFile.class, parameters).getFileContent();
 	}
 
-	private String[] getObjectNames(String goal) {
+	private List<TransformableFile> getObjectNames(String goal) {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		parameters.put("tags", tags);
-		String fileList = restTemplate.getForObject(getHost() + "get" + goal + "ObjectNames?tags={tags}",
-				ModelTransformerResponse.class, parameters).fileName();
-		if (!fileList.isBlank()) {
-			return fileList.split("\n");
-		} else {
-			return new String[0];
-		}
+
+		ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(
+				getHost() + "get" + goal + "ObjectNames?tags={tags}",
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<TransformableFile>>() {
+				}, parameters);
+		List<TransformableFile> fileList = response.getBody();
+		return fileList;
 	}
 
 	private void waitForService() throws MojoExecutionException {
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() - startTime < timeout) {
 			try {
-				ResponseEntity<String> response = restTemplate.getForEntity("http://" + host + ":" + port + "/" + "actuator/health",
+				ResponseEntity<String> response = restTemplate.getForEntity(
+						"http://" + host + ":" + port + "/" + "actuator/health",
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("\"status\":\"UP\"")) {
 					return;
@@ -128,10 +134,11 @@ public abstract class MBTMojo extends AbstractMojo {
 					}
 				}
 			} else {
-				for (String fileName : getObjectNames(goal)) {
-					String content = convertObject(goal, fileName, sr.contains(fileName) ? sr.get(fileName) : null);
+				for (TransformableFile tf : getObjectNames(goal)) {
+					String content = convertObject(goal, tf.getFileName(),
+							sr.contains(tf.getFileName()) ? sr.get(tf.getFileName()) : null);
 					if (!content.isEmpty()) {
-						sr.put(fileName, content);
+						sr.put(tf.getFileName(), content);
 					}
 				}
 			}

@@ -4,17 +4,17 @@ import io.cucumber.java.Before;
 import io.cucumber.spring.CucumberContextConfiguration;
 
 import java.io.File;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.farhan.mbt.RestServiceApplication;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = "org.farhan")
-@EnableAutoConfiguration
+@ComponentScan(basePackages = "org.farhan.impl")
+@EnableAutoConfiguration(exclude = { org.springframework.boot.autoconfigure.jms.artemis.ArtemisAutoConfiguration.class,
+		org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class })
 @ActiveProfiles("failsafe")
 @CucumberContextConfiguration
-@SpringBootTest(classes = RestServiceApplication.class)
+@ContextConfiguration(classes = Config.class)
 public class Config {
 
 	public void deleteDir(File aDir) {

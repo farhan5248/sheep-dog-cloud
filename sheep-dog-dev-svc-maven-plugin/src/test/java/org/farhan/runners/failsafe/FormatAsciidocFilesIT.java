@@ -10,9 +10,9 @@ import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("cucumber/specs/RoundTrip/CodeToCode.feature")
+@SelectClasspathResource("cucumber/specs/Usage/Format Asciidoc Files.feature")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "org.farhan.common,org.farhan.objects,org.farhan.stepdefs,org.farhan.runners.failsafe")
 @IncludeTags("round-trip")
-public class CodeToCodeIT {
+public class FormatAsciidocFilesIT {
 }

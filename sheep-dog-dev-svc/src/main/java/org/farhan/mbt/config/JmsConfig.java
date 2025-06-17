@@ -38,7 +38,7 @@ public class JmsConfig {
     private String artemisPassword;
     
     @Bean
-    @Profile("!surefire") // Only create this bean when not in the test profile
+    @Profile("default") // Only create this bean when not in the test profile
     public ConnectionFactory jmsConnectionFactory() throws JMSException {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
         factory.setBrokerURL("tcp://" + artemisHost + ":" + artemisPort);

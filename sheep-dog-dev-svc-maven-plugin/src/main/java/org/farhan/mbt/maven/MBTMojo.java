@@ -26,7 +26,7 @@ public abstract class MBTMojo extends AbstractMojo {
 	public String baseDir = "";
 
 	private final RestTemplate restTemplate;
-	private final int RETRY_COUNT = 3;
+	private final int RETRY_COUNT = 10;
 
 	public MBTMojo() {
 		baseDir = new File("").getAbsolutePath();
@@ -59,6 +59,8 @@ public abstract class MBTMojo extends AbstractMojo {
 				restTemplate.delete(getHost() + "clear" + goal + "Objects?tags={tags}", parameters);
 				return; // Exit if successful
 			} catch (Exception e) {
+				getLog().info("Retry attempt " + (retryCount + 1));
+				Thread.sleep(1000);
 				retryCount++;
 			}
 		}
@@ -77,6 +79,8 @@ public abstract class MBTMojo extends AbstractMojo {
 								TransformableFile.class, parameters)
 						.getFileContent();
 			} catch (Exception e) {
+				getLog().info("Retry attempt " + (retryCount + 1));
+				Thread.sleep(1000);
 				retryCount++;
 			}
 		}
@@ -97,8 +101,13 @@ public abstract class MBTMojo extends AbstractMojo {
 						new ParameterizedTypeReference<List<TransformableFile>>() {
 						}, parameters);
 				List<TransformableFile> fileList = response.getBody();
+				for (TransformableFile tf : fileList) {
+					getLog().info("ObjectName: " + tf.getFileName());
+				}
 				return fileList;
 			} catch (Exception e) {
+				getLog().info("Retry attempt " + (retryCount + 1));
+				Thread.sleep(1000);
 				retryCount++;
 			}
 		}
@@ -132,6 +141,10 @@ public abstract class MBTMojo extends AbstractMojo {
 	}
 
 	public void execute(String goal) throws MojoExecutionException {
+		execute(goal, "");
+	}
+
+	public void execute(String goal, String extension) throws MojoExecutionException {
 		getLog().info("Starting execute");
 		getLog().info("tags: " + tags);
 		getLog().info("baseDir: " + baseDir);
@@ -148,16 +161,16 @@ public abstract class MBTMojo extends AbstractMojo {
 				clearObjects(goal);
 				for (String dir : dirs) {
 					ArrayList<String> tempFiles = new ArrayList<String>();
-					for (String fileName : sr.list(dir, "")) {
+					for (String fileName : sr.list(dir, extension)) {
 						if (fileName.startsWith(dir + "stepdefs")) {
 							tempFiles.add(fileName);
 						} else {
-							getLog().debug("fileName: " + fileName);
+							getLog().info("Converting: " + fileName);
 							convertObject(goal, fileName, sr.get(fileName));
 						}
 					}
 					for (String fileName : tempFiles) {
-						getLog().debug("fileName: " + fileName);
+						getLog().info("Converting: " + fileName);
 						convertObject(goal, fileName, sr.get(fileName));
 					}
 				}
@@ -166,13 +179,13 @@ public abstract class MBTMojo extends AbstractMojo {
 					String content = convertObject(goal, tf.getFileName(),
 							sr.contains(tf.getFileName()) ? sr.get(tf.getFileName()) : null);
 					if (!content.isEmpty()) {
+						getLog().info("Converting: " + tf.getFileName());
 						sr.put(tf.getFileName(), content);
 					}
 				}
 			}
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-
 			throw new MojoExecutionException(e);
 		}
 		getLog().info("Ending execute");

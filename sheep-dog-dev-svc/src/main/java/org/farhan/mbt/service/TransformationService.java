@@ -70,8 +70,8 @@ public class TransformationService {
     public void convertSourceObject(Converter mojo, TransformableFile mtr) {
         try {
             jmsTemplate.convertAndSend(JmsConfig.SOURCE_FILES_QUEUE, mtr);
-            MessageConsumer.IN_FLIGHT = true;
-            while (MessageConsumer.IN_FLIGHT) {
+            MessageConsumer.IN_FLIGHT = 1;
+            while (MessageConsumer.IN_FLIGHT == 1) {
                 try {
                     TimeUnit.MILLISECONDS.sleep(100);
                 } catch (InterruptedException e) {
@@ -82,6 +82,10 @@ public class TransformationService {
         } catch (Exception e) {
             logger.error("Error publishing object", e);
             throw new MessagePublishingException("Error publishing object", e);
+        }
+        if (MessageConsumer.IN_FLIGHT == -1) {
+            logger.error("Message processing failed for file: " + mtr.getFileName());
+            throw new MessagePublishingException("Message processing failed for file: " + mtr.getFileName());
         }
     }
 

@@ -3,6 +3,7 @@ package org.farhan.mbt.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,7 +14,8 @@ public class ModelSourceFile {
     @Column(name = "file_name")
     private String fileName;
     
-    @Column(name = "file_content", columnDefinition = "TEXT")
+    @Lob
+    @Column(name = "file_content", columnDefinition = "LONGTEXT")
     private String fileContent;
     
     // Default constructor required by JPA

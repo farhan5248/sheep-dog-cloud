@@ -20,7 +20,7 @@ import jakarta.jms.JMSException;
 public class MessageConsumer {
 
     // TODO until I can check if a doc is processed, will use this hack
-    public static boolean IN_FLIGHT = false;
+    public static int IN_FLIGHT = 0;
 
     private static final Logger logger = LoggerFactory.getLogger(MessageConsumer.class);
 
@@ -37,9 +37,8 @@ public class MessageConsumer {
 
         int retryCount = 0;
         int maxRetries = 3;
-        boolean saved = false;
 
-        while (!saved && retryCount < maxRetries) {
+        while (retryCount < maxRetries) {
             try {
                 Converter mojo;
                 if (file.getFileName().endsWith(".asciidoc")) {
@@ -47,24 +46,18 @@ public class MessageConsumer {
                 } else if (file.getFileName().endsWith(".feature")) {
                     mojo = new ConvertCucumberToUML(file.getTags(), repository, new LoggerImpl(logger));
                 } else {
-                    throw new MessageConsumingException("Unsupported file type: " + file.getFileName());
+                    logger.warn("Unsupported file type: " + file.getFileName());
+                    IN_FLIGHT = 0;
+                    return; // Skip unsupported file types
                 }
                 mojo.convertFile(file.getFileName(), file.getFileContent() == null ? "" : file.getFileContent());
                 logger.info("Transformed source file: {}", file.getFileName());
-                saved = true;
-                IN_FLIGHT = false;
+                IN_FLIGHT = 0;
+                return;
             } catch (Exception e) {
                 retryCount++;
                 logger.warn("Error transforming source file (attempt {}/{})", retryCount, maxRetries, e);
-
-                if (retryCount >= maxRetries) {
-                    logger.error("Failed to transform source file after {} attempts", maxRetries, e);
-                    // In a production system, we would move this to a dead letter queue
-                    throw new MessageConsumingException("Failed to transform source file after multiple attempts", e);
-                }
-
                 try {
-                    // Exponential backoff
                     Thread.sleep(100 * (long) Math.pow(2, retryCount));
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
@@ -73,5 +66,12 @@ public class MessageConsumer {
                 }
             }
         }
+        if (retryCount >= maxRetries) {
+            logger.error("Failed to transform source file after {} attempts", maxRetries);
+            IN_FLIGHT = 0;
+            // In a production system, we would move this to a dead letter queue
+            throw new MessageConsumingException("Failed to transform source file after multiple attempts");
+        }
+
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class AsciiDoctorToUMLMojo extends MBTMojo {
 
 	public void execute() throws MojoExecutionException {
-		super.execute("ConvertAsciidoctorToUML");
+		// TODO test that asciidoc is valid but nothing else
+		super.execute("ConvertAsciidoctorToUML", ".asciidoc");
 	}
 }

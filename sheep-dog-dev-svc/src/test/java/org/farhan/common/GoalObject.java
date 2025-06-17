@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 public class GoalObject extends TestObject {
 
 	private final RestTemplate restTemplate = new RestTemplate();
-	private final int RETRY_COUNT = 3;
+	private final int RETRY_COUNT = 10;
 
 	public GoalObject() {
 		attributes.put("tags", "");
@@ -44,6 +44,7 @@ public class GoalObject extends TestObject {
 				restTemplate.delete(getHost() + "clear" + goal + "Objects?tags={tags}", parameters);
 				return; // Exit if successful
 			} catch (Exception e) {
+				Thread.sleep(1000); 
 				retryCount++;
 			}
 		}
@@ -62,6 +63,7 @@ public class GoalObject extends TestObject {
 								TransformableFile.class, parameters)
 						.getFileContent();
 			} catch (Exception e) {
+				Thread.sleep(1000); 
 				retryCount++;
 			}
 		}
@@ -84,6 +86,7 @@ public class GoalObject extends TestObject {
 				List<TransformableFile> fileList = response.getBody();
 				return fileList;
 			} catch (Exception e) {
+				Thread.sleep(1000); 
 				retryCount++;
 			}
 		}

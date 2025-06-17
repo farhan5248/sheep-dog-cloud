@@ -59,7 +59,7 @@ public abstract class MBTMojo extends AbstractMojo {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		parameters.put("tags", tags);
 		parameters.put("fileName", fileName);
-		return restTemplate.postForObject(getHost() + "run" + goal + "?tags={tags}&fileName={fileName}", contents,
+		return restTemplate.(getHost() + "run" + goal + "?tags={tags}&fileName={fileName}", contents,
 				TransformableFile.class, parameters).getFileContent();
 	}
 
@@ -85,6 +85,7 @@ public abstract class MBTMojo extends AbstractMojo {
 						"http://" + host + ":" + port + "/" + "actuator/health",
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("\"status\":\"UP\"")) {
+					getLog().info("Service ready");
 					return;
 				}
 			} catch (Exception e) {
@@ -99,7 +100,6 @@ public abstract class MBTMojo extends AbstractMojo {
 				throw new MojoExecutionException("Interrupted while waiting for service", e);
 			}
 		}
-
 		throw new MojoExecutionException("Service did not become available within " + timeout + " milliseconds");
 	}
 
@@ -143,6 +143,7 @@ public abstract class MBTMojo extends AbstractMojo {
 				}
 			}
 		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
 			throw new MojoExecutionException(e);
 		}
 		getLog().info("Ending execute");

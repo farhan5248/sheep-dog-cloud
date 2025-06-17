@@ -17,7 +17,6 @@ import org.springframework.jms.support.converter.MessageType;
 
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
-import jakarta.jms.Session;
 
 @Configuration
 @EnableJms

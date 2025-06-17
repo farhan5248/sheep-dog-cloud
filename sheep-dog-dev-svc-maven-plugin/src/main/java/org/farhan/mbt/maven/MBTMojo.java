@@ -59,7 +59,7 @@ public abstract class MBTMojo extends AbstractMojo {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		parameters.put("tags", tags);
 		parameters.put("fileName", fileName);
-		return restTemplate.(getHost() + "run" + goal + "?tags={tags}&fileName={fileName}", contents,
+		return restTemplate.postForObject(getHost() + "run" + goal + "?tags={tags}&fileName={fileName}", contents,
 				TransformableFile.class, parameters).getFileContent();
 	}
 
@@ -144,6 +144,7 @@ public abstract class MBTMojo extends AbstractMojo {
 			}
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
+
 			throw new MojoExecutionException(e);
 		}
 		getLog().info("Ending execute");

@@ -273,7 +273,7 @@
 								<argument>rollout</argument>
 								<argument>restart</argument>
 								<argument>deployment</argument>
-								<argument>${project.artifactId}</argument>
+								<argument>sheep-dog-dev-svc</argument>
 								<argument>-n</argument>
 								<argument>failsafe</argument>
 							</arguments>

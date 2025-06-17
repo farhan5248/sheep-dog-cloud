@@ -71,6 +71,7 @@ public class GoalObject extends TestObject {
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK &&
 						response.getBody().contains("\"status\":\"UP\"")) {
+					System.out.println("Service ready");
 					return;
 				}
 			} catch (Exception e) {

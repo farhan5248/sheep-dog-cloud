@@ -1,4 +1,3 @@
 cd ..
-call mvn clean
-call mvn org.farhan:sheep-dog-dev-maven-plugin:1.26-SNAPSHOT:uml-to-cucumber-spring -DrepoDir=../../sheep-dog-qa/sheep-dog-specs/ -Dtags="round-trip"
+call mvn clean org.farhan:sheep-dog-dev-svc-maven-plugin:uml-to-cucumber-spring -Dtags="round-trip" -Dhost="dev.sheepdogdev.io"
 cd scripts 

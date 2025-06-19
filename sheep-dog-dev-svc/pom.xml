@@ -177,6 +177,16 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.farhan</groupId>
+				<artifactId>sheep-dog-dev-svc-maven-plugin</artifactId>
+				<version>1.29</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>

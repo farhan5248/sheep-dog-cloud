@@ -1,6 +1,4 @@
 package org.farhan.mbt.maven;
-import org.springframework.retry.support.RetryTemplate;
-import org.springframework.retry.policy.TimeoutRetryPolicy;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

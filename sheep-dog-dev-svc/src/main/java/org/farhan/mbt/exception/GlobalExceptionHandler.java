@@ -11,38 +11,54 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-    
-    @ExceptionHandler(TransformationException.class)
+
+    @ExceptionHandler(PublishingException.class)
     public ResponseEntity<ErrorResponse> handleMessagePublishingException(
+            PublishingException ex, WebRequest request) {
+
+        logger.error("Publishing exception occurred: {}", ex.getMessage(), ex);
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Couldn't publish the object",
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(TransformationException.class)
+    public ResponseEntity<ErrorResponse> handleTransformationException(
             TransformationException ex, WebRequest request) {
-        
-        logger.error("Resource not found exception occurred: {}", ex.getMessage(), ex);
-        
+
+        logger.error("Transformation exception occurred: {}", ex.getMessage(), ex);
+
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Couldn't transform the object",
                 ex.getMessage(),
                 request.getDescription(false));
-        
+
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex, WebRequest request) {
-        
+
         logger.error("Unhandled exception occurred: {}", ex.getMessage(), ex);
-        
+
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
-                "An unexpected error occurred",
+                ex.getMessage(),
                 request.getDescription(false));
-        
+
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

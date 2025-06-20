@@ -5,8 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.farhan.mbt.config.JmsConfig;
 import org.farhan.mbt.convert.Converter;
-import org.farhan.mbt.exception.MessageConsumingException;
-import org.farhan.mbt.exception.MessagePublishingException;
+import org.farhan.mbt.exception.PublishingException;
 import org.farhan.mbt.exception.TransformationException;
 import org.farhan.mbt.model.TransformableFile;
 import org.slf4j.Logger;
@@ -36,8 +35,7 @@ public class TransformationService {
             logger.debug("response: " + mtr.toString());
             return mtr;
         } catch (Exception e) {
-            logger.error("Error checking queue status", e);
-            throw new TransformationException("Error converting object", e);
+            throw new TransformationException(fileName, e);
         }
     }
 
@@ -45,8 +43,7 @@ public class TransformationService {
         try {
             mojo.clearProjects();
         } catch (Exception e) {
-            logger.error("Error checking queue status", e);
-            throw new TransformationException("Error clearing objects", e);
+            throw new TransformationException("Clearing objects", e);
         }
     }
 
@@ -62,8 +59,7 @@ public class TransformationService {
             }
             return fileList;
         } catch (Exception e) {
-            logger.error("Error checking queue status", e);
-            throw new TransformationException("Error getting object names", e);
+            throw new TransformationException("Getting object names for tags: " + tags, e);
         }
     }
 
@@ -80,12 +76,11 @@ public class TransformationService {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error publishing object", e);
-            throw new MessagePublishingException("Error publishing object", e);
+            throw new PublishingException(mtr.getFileName(), e);
         }
         if (MessageConsumer.IN_FLIGHT == -1) {
-            logger.error("Message processing failed for file: " + mtr.getFileName());
-            throw new MessagePublishingException("Message processing failed for file: " + mtr.getFileName());
+            // This is only temp, remove it when IN_FLIGHT is removed
+            throw new TransformationException(mtr.getFileName());
         }
     }
 
@@ -124,8 +119,7 @@ public class TransformationService {
 
             return false; // Timeout occurred
         } catch (JMSException e) {
-            logger.error("Error checking queue status", e);
-            throw new MessageConsumingException("Error checking queue status", e);
+            throw new PublishingException("Waiting for queue to clear", e);
         }
     }
 

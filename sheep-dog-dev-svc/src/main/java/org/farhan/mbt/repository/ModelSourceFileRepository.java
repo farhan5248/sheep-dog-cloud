@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface ModelSourceFileRepository extends JpaRepository<ModelSourceFile, String> {
     
     @Query("SELECT m FROM ModelSourceFile m WHERE m.fileName LIKE :pattern")
-    List<ModelSourceFile> findByFileNameLike(@Param("pattern") String pattern);
+    List<ModelSourceFile> findByFileNameLike(@Param("pattern") String fileNamePattern);
     
     ModelSourceFile findByFileName(String fileName);
 }

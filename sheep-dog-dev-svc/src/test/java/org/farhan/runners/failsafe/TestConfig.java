@@ -15,9 +15,9 @@ import org.springframework.context.annotation.ComponentScan;
 		org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class })
 @ActiveProfiles("failsafe")
 @CucumberContextConfiguration
-@ContextConfiguration(classes = Config.class)
+@ContextConfiguration(classes = TestConfig.class)
 @TestPropertySource("classpath:application-failsafe.properties")
-public class Config {
+public class TestConfig {
 
 	public void deleteDir(File aDir) {
 		if (aDir.exists()) {

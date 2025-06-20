@@ -1,13 +1,15 @@
 package org.farhan.runners.failsafe;
 
-import io.cucumber.java.Before;
-import io.cucumber.spring.CucumberContextConfiguration;
+import java.io.File;
+
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import java.io.File;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
+
+import io.cucumber.java.Before;
+import io.cucumber.spring.CucumberContextConfiguration;
 
 @ComponentScan(basePackages = {"org.farhan.impl"})
 @EnableAutoConfiguration

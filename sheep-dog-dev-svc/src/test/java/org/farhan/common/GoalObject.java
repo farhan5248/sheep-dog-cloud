@@ -21,6 +21,7 @@ public class GoalObject extends TestObject {
 	public GoalObject() {
 		attributes.put("tags", "");
 		restTemplate = new RestTemplate();
+		// TODO add a property for this
 		//restTemplate.getInterceptors().add(new CaptureInterceptor());
 	}
 

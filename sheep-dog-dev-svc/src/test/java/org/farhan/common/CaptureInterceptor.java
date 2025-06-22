@@ -2,6 +2,7 @@ package org.farhan.common;
 
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.farhan.runners.surefire.springboot.CucumberTestConfig;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 
@@ -14,36 +15,59 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-        // Capture request
         String requestBody = new String(body, StandardCharsets.UTF_8);
-        String requestInfo = request.getMethod() + " " + request.getURI() + "\n" + requestBody;
-        // Execute and buffer response
         ClientHttpResponse response = execution.execute(request, body);
         byte[] responseBodyBytes = response.getBody().readAllBytes();
         String responseBody = new String(responseBodyBytes, StandardCharsets.UTF_8);
-        String responseInfo = response.getStatusCode() + "\n" + responseBody;
 
         if (!request.getURI().getPath().contains("actuator")) {
-            saveGroovyContract("src/test/resources/contracts/" + counter + ".groovy", request, requestBody, response, responseBody);
+            saveGroovyContract(
+                    "src/test/resources/contracts/" + CucumberTestConfig.scenarioId + "." + counter + ".groovy",
+                    request, requestBody, response, responseBody);
         }
 
         // Return a new response with the buffered body
         return new BufferingClientHttpResponseWrapper(response, responseBodyBytes);
     }
 
-    private void saveGroovyContract(String path, HttpRequest request, String requestBody, ClientHttpResponse response, String responseBody) throws IOException {
+    private void saveGroovyContract(String path, HttpRequest request, String requestBody, ClientHttpResponse response,
+            String responseBody) throws IOException {
         String method = request.getMethod().name();
         String url = request.getURI().getPath();
         @SuppressWarnings("deprecation")
         int status = response.getRawStatusCode();
-        String contentType = response.getHeaders().getContentType() != null ? response.getHeaders().getContentType().toString() : "application/json";
+        String contentType = response.getHeaders().getContentType() != null
+                ? response.getHeaders().getContentType().toString()
+                : "application/json";
         StringBuilder groovy = new StringBuilder();
         groovy.append("org.springframework.cloud.contract.spec.Contract.make {\n");
         groovy.append("    request {\n");
         groovy.append("        method '" + method + "'\n");
-        groovy.append("        url '" + url + "'\n");
+        // Add query parameters if present (map style)
+        String query = request.getURI().getQuery();
+        if (query != null && !query.isBlank()) {
+            groovy.append("        url ('" + url + "') {\n");
+            groovy.append("            queryParameters {\n");
+            String[] params = query.split("&");
+            for (String param : params) {
+                String[] kv = param.split("=", 2);
+                String key = kv[0];
+                String value = kv.length > 1 ? kv[1] : "";
+                groovy.append("                parameter " + key + ": '" + value + "'\n");
+            }
+            groovy.append("            }\n");
+            groovy.append("        }\n");
+
+        } else {
+            groovy.append("        url '" + url + "'\n");
+        }
         if (requestBody != null && !requestBody.isBlank()) {
             groovy.append("        body('''" + requestBody.replace("'", "\\'") + "''')\n");
+        }
+        if (CucumberTestConfig.scenarioId != null) {
+            groovy.append("        headers {\n");
+            groovy.append("            header('scenarioId', '" + CucumberTestConfig.scenarioId + "')\n");
+            groovy.append("        }\n");
         }
         groovy.append("    }\n");
         groovy.append("    response {\n");
@@ -54,7 +78,16 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
             groovy.append("        }\n");
         }
         if (responseBody != null && !responseBody.isBlank()) {
-            groovy.append("        body('''" + responseBody.replace("'", "\\'") + "''')\n");
+            // Try to pretty-print and validate JSON, else save as plain string
+            String jsonBody = responseBody;
+            try {
+                com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                Object json = mapper.readValue(responseBody, Object.class);
+                jsonBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+            } catch (Exception e) {
+                // Not valid JSON, save as is
+            }
+            groovy.append("        body(" + jsonBody + ")\n");
         }
         groovy.append("    }\n");
         groovy.append("}\n");
@@ -65,7 +98,8 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
         File[] files = dir.listFiles((d, name) -> name.endsWith(".groovy"));
         if (files != null) {
             for (File file : files) {
-                String existing = new String(java.nio.file.Files.readAllBytes(file.toPath()), java.nio.charset.StandardCharsets.UTF_8);
+                String existing = new String(java.nio.file.Files.readAllBytes(file.toPath()),
+                        java.nio.charset.StandardCharsets.UTF_8);
                 if (existing.equals(newContract)) {
                     // Duplicate found, do not save
                     return;

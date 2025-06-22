@@ -38,7 +38,7 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
         int status = response.getRawStatusCode();
         String contentType = response.getHeaders().getContentType() != null
                 ? response.getHeaders().getContentType().toString()
-                : "application/json";
+                : null;
         StringBuilder groovy = new StringBuilder();
         groovy.append("org.springframework.cloud.contract.spec.Contract.make {\n");
         groovy.append("    request {\n");
@@ -78,16 +78,12 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
             groovy.append("        }\n");
         }
         if (responseBody != null && !responseBody.isBlank()) {
-            // Try to pretty-print and validate JSON, else save as plain string
-            String jsonBody = responseBody;
-            try {
-                com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-                Object json = mapper.readValue(responseBody, Object.class);
-                jsonBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-            } catch (Exception e) {
-                // Not valid JSON, save as is
+            // TODO not sure why this is happening but it is so doing this hack for now
+            responseBody = responseBody.replace("\\", "\\\\").replace("'", "\\'");
+            if (responseBody.contains(".feature")) {
+               // responseBody = responseBody.replace("\\\\n", "\n");
             }
-            groovy.append("        body(" + jsonBody + ")\n");
+            groovy.append("        body('''" + responseBody + "''')\n");
         }
         groovy.append("    }\n");
         groovy.append("}\n");

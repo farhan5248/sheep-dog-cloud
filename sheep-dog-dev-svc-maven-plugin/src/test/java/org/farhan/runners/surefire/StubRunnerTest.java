@@ -22,9 +22,10 @@ public class StubRunnerTest {
         headers.add("scenarioId", "Create cucumber files from asciidoc files");
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
         restTemplate.exchange(
-                "http://localhost:8080/sheep-dog-dev-svc/clearConvertAsciidoctorToUMLObjects",
+                "http://localhost:8080/sheep-dog-dev-svc/clearConvertAsciidoctorToUMLObjects?tags={tags}",
                 org.springframework.http.HttpMethod.DELETE,
                 requestEntity,
-                Void.class);
+                Void.class,
+                "");
     }
 }

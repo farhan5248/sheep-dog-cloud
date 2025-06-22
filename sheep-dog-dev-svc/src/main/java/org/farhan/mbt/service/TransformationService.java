@@ -30,8 +30,10 @@ public class TransformationService {
 
     public TransformableFile convertObject(Converter mojo, String fileName, String contents) {
         try {
+            // The replace \r is because when run on a windows machine the tests return a \r
+            // but not on a linux machine
             TransformableFile mtr = new TransformableFile(fileName,
-                    mojo.convertFile(fileName, contents == null ? "" : contents));
+                    mojo.convertFile(fileName, contents == null ? "" : contents).replace("\r", ""));
             logger.debug("response: " + mtr.toString());
             return mtr;
         } catch (Exception e) {

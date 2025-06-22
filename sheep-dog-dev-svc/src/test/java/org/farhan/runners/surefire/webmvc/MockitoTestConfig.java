@@ -9,7 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 @Configuration
 @ComponentScan(basePackages = { "org.farhan.mbt.controller", "org.farhan.mbt.exception", "org.farhan.mbt.service" })
 @TestPropertySource("classpath:application-surefire.properties")
-public class WebMvcTestConfig {
+public class MockitoTestConfig {
     @Bean
     public JmsTemplate jmsTemplate() {
         return org.mockito.Mockito.mock(JmsTemplate.class);

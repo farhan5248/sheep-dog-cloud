@@ -24,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@ContextConfiguration(classes = WebMvcTestConfig.class)
+@ContextConfiguration(classes = MockitoTestConfig.class)
 @ActiveProfiles("surefire")
 @WebMvcTest(TransformationController.class)
 public class TransformationControllerTest {

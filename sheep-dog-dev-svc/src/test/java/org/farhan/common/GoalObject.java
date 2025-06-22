@@ -15,11 +15,13 @@ import org.springframework.web.client.RestTemplate;
 
 public class GoalObject extends TestObject {
 
-	private final RestTemplate restTemplate = new RestTemplate();
+	private final RestTemplate restTemplate;
 	private final int RETRY_COUNT = 10;
 
 	public GoalObject() {
 		attributes.put("tags", "");
+		restTemplate = new RestTemplate();
+		//restTemplate.getInterceptors().add(new CaptureInterceptor());
 	}
 
 	@Value("${sheepdog.host:dev.sheepdogdev.io}")

@@ -220,7 +220,7 @@
 				<version>${spring-cloud-contract.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<packageWithBaseClasses>org.farhan.runners.surefire.springboot.StubRunnerBase</packageWithBaseClasses>
+					<baseClassForTests>org.farhan.runners.surefire.springboot.StubRunnerTestConfig</baseClassForTests>
 				</configuration>
 			</plugin>
 			<plugin>

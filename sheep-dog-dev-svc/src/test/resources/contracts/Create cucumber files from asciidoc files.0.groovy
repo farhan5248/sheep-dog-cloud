@@ -1,16 +1,10 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
-        method 'DELETE'
-        url ('/sheep-dog-dev-svc/clearConvertAsciidoctorToUMLObjects') {
-            queryParameters {
-                parameter tags: ''
-            }
-        }
-        headers {
-            header('scenarioId', 'Create cucumber files from asciidoc files')
-        }
+        method 'GET'
+        url '/actuator/health'
     }
     response {
         status 200
+        body('''{"status":"UP"}''')
     }
 }

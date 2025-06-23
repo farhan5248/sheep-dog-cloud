@@ -19,7 +19,6 @@
 		<project.build.sourceEncoding>
 			UTF-8</project.build.sourceEncoding>
 		<java.version>21</java.version>
-		<sheep-dog-dev-svc.version>1.28-SNAPSHOT</sheep-dog-dev-svc.version>
 	</properties>
 
 	<scm>
@@ -161,12 +160,6 @@
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
 			<version>2.0.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.farhan</groupId>
-			<artifactId>sheep-dog-dev-svc</artifactId>
-			<version>${sheep-dog-dev-svc.version}</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

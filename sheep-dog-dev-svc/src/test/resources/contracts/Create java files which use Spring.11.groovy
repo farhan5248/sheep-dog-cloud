@@ -1,12 +1,30 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'POST'
-        url ('/sheep-dog-dev-svc/runConvertUMLToCucumberSpring') {
+        url ('/sheep-dog-dev-svc/runConvertAsciidoctorToUML') {
             queryParameters {
-                parameter tags: ''
-                parameter fileName: 'src-gen/test/resources/cucumber/specs/app/Process.feature'
+                parameter fileName: 'src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc'
             }
         }
+        body('''= Step-Object: Object page
+
+== Step-Definition: is valid
+
+== Step-Definition: is invalid
+
+== Step-Definition: is created as follows
+
+* Step-Parameters: 1
++
+|===
+| grp | ins
+|===
+
+* Step-Parameters: 2
++
+|===
+| Content
+|===''')
         headers {
             header('scenarioId', 'Create java files which use Spring')
         }
@@ -16,6 +34,6 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {
             contentType('application/json')
         }
-//        body('''{"fileName":"src-gen/test/resources/cucumber/specs/app/Process.feature","fileContent":"@tag1\\nFeature: Process\\n\\n  \\\\@tag1\\n  Desc 1\\n\\n  @tag2\\n  Scenario: Story One\\n\\n    \\\\@tag2\\n    Desc 2\\n\\n    Given The blah application, Object page is valid\\n     Then The blah application, Object page is created as follows\\n          \\"\\"\\"\\n            text1\\n          \\n            text2\\n          \\"\\"\\"\\n\\n  @tag3\\n  Scenario Outline: Story Two\\n\\n    \\\\@tag3\\n    Desc 3\\n\\n    Given The blah application, Object page is invalid\\n     When The blah application, Object page is created as follows\\n          | grp | ins   |\\n          | 8   | <ins> |\\n\\n    Examples: Some data\\n\\n          | ins |\\n          | 4   |\\n\\n    Examples: Dataset 2\\n\\n          | ins |\\n          | 5   |\\n          | 6   |\\n\\n","tags":null}''')
+        body('''{"fileName":"src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc","fileContent":"= Step-Object: Object page\\n\\n== Step-Definition: is valid\\n\\n== Step-Definition: is invalid\\n\\n== Step-Definition: is created as follows\\n\\n* Step-Parameters: 1\\n+\\n|===\\n| grp | ins\\n|===\\n\\n* Step-Parameters: 2\\n+\\n|===\\n| Content\\n|===","tags":""}''')
     }
 }

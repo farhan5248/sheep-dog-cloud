@@ -1,13 +1,13 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'POST'
-        url ('/sheep-dog-dev-svc/runConvertUMLToCucumber') {
+        url ('/sheep-dog-dev-svc/runConvertUMLToCucumberGuice') {
             queryParameters {
                 parameter fileName: 'src-gen/test/resources/cucumber/specs/app/Process.feature'
             }
         }
         headers {
-            header('scenarioId', 'Create cucumber files from asciidoc files')
+            header('scenarioId', 'Create java files which use Guice')
         }
     }
     response {

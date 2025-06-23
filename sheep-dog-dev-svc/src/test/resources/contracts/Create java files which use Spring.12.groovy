@@ -1,12 +1,7 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
-        method 'POST'
-        url ('/sheep-dog-dev-svc/runConvertUMLToCucumberSpring') {
-            queryParameters {
-                parameter tags: ''
-                parameter fileName: 'src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java'
-            }
-        }
+        method 'GET'
+        url '/sheep-dog-dev-svc/getConvertUMLToCucumberSpringObjectNames'
         headers {
             header('scenarioId', 'Create java files which use Spring')
         }
@@ -16,6 +11,6 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {
             contentType('application/json')
         }
-        body('''{"fileName":"src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java","fileContent":"package org.farhan.stepdefs.blah;\\n\\nimport io.cucumber.datatable.DataTable;\\nimport io.cucumber.java.en.Given;\\nimport org.farhan.common.TestSteps;\\nimport org.farhan.objects.blah.ObjectPage;\\n\\npublic class BlahObjectPageSteps extends TestSteps {\\n\\n    public BlahObjectPageSteps(ObjectPage object) {\\n        super(object, \\"blah\\", \\"Object\\");\\n    }\\n\\n    @Given(\\"^The blah application, Object page is created as follows$\\")\\n    public void isCreatedAsFollows(DataTable dataTable) {\\n        object.setInputOutputs(dataTable);\\n    }\\n\\n    @Given(\\"^The blah application, Object page is invalid$\\")\\n    public void isInvalid() {\\n        object.setInputOutputs(\\"Invalid\\");\\n    }\\n\\n    @Given(\\"^The blah application, Object page is valid$\\")\\n    public void isValid() {\\n        object.setInputOutputs(\\"Valid\\");\\n    }\\n}\\n","tags":null}''')
+        body('''[{"fileName":"src-gen/test/resources/cucumber/specs/app/Process.feature","fileContent":"","tags":null},{"fileName":"src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java","fileContent":"","tags":null},{"fileName":"src-gen/test/java/org/farhan/objects/blah/ObjectPage.java","fileContent":"","tags":null}]''')
     }
 }

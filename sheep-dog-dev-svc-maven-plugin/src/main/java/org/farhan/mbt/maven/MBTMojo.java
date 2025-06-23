@@ -10,6 +10,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +28,14 @@ public abstract class MBTMojo extends AbstractMojo {
 	public String baseDir = "";
 
 	private final RestTemplate restTemplate;
+	private HttpEntity<Void> requestEntity;
 	private final int RETRY_COUNT = 10;
 
 	public MBTMojo() {
 		baseDir = new File("").getAbsolutePath();
 		RestClientConfig config = new RestClientConfig();
-		this.restTemplate = config.restTemplate();
+		restTemplate = config.restTemplate();
+		requestEntity = new HttpEntity<>(new HttpHeaders());
 	}
 
 	@Parameter(property = "tags", defaultValue = "")
@@ -52,11 +56,21 @@ public abstract class MBTMojo extends AbstractMojo {
 
 	private void clearObjects(String goal) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		parameters.put("tags", tags);
+		String url = getHost() + "clear" + goal + "Objects";
+		if (!tags.isEmpty()) {
+			parameters.put("tags", tags);
+			url += "?tags={tags}";
+		}
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
-				restTemplate.delete(getHost() + "clear" + goal + "Objects?tags={tags}", parameters);
+				restTemplate.exchange(
+						url,
+						HttpMethod.DELETE,
+						requestEntity,
+						Void.class,
+						parameters);
+
 				return; // Exit if successful
 			} catch (Exception e) {
 				getLog().info("Retry attempt " + (retryCount + 1));
@@ -69,15 +83,23 @@ public abstract class MBTMojo extends AbstractMojo {
 
 	private String convertObject(String goal, String fileName, String contents) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		parameters.put("tags", tags);
+		String url = getHost() + "run" + goal + "?fileName={fileName}";
+		if (!tags.isEmpty()) {
+			parameters.put("tags", tags);
+			url += "&tags={tags}";
+		}
 		parameters.put("fileName", fileName);
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
-				return restTemplate
-						.postForObject(getHost() + "run" + goal + "?tags={tags}&fileName={fileName}", contents,
-								TransformableFile.class, parameters)
-						.getFileContent();
+				ResponseEntity<TransformableFile> postResponse = restTemplate.exchange(
+						url,
+						HttpMethod.POST,
+						new HttpEntity<>(contents,
+								requestEntity != null ? requestEntity.getHeaders() : new HttpHeaders()),
+						TransformableFile.class,
+						parameters);
+				return postResponse.getBody().getFileContent();
 			} catch (Exception e) {
 				getLog().info("Retry attempt " + (retryCount + 1));
 				Thread.sleep(1000);
@@ -90,14 +112,18 @@ public abstract class MBTMojo extends AbstractMojo {
 	private List<TransformableFile> getObjectNames(String goal) throws Exception {
 
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		parameters.put("tags", tags);
+		String url = getHost() + "get" + goal + "ObjectNames";
+		if (!tags.isEmpty()) {
+			parameters.put("tags", tags);
+			url += "?tags={tags}";
+		}
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
 				ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(
-						getHost() + "get" + goal + "ObjectNames?tags={tags}",
+						url,
 						HttpMethod.GET,
-						null,
+						requestEntity,
 						new ParameterizedTypeReference<List<TransformableFile>>() {
 						}, parameters);
 				List<TransformableFile> fileList = response.getBody();
@@ -189,6 +215,12 @@ public abstract class MBTMojo extends AbstractMojo {
 			throw new MojoExecutionException(e);
 		}
 		getLog().info("Ending execute");
+	}
+
+	public void setScenarioId(String scenarioId) {
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("scenarioId", scenarioId);
+		requestEntity = new HttpEntity<>(httpHeaders);
 	}
 
 }

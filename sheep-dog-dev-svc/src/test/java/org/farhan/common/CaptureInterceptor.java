@@ -20,11 +20,9 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
         byte[] responseBodyBytes = response.getBody().readAllBytes();
         String responseBody = new String(responseBodyBytes, StandardCharsets.UTF_8);
 
-        if (!request.getURI().getPath().contains("actuator")) {
-            saveGroovyContract(
-                    "src/test/resources/contracts/" + CucumberTestConfig.scenarioId + "." + counter + ".groovy",
-                    request, requestBody, response, responseBody);
-        }
+        saveGroovyContract(
+                "src/test/resources/contracts/" + CucumberTestConfig.scenarioId + "." + counter + ".groovy",
+                request, requestBody, response, responseBody);
 
         // Return a new response with the buffered body
         return new BufferingClientHttpResponseWrapper(response, responseBodyBytes);
@@ -81,7 +79,7 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
             // TODO not sure why this is happening but it is so doing this hack for now
             responseBody = responseBody.replace("\\", "\\\\").replace("'", "\\'");
             if (responseBody.contains(".feature")) {
-               // responseBody = responseBody.replace("\\\\n", "\n");
+                // responseBody = responseBody.replace("\\\\n", "\n");
             }
             groovy.append("        body('''" + responseBody + "''')\n");
         }

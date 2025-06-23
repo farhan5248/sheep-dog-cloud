@@ -1,6 +1,7 @@
 package org.farhan.common;
 
 import org.farhan.mbt.maven.MBTMojo;
+import org.farhan.runners.surefire.TestConfig;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -28,6 +29,9 @@ public abstract class GoalObject extends TestObject {
 			mojo.host = serverHost;
 			mojo.port = serverPort;
 			mojo.timeout = timeout;
+			if (TestConfig.scenarioId != null) {
+				mojo.setScenarioId(TestConfig.scenarioId);
+			}
 			mojo.execute();
 		} catch (Exception e) {
 			Assertions.fail("There was an error executing the test step\n" + getStackTraceAsString(e));

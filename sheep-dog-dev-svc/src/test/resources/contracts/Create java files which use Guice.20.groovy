@@ -1,12 +1,7 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
-        method 'POST'
-        url ('/sheep-dog-dev-svc/runConvertUMLToCucumberGuice') {
-            queryParameters {
-                parameter tags: ''
-                parameter fileName: 'src-gen/test/java/org/farhan/objects/blah/ObjectPage.java'
-            }
-        }
+        method 'GET'
+        url '/sheep-dog-dev-svc/getConvertUMLToCucumberGuiceObjectNames'
         headers {
             header('scenarioId', 'Create java files which use Guice')
         }
@@ -16,6 +11,6 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {
             contentType('application/json')
         }
-        body('''{"fileName":"src-gen/test/java/org/farhan/objects/blah/ObjectPage.java","fileContent":"package org.farhan.objects.blah;\\n\\nimport java.util.HashMap;\\n\\npublic interface ObjectPage {\\n\\n    public void setGrp(HashMap<String, String> keyMap);\\n\\n    public void setIns(HashMap<String, String> keyMap);\\n\\n    public void setContent(HashMap<String, String> keyMap);\\n\\n    public void setInvalid(HashMap<String, String> keyMap);\\n\\n    public void setValid(HashMap<String, String> keyMap);\\n}\\n","tags":null}''')
+        body('''[{"fileName":"src-gen/test/resources/cucumber/specs/app/Process.feature","fileContent":"","tags":null},{"fileName":"src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java","fileContent":"","tags":null},{"fileName":"src-gen/test/java/org/farhan/objects/blah/ObjectPage.java","fileContent":"","tags":null}]''')
     }
 }

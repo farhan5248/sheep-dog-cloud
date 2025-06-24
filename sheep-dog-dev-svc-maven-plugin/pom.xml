@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -10,7 +8,7 @@
 	</parent>
 	<groupId>org.farhan</groupId>
 	<artifactId>sheep-dog-dev-svc-maven-plugin</artifactId>
-	<version>1.30-SNAPSHOT</version>
+	<version>1.30</version>
 	<packaging>maven-plugin</packaging>
 	<name>Lean Sheep Dog Tools for Developers Service Maven Plugin</name>
 
@@ -23,7 +21,7 @@
 
 	<scm>
 		<connection>scm:git:https://github.com/farhan5248/sheep-dog-cloud</connection>
-		<tag>sheep-dog-dev-svc-maven-plugin-1.28</tag>
+		<tag>sheep-dog-dev-svc-maven-plugin-1.30</tag>
 	</scm>
 
 	<pluginRepositories>

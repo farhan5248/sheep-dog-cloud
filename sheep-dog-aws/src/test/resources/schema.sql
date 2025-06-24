@@ -1,5 +1,0 @@
-CREATE TABLE IF NOT EXISTS greetings (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    content VARCHAR(255) NOT NULL,
-    created_time DATETIME NOT NULL
-);

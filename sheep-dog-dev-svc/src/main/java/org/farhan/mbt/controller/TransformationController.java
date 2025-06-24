@@ -1,14 +1,15 @@
 package org.farhan.mbt.controller;
 
 import java.util.List;
-import org.farhan.mbt.convert.ConvertAsciidoctorToUML;
-import org.farhan.mbt.convert.ConvertCucumberToUML;
-import org.farhan.mbt.convert.ConvertUMLToAsciidoctor;
-import org.farhan.mbt.convert.ConvertUMLToCucumber;
-import org.farhan.mbt.convert.ConvertUMLToCucumberGuice;
-import org.farhan.mbt.convert.ConvertUMLToCucumberSpring;
-import org.farhan.mbt.convert.ObjectRepository;
+
+import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
+import org.farhan.mbt.asciidoctor.ConvertUMLToAsciidoctor;
+import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.model.TransformableFile;
+import org.farhan.mbt.next.cucumber.ConvertCucumberToUML;
+import org.farhan.mbt.next.cucumber.ConvertUMLToCucumber;
+import org.farhan.mbt.next.cucumber.ConvertUMLToCucumberGuice;
+import org.farhan.mbt.next.cucumber.ConvertUMLToCucumberSpring;
 import org.farhan.mbt.service.TransformationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

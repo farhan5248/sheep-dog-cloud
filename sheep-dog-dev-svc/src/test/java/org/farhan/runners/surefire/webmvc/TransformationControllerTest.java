@@ -10,9 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
 import org.farhan.mbt.controller.TransformationController;
-import org.farhan.mbt.convert.ConvertAsciidoctorToUML;
-import org.farhan.mbt.convert.ObjectRepository;
+import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.exception.TransformationException;
 import org.farhan.mbt.service.TransformationService;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package org.farhan.mbt.controller;
 
 import org.slf4j.Logger;
 
-public class LoggerImpl implements org.farhan.mbt.convert.Logger {
+public class LoggerImpl implements org.farhan.mbt.core.Logger {
 
 	private Logger log;
 

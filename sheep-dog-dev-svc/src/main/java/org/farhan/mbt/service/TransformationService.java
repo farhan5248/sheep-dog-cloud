@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import org.farhan.mbt.config.JmsConfig;
-import org.farhan.mbt.convert.Converter;
+import org.farhan.mbt.core.Converter;
 import org.farhan.mbt.exception.PublishingException;
 import org.farhan.mbt.exception.TransformationException;
 import org.farhan.mbt.model.TransformableFile;

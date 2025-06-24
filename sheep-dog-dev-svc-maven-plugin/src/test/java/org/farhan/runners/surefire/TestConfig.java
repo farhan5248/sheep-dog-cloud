@@ -25,7 +25,7 @@ import io.cucumber.spring.CucumberContextConfiguration;
 @TestPropertySource("classpath:application-surefire.properties")
 @ExtendWith({ StubRunnerExtension.class, SpringExtension.class })
 // TODO update this to read the surefire properties file
-@AutoConfigureStubRunner(ids = "org.farhan:sheep-dog-dev-svc:+:stubs:8081", stubsMode = StubRunnerProperties.StubsMode.LOCAL)
+@AutoConfigureStubRunner(ids = "org.farhan:sheep-dog-dev-svc:+:stubs:8080", stubsMode = StubRunnerProperties.StubsMode.LOCAL)
 
 public class TestConfig {
 

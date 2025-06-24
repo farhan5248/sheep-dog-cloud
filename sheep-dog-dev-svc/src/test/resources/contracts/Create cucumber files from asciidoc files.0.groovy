@@ -5,6 +5,6 @@ org.springframework.cloud.contract.spec.Contract.make {
     }
     response {
         status 200
-        body('''{"status":"UP"}''')
+        body(file('bodies/Create cucumber files from asciidoc files.0.rsp.json'))
     }
 }

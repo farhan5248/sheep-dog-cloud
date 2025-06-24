@@ -1,7 +1,12 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
-        method 'GET'
-        url '/sheep-dog-dev-svc/getConvertUMLToCucumberGuiceObjectNames'
+        method 'POST'
+        url ('/sheep-dog-dev-svc/runConvertAsciidoctorToUML') {
+            queryParameters {
+                parameter fileName: 'src/test/resources/asciidoc/specs/app/Process.asciidoc'
+            }
+        }
+        body(file('bodies/Create java files which use Guice.20.req.json'))
         headers {
             header('scenarioId', 'Create java files which use Guice')
         }
@@ -11,6 +16,6 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {
             contentType('application/json')
         }
-        body('''[{"fileName":"src-gen/test/resources/cucumber/specs/app/Process.feature","fileContent":"","tags":null},{"fileName":"src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java","fileContent":"","tags":null},{"fileName":"src-gen/test/java/org/farhan/objects/blah/ObjectPage.java","fileContent":"","tags":null}]''')
+        body(file('bodies/Create java files which use Guice.20.rsp.json'))
     }
 }

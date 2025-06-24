@@ -1,13 +1,13 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'POST'
-        url ('/sheep-dog-dev-svc/runConvertUMLToCucumberSpring') {
+        url ('/sheep-dog-dev-svc/runConvertUMLToCucumberGuice') {
             queryParameters {
                 parameter fileName: 'src-gen/test/resources/cucumber/specs/app/Process.feature'
             }
         }
         headers {
-            header('scenarioId', 'Create java files which use Spring')
+            header('scenarioId', 'Create java files which use Guice')
         }
     }
     response {
@@ -15,6 +15,6 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {
             contentType('application/json')
         }
-        body(file('bodies/Create java files which use Spring.15.rsp.json'))
+        body(file('bodies/Create java files which use Guice.24.rsp.json'))
     }
 }

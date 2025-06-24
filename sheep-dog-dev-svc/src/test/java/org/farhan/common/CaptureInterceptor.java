@@ -50,8 +50,10 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
             for (String param : params) {
                 String[] kv = param.split("=", 2);
                 String key = kv[0];
-                String value = kv.length > 1 ? kv[1] : "";
-                groovy.append("                parameter " + key + ": '" + value + "'\n");
+                if (kv[1].isBlank()) {
+                    continue;
+                }
+                groovy.append("                parameter " + key + ": '" + kv[1] + "'\n");
             }
             groovy.append("            }\n");
             groovy.append("        }\n");
@@ -60,7 +62,8 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
             groovy.append("        url '" + url + "'\n");
         }
         if (requestBody != null && !requestBody.isBlank()) {
-            groovy.append("        body('''" + requestBody.replace("'", "\\'") + "''')\n");
+            groovy.append("        body(file('" + "bodies/" + CucumberTestConfig.scenarioId + "." + counter
+                    + ".req.txt" + "'))\n");
         }
         if (CucumberTestConfig.scenarioId != null) {
             groovy.append("        headers {\n");
@@ -76,35 +79,39 @@ public class CaptureInterceptor implements ClientHttpRequestInterceptor {
             groovy.append("        }\n");
         }
         if (responseBody != null && !responseBody.isBlank()) {
-            // TODO not sure why this is happening but it is so doing this hack for now
-            responseBody = responseBody.replace("\\", "\\\\").replace("'", "\\'");
-            if (responseBody.contains(".feature")) {
-                // responseBody = responseBody.replace("\\\\n", "\n");
-            }
-            groovy.append("        body('''" + responseBody + "''')\n");
+            groovy.append("        body(file('" + "bodies/" + CucumberTestConfig.scenarioId + "." + counter
+                    + ".rsp.json" + "'))\n");
         }
         groovy.append("    }\n");
         groovy.append("}\n");
-        String newContract = groovy.toString();
 
-        // Check for duplicate content
-        File dir = new File("src/test/resources/contracts");
-        File[] files = dir.listFiles((d, name) -> name.endsWith(".groovy"));
-        if (files != null) {
-            for (File file : files) {
-                String existing = new String(java.nio.file.Files.readAllBytes(file.toPath()),
-                        java.nio.charset.StandardCharsets.UTF_8);
-                if (existing.equals(newContract)) {
-                    // Duplicate found, do not save
-                    return;
-                }
-            }
+        File bodyDir = new File("src/test/resources/contracts/bodies");
+        bodyDir.mkdirs(); // Ensure the directory exists
+
+        if (requestBody != null && !requestBody.isBlank()) {
+            FileWriter fw = new FileWriter(
+                    "src/test/resources/contracts/bodies/" + CucumberTestConfig.scenarioId + "." + counter
+                            + ".req.txt",
+                    false);
+            fw.write(requestBody);
+            fw.close();
         }
-        // No duplicate found, save the contract
+
+        if (responseBody != null && !responseBody.isBlank()) {
+            FileWriter fw = new FileWriter(
+                    "src/test/resources/contracts/bodies/" + CucumberTestConfig.scenarioId + "." + counter
+                            + ".rsp.json",
+                    false);
+            fw.write(responseBody.replace("\\\\", "\\\\\\\\"));
+            fw.close();
+        }
+
+        String newContract = groovy.toString();
         try (FileWriter fw = new FileWriter(path, false)) {
             fw.write(newContract);
             counter++;
         }
+
     }
 
     // Wrapper to allow multiple reads of the response body

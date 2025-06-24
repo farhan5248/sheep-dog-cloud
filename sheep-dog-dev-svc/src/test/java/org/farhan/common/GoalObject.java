@@ -22,7 +22,7 @@ public class GoalObject extends TestObject {
 		attributes.put("tags", "");
 		restTemplate = new RestTemplate();
 		// TODO add a property for this
-		//restTemplate.getInterceptors().add(new CaptureInterceptor());
+		// restTemplate.getInterceptors().add(new CaptureInterceptor());
 	}
 
 	@Value("${sheepdog.host:dev.sheepdogdev.io}")

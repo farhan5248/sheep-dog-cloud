@@ -73,7 +73,7 @@ public abstract class MBTMojo extends AbstractMojo {
 
 				return; // Exit if successful
 			} catch (Exception e) {
-				getLog().info("Retry attempt " + (retryCount + 1));
+				getLog().error("Retry attempt " + (retryCount + 1), e);
 				Thread.sleep(1000);
 				retryCount++;
 			}
@@ -101,7 +101,7 @@ public abstract class MBTMojo extends AbstractMojo {
 						parameters);
 				return postResponse.getBody().getFileContent();
 			} catch (Exception e) {
-				getLog().info("Retry attempt " + (retryCount + 1));
+				getLog().error("Retry attempt " + (retryCount + 1), e);
 				Thread.sleep(1000);
 				retryCount++;
 			}
@@ -132,7 +132,7 @@ public abstract class MBTMojo extends AbstractMojo {
 				}
 				return fileList;
 			} catch (Exception e) {
-				getLog().info("Retry attempt " + (retryCount + 1));
+				getLog().error("Retry attempt " + (retryCount + 1), e);
 				Thread.sleep(1000);
 				retryCount++;
 			}

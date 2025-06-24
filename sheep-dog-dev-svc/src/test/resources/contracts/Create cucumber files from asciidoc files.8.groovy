@@ -3,7 +3,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         method 'POST'
         url ('/sheep-dog-dev-svc/runConvertUMLToCucumber') {
             queryParameters {
-                parameter fileName: 'src-gen/test/resources/cucumber/specs/app/Process.feature'
+                parameter fileName: 'src-gen/test/java/org/farhan/objects/blah/ObjectPage.java'
             }
         }
         headers {
@@ -15,6 +15,6 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {
             contentType('application/json')
         }
-        body(file('bodies/Create cucumber files from asciidoc files.6.rsp.json'))
+        body(file('bodies/Create cucumber files from asciidoc files.8.rsp.json'))
     }
 }

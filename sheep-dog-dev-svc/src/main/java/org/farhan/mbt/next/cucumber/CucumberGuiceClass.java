@@ -1,7 +1,6 @@
 package org.farhan.mbt.next.cucumber;
 
 import org.farhan.dsl.common.TestStepNameHelper;
-import org.farhan.mbt.cucumber.CucumberClass;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;

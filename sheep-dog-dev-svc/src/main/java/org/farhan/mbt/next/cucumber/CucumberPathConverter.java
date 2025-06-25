@@ -3,7 +3,6 @@ package org.farhan.mbt.next.cucumber;
 import org.farhan.mbt.core.UMLStepObject;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.core.UMLTestSuite;
-import org.farhan.mbt.cucumber.CucumberTestProject;
 
 public class CucumberPathConverter {
 

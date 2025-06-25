@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.farhan.dsl.common.TestStepNameHelper;
-import org.farhan.mbt.cucumber.CucumberJava;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 

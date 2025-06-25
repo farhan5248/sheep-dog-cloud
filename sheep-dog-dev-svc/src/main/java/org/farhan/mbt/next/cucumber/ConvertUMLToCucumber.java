@@ -3,10 +3,14 @@ package org.farhan.mbt.next.cucumber;
 import java.util.ArrayList;
 
 import org.farhan.dsl.cucumber.cucumber.Background;
+import org.farhan.dsl.cucumber.cucumber.DocString;
 import org.farhan.dsl.cucumber.cucumber.Examples;
+import org.farhan.dsl.cucumber.cucumber.ExamplesTable;
+import org.farhan.dsl.cucumber.cucumber.Row;
 import org.farhan.dsl.cucumber.cucumber.Scenario;
 import org.farhan.dsl.cucumber.cucumber.ScenarioOutline;
 import org.farhan.dsl.cucumber.cucumber.Step;
+import org.farhan.dsl.cucumber.cucumber.StepTable;
 import org.farhan.mbt.core.Converter;
 
 import org.farhan.mbt.core.Logger;
@@ -16,12 +20,6 @@ import org.farhan.mbt.core.UMLStepObject;
 import org.farhan.mbt.core.UMLTestCase;
 import org.farhan.mbt.core.UMLTestData;
 import org.farhan.mbt.core.UMLTestSuite;
-import org.farhan.mbt.cucumber.CucumberClass;
-import org.farhan.mbt.cucumber.CucumberFeature;
-import org.farhan.mbt.cucumber.CucumberInterface;
-import org.farhan.mbt.cucumber.CucumberJava;
-import org.farhan.mbt.cucumber.CucumberPathConverter;
-import org.farhan.mbt.cucumber.CucumberTestProject;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.core.UMLTestSetup;
 import org.farhan.mbt.core.UMLTestStep;
@@ -41,7 +39,12 @@ public class ConvertUMLToCucumber extends Converter {
 	public String convertFile(String path, String content) throws Exception {
 		initProjects();
 		if (path.startsWith(project.getDir(project.TEST_CASES))) {
-			return convertTestSuite(path, content);
+			UMLTestSuite srcTestSuite = model.getTestSuite(pathConverter.findUMLPath(path));
+			tgtObjTestSuite = (CucumberFeature) project.addFile(path);
+			tgtObjTestSuite.parse(content);
+			tgtObjTestSuite.addFeatureName(srcTestSuite.getName());
+			convertTestSuite(srcTestSuite);
+			return tgtObjTestSuite.toString();
 		} else {
 			return convertStepObject(path, content);
 		}
@@ -73,8 +76,17 @@ public class ConvertUMLToCucumber extends Converter {
 
 	protected void convertTestCase(Scenario scenario, UMLTestCase srcTestCase) throws Exception {
 		log.debug("test case: " + srcTestCase.getName());
-		tgtObjTestSuite.setScenarioTags(scenario, srcTestCase.getTags());
-		tgtObjTestSuite.setScenarioDescription(scenario, srcTestCase.getDescription());
+
+		for (String tag : srcTestCase.getTags()) {
+			tgtObjTestSuite.addScenarioTag(scenario, tag);
+		}
+
+		if (!srcTestCase.getDescription().isEmpty()) {
+			for (String statement : srcTestCase.getDescription().split("\n")) {
+				tgtObjTestSuite.addScenarioStatement(scenario, statement);
+			}
+		}
+
 		for (UMLTestStep srcTestStep : srcTestCase.getTestStepList()) {
 			convertTestStep(tgtObjTestSuite.addStep(scenario, srcTestStep.getNameLong()), srcTestStep);
 		}
@@ -82,8 +94,15 @@ public class ConvertUMLToCucumber extends Converter {
 
 	protected void convertTestCaseWithData(ScenarioOutline scenarioOutline, UMLTestCase srcTestCase) throws Exception {
 		log.debug("test case: " + srcTestCase.getName());
-		tgtObjTestSuite.setScenarioOutlineTags(scenarioOutline, srcTestCase.getTags());
-		tgtObjTestSuite.setScenarioOutlineDescription(scenarioOutline, srcTestCase.getDescription());
+		for (String tag : srcTestCase.getTags()) {
+			tgtObjTestSuite.addScenarioOutlineTag(scenarioOutline, tag);
+		}
+		if (!srcTestCase.getDescription().isEmpty()) {
+			for (String statement : srcTestCase.getDescription().split("\n")) {
+				tgtObjTestSuite.addScenarioOutlineStatement(scenarioOutline, statement);
+			}
+		}
+
 		for (UMLTestStep srcTestStep : srcTestCase.getTestStepList()) {
 			convertTestStep(tgtObjTestSuite.addStep(scenarioOutline, srcTestStep.getNameLong()), srcTestStep);
 		}
@@ -94,17 +113,34 @@ public class ConvertUMLToCucumber extends Converter {
 
 	protected void convertTestData(Examples examples, UMLTestData srcTestData) {
 		log.debug("test data: " + srcTestData.getName());
-		tgtObjTestSuite.setExamplesTags(examples, srcTestData.getTags());
-		tgtObjTestSuite.setExamplesDescription(examples, srcTestData.getDescription());
-		tgtObjTestSuite.setExamplesTable(examples, srcTestData.getTable());
-		for (ArrayList<String> row : srcTestData.getRowList()) {
-			tgtObjTestSuite.addExamplesRow(examples, row);
+		for (String c : srcTestData.getTags()) {
+			tgtObjTestSuite.addExamplesTag(examples, c);
+		}
+
+		if (!srcTestData.getDescription().isEmpty()) {
+			for (String statement : srcTestData.getDescription().split("\n")) {
+				tgtObjTestSuite.addExamplesStatement(examples, statement);
+			}
+		}
+		ExamplesTable examplesTable = tgtObjTestSuite.addExamplesTable(examples);
+
+		for (ArrayList<String> srcRow : srcTestData.getRowList()) {
+			Row row = tgtObjTestSuite.addExamplesTableRow(examplesTable);
+			for (String srcCell : srcRow) {
+				tgtObjTestSuite.addCell(row.getCells(), srcCell);
+			}
 		}
 	}
 
 	protected void convertTestSetup(Background background, UMLTestSetup srcTestSetup) throws Exception {
 		log.debug("test setup: " + srcTestSetup.getName());
-		tgtObjTestSuite.setBackgroundDescription(background, srcTestSetup.getDescription());
+		// TODO replace getDescription with getStatementList
+		if (!srcTestSetup.getDescription().isEmpty()) {
+			for (String statement : srcTestSetup.getDescription().split("\n")) {
+				tgtObjTestSuite.addBackgroundStatement(background, statement);
+			}
+		}
+
 		for (UMLTestStep srcStep : srcTestSetup.getTestStepList()) {
 			convertTestStep(tgtObjTestSuite.addStep(background, srcStep.getNameLong()), srcStep);
 		}
@@ -113,21 +149,33 @@ public class ConvertUMLToCucumber extends Converter {
 	protected void convertTestStep(Step step, UMLTestStep srcStep) throws Exception {
 		log.debug("test step: " + srcStep.getName());
 		if (srcStep.hasDocString()) {
-			tgtObjTestSuite.setDocString(step, srcStep.getStepText());
+			DocString docString = tgtObjTestSuite.addDocString(step);
+			for (String l : srcStep.getStepText().split("\n")) {
+				tgtObjTestSuite.addLine(docString, l);
+			}
 		} else if (srcStep.hasStepTable()) {
-			tgtObjTestSuite.setStepTable(step, srcStep.getStepData());
+			StepTable stepTable = tgtObjTestSuite.addStepTable(step);
+			for (ArrayList<String> srcRow : srcStep.getStepData()) {
+				Row row = tgtObjTestSuite.addStepTableRow(stepTable);
+				for (String srcCell : srcRow) {
+					tgtObjTestSuite.addCell(row.getCells(), srcCell);
+				}
+			}
 		}
 	}
 
-	protected String convertTestSuite(String path, String content) throws Exception {
-		log.debug("test suite: " + path);
-		UMLTestSuite srcTestSuite = model.getTestSuite(pathConverter.findUMLPath(path));
-		tgtObjTestSuite = (CucumberFeature) project.addFile(path);
-		tgtObjTestSuite.parse(content);
-		tgtObjTestSuite.setFeatureName(srcTestSuite.getName());
-		tgtObjTestSuite.setFeatureTags(srcTestSuite.getTags());
-		tgtObjTestSuite.setFeatureDescription(srcTestSuite.getDescription());
+	protected void convertTestSuite(UMLTestSuite srcTestSuite) throws Exception {
+		log.debug("test suite: " + srcTestSuite.getName());
 
+		for (String tag : srcTestSuite.getTags()) {
+			tgtObjTestSuite.addFeatureTag(tag);
+		}
+
+		if (!srcTestSuite.getDescription().isEmpty()) {
+			for (String statement : srcTestSuite.getDescription().split("\n")) {
+				tgtObjTestSuite.addFeatureStatement(statement);
+			}
+		}
 		if (srcTestSuite.hasTestSetup()) {
 			convertTestSetup(tgtObjTestSuite.addBackground(srcTestSuite.getTestSetup().getName()),
 					srcTestSuite.getTestSetup());
@@ -139,7 +187,6 @@ public class ConvertUMLToCucumber extends Converter {
 				convertTestCase(tgtObjTestSuite.addScenario(srcTestCase.getName()), srcTestCase);
 			}
 		}
-		return tgtObjTestSuite.toString();
 	}
 
 	@Override

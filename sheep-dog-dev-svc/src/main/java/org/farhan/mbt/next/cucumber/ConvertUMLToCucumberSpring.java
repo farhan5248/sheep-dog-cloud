@@ -3,10 +3,6 @@ package org.farhan.mbt.next.cucumber;
 import org.farhan.mbt.core.Logger;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.core.UMLTestProject;
-import org.farhan.mbt.cucumber.ConvertUMLToCucumber;
-import org.farhan.mbt.cucumber.CucumberPathConverter;
-import org.farhan.mbt.cucumber.CucumberSpringTestProject;
-import org.farhan.mbt.cucumber.CucumberTestProject;
 
 public class ConvertUMLToCucumberSpring extends ConvertUMLToCucumber {
 

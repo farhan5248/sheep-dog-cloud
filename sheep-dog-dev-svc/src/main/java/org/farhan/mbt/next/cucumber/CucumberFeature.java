@@ -21,7 +21,9 @@ import org.farhan.dsl.cucumber.cucumber.AbstractScenario;
 import org.farhan.dsl.cucumber.cucumber.Background;
 import org.farhan.dsl.cucumber.cucumber.Cell;
 import org.farhan.dsl.cucumber.cucumber.CucumberFactory;
+import org.farhan.dsl.cucumber.cucumber.DocString;
 import org.farhan.dsl.cucumber.cucumber.Examples;
+import org.farhan.dsl.cucumber.cucumber.ExamplesTable;
 import org.farhan.dsl.cucumber.cucumber.Feature;
 import org.farhan.dsl.cucumber.cucumber.Line;
 import org.farhan.dsl.cucumber.cucumber.Row;
@@ -29,6 +31,7 @@ import org.farhan.dsl.cucumber.cucumber.Scenario;
 import org.farhan.dsl.cucumber.cucumber.ScenarioOutline;
 import org.farhan.dsl.cucumber.cucumber.Statement;
 import org.farhan.dsl.cucumber.cucumber.Step;
+import org.farhan.dsl.cucumber.cucumber.StepTable;
 import org.farhan.dsl.cucumber.cucumber.Tag;
 import org.farhan.mbt.core.ConvertibleObject;
 
@@ -54,6 +57,23 @@ public class CucumberFeature implements ConvertibleObject {
 		return background;
 	}
 
+	public Statement addBackgroundStatement(Background background, String statement) {
+		return addStatement(background.getStatements(), statement);
+	}
+
+	public Cell addCell(EList<Cell> cellList, String name) {
+		Cell cell = CucumberFactory.eINSTANCE.createCell();
+		cell.setName(name);
+		cellList.add(cell);
+		return cell;
+	}
+
+	public DocString addDocString(Step step) {
+		DocString docString = CucumberFactory.eINSTANCE.createDocString();
+		step.setTheDocString(docString);
+		return docString;
+	}
+
 	public Examples addExamples(ScenarioOutline scenarioOutline, String examplesName) {
 		Examples examples = CucumberFactory.eINSTANCE.createExamples();
 		examples.setName(examplesName);
@@ -61,14 +81,49 @@ public class CucumberFeature implements ConvertibleObject {
 		return examples;
 	}
 
-	public void addExamplesRow(Examples examples, ArrayList<String> examplesRow) {
+	public Statement addExamplesStatement(Examples examples, String statement) {
+		return addStatement(examples.getStatements(), statement);
+	}
+
+	public ExamplesTable addExamplesTable(Examples examples) {
+		ExamplesTable et = CucumberFactory.eINSTANCE.createExamplesTable();
+		examples.setTheExamplesTable(et);
+		return et;
+	}
+
+	public Row addExamplesTableRow(ExamplesTable examplesTable) {
+		Row row = addRow(examplesTable.getRows());
+		return row;
+	}
+
+	public Tag addExamplesTag(Examples examples, String tagName) {
+		return addTag(examples.getTags(), tagName);
+	}
+
+	public void addFeatureName(String featureName) {
+		theFeature.setName(featureName);
+	}
+
+	public Statement addFeatureStatement(String statement) {
+		return addStatement(theFeature.getStatements(), statement);
+	}
+
+	public Tag addFeatureTag(String tagName) {
+		return addTag(theFeature.getTags(), tagName);
+	}
+
+	public Line addLine(DocString docString, String name) {
+		Line line = CucumberFactory.eINSTANCE.createLine();
+		// Add hidden text
+		line.setName("          " + name);
+		docString.getLines().add(line);
+		return line;
+	}
+
+	public Row addRow(EList<Row> rowList) {
 		Row row = CucumberFactory.eINSTANCE.createRow();
-		for (String srcCell : examplesRow) {
-			Cell cell = CucumberFactory.eINSTANCE.createCell();
-			cell.setName(srcCell);
-			row.getCells().add(cell);
-		}
-		examples.getTheExamplesTable().getRows().add(row);
+		rowList.add(row);
+		return row;
 	}
 
 	public Scenario addScenario(String scenarioName) {
@@ -85,6 +140,31 @@ public class CucumberFeature implements ConvertibleObject {
 		scenarioOutline.setName(scenarioOutlineName);
 		theFeature.getAbstractScenarios().add(position, scenarioOutline);
 		return scenarioOutline;
+	}
+
+	public Statement addScenarioOutlineStatement(ScenarioOutline scenarioOutline, String statement) {
+		return addStatement(scenarioOutline.getStatements(), statement);
+	}
+
+	public Tag addScenarioOutlineTag(ScenarioOutline scenarioOutline, String tagName) {
+		return addTag(scenarioOutline.getTags(), tagName);
+	}
+
+	public Statement addScenarioStatement(Scenario scenario, String statement) {
+		return addStatement(scenario.getStatements(), statement);
+	}
+
+	public Tag addScenarioTag(Scenario scenario, String tagName) {
+		return addTag(scenario.getTags(), tagName);
+	}
+
+	public Statement addStatement(EList<Statement> statements, String statementText) {
+		Statement s = CucumberFactory.eINSTANCE.createStatement();
+		// TODO need test for this, reverse and then forward engineer any text with a
+		// tag in it
+		s.setName(statementText.replaceAll("(\\s*)([\\\\]*)@", "$1\\\\@"));
+		statements.add(s);
+		return s;
 	}
 
 	public Step addStep(AbstractScenario abstractScenario, String name) {
@@ -107,6 +187,30 @@ public class CucumberFeature implements ConvertibleObject {
 		step.setName(name.substring(keyword.length() + 1));
 		abstractScenario.getSteps().add(step);
 		return step;
+	}
+
+	public StepTable addStepTable(Step step) {
+		StepTable stepTable = CucumberFactory.eINSTANCE.createStepTable();
+		step.setTheStepTable(stepTable);
+		return stepTable;
+	}
+
+	public Row addStepTableRow(StepTable stepTable) {
+		Row row = addRow(stepTable.getRows());
+		return row;
+	}
+
+	private Tag addTag(EList<Tag> tagList, String tagName) {
+
+		for (Tag t : tagList) {
+			if (t.getName().contentEquals(tagName)) {
+				return t;
+			}
+		}
+		Tag tag = CucumberFactory.eINSTANCE.createTag();
+		tag.setName(tagName);
+		tagList.add(tag);
+		return tag;
 	}
 
 	private String convertStatementsToString(EList<Statement> eList) {
@@ -134,6 +238,7 @@ public class CucumberFeature implements ConvertibleObject {
 	}
 
 	public EList<AbstractScenario> getAbstractScenarioList() {
+		// TODO remove this and return theFeature when its created
 		return theFeature.getAbstractScenarios();
 	}
 
@@ -318,110 +423,6 @@ public class CucumberFeature implements ConvertibleObject {
 		}
 	}
 
-	public void setBackgroundDescription(Background background, String backgroundDescription) {
-		setDescription(background, backgroundDescription);
-	}
-
-	private void setDescription(AbstractScenario abstractScenario, String description) {
-		if (!description.isEmpty()) {
-			for (String line : description.split("\n")) {
-				Statement s = CucumberFactory.eINSTANCE.createStatement();
-				// TODO need test for this, reverse and then forward engineer any text with a
-				// tag in it
-				s.setName(line.replaceAll("(\\s*)([\\\\]*)@", "$1\\\\@"));
-				abstractScenario.getStatements().add(s);
-			}
-		}
-	}
-
-	public void setDocString(Step step, String docString) {
-		step.setTheDocString(CucumberFactory.eINSTANCE.createDocString());
-		for (String l : docString.split("\n")) {
-			Line line = CucumberFactory.eINSTANCE.createLine();
-			// Add hidden text
-			line.setName("          " + l);
-			step.getTheDocString().getLines().add(line);
-		}
-	}
-
-	public void setExamplesTable(Examples examples, ArrayList<String> headers) {
-		examples.setTheExamplesTable(CucumberFactory.eINSTANCE.createExamplesTable());
-		Row row = CucumberFactory.eINSTANCE.createRow();
-		for (String srcCell : headers) {
-			Cell cell = CucumberFactory.eINSTANCE.createCell();
-			cell.setName(srcCell);
-			row.getCells().add(cell);
-		}
-		examples.getTheExamplesTable().getRows().add(row);
-	}
-
-	public void setExamplesTags(Examples examples, ArrayList<String> tags) {
-		for (String c : tags) {
-			Tag tag = CucumberFactory.eINSTANCE.createTag();
-			examples.getTags().add(tag);
-			tag.setName(c);
-		}
-	}
-
-	public void setFeatureDescription(String featureDescription) {
-		if (!featureDescription.isEmpty()) {
-			theFeature.getStatements().clear();
-			for (String line : featureDescription.split("\n")) {
-				Statement s = CucumberFactory.eINSTANCE.createStatement();
-				s.setName(line.replaceAll("(\\s*)([\\\\]*)@", "$1\\\\@"));
-				theFeature.getStatements().add(s);
-			}
-		}
-	}
-
-	public void setFeatureName(String featureName) {
-		theFeature.setName(featureName);
-	}
-
-	public void setFeatureTags(ArrayList<String> featureTags) {
-		setTags(theFeature.getTags(), featureTags);
-	}
-
-	public void setScenarioDescription(Scenario scenario, String scenarioDescription) {
-		setDescription(scenario, scenarioDescription);
-	}
-
-	public void setScenarioOutlineDescription(ScenarioOutline scenarioOutline, String scenarioOutlineDescription) {
-		setDescription(scenarioOutline, scenarioOutlineDescription);
-	}
-
-	public void setScenarioOutlineTags(ScenarioOutline scenarioOutline, ArrayList<String> scenarioOutlineTags) {
-		setTags(scenarioOutline.getTags(), scenarioOutlineTags);
-	}
-
-	public void setScenarioTags(Scenario scenario, ArrayList<String> scenarioTags) {
-		setTags(scenario.getTags(), scenarioTags);
-	}
-
-	public void setStepTable(Step step, ArrayList<ArrayList<String>> stepTableRowList) {
-		step.setTheStepTable(CucumberFactory.eINSTANCE.createStepTable());
-		for (ArrayList<String> srcRow : stepTableRowList) {
-			Row row = CucumberFactory.eINSTANCE.createRow();
-			for (String srcCell : srcRow) {
-				Cell cell = CucumberFactory.eINSTANCE.createCell();
-				cell.setName(srcCell);
-				row.getCells().add(cell);
-			}
-			step.getTheStepTable().getRows().add(row);
-		}
-	}
-
-	private void setTags(EList<Tag> tagList, ArrayList<String> tags) {
-		if (!tags.isEmpty()) {
-			tagList.clear();
-			for (String t : tags) {
-				Tag tag = CucumberFactory.eINSTANCE.createTag();
-				tag.setName(t);
-				tagList.add(tag);
-			}
-		}
-	}
-
 	public String toString() {
 		URI uri = URI.createFileURI(thePath);
 		Resource resource = new ResourceSetImpl().createResource(uri);
@@ -434,17 +435,6 @@ public class CucumberFeature implements ConvertibleObject {
 			return null;
 		}
 		return os.toString();
-	}
-
-	public void setExamplesDescription(Examples examples, String description) {
-		if (!description.isEmpty()) {
-			examples.getStatements().clear();
-			for (String line : description.split("\n")) {
-				Statement s = CucumberFactory.eINSTANCE.createStatement();
-				s.setName(line.replaceAll("(\\s*)([\\\\]*)@", "$1\\\\@"));
-				examples.getStatements().add(s);
-			}
-		}
 	}
 
 }

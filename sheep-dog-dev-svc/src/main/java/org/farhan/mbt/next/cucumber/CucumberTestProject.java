@@ -6,9 +6,6 @@ import org.farhan.dsl.cucumber.CucumberStandaloneSetup;
 import org.farhan.mbt.core.ConvertibleObject;
 import org.farhan.mbt.core.ConvertibleProject;
 import org.farhan.mbt.core.ObjectRepository;
-import org.farhan.mbt.cucumber.CucumberClass;
-import org.farhan.mbt.cucumber.CucumberFeature;
-import org.farhan.mbt.cucumber.CucumberInterface;
 
 public class CucumberTestProject extends ConvertibleProject {
 

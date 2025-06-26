@@ -33,9 +33,6 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 	private final ObjectRepository repository;
 	private final AsciiDoctorService service;
 
-	@Value("${spring.datasource.url}")
-	private String url;
-
 	@Autowired
 	public AsciiDoctorController(ObjectRepository repository, AsciiDoctorService service) {
 		this.repository = repository;

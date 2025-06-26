@@ -36,8 +36,11 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 	private final ObjectRepository repository;
 	private final CucumberService service;
 
-	@Value("${spring.datasource.url}")
-	private String url;
+	@Value("${sheepdog.host:dev.sheepdogdev.io}")
+	private String serverHost;
+
+	@Value("${sheepdog.port:80}")
+	private int serverPort;
 
 	@Autowired
 	public CucumberController(ObjectRepository repository, CucumberService service) {
@@ -59,7 +62,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberGuiceObjectNames");
 		List<TransformableFile> fileList = service.getObjectNames(
-				new ConvertUMLToCucumberGuice(tags, repository, new LoggerImpl(logger)),
+				new ConvertUMLToCucumberGuice(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
 				tags);
 		logger.info("Ending getConvertUMLToCucumberGuiceObjectNames");
 		return fileList;
@@ -70,7 +73,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberObjectNames");
 		List<TransformableFile> fileList = service.getObjectNames(
-				new ConvertUMLToCucumber(tags, repository, new LoggerImpl(logger)), tags);
+				new ConvertUMLToCucumber(tags, repository, new LoggerImpl(logger), serverHost, serverPort), tags);
 		logger.info("Ending getConvertUMLToCucumberObjectNames");
 		return fileList;
 	}
@@ -80,7 +83,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberSpringObjectNames");
 		List<TransformableFile> fileList = service.getObjectNames(
-				new ConvertUMLToCucumberSpring(tags, repository, new LoggerImpl(logger)),
+				new ConvertUMLToCucumberSpring(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
 				tags);
 		logger.info("Ending getConvertUMLToCucumberSpringObjectNames");
 		return fileList;
@@ -113,7 +116,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
 		TransformableFile mtr = service.convertObject(
-				new ConvertUMLToCucumber(tags, repository, new LoggerImpl(logger)),
+				new ConvertUMLToCucumber(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumber");
@@ -128,7 +131,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
 		TransformableFile mtr = service.convertObject(
-				new ConvertUMLToCucumberGuice(tags, repository, new LoggerImpl(logger)),
+				new ConvertUMLToCucumberGuice(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumberGuice");
@@ -143,7 +146,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
 		TransformableFile mtr = service.convertObject(
-				new ConvertUMLToCucumberSpring(tags, repository, new LoggerImpl(logger)),
+				new ConvertUMLToCucumberSpring(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumberSpring");

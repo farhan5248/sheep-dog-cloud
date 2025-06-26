@@ -6,8 +6,8 @@ import org.farhan.mbt.core.UMLTestProject;
 
 public class ConvertUMLToCucumberGuice extends ConvertUMLToCucumber {
 
-	public ConvertUMLToCucumberGuice(String tags, ObjectRepository fa, Logger log) {
-		super(tags, fa, log);
+	public ConvertUMLToCucumberGuice(String tags, ObjectRepository fa, Logger log, String serverHost, int serverPort) {
+		super(tags, fa, log, serverHost, serverPort);
 	}
 
 	public void initProjects() throws Exception {

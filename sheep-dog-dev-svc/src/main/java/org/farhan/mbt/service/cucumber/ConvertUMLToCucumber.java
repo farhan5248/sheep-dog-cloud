@@ -1,6 +1,8 @@
 package org.farhan.mbt.service.cucumber;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 import org.farhan.dsl.cucumber.cucumber.Background;
 import org.farhan.dsl.cucumber.cucumber.DocString;
@@ -20,6 +22,11 @@ import org.farhan.mbt.core.UMLStepObject;
 import org.farhan.mbt.core.UMLTestCase;
 import org.farhan.mbt.core.UMLTestData;
 import org.farhan.mbt.core.UMLTestSuite;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.core.UMLTestSetup;
 import org.farhan.mbt.core.UMLTestStep;
@@ -31,8 +38,20 @@ public class ConvertUMLToCucumber extends Converter {
 	protected CucumberJava tgtObjStepObject;
 	protected CucumberPathConverter pathConverter;
 
-	public ConvertUMLToCucumber(String tags, ObjectRepository fa, Logger log) {
+	private final RestTemplate restTemplate;
+	private final int RETRY_COUNT = 10;
+	private String serverHost;
+	private int serverPort;
+
+	public ConvertUMLToCucumber(String tags, ObjectRepository fa, Logger log, String serverHost, int serverPort) {
 		super(tags, fa, log);
+		restTemplate = new RestTemplate();
+		this.serverHost = serverHost;
+		this.serverPort = serverPort;
+	}
+
+	private String getHost() {
+		return "http://" + serverHost + ":" + serverPort + "/";
 	}
 
 	@Override
@@ -71,9 +90,50 @@ public class ConvertUMLToCucumber extends Converter {
 			}
 		}
 
-		for (UMLTestStep srcTestStep : srcTestCase.getTestStepList()) {
-			convertTestStep(tgtObjTestSuite.addStep(scenario, srcTestStep.getNameLong()), srcTestStep);
+		for (UMLTestStep srcStep : srcTestCase.getTestStepList()) {
+			String stepId = srcStep.getId();
+			String caseId = srcStep.getParent().getId();
+			String suiteId = srcStep.getParent().getParent().getId();
+			String projectId = srcStep.getParent().getParent().getParent().getId();
+			convertTestStep(tgtObjTestSuite.addStep(scenario, srcStep.getNameLong()),
+					getUMLTestStep(projectId, suiteId, caseId, stepId));
 		}
+	}
+
+	public org.farhan.mbt.model.UMLTestStep getUMLTestStep(String projectId, String suiteId, String caseId,
+			String stepId)
+			throws Exception {
+
+		String resource = "uml/";
+		String url = getHost() + resource;
+		projectId = projectId == null || projectId.isEmpty() ? "default" : projectId;
+		// TODO use the parameters instead of building the URL
+		if (caseId == null || caseId.isEmpty()) {
+			url += "getUMLTestStep/project/" + projectId + "/suite/" + suiteId + "/setup/step/" + stepId;
+		} else {
+			url += "getUMLTestStep/project/" + projectId + "/suite/" + suiteId + "/case/" + caseId + "/step/" + stepId;
+		}
+
+		TreeMap<String, String> parameters = new TreeMap<String, String>();
+		int retryCount = 0;
+		while (retryCount < RETRY_COUNT) {
+			try {
+				ResponseEntity<org.farhan.mbt.model.UMLTestStep> response = restTemplate.exchange(
+						url,
+						HttpMethod.GET,
+						null,
+						new ParameterizedTypeReference<org.farhan.mbt.model.UMLTestStep>() {
+						}, parameters);
+				org.farhan.mbt.model.UMLTestStep fileList = response.getBody();
+				return fileList;
+			} catch (Exception e) {
+				Thread.sleep(1000);
+				retryCount++;
+			}
+		}
+		// TODO add parameters to the exception message
+		throw new Exception("Max retries reached while getting uml test step: " + url);
+
 	}
 
 	protected void convertTestCaseWithData(ScenarioOutline scenarioOutline, UMLTestCase srcTestCase) throws Exception {
@@ -87,8 +147,13 @@ public class ConvertUMLToCucumber extends Converter {
 			}
 		}
 
-		for (UMLTestStep srcTestStep : srcTestCase.getTestStepList()) {
-			convertTestStep(tgtObjTestSuite.addStep(scenarioOutline, srcTestStep.getNameLong()), srcTestStep);
+		for (UMLTestStep srcStep : srcTestCase.getTestStepList()) {
+			String stepId = srcStep.getId();
+			String caseId = srcStep.getParent().getId();
+			String suiteId = srcStep.getParent().getParent().getId();
+			String projectId = srcStep.getParent().getParent().getParent().getId();
+			convertTestStep(tgtObjTestSuite.addStep(scenarioOutline, srcStep.getNameLong()),
+					getUMLTestStep(projectId, suiteId, caseId, stepId));
 		}
 		for (UMLTestData srcTestData : srcTestCase.getTestDataList()) {
 			convertTestData(tgtObjTestSuite.addExamples(scenarioOutline, srcTestData.getName()), srcTestData);
@@ -126,16 +191,30 @@ public class ConvertUMLToCucumber extends Converter {
 		}
 
 		for (UMLTestStep srcStep : srcTestSetup.getTestStepList()) {
-			// the srcStep will be a url /asciidoctor/project/1/suite/1/case/2/step/3
-			// the restTemplate will call that URL and get a resource class which is passed to convertTestStep
-			// the asciidoc service will use the set of id in the url and make calls to get the UML element and then populate the resource class
-			// example calls are getProj(id).getTestSuite(id).getTestCase(id).getTestStep(id)
+			String stepId = srcStep.getId();
+			String caseId = null;
+			String suiteId = srcStep.getParent().getParent().getId();
+			String projectId = srcStep.getParent().getParent().getParent().getId();
+			convertTestStep(tgtObjTestSuite.addStep(background, srcStep.getNameLong()),
+					getUMLTestStep(projectId, suiteId, caseId, stepId));
+		}
+	}
 
-			// For now I have to get the id of all nodes from srcStep and pass it to getUMLTestStep
-			// getUMLTestStep(project.getId(), suite.getId(), case.getId(), step.getId())
-			// It'll return the right srcStep
-
-			convertTestStep(tgtObjTestSuite.addStep(background, srcStep.getNameLong()), srcStep);
+	protected void convertTestStep(Step step, org.farhan.mbt.model.UMLTestStep srcStep) throws Exception {
+		log.debug("test step: " + srcStep.getName());
+		if (srcStep.getStepText() != null) {
+			DocString docString = tgtObjTestSuite.addDocString(step);
+			for (String l : srcStep.getStepText().split("\n")) {
+				tgtObjTestSuite.addLine(docString, l);
+			}
+		} else if (srcStep.getStepData() != null) {
+			StepTable stepTable = tgtObjTestSuite.addStepTable(step);
+			for (ArrayList<String> srcRow : srcStep.getStepData()) {
+				Row row = tgtObjTestSuite.addStepTableRow(stepTable);
+				for (String srcCell : srcRow) {
+					tgtObjTestSuite.addCell(row.getCells(), srcCell);
+				}
+			}
 		}
 	}
 
@@ -157,6 +236,7 @@ public class ConvertUMLToCucumber extends Converter {
 		}
 	}
 
+	// TODO delete after updating all UMLTestStep usages
 	protected void convertTestSuite(UMLTestSuite srcTestSuite) throws Exception {
 		log.debug("test suite: " + srcTestSuite.getName());
 

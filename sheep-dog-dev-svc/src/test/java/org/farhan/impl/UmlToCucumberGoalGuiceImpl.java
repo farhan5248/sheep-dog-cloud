@@ -11,6 +11,6 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 public class UmlToCucumberGoalGuiceImpl extends GoalObject implements UmlToCucumberGuiceGoal {
 
 	public void transition() {
-		runGoal("ConvertUMLToCucumberGuice");
+		runGoal("cucumber", "ConvertUMLToCucumberGuice");
 	}
 }

@@ -1,4 +1,4 @@
-package org.farhan.mbt.next.cucumber;
+package org.farhan.mbt.service.cucumber;
 
 import java.util.ArrayList;
 
@@ -46,32 +46,16 @@ public class ConvertUMLToCucumber extends Converter {
 			convertTestSuite(srcTestSuite);
 			return tgtObjTestSuite.toString();
 		} else {
-			return convertStepObject(path, content);
-		}
-	}
-
-	protected String convertStepObject(String path, String content) throws Exception {
-		log.debug("step object: " + path);
-		UMLStepObject srcStepObject = model.getStepObject(pathConverter.findUMLPath(path));
-		if (path.startsWith(project.getDir(project.TEST_STEPS))) {
-			tgtObjStepObject = (CucumberClass) project.addFile(path);
-		} else {
-			tgtObjStepObject = (CucumberInterface) project.addFile(path);
-		}
-		tgtObjStepObject.parse(content);
-		for (UMLStepDefinition srcStepDefinition : srcStepObject.getStepDefinitionList()) {
-
-			ArrayList<String> parametersListMerged = new ArrayList<String>();
-			for (org.farhan.mbt.core.UMLStepParameters a : srcStepDefinition.getStepParametersList()) {
-				for (String s : a.getUmlElement().getDetails().getFirst().getValue().split("\\|")) {
-					if (!parametersListMerged.contains(s.trim())) {
-						parametersListMerged.add(s.trim());
-					}
-				}
+			UMLStepObject srcStepObject = model.getStepObject(pathConverter.findUMLPath(path));
+			if (path.startsWith(project.getDir(project.TEST_STEPS))) {
+				tgtObjStepObject = (CucumberClass) project.addFile(path);
+			} else {
+				tgtObjStepObject = (CucumberInterface) project.addFile(path);
 			}
-			tgtObjStepObject.addStepDefinition(srcStepDefinition.getNameLong(), parametersListMerged);
+			tgtObjStepObject.parse(content);
+			convertStepObject(srcStepObject);
+			return tgtObjStepObject.toString();
 		}
-		return tgtObjStepObject.toString();
 	}
 
 	protected void convertTestCase(Scenario scenario, UMLTestCase srcTestCase) throws Exception {
@@ -142,6 +126,15 @@ public class ConvertUMLToCucumber extends Converter {
 		}
 
 		for (UMLTestStep srcStep : srcTestSetup.getTestStepList()) {
+			// the srcStep will be a url /asciidoctor/project/1/suite/1/case/2/step/3
+			// the restTemplate will call that URL and get a resource class which is passed to convertTestStep
+			// the asciidoc service will use the set of id in the url and make calls to get the UML element and then populate the resource class
+			// example calls are getProj(id).getTestSuite(id).getTestCase(id).getTestStep(id)
+
+			// For now I have to get the id of all nodes from srcStep and pass it to getUMLTestStep
+			// getUMLTestStep(project.getId(), suite.getId(), case.getId(), step.getId())
+			// It'll return the right srcStep
+
 			convertTestStep(tgtObjTestSuite.addStep(background, srcStep.getNameLong()), srcStep);
 		}
 	}
@@ -186,6 +179,22 @@ public class ConvertUMLToCucumber extends Converter {
 			} else {
 				convertTestCase(tgtObjTestSuite.addScenario(srcTestCase.getName()), srcTestCase);
 			}
+		}
+	}
+
+	protected void convertStepObject(UMLStepObject srcStepObject) throws Exception {
+		log.debug("step object: " + srcStepObject.getName());
+		for (UMLStepDefinition srcStepDefinition : srcStepObject.getStepDefinitionList()) {
+
+			ArrayList<String> parametersListMerged = new ArrayList<String>();
+			for (org.farhan.mbt.core.UMLStepParameters a : srcStepDefinition.getStepParametersList()) {
+				for (String s : a.getUmlElement().getDetails().getFirst().getValue().split("\\|")) {
+					if (!parametersListMerged.contains(s.trim())) {
+						parametersListMerged.add(s.trim());
+					}
+				}
+			}
+			tgtObjStepObject.addStepDefinition(srcStepDefinition.getNameLong(), parametersListMerged);
 		}
 	}
 

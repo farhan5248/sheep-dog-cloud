@@ -1,4 +1,4 @@
-package org.farhan.mbt.next.cucumber;
+package org.farhan.mbt.service.cucumber;
 
 import org.farhan.dsl.cucumber.cucumber.AbstractScenario;
 import org.farhan.dsl.cucumber.cucumber.Examples;

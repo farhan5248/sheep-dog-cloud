@@ -14,6 +14,6 @@ import org.springframework.stereotype.Component;
 public class UMLToCucumberMojo extends MBTMojo {
 
 	public void execute() throws MojoExecutionException {
-		super.execute("ConvertUMLToCucumber");
+		super.execute("cucumber/", "ConvertUMLToCucumber");
 	}
 }

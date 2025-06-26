@@ -13,7 +13,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 public class UmlToCucumberGoalImpl extends GoalObject implements UmlToCucumberGoal {
 
 	public void transition() {
-		runGoal("ConvertUMLToCucumber");
+		runGoal("cucumber", "ConvertUMLToCucumber");
 	}
 
 	@Override

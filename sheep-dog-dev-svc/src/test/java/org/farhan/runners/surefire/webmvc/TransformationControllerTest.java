@@ -11,10 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
-import org.farhan.mbt.controller.TransformationController;
+import org.farhan.mbt.controller.AsciiDoctorController;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.exception.TransformationException;
-import org.farhan.mbt.service.TransformationService;
+import org.farhan.mbt.service.AsciiDoctorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @ContextConfiguration(classes = MockitoTestConfig.class)
 @ActiveProfiles("surefire")
-@WebMvcTest(TransformationController.class)
+@WebMvcTest(AsciiDoctorController.class)
 public class TransformationControllerTest {
 
         @Autowired
@@ -36,7 +36,7 @@ public class TransformationControllerTest {
         private ObjectRepository repository;
 
         @MockitoBean
-        private TransformationService service;
+        private AsciiDoctorService service;
 
         @Test
         public void testClearConvertAsciidoctorToUMLObjectsTransformationException() throws Exception {
@@ -44,7 +44,7 @@ public class TransformationControllerTest {
                 doThrow(new org.farhan.mbt.exception.TransformationException(message))
                                 .when(service).clearObjects(any(ConvertAsciidoctorToUML.class));
 
-                mockMvc.perform(delete("/sheep-dog-dev-svc/clearConvertAsciidoctorToUMLObjects"))
+                mockMvc.perform(delete("/asciidoctor/clearConvertAsciidoctorToUMLObjects"))
                                 .andExpect(status().isInternalServerError())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.message", is("Error transforming object: " + message)));
@@ -58,7 +58,7 @@ public class TransformationControllerTest {
                 doThrow(new org.farhan.mbt.exception.PublishingException(message)).when(service)
                                 .convertSourceObject(any(ConvertAsciidoctorToUML.class), any());
 
-                mockMvc.perform(post("/sheep-dog-dev-svc/runConvertAsciidoctorToUML")
+                mockMvc.perform(post("/asciidoctor/runConvertAsciidoctorToUML")
                                 .param("tags", "")
                                 .param("fileName", fileName)
                                 .content(contents)
@@ -76,7 +76,7 @@ public class TransformationControllerTest {
                 doThrow(new org.farhan.mbt.exception.TransformationException(message)).when(service)
                                 .convertSourceObject(any(ConvertAsciidoctorToUML.class), any());
 
-                mockMvc.perform(post("/sheep-dog-dev-svc/runConvertAsciidoctorToUML")
+                mockMvc.perform(post("/asciidoctor/runConvertAsciidoctorToUML")
                                 .param("tags", "")
                                 .param("fileName", fileName)
                                 .content(contents)
@@ -87,7 +87,7 @@ public class TransformationControllerTest {
         }
 
         @Test
-        public void testGetConvertUMLToCucumberObjectNamesTransformationException() throws Exception {
+        public void testGetConvertUMLToAsciiDoctorObjectNamesTransformationException() throws Exception {
 
                 String tags = "tag1";
                 String message = "Getting object names for tags: " + tags;
@@ -96,7 +96,7 @@ public class TransformationControllerTest {
                                                 org.mockito.ArgumentMatchers.eq(tags)))
                                 .thenThrow(new TransformationException(message));
 
-                mockMvc.perform(get("/sheep-dog-dev-svc/getConvertUMLToCucumberObjectNames")
+                mockMvc.perform(get("/asciidoctor/getConvertUMLToAsciidoctorObjectNames")
                                 .param("tags", tags))
                                 .andExpect(status().isInternalServerError())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -104,7 +104,7 @@ public class TransformationControllerTest {
         }
 
         @Test
-        public void testRunConvertUMLToCucumberTransformationException() throws Exception {
+        public void testRunConvertUMLToAsciiDoctorTransformationException() throws Exception {
                 String fileName = "src-gen/test/java/org/farhan/objects/blah/ObjectPage.java";
                 String tags = "tag1";
                 String contents = "";
@@ -115,7 +115,7 @@ public class TransformationControllerTest {
                                                 org.mockito.ArgumentMatchers.any()))
                                 .thenThrow(new TransformationException(message));
 
-                mockMvc.perform(post("/sheep-dog-dev-svc/runConvertUMLToCucumber")
+                mockMvc.perform(post("/asciidoctor/runConvertUMLToAsciidoctor")
                                 .param("tags", tags)
                                 .param("fileName", fileName)
                                 .content(contents)

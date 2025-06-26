@@ -13,7 +13,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 public class UmlToAsciidoctorGoalImpl extends GoalObject implements UmlToAsciidoctorGoal {
 
 	public void transition() {
-		runGoal("ConvertUMLToAsciidoctor");
+		runGoal("asciidoctor", "ConvertUMLToAsciidoctor");
 	}
 
 	@Override

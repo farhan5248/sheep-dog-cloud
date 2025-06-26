@@ -1,7 +1,7 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'POST'
-        url ('/sheep-dog-dev-svc/runConvertUMLToCucumber') {
+        url ('/cucumber/runConvertUMLToCucumber') {
             queryParameters {
                 parameter fileName: 'src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java'
             }

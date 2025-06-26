@@ -1,4 +1,4 @@
-package org.farhan.mbt.next.cucumber;
+package org.farhan.mbt.service.cucumber;
 
 import org.farhan.mbt.core.UMLStepObject;
 import org.farhan.mbt.core.UMLTestProject;

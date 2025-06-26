@@ -1,13 +1,13 @@
-package org.farhan.mbt.next.cucumber;
+package org.farhan.mbt.service.cucumber;
 
 import org.farhan.dsl.common.TestStepNameHelper;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 
-public class CucumberSpringClass extends CucumberClass {
+public class CucumberGuiceClass extends CucumberClass {
 
-	public CucumberSpringClass(String thePath) {
+	public CucumberGuiceClass(String thePath) {
 		super(thePath);
 	}
 
@@ -17,6 +17,10 @@ public class CucumberSpringClass extends CucumberClass {
 			constructor.addAndGetParameter(getObjectNameFromPath(thePath), "object");
 			constructor.createBody().addStatement("super(object,\"" + TestStepNameHelper.getComponentName(name)
 					+ "\",\"" + TestStepNameHelper.getObjectName(name) + "\");");
+			constructor.addMarkerAnnotation("Inject");
+			getType().addMarkerAnnotation("ScenarioScoped");
+			theJavaClass.addImport("io.cucumber.guice.ScenarioScoped");
+			theJavaClass.addImport("com.google.inject.Inject");
 			theJavaClass.addImport(getPackageDeclaration().replaceFirst(".stepdefs.", ".objects.") + "."
 					+ getObjectNameFromPath(thePath));
 		}

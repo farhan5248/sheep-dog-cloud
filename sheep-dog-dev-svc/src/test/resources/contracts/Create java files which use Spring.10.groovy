@@ -1,7 +1,7 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'DELETE'
-        url ('/sheep-dog-dev-svc/clearConvertAsciidoctorToUMLObjects') {
+        url ('/asciidoctor/clearConvertAsciidoctorToUMLObjects') {
             queryParameters {
             }
         }

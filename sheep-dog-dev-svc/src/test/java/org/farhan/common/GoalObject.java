@@ -35,26 +35,26 @@ public class GoalObject extends TestObject {
 	private int timeout;
 
 	private String getHost() {
-		return "http://" + serverHost + ":" + serverPort + "/sheep-dog-dev-svc/";
+		return "http://" + serverHost + ":" + serverPort + "/";
 	}
 
-	private void clearObjects(String goal) throws Exception{
+	private void clearObjects(String resource, String goal) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		parameters.put("tags", attributes.get("tags"));
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
-				restTemplate.delete(getHost() + "clear" + goal + "Objects?tags={tags}", parameters);
+				restTemplate.delete(getHost() + resource + "/clear" + goal + "Objects?tags={tags}", parameters);
 				return; // Exit if successful
 			} catch (Exception e) {
-				Thread.sleep(1000); 
+				Thread.sleep(1000);
 				retryCount++;
 			}
 		}
 		throw new Exception("Max retries reached while clearing objects for goal: " + goal);
 	}
 
-	private String convertObject(String goal, String fileName, String contents) throws Exception{
+	private String convertObject(String resource, String goal, String fileName, String contents) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		parameters.put("tags", attributes.get("tags"));
 		parameters.put("fileName", fileName);
@@ -62,26 +62,27 @@ public class GoalObject extends TestObject {
 		while (retryCount < RETRY_COUNT) {
 			try {
 				return restTemplate
-						.postForObject(getHost() + "run" + goal + "?tags={tags}&fileName={fileName}", contents,
+						.postForObject(getHost() + resource + "/run" + goal + "?tags={tags}&fileName={fileName}",
+								contents,
 								TransformableFile.class, parameters)
 						.getFileContent();
 			} catch (Exception e) {
-				Thread.sleep(1000); 
+				Thread.sleep(1000);
 				retryCount++;
 			}
 		}
 		throw new Exception("Max retries reached while converting objects for goal: " + goal);
 	}
 
-	private List<TransformableFile> getObjectNames(String goal) throws Exception {
-		
+	private List<TransformableFile> getObjectNames(String resource, String goal) throws Exception {
+
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		parameters.put("tags", attributes.get("tags"));
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
 				ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(
-						getHost() + "get" + goal + "ObjectNames?tags={tags}",
+						getHost() + resource + "/get" + goal + "ObjectNames?tags={tags}",
 						HttpMethod.GET,
 						null,
 						new ParameterizedTypeReference<List<TransformableFile>>() {
@@ -89,7 +90,7 @@ public class GoalObject extends TestObject {
 				List<TransformableFile> fileList = response.getBody();
 				return fileList;
 			} catch (Exception e) {
-				Thread.sleep(1000); 
+				Thread.sleep(1000);
 				retryCount++;
 			}
 		}
@@ -101,7 +102,7 @@ public class GoalObject extends TestObject {
 		while (System.currentTimeMillis() - startTime < timeout) {
 			try {
 				ResponseEntity<String> response = restTemplate.getForEntity(
-						"http://" + serverHost + ":" + serverPort + "/" + "actuator/health",
+						getHost() + "actuator/health",
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK &&
 						response.getBody().contains("\"status\":\"UP\"")) {
@@ -124,30 +125,30 @@ public class GoalObject extends TestObject {
 		throw new Exception("Service did not become available within " + timeout + " milliseconds");
 	}
 
-	protected void runGoal(String goal) {
+	protected void runGoal(String resource, String goal) {
 
 		SourceRepository sr = new SourceRepository();
 		String[] dirs = { "src/test/resources/asciidoc/", "src-gen/test/resources/cucumber/" };
 		try {
 			waitForService();
 			if (goal.endsWith("ToUML")) {
-				clearObjects(goal);
+				clearObjects(resource, goal);
 				for (String dir : dirs) {
 					ArrayList<String> tempFiles = new ArrayList<String>();
 					for (String fileName : sr.list(dir, "")) {
 						if (fileName.startsWith(dir + "stepdefs")) {
 							tempFiles.add(fileName);
 						} else {
-							convertObject(goal, fileName, sr.get(fileName));
+							convertObject(resource, goal, fileName, sr.get(fileName));
 						}
 					}
 					for (String fileName : tempFiles) {
-						convertObject(goal, fileName, sr.get(fileName));
+						convertObject(resource, goal, fileName, sr.get(fileName));
 					}
 				}
 			} else {
-				for (TransformableFile tf : getObjectNames(goal)) {
-					String content = convertObject(goal, tf.getFileName(),
+				for (TransformableFile tf : getObjectNames(resource, goal)) {
+					String content = convertObject(resource, goal, tf.getFileName(),
 							sr.contains(tf.getFileName()) ? sr.get(tf.getFileName()) : null);
 					if (!content.isEmpty()) {
 						sr.put(tf.getFileName(), content);

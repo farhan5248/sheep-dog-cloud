@@ -1,4 +1,4 @@
-package org.farhan.mbt.next.cucumber;
+package org.farhan.mbt.service.cucumber;
 
 import org.farhan.mbt.core.ConvertibleObject;
 import org.farhan.mbt.core.ObjectRepository;

@@ -1,7 +1,7 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'GET'
-        url ('/sheep-dog-dev-svc/getConvertUMLToCucumberGuiceObjectNames') {
+        url ('/cucumber/getConvertUMLToCucumberGuiceObjectNames') {
             queryParameters {
             }
         }

@@ -3,14 +3,13 @@ package org.farhan.mbt.controller;
 import java.util.List;
 
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
-import org.farhan.mbt.asciidoctor.ConvertUMLToAsciidoctor;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.model.TransformableFile;
-import org.farhan.mbt.next.cucumber.ConvertCucumberToUML;
-import org.farhan.mbt.next.cucumber.ConvertUMLToCucumber;
-import org.farhan.mbt.next.cucumber.ConvertUMLToCucumberGuice;
-import org.farhan.mbt.next.cucumber.ConvertUMLToCucumberSpring;
-import org.farhan.mbt.service.TransformationService;
+import org.farhan.mbt.service.CucumberService;
+import org.farhan.mbt.service.cucumber.ConvertCucumberToUML;
+import org.farhan.mbt.service.cucumber.ConvertUMLToCucumber;
+import org.farhan.mbt.service.cucumber.ConvertUMLToCucumberGuice;
+import org.farhan.mbt.service.cucumber.ConvertUMLToCucumberSpring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,31 +27,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @ConfigurationProperties(prefix = "sheepdog")
 @RestController
-@RequestMapping("/sheep-dog-dev-svc")
-public class TransformationController implements ApplicationListener<ApplicationReadyEvent> {
+@RequestMapping("/cucumber")
+public class CucumberController implements ApplicationListener<ApplicationReadyEvent> {
 
-	Logger logger = LoggerFactory.getLogger(TransformationController.class);
+	Logger logger = LoggerFactory.getLogger(CucumberController.class);
 	// TODO this repo and any mojo should be in the service layer, not the
 	// controller
 	private final ObjectRepository repository;
-	private final TransformationService service;
+	private final CucumberService service;
 
 	@Value("${spring.datasource.url}")
 	private String url;
 
 	@Autowired
-	public TransformationController(ObjectRepository repository, TransformationService service) {
+	public CucumberController(ObjectRepository repository, CucumberService service) {
 		this.repository = repository;
 		this.service = service;
-	}
-
-	@DeleteMapping("/clearConvertAsciidoctorToUMLObjects")
-	public void clearConvertAsciidoctorToUMLObjects(
-			@RequestParam(value = "tags", defaultValue = "") String tags) {
-		logger.info("Starting clearConvertAsciidoctorToUMLObjects");
-		logger.info("tags:" + tags);
-		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)));
-		logger.info("Ending clearConvertAsciidoctorToUMLObjects");
 	}
 
 	@DeleteMapping("/clearConvertCucumberToUMLObjects")
@@ -62,17 +52,6 @@ public class TransformationController implements ApplicationListener<Application
 		logger.info("tags:" + tags);
 		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)));
 		logger.info("Ending clearConvertCucumberToUMLObjects");
-	}
-
-	@GetMapping("/getConvertUMLToAsciidoctorObjectNames")
-	public List<TransformableFile> getConvertUMLToAsciidoctorObjectNames(
-			@RequestParam(value = "tags", defaultValue = "") String tags) {
-		logger.info("Starting getConvertUMLToAsciidoctorObjectNames");
-		List<TransformableFile> fileList = service.getObjectNames(
-				new ConvertUMLToAsciidoctor(tags, repository, new LoggerImpl(logger)),
-				tags);
-		logger.info("Ending getConvertUMLToAsciidoctorObjectNames");
-		return fileList;
 	}
 
 	@GetMapping("/getConvertUMLToCucumberGuiceObjectNames")
@@ -107,31 +86,6 @@ public class TransformationController implements ApplicationListener<Application
 		return fileList;
 	}
 
-	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
-		logger.info("Starting onApplicationEvent");
-		logger.info("spring.datasource.url:" + url);
-		// TODO initialise the EMF stuff here
-		logger.info("Ending onApplicationEvent");
-	}
-
-	@PostMapping("/runConvertAsciidoctorToUML")
-	public TransformableFile runConvertAsciidoctorToUML(
-			@RequestParam(value = "tags", defaultValue = "") String tags,
-			@RequestParam(value = "fileName") String fileName, @RequestBody String contents) {
-		logger.info("Starting runConvertAsciidoctorToUML");
-		logger.info("tags:" + tags);
-		logger.info("fileName:" + fileName);
-		// TODO temp hack, nothing should be returned, update test code to not expect a
-		// return value
-		TransformableFile mtr = new TransformableFile(fileName, contents, tags);
-		service.convertSourceObject(
-				new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)),
-				mtr);
-		logger.info("Ending runConvertAsciidoctorToUML");
-		return mtr;
-	}
-
 	@PostMapping("/runConvertCucumberToUML")
 	public TransformableFile runConvertCucumberToUML(
 			@RequestParam(value = "tags", defaultValue = "") String tags,
@@ -147,19 +101,8 @@ public class TransformationController implements ApplicationListener<Application
 		return mtr;
 	}
 
-	@PostMapping("/runConvertUMLToAsciidoctor")
-	public TransformableFile runConvertUMLToAsciidoctor(
-			@RequestParam(value = "tags", defaultValue = "") String tags,
-			@RequestParam(value = "fileName") String fileName, @RequestBody(required = false) String contents) {
-		logger.info("Starting runConvertUMLToAsciidoctor");
-		logger.info("tags:" + tags);
-		logger.info("fileName:" + fileName);
-		TransformableFile mtr = service.convertObject(
-				new ConvertUMLToAsciidoctor(tags, repository, new LoggerImpl(logger)),
-				fileName, contents);
-		logger.debug("response: " + mtr.toString());
-		logger.info("Ending runConvertUMLToAsciidoctor");
-		return mtr;
+	@Override
+	public void onApplicationEvent(ApplicationReadyEvent event) {
 	}
 
 	@PostMapping("/runConvertUMLToCucumber")

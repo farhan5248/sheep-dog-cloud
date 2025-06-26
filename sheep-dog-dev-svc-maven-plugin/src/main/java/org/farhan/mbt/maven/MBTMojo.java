@@ -51,12 +51,12 @@ public abstract class MBTMojo extends AbstractMojo {
 	public int timeout;
 
 	private String getHost() {
-		return "http://" + host + ":" + port + "/sheep-dog-dev-svc/";
+		return "http://" + host + ":" + port + "/";
 	}
 
-	private void clearObjects(String goal) throws Exception {
+	private void clearObjects(String resource, String goal) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		String url = getHost() + "clear" + goal + "Objects";
+		String url = getHost() + resource + "/clear" + goal + "Objects";
 		if (!tags.isEmpty()) {
 			parameters.put("tags", tags);
 			url += "?tags={tags}";
@@ -81,9 +81,9 @@ public abstract class MBTMojo extends AbstractMojo {
 		throw new Exception("Max retries reached while clearing objects for goal: " + goal);
 	}
 
-	private String convertObject(String goal, String fileName, String contents) throws Exception {
+	private String convertObject(String resource, String goal, String fileName, String contents) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		String url = getHost() + "run" + goal + "?fileName={fileName}";
+		String url = getHost() + resource + "/run" + goal + "?fileName={fileName}";
 		if (!tags.isEmpty()) {
 			parameters.put("tags", tags);
 			url += "&tags={tags}";
@@ -109,10 +109,10 @@ public abstract class MBTMojo extends AbstractMojo {
 		throw new Exception("Max retries reached while converting objects for goal: " + goal);
 	}
 
-	private List<TransformableFile> getObjectNames(String goal) throws Exception {
+	private List<TransformableFile> getObjectNames(String resource, String goal) throws Exception {
 
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		String url = getHost() + "get" + goal + "ObjectNames";
+		String url = getHost() + resource + "/get" + goal + "ObjectNames";
 		if (!tags.isEmpty()) {
 			parameters.put("tags", tags);
 			url += "?tags={tags}";
@@ -145,7 +145,7 @@ public abstract class MBTMojo extends AbstractMojo {
 		while (System.currentTimeMillis() - startTime < timeout) {
 			try {
 				ResponseEntity<String> response = restTemplate.getForEntity(
-						"http://" + host + ":" + port + "/" + "actuator/health",
+						getHost() + "actuator/health",
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("\"status\":\"UP\"")) {
 					getLog().info("Service ready");
@@ -166,11 +166,11 @@ public abstract class MBTMojo extends AbstractMojo {
 		throw new MojoExecutionException("Service did not become available within " + timeout + " milliseconds");
 	}
 
-	public void execute(String goal) throws MojoExecutionException {
-		execute(goal, "");
+	public void execute(String resource, String goal) throws MojoExecutionException {
+		execute(resource, goal, "");
 	}
 
-	public void execute(String goal, String extension) throws MojoExecutionException {
+	public void execute(String resource, String goal, String extension) throws MojoExecutionException {
 		getLog().info("Starting execute");
 		getLog().info("tags: " + tags);
 		getLog().info("baseDir: " + baseDir);
@@ -184,7 +184,7 @@ public abstract class MBTMojo extends AbstractMojo {
 		try {
 			waitForService();
 			if (goal.endsWith("ToUML")) {
-				clearObjects(goal);
+				clearObjects(resource, goal);
 				for (String dir : dirs) {
 					ArrayList<String> tempFiles = new ArrayList<String>();
 					for (String fileName : sr.list(dir, extension)) {
@@ -192,17 +192,17 @@ public abstract class MBTMojo extends AbstractMojo {
 							tempFiles.add(fileName);
 						} else {
 							getLog().info("Converting: " + fileName);
-							convertObject(goal, fileName, sr.get(fileName));
+							convertObject(resource, goal, fileName, sr.get(fileName));
 						}
 					}
 					for (String fileName : tempFiles) {
 						getLog().info("Converting: " + fileName);
-						convertObject(goal, fileName, sr.get(fileName));
+						convertObject(resource, goal, fileName, sr.get(fileName));
 					}
 				}
 			} else {
-				for (TransformableFile tf : getObjectNames(goal)) {
-					String content = convertObject(goal, tf.getFileName(),
+				for (TransformableFile tf : getObjectNames(resource, goal)) {
+					String content = convertObject(resource, goal, tf.getFileName(),
 							sr.contains(tf.getFileName()) ? sr.get(tf.getFileName()) : null);
 					if (!content.isEmpty()) {
 						getLog().info("Converting: " + tf.getFileName());

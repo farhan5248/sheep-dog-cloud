@@ -1,7 +1,7 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'POST'
-        url ('/sheep-dog-dev-svc/runConvertAsciidoctorToUML') {
+        url ('/asciidoctor/runConvertAsciidoctorToUML') {
             queryParameters {
                 parameter fileName: 'src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc'
             }

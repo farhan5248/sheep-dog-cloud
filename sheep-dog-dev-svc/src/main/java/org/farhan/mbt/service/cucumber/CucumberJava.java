@@ -1,4 +1,4 @@
-package org.farhan.mbt.next.cucumber;
+package org.farhan.mbt.service.cucumber;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

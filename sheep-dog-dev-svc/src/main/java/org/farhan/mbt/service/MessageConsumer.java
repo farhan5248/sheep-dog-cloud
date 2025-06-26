@@ -7,7 +7,7 @@ import org.farhan.mbt.core.Converter;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.exception.MessageConsumingException;
 import org.farhan.mbt.model.TransformableFile;
-import org.farhan.mbt.next.cucumber.ConvertCucumberToUML;
+import org.farhan.mbt.service.cucumber.ConvertCucumberToUML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

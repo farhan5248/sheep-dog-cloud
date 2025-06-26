@@ -18,6 +18,6 @@ public class CucumberToUmlGoalImpl extends GoalObject implements CucumberToUmlGo
 
 	@Override
 	public void transition() {
-		runGoal("ConvertCucumberToUML");
+		runGoal("cucumber", "ConvertCucumberToUML");
 	}
 }

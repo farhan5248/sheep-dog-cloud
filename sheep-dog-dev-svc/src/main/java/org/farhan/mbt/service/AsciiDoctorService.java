@@ -18,13 +18,13 @@ import jakarta.jms.JMSException;
 import jakarta.jms.Queue;
 
 @Service
-public class TransformationService {
+public class AsciiDoctorService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TransformationService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AsciiDoctorService.class);
     private final JmsTemplate jmsTemplate;
 
     @Autowired
-    public TransformationService(JmsTemplate jmsTemplate) {
+    public AsciiDoctorService(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
 

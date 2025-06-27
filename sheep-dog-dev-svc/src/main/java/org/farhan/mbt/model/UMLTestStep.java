@@ -15,18 +15,23 @@ public class UMLTestStep {
     @JsonProperty("stepText")
     private String stepText;
 
-    @JsonProperty("stepData")
-    private ArrayList<ArrayList<String>> stepData;
+    @JsonProperty("stepTable")
+    private ArrayList<ArrayList<String>> stepTable;
 
     // Default constructor required for Jackson deserialization
     public UMLTestStep() {
+        this.name = null;
+        this.nameLong = null;
+        // TODO these should be empty lists, not null
+        this.stepText = null;
+        this.stepTable = null;
     }
 
     public UMLTestStep(org.farhan.mbt.core.UMLTestStep umlTestStep) {
         name = umlTestStep.getName();
         nameLong = umlTestStep.getNameLong();
         stepText = umlTestStep.getStepText();
-        stepData = umlTestStep.getStepData();
+        stepTable = umlTestStep.getStepData();
     }
 
     public String getName() {
@@ -53,12 +58,12 @@ public class UMLTestStep {
         this.stepText = stepText;
     }
 
-    public ArrayList<ArrayList<String>> getStepData() {
-        return stepData;
+    public ArrayList<ArrayList<String>> getStepTable() {
+        return stepTable;
     }
 
-    public void setStepData(ArrayList<ArrayList<String>> stepData) {
-        this.stepData = stepData;
+    public void setStepTable(ArrayList<ArrayList<String>> stepTable) {
+        this.stepTable = stepTable;
     }
 
 }

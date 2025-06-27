@@ -3,7 +3,10 @@ package org.farhan.mbt.service;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.model.UMLTestStep;
+import org.farhan.mbt.model.UMLTestSuite;
 import org.farhan.mbt.model.UMLTestCase;
+import org.farhan.mbt.model.UMLTestData;
+import org.farhan.mbt.model.UMLTestSetup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +26,13 @@ public class UMLService {
     // TODO make these int
     public UMLTestStep getUMLTestStep(String projectId, String suiteId, String caseId, String stepId)
             throws Exception {
-        UMLTestStep testStep = null;
         // TODO having a model like this isn't very efficient, but it'll work for now
         // It's not efficient because it loads the entire model for every query each
         // time. Even if I kept one model cached per id/tag, I'd have to make sure any
         // writes to it are updating the same one.
         UMLTestProject model = new UMLTestProject(projectId, repository);
         model.init();
+        UMLTestStep testStep = null;
         if (caseId == null || caseId.isEmpty()) {
             testStep = new UMLTestStep(
                     model.getTestSuiteList().get(Integer.parseInt(suiteId)).getTestSetup().getTestStepList()
@@ -49,5 +52,42 @@ public class UMLService {
         UMLTestCase testCase = new UMLTestCase(model.getTestSuiteList().get(Integer.parseInt(suiteId))
                 .getTestCaseList().get(Integer.parseInt(caseId)));
         return testCase;
+    }
+
+    public UMLTestSetup getUMLTestSetup(String projectId, String suiteId)
+            throws Exception {
+        UMLTestProject model = new UMLTestProject(projectId, repository);
+        model.init();
+        UMLTestSetup testSetup = new UMLTestSetup(
+                model.getTestSuiteList().get(Integer.parseInt(suiteId)).getTestSetup());
+        return testSetup;
+    }
+
+    public UMLTestData getUMLTestData(String projectId, String suiteId, String caseId, String dataId)
+            throws Exception {
+        UMLTestProject model = new UMLTestProject(projectId, repository);
+        model.init();
+        UMLTestData testData = new UMLTestData(model.getTestSuiteList().get(Integer.parseInt(suiteId))
+                .getTestCaseList().get(Integer.parseInt(caseId)).getTestDataList()
+                .get(Integer.parseInt(dataId)));
+        return testData;
+    }
+
+    public UMLTestSuite getUMLTestSuite(String projectId, String suiteId, String qualifiedName)
+            throws Exception {
+        UMLTestProject model = new UMLTestProject(projectId, repository);
+        model.init();
+        UMLTestSuite testSuite = new UMLTestSuite(
+                suiteId == null ? model.getTestSuite(qualifiedName)
+                        : model.getTestSuiteList().get(Integer.parseInt(suiteId)));
+        return testSuite;
+    }
+
+    public org.farhan.mbt.model.UMLTestProject getUMLTestProject(String projectId)
+            throws Exception {
+        UMLTestProject model = new UMLTestProject(projectId, repository);
+        model.init();
+        org.farhan.mbt.model.UMLTestProject umlTestProject = new org.farhan.mbt.model.UMLTestProject(model);
+        return umlTestProject;
     }
 }

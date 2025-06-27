@@ -1,7 +1,6 @@
 package org.farhan.mbt.service.cucumber;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 
 import org.farhan.dsl.cucumber.cucumber.Background;
@@ -22,10 +21,9 @@ import org.farhan.mbt.core.UMLStepObject;
 import org.farhan.mbt.core.UMLTestCase;
 import org.farhan.mbt.core.UMLTestData;
 import org.farhan.mbt.core.UMLTestSuite;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.core.UMLTestSetup;
@@ -77,26 +75,25 @@ public class ConvertUMLToCucumber extends Converter {
 		}
 	}
 
-	protected void convertTestCase(Scenario scenario, UMLTestCase srcTestCase) throws Exception {
-		log.debug("test case: " + srcTestCase.getName());
+	protected void convertTestCase(Scenario scenario, org.farhan.mbt.model.UMLTestCase umlTestCase) throws Exception {
+		log.debug("test case: " + umlTestCase.getName());
 
-		for (String tag : srcTestCase.getTags()) {
+		for (String tag : umlTestCase.getTags()) {
 			tgtObjTestSuite.addScenarioTag(scenario, tag);
 		}
 
-		if (!srcTestCase.getDescription().isEmpty()) {
-			for (String statement : srcTestCase.getDescription().split("\n")) {
+		if (!umlTestCase.getDescription().isEmpty()) {
+			for (String statement : umlTestCase.getDescription()) {
 				tgtObjTestSuite.addScenarioStatement(scenario, statement);
 			}
 		}
 
-		for (UMLTestStep srcStep : srcTestCase.getTestStepList()) {
-			String stepId = srcStep.getId();
-			String caseId = srcStep.getParent().getId();
-			String suiteId = srcStep.getParent().getParent().getId();
-			String projectId = srcStep.getParent().getParent().getParent().getId();
+		for (String umlTestStepLink : umlTestCase.getTestStepList()) {
+			org.farhan.mbt.model.UMLTestStep srcStep = (org.farhan.mbt.model.UMLTestStep) getResource(umlTestStepLink,
+					new ParameterizedTypeReference<org.farhan.mbt.model.UMLTestStep>() {
+					});
 			convertTestStep(tgtObjTestSuite.addStep(scenario, srcStep.getNameLong()),
-					getUMLTestStep(projectId, suiteId, caseId, stepId));
+					srcStep);
 		}
 	}
 
@@ -104,36 +101,47 @@ public class ConvertUMLToCucumber extends Converter {
 			String stepId)
 			throws Exception {
 
-		String resource = "uml/";
-		String url = getHost() + resource;
-		projectId = projectId == null || projectId.isEmpty() ? "default" : projectId;
+		String resource;
 		// TODO use the parameters instead of building the URL
 		if (caseId == null || caseId.isEmpty()) {
-			url += "getUMLTestStep/project/" + projectId + "/suite/" + suiteId + "/setup/step/" + stepId;
+			resource = "project/" + projectId + "/suite/" + suiteId + "/setup/step/" + stepId;
 		} else {
-			url += "getUMLTestStep/project/" + projectId + "/suite/" + suiteId + "/case/" + caseId + "/step/" + stepId;
+			resource = "project/" + projectId + "/suite/" + suiteId + "/case/" + caseId + "/step/" + stepId;
 		}
+		return (org.farhan.mbt.model.UMLTestStep) getResource(resource,
+				new ParameterizedTypeReference<org.farhan.mbt.model.UMLTestStep>() {
+				});
+	}
 
+	public org.farhan.mbt.model.UMLTestCase getUMLTestCase(String projectId, String suiteId, String caseId)
+			throws Exception {
+
+		String resource = "project/" + projectId + "/suite/" + suiteId + "/case/" + caseId;
+		return (org.farhan.mbt.model.UMLTestCase) getResource(resource,
+				new ParameterizedTypeReference<org.farhan.mbt.model.UMLTestCase>() {
+				});
+	}
+
+	@SuppressWarnings("unchecked")
+	public Object getResource(String resource, ParameterizedTypeReference typeReference)
+			throws Exception {
+		String url = getHost() + "uml/" + resource;
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
-				ResponseEntity<org.farhan.mbt.model.UMLTestStep> response = restTemplate.exchange(
+				return restTemplate.exchange(
 						url,
 						HttpMethod.GET,
 						null,
-						new ParameterizedTypeReference<org.farhan.mbt.model.UMLTestStep>() {
-						}, parameters);
-				org.farhan.mbt.model.UMLTestStep fileList = response.getBody();
-				return fileList;
-			} catch (Exception e) {
+						typeReference, parameters).getBody();
+			} catch (RestClientException e) {
 				Thread.sleep(1000);
 				retryCount++;
 			}
 		}
 		// TODO add parameters to the exception message
-		throw new Exception("Max retries reached while getting uml test step: " + url);
-
+		throw new Exception("Max retries reached while getting resource: " + url);
 	}
 
 	protected void convertTestCaseWithData(ScenarioOutline scenarioOutline, UMLTestCase srcTestCase) throws Exception {
@@ -218,24 +226,6 @@ public class ConvertUMLToCucumber extends Converter {
 		}
 	}
 
-	protected void convertTestStep(Step step, UMLTestStep srcStep) throws Exception {
-		log.debug("test step: " + srcStep.getName());
-		if (srcStep.hasDocString()) {
-			DocString docString = tgtObjTestSuite.addDocString(step);
-			for (String l : srcStep.getStepText().split("\n")) {
-				tgtObjTestSuite.addLine(docString, l);
-			}
-		} else if (srcStep.hasStepTable()) {
-			StepTable stepTable = tgtObjTestSuite.addStepTable(step);
-			for (ArrayList<String> srcRow : srcStep.getStepData()) {
-				Row row = tgtObjTestSuite.addStepTableRow(stepTable);
-				for (String srcCell : srcRow) {
-					tgtObjTestSuite.addCell(row.getCells(), srcCell);
-				}
-			}
-		}
-	}
-
 	// TODO delete after updating all UMLTestStep usages
 	protected void convertTestSuite(UMLTestSuite srcTestSuite) throws Exception {
 		log.debug("test suite: " + srcTestSuite.getName());
@@ -249,15 +239,19 @@ public class ConvertUMLToCucumber extends Converter {
 				tgtObjTestSuite.addFeatureStatement(statement);
 			}
 		}
+		String suiteId = srcTestSuite.getId();
+		String projectId = srcTestSuite.getParent().getId();
 		if (srcTestSuite.hasTestSetup()) {
 			convertTestSetup(tgtObjTestSuite.addBackground(srcTestSuite.getTestSetup().getName()),
 					srcTestSuite.getTestSetup());
 		}
 		for (UMLTestCase srcTestCase : srcTestSuite.getTestCaseList()) {
+			String caseId = srcTestCase.getId();
 			if (srcTestCase.hasTestData()) {
 				convertTestCaseWithData(tgtObjTestSuite.addScenarioOutline(srcTestCase.getName()), srcTestCase);
 			} else {
-				convertTestCase(tgtObjTestSuite.addScenario(srcTestCase.getName()), srcTestCase);
+				convertTestCase(tgtObjTestSuite.addScenario(srcTestCase.getName()),
+						getUMLTestCase(projectId, suiteId, caseId));
 			}
 		}
 	}

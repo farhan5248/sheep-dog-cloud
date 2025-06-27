@@ -8,10 +8,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class UMLTestStep {
     @JsonProperty("name")
     private String name;
-    
+
+    @JsonProperty("nameLong")
+    private String nameLong;
+
     @JsonProperty("stepText")
     private String stepText;
-    
+
     @JsonProperty("stepData")
     private ArrayList<ArrayList<String>> stepData;
 
@@ -21,12 +24,21 @@ public class UMLTestStep {
 
     public UMLTestStep(org.farhan.mbt.core.UMLTestStep umlTestStep) {
         name = umlTestStep.getName();
+        nameLong = umlTestStep.getNameLong();
         stepText = umlTestStep.getStepText();
         stepData = umlTestStep.getStepData();
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setNameLong(String nameLong) {
+        this.nameLong = nameLong;
+    }
+
+    public String getNameLong() {
+        return nameLong;
     }
 
     public void setName(String name) {

@@ -63,51 +63,51 @@ public class UMLTestCase {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public HashMap<String, Object> get_links() {
+        return _links;
     }
 
     public ArrayList<String> getDescription() {
         return description;
     }
 
-    public void setDescription(ArrayList<String> description) {
-        this.description = description;
+    public String getName() {
+        return name;
     }
 
     public ArrayList<String> getTags() {
         return tags;
     }
 
-    public void setTags(ArrayList<String> tags) {
-        this.tags = tags;
-    }
-
-    public HashMap<String, Object> get_links() {
-        return _links;
-    }
-
-    public void set_links(HashMap<String, Object> _links) {
-        this._links = _links;
-    }
-
-    public void setTestStepList(ArrayList<String> testStepList) {
-        this.testStepList = testStepList;
+    public ArrayList<String> getTestDataList() {
+        return testDataList;
     }
 
     public ArrayList<String> getTestStepList() {
         return testStepList;
     }
 
+    public void set_links(HashMap<String, Object> _links) {
+        this._links = _links;
+    }
+
+    public void setDescription(ArrayList<String> description) {
+        this.description = description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+
     public void setTestDataList(ArrayList<String> testDataList) {
         this.testDataList = testDataList;
     }
 
-    public ArrayList<String> getTestDataList() {
-        return testDataList;
+    public void setTestStepList(ArrayList<String> testStepList) {
+        this.testStepList = testStepList;
     }
 }

@@ -15,9 +15,10 @@ import org.farhan.dsl.cucumber.cucumber.StepTable;
 import org.farhan.mbt.core.Converter;
 import org.farhan.mbt.core.Logger;
 import org.farhan.mbt.core.ObjectRepository;
-import org.farhan.mbt.core.UMLStepDefinition;
-import org.farhan.mbt.core.UMLStepObject;
 import org.farhan.mbt.core.UMLTestProject;
+import org.farhan.mbt.model.UMLStepObject;
+import org.farhan.mbt.model.UMLStepDefinition;
+import org.farhan.mbt.model.UMLStepParameters;
 import org.farhan.mbt.model.UMLTestSuite;
 import org.farhan.mbt.model.UMLTestCase;
 import org.farhan.mbt.model.UMLTestData;
@@ -57,13 +58,19 @@ public class ConvertUMLToCucumber extends Converter {
 					"project/" + (tags.isEmpty() ? "default" : tags) + "/suite?qualifiedName={qualifiedName}",
 					new ParameterizedTypeReference<UMLTestSuite>() {
 					}, parameters);
+
 			tgtObjTestSuite = (CucumberFeature) project.addFile(path);
 			tgtObjTestSuite.parse(content);
 			tgtObjTestSuite.addFeatureName(srcTestSuite.getName());
 			convertTestSuite(srcTestSuite);
 			return tgtObjTestSuite.toString();
 		} else {
-			UMLStepObject srcStepObject = model.getStepObject(pathConverter.findUMLPath(path));
+			TreeMap<String, String> parameters = new TreeMap<String, String>();
+			parameters.put("qualifiedName", pathConverter.findUMLPath(path));
+			UMLStepObject srcStepObject = (UMLStepObject) getResource(
+					"project/" + (tags.isEmpty() ? "default" : tags) + "/object?qualifiedName={qualifiedName}",
+					new ParameterizedTypeReference<UMLStepObject>() {
+					}, parameters);
 			if (path.startsWith(project.getDir(project.TEST_STEPS))) {
 				tgtObjStepObject = (CucumberClass) project.addFile(path);
 			} else {
@@ -76,14 +83,24 @@ public class ConvertUMLToCucumber extends Converter {
 	}
 
 	protected void convertStepObject(UMLStepObject srcStepObject) throws Exception {
+		// TODO there are missing REST methods for things like name and statements
 		log.debug("step object: " + srcStepObject.getName());
-		for (UMLStepDefinition srcStepDefinition : srcStepObject.getStepDefinitionList()) {
+		for (String umlStepDefinitionLink : srcStepObject.getStepDefinitionList()) {
 
 			ArrayList<String> parametersListMerged = new ArrayList<String>();
-			for (org.farhan.mbt.core.UMLStepParameters a : srcStepDefinition.getStepParametersList()) {
-				for (String s : a.getUmlElement().getDetails().getFirst().getValue().split("\\|")) {
-					if (!parametersListMerged.contains(s.trim())) {
-						parametersListMerged.add(s.trim());
+			UMLStepDefinition srcStepDefinition = (UMLStepDefinition) getResource(umlStepDefinitionLink,
+					new ParameterizedTypeReference<UMLStepDefinition>() {
+					}, null);
+
+			for (String umlStepParametersLink : srcStepDefinition.getStepParametersList()) {
+				UMLStepParameters srcStepParameters = (UMLStepParameters) getResource(umlStepParametersLink,
+						new ParameterizedTypeReference<UMLStepParameters>() {
+						}, null);
+				for (ArrayList<String> srcRow : srcStepParameters.getStepParametersTable()) {
+					for (String srcCell : srcRow) {
+						if (!parametersListMerged.contains(srcCell.trim())) {
+							parametersListMerged.add(srcCell.trim());
+						}
 					}
 				}
 			}
@@ -250,9 +267,12 @@ public class ConvertUMLToCucumber extends Converter {
 			objects.add(pathConverter.convertFilePath(srcTestSuite.getQualifiedName(), project.TEST_CASES));
 		}
 
-		for (UMLStepObject co : model.getStepObjectList()) {
-			objects.add(pathConverter.convertFilePath(co.getUmlElement().getQualifiedName(), project.TEST_STEPS));
-			objects.add(pathConverter.convertFilePath(co.getUmlElement().getQualifiedName(), project.TEST_OBJECTS));
+		for (String stepObjectLink : srcTestProject.getStepObjectList()) {
+			UMLStepObject srcStepObject = (UMLStepObject) getResource(stepObjectLink,
+					new ParameterizedTypeReference<UMLStepObject>() {
+					}, null);
+			objects.add(pathConverter.convertFilePath(srcStepObject.getQualifiedName(), project.TEST_STEPS));
+			objects.add(pathConverter.convertFilePath(srcStepObject.getQualifiedName(), project.TEST_OBJECTS));
 		}
 		return objects;
 	}

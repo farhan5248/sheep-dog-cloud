@@ -4,6 +4,9 @@ import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.model.UMLTestStep;
 import org.farhan.mbt.model.UMLTestSuite;
+import org.farhan.mbt.model.UMLStepDefinition;
+import org.farhan.mbt.model.UMLStepObject;
+import org.farhan.mbt.model.UMLStepParameters;
 import org.farhan.mbt.model.UMLTestCase;
 import org.farhan.mbt.model.UMLTestData;
 import org.farhan.mbt.model.UMLTestSetup;
@@ -73,6 +76,44 @@ public class UMLService {
         return testData;
     }
 
+    public org.farhan.mbt.model.UMLTestProject getUMLTestProject(String projectId)
+            throws Exception {
+        UMLTestProject model = new UMLTestProject(projectId, repository);
+        model.init();
+        org.farhan.mbt.model.UMLTestProject umlTestProject = new org.farhan.mbt.model.UMLTestProject(model);
+        return umlTestProject;
+    }
+
+    public UMLStepParameters getUMLStepParameters(String projectId, String objectId, String definitionId,
+            String parametersId) throws Exception {
+        UMLTestProject model = new UMLTestProject(projectId, repository);
+        model.init();
+        UMLStepParameters stepParameters = new UMLStepParameters(
+                model.getStepObjectList().get(Integer.parseInt(objectId)).getStepDefinitionList()
+                        .get(Integer.parseInt(definitionId)).getStepParametersList()
+                        .get(Integer.parseInt(parametersId)));
+        return stepParameters;
+    }
+
+    public UMLStepDefinition getUMLStepDefinition(String projectId, String objectId, String definitionId)
+            throws Exception {
+        UMLTestProject model = new UMLTestProject(projectId, repository);
+        model.init();
+        UMLStepDefinition stepDefinition = new UMLStepDefinition(model.getStepObjectList()
+                .get(Integer.parseInt(objectId)).getStepDefinitionList().get(Integer.parseInt(definitionId)));
+        return stepDefinition;
+    }
+
+    public UMLStepObject getUMLStepObject(String projectId, String objectId, String qualifiedName)
+            throws Exception {
+        UMLTestProject model = new UMLTestProject(projectId, repository);
+        model.init();
+        UMLStepObject stepObject = new UMLStepObject(
+                objectId == null ? model.getStepObject(qualifiedName)
+                        : model.getStepObjectList().get(Integer.parseInt(objectId)));
+        return stepObject;
+    }
+
     public UMLTestSuite getUMLTestSuite(String projectId, String suiteId, String qualifiedName)
             throws Exception {
         UMLTestProject model = new UMLTestProject(projectId, repository);
@@ -81,13 +122,5 @@ public class UMLService {
                 suiteId == null ? model.getTestSuite(qualifiedName)
                         : model.getTestSuiteList().get(Integer.parseInt(suiteId)));
         return testSuite;
-    }
-
-    public org.farhan.mbt.model.UMLTestProject getUMLTestProject(String projectId)
-            throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
-        org.farhan.mbt.model.UMLTestProject umlTestProject = new org.farhan.mbt.model.UMLTestProject(model);
-        return umlTestProject;
     }
 }

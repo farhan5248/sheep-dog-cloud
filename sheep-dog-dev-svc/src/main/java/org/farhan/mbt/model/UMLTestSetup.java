@@ -3,7 +3,6 @@ package org.farhan.mbt.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import org.farhan.mbt.core.UMLTestStep;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -47,35 +46,35 @@ public class UMLTestSetup {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public HashMap<String, Object> get_links() {
+        return _links;
     }
 
     public ArrayList<String> getDescription() {
         return description;
     }
 
-    public void setDescription(ArrayList<String> description) {
-        this.description = description;
+    public String getName() {
+        return name;
     }
 
-    public HashMap<String, Object> get_links() {
-        return _links;
+    public ArrayList<String> getTestStepList() {
+        return testStepList;
     }
 
     public void set_links(HashMap<String, Object> _links) {
         this._links = _links;
     }
 
-    public void setTestStepList(ArrayList<String> testStepList) {
-        this.testStepList = testStepList;
+    public void setDescription(ArrayList<String> description) {
+        this.description = description;
     }
 
-    public ArrayList<String> getTestStepList() {
-        return testStepList;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTestStepList(ArrayList<String> testStepList) {
+        this.testStepList = testStepList;
     }
 }

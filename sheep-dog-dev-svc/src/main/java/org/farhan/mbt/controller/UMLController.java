@@ -1,6 +1,9 @@
 package org.farhan.mbt.controller;
 
 import org.farhan.mbt.model.UMLTestProject;
+import org.farhan.mbt.model.UMLStepObject;
+import org.farhan.mbt.model.UMLStepDefinition;
+import org.farhan.mbt.model.UMLStepParameters;
 import org.farhan.mbt.model.UMLTestCase;
 import org.farhan.mbt.model.UMLTestData;
 import org.farhan.mbt.model.UMLTestSetup;
@@ -57,6 +60,56 @@ public class UMLController {
         return testData;
     }
 
+    @GetMapping("/project/{projectId}/object/{objectId}/definition/{definitionId}/parameters/{parametersId}")
+    public UMLStepParameters getUMLStepParameters(
+            @PathVariable String projectId,
+            @PathVariable String objectId,
+            @PathVariable String definitionId,
+            @PathVariable String parametersId) throws Exception {
+        logger.info("Starting getUMLStepParameters");
+        UMLStepParameters testStep = service.getUMLStepParameters(projectId.contentEquals("default") ? "" : projectId,
+                objectId,
+                definitionId,
+                parametersId);
+        logger.info("Ending getUMLStepParameters");
+        return testStep;
+    }
+
+    @GetMapping("/project/{projectId}/object/{objectId}/definition/{definitionId}")
+    public UMLStepDefinition getUMLStepDefinition(
+            @PathVariable String projectId,
+            @PathVariable String objectId,
+            @PathVariable String definitionId) throws Exception {
+        logger.info("Starting getUMLStepDefinition");
+        UMLStepDefinition testStep = service.getUMLStepDefinition(projectId.contentEquals("default") ? "" : projectId,
+                objectId,
+                definitionId);
+        logger.info("Ending getUMLStepDefinition");
+        return testStep;
+    }
+
+    @GetMapping("/project/{projectId}/object")
+    public UMLStepObject getUMLStepObjectByName(
+            @PathVariable String projectId,
+            @RequestParam(value = "qualifiedName") String qualifiedName) throws Exception {
+        logger.info("Starting getUMLStepObjectByName");
+        UMLStepObject stepObject = service.getUMLStepObject(projectId.contentEquals("default") ? "" : projectId,
+                null, qualifiedName);
+        logger.info("Ending getUMLStepObjectByName");
+        return stepObject;
+    }
+
+    @GetMapping("/project/{projectId}/object/{objectId}")
+    public UMLStepObject getUMLStepObjectById(
+            @PathVariable String projectId,
+            @PathVariable String objectId) throws Exception {
+        logger.info("Starting getUMLStepObjectById");
+        UMLStepObject stepObject = service.getUMLStepObject(projectId.contentEquals("default") ? "" : projectId,
+                objectId, null);
+        logger.info("Ending getUMLStepObjectById");
+        return stepObject;
+    }
+
     @GetMapping("/project/{projectId}/suite/{suiteId}/case/{caseId}/step/{stepId}")
     public UMLTestStep getUMLTestStepTestCase(
             @PathVariable String projectId,
@@ -97,10 +150,10 @@ public class UMLController {
     public UMLTestSuite getUMLTestSuiteByName(
             @PathVariable String projectId,
             @RequestParam(value = "qualifiedName") String qualifiedName) throws Exception {
-        logger.info("Starting getUMLTestSuite");
+        logger.info("Starting getUMLTestSuiteByName");
         UMLTestSuite testSuite = service.getUMLTestSuite(projectId.contentEquals("default") ? "" : projectId,
                 null, qualifiedName);
-        logger.info("Ending getUMLTestSuite");
+        logger.info("Ending getUMLTestSuiteByName");
         return testSuite;
     }
 
@@ -108,10 +161,10 @@ public class UMLController {
     public UMLTestSuite getUMLTestSuiteById(
             @PathVariable String projectId,
             @PathVariable String suiteId) throws Exception {
-        logger.info("Starting getUMLTestSuite");
+        logger.info("Starting getUMLTestSuiteById");
         UMLTestSuite testSuite = service.getUMLTestSuite(projectId.contentEquals("default") ? "" : projectId,
                 suiteId, null);
-        logger.info("Ending getUMLTestSuite");
+        logger.info("Ending getUMLTestSuiteById");
         return testSuite;
     }
 

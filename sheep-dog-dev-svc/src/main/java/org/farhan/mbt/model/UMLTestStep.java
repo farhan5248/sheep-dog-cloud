@@ -38,32 +38,32 @@ public class UMLTestStep {
         return name;
     }
 
-    public void setNameLong(String nameLong) {
-        this.nameLong = nameLong;
-    }
-
     public String getNameLong() {
         return nameLong;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getStepText() {
-        return stepText;
-    }
-
-    public void setStepText(String stepText) {
-        this.stepText = stepText;
     }
 
     public ArrayList<ArrayList<String>> getStepTable() {
         return stepTable;
     }
 
+    public String getStepText() {
+        return stepText;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNameLong(String nameLong) {
+        this.nameLong = nameLong;
+    }
+
     public void setStepTable(ArrayList<ArrayList<String>> stepTable) {
         this.stepTable = stepTable;
+    }
+
+    public void setStepText(String stepText) {
+        this.stepText = stepText;
     }
 
 }

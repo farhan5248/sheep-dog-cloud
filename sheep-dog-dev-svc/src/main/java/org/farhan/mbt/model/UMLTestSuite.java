@@ -67,48 +67,24 @@ public class UMLTestSuite {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getQualifiedName() {
-        return qualifiedName;
-    }
-
-    public void setQualifiedName(String qualifiedName) {
-        this.qualifiedName = qualifiedName;
+    public HashMap<String, Object> get_links() {
+        return _links;
     }
 
     public ArrayList<String> getDescription() {
         return description;
     }
 
-    public void setDescription(ArrayList<String> description) {
-        this.description = description;
+    public String getName() {
+        return name;
+    }
+
+    public String getQualifiedName() {
+        return qualifiedName;
     }
 
     public ArrayList<String> getTags() {
         return tags;
-    }
-
-    public void setTags(ArrayList<String> tags) {
-        this.tags = tags;
-    }
-
-    public HashMap<String, Object> get_links() {
-        return _links;
-    }
-
-    public void set_links(HashMap<String, Object> _links) {
-        this._links = _links;
-    }
-
-    public void setTestCaseList(ArrayList<String> testCaseList) {
-        this.testCaseList = testCaseList;
     }
 
     public ArrayList<String> getTestCaseList() {
@@ -117,6 +93,30 @@ public class UMLTestSuite {
 
     public String getTestSetup() {
         return testSetup;
+    }
+
+    public void set_links(HashMap<String, Object> _links) {
+        this._links = _links;
+    }
+
+    public void setDescription(ArrayList<String> description) {
+        this.description = description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setQualifiedName(String qualifiedName) {
+        this.qualifiedName = qualifiedName;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+
+    public void setTestCaseList(ArrayList<String> testCaseList) {
+        this.testCaseList = testCaseList;
     }
 
     public void setTestSetup(String testSetup) {

@@ -36,36 +36,36 @@ public class UMLTestData {
         this.dataTable = umlTestData.getRowList();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public ArrayList<ArrayList<String>> getDataTable() {
+        return dataTable;
     }
 
     public ArrayList<String> getDescription() {
         return description;
     }
 
-    public void setDescription(ArrayList<String> description) {
-        this.description = description;
+    public String getName() {
+        return name;
     }
 
     public ArrayList<String> getTags() {
         return tags;
     }
 
-    public void setTags(ArrayList<String> tags) {
-        this.tags = tags;
-    }
-
-    public ArrayList<ArrayList<String>> getDataTable() {
-        return dataTable;
-    }
-
     public void setDataTable(ArrayList<ArrayList<String>> dataTable) {
         this.dataTable = dataTable;
+    }
+
+    public void setDescription(ArrayList<String> description) {
+        this.description = description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
 
 }

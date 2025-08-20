@@ -2,8 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with the sheep-dog-cloud repository.
 
-> **📚 Complete Documentation**: See `../sheep-dog-qa/CLAUDE.*.md` files for comprehensive guidance:
-> - `CLAUDE.local.md` - Cross-repository coordination
+> **📚 Complete Documentation**: See the comprehensive guidance files:
+> - `../sheep-dog-main/CLAUDE.md` - Cross-repository coordination
 > - `CLAUDE.architecture.md` - System architecture & design patterns
 > - `CLAUDE.development.md` - Development workflows & practices  
 > - `CLAUDE.testing.md` - BDD/testing methodologies
@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 - **Kubernetes Manifests**: Cloud orchestration configurations
 
 ### Maven Plugin Used
-- **Plugin**: `sheep-dog-dev-svc-maven-plugin:1.29`
+- **Plugin**: `sheep-dog-dev-svc-maven-plugin:1.33-SNAPSHOT`
 - **Key Feature**: Does NOT require `-DrepoDir` parameter (auto-handles repositories)
 
 ## Development Commands

@@ -16,7 +16,7 @@ public class UMLStepParameters {
     }
 
     public UMLStepParameters(org.farhan.mbt.core.UMLStepParameters umlStepParameters) {
-        stepParametersTable = umlStepParameters.getStepParametersData();
+        stepParametersTable = umlStepParameters.getRowList();
     }
 
     public ArrayList<ArrayList<String>> getStepParametersTable() {

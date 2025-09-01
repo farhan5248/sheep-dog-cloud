@@ -22,7 +22,7 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalMyDslParser extends AbstractInternalContentAssistParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_INT", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'Hello'", "'!'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_INT", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'Hello'", "'!'", "'from'"
     };
     public static final int RULE_ID=4;
     public static final int RULE_WS=9;
@@ -33,6 +33,7 @@ public class InternalMyDslParser extends AbstractInternalContentAssistParser {
     public static final int T__11=11;
     public static final int RULE_ML_COMMENT=7;
     public static final int T__12=12;
+    public static final int T__13=13;
     public static final int EOF=-1;
 
     // delegates
@@ -403,17 +404,22 @@ public class InternalMyDslParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Greeting__Group__2"
-    // InternalMyDsl.g:156:1: rule__Greeting__Group__2 : rule__Greeting__Group__2__Impl ;
+    // InternalMyDsl.g:156:1: rule__Greeting__Group__2 : rule__Greeting__Group__2__Impl rule__Greeting__Group__3 ;
     public final void rule__Greeting__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalMyDsl.g:160:1: ( rule__Greeting__Group__2__Impl )
-            // InternalMyDsl.g:161:2: rule__Greeting__Group__2__Impl
+            // InternalMyDsl.g:160:1: ( rule__Greeting__Group__2__Impl rule__Greeting__Group__3 )
+            // InternalMyDsl.g:161:2: rule__Greeting__Group__2__Impl rule__Greeting__Group__3
             {
-            pushFollow(FOLLOW_2);
+            pushFollow(FOLLOW_5);
             rule__Greeting__Group__2__Impl();
+
+            state._fsp--;
+
+            pushFollow(FOLLOW_2);
+            rule__Greeting__Group__3();
 
             state._fsp--;
 
@@ -436,21 +442,42 @@ public class InternalMyDslParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Greeting__Group__2__Impl"
-    // InternalMyDsl.g:167:1: rule__Greeting__Group__2__Impl : ( '!' ) ;
+    // InternalMyDsl.g:168:1: rule__Greeting__Group__2__Impl : ( ( rule__Greeting__Group_2__0 )? ) ;
     public final void rule__Greeting__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalMyDsl.g:171:1: ( ( '!' ) )
-            // InternalMyDsl.g:172:1: ( '!' )
+            // InternalMyDsl.g:172:1: ( ( ( rule__Greeting__Group_2__0 )? ) )
+            // InternalMyDsl.g:173:1: ( ( rule__Greeting__Group_2__0 )? )
             {
-            // InternalMyDsl.g:172:1: ( '!' )
-            // InternalMyDsl.g:173:2: '!'
+            // InternalMyDsl.g:173:1: ( ( rule__Greeting__Group_2__0 )? )
+            // InternalMyDsl.g:174:2: ( rule__Greeting__Group_2__0 )?
             {
-             before(grammarAccess.getGreetingAccess().getExclamationMarkKeyword_2()); 
-            match(input,12,FOLLOW_2); 
-             after(grammarAccess.getGreetingAccess().getExclamationMarkKeyword_2()); 
+             before(grammarAccess.getGreetingAccess().getGroup_2()); 
+            // InternalMyDsl.g:175:2: ( rule__Greeting__Group_2__0 )?
+            int alt2=2;
+            int LA2_0 = input.LA(1);
+
+            if ( (LA2_0==13) ) {
+                alt2=1;
+            }
+            switch (alt2) {
+                case 1 :
+                    // InternalMyDsl.g:175:3: rule__Greeting__Group_2__0
+                    {
+                    pushFollow(FOLLOW_2);
+                    rule__Greeting__Group_2__0();
+
+                    state._fsp--;
+
+
+                    }
+                    break;
+
+            }
+
+             after(grammarAccess.getGreetingAccess().getGroup_2()); 
 
             }
 
@@ -472,18 +499,243 @@ public class InternalMyDslParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__Greeting__Group__2__Impl"
 
 
+    // $ANTLR start "rule__Greeting__Group__3"
+    // InternalMyDsl.g:183:1: rule__Greeting__Group__3 : rule__Greeting__Group__3__Impl ;
+    public final void rule__Greeting__Group__3() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalMyDsl.g:187:1: ( rule__Greeting__Group__3__Impl )
+            // InternalMyDsl.g:188:2: rule__Greeting__Group__3__Impl
+            {
+            pushFollow(FOLLOW_2);
+            rule__Greeting__Group__3__Impl();
+
+            state._fsp--;
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Greeting__Group__3"
+
+
+    // $ANTLR start "rule__Greeting__Group__3__Impl"
+    // InternalMyDsl.g:194:1: rule__Greeting__Group__3__Impl : ( '!' ) ;
+    public final void rule__Greeting__Group__3__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalMyDsl.g:198:1: ( ( '!' ) )
+            // InternalMyDsl.g:199:1: ( '!' )
+            {
+            // InternalMyDsl.g:199:1: ( '!' )
+            // InternalMyDsl.g:200:2: '!'
+            {
+             before(grammarAccess.getGreetingAccess().getExclamationMarkKeyword_3()); 
+            match(input,12,FOLLOW_2); 
+             after(grammarAccess.getGreetingAccess().getExclamationMarkKeyword_3()); 
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Greeting__Group__3__Impl"
+
+
+    // $ANTLR start "rule__Greeting__Group_2__0"
+    // InternalMyDsl.g:210:1: rule__Greeting__Group_2__0 : rule__Greeting__Group_2__0__Impl rule__Greeting__Group_2__1 ;
+    public final void rule__Greeting__Group_2__0() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalMyDsl.g:214:1: ( rule__Greeting__Group_2__0__Impl rule__Greeting__Group_2__1 )
+            // InternalMyDsl.g:215:2: rule__Greeting__Group_2__0__Impl rule__Greeting__Group_2__1
+            {
+            pushFollow(FOLLOW_4);
+            rule__Greeting__Group_2__0__Impl();
+
+            state._fsp--;
+
+            pushFollow(FOLLOW_2);
+            rule__Greeting__Group_2__1();
+
+            state._fsp--;
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Greeting__Group_2__0"
+
+
+    // $ANTLR start "rule__Greeting__Group_2__0__Impl"
+    // InternalMyDsl.g:222:1: rule__Greeting__Group_2__0__Impl : ( 'from' ) ;
+    public final void rule__Greeting__Group_2__0__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalMyDsl.g:226:1: ( ( 'from' ) )
+            // InternalMyDsl.g:227:1: ( 'from' )
+            {
+            // InternalMyDsl.g:227:1: ( 'from' )
+            // InternalMyDsl.g:228:2: 'from'
+            {
+             before(grammarAccess.getGreetingAccess().getFromKeyword_2_0()); 
+            match(input,13,FOLLOW_2); 
+             after(grammarAccess.getGreetingAccess().getFromKeyword_2_0()); 
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Greeting__Group_2__0__Impl"
+
+
+    // $ANTLR start "rule__Greeting__Group_2__1"
+    // InternalMyDsl.g:237:1: rule__Greeting__Group_2__1 : rule__Greeting__Group_2__1__Impl ;
+    public final void rule__Greeting__Group_2__1() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalMyDsl.g:241:1: ( rule__Greeting__Group_2__1__Impl )
+            // InternalMyDsl.g:242:2: rule__Greeting__Group_2__1__Impl
+            {
+            pushFollow(FOLLOW_2);
+            rule__Greeting__Group_2__1__Impl();
+
+            state._fsp--;
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Greeting__Group_2__1"
+
+
+    // $ANTLR start "rule__Greeting__Group_2__1__Impl"
+    // InternalMyDsl.g:248:1: rule__Greeting__Group_2__1__Impl : ( ( rule__Greeting__FromAssignment_2_1 ) ) ;
+    public final void rule__Greeting__Group_2__1__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalMyDsl.g:252:1: ( ( ( rule__Greeting__FromAssignment_2_1 ) ) )
+            // InternalMyDsl.g:253:1: ( ( rule__Greeting__FromAssignment_2_1 ) )
+            {
+            // InternalMyDsl.g:253:1: ( ( rule__Greeting__FromAssignment_2_1 ) )
+            // InternalMyDsl.g:254:2: ( rule__Greeting__FromAssignment_2_1 )
+            {
+             before(grammarAccess.getGreetingAccess().getFromAssignment_2_1()); 
+            // InternalMyDsl.g:255:2: ( rule__Greeting__FromAssignment_2_1 )
+            // InternalMyDsl.g:255:3: rule__Greeting__FromAssignment_2_1
+            {
+            pushFollow(FOLLOW_2);
+            rule__Greeting__FromAssignment_2_1();
+
+            state._fsp--;
+
+
+            }
+
+             after(grammarAccess.getGreetingAccess().getFromAssignment_2_1()); 
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Greeting__Group_2__1__Impl"
+
+
     // $ANTLR start "rule__Model__GreetingsAssignment"
-    // InternalMyDsl.g:183:1: rule__Model__GreetingsAssignment : ( ruleGreeting ) ;
+    // InternalMyDsl.g:264:1: rule__Model__GreetingsAssignment : ( ruleGreeting ) ;
     public final void rule__Model__GreetingsAssignment() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalMyDsl.g:187:1: ( ( ruleGreeting ) )
-            // InternalMyDsl.g:188:2: ( ruleGreeting )
+            // InternalMyDsl.g:268:1: ( ( ruleGreeting ) )
+            // InternalMyDsl.g:269:2: ( ruleGreeting )
             {
-            // InternalMyDsl.g:188:2: ( ruleGreeting )
-            // InternalMyDsl.g:189:3: ruleGreeting
+            // InternalMyDsl.g:269:2: ( ruleGreeting )
+            // InternalMyDsl.g:270:3: ruleGreeting
             {
              before(grammarAccess.getModelAccess().getGreetingsGreetingParserRuleCall_0()); 
             pushFollow(FOLLOW_2);
@@ -514,17 +766,17 @@ public class InternalMyDslParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Greeting__NameAssignment_1"
-    // InternalMyDsl.g:198:1: rule__Greeting__NameAssignment_1 : ( RULE_ID ) ;
+    // InternalMyDsl.g:279:1: rule__Greeting__NameAssignment_1 : ( RULE_ID ) ;
     public final void rule__Greeting__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalMyDsl.g:202:1: ( ( RULE_ID ) )
-            // InternalMyDsl.g:203:2: ( RULE_ID )
+            // InternalMyDsl.g:283:1: ( ( RULE_ID ) )
+            // InternalMyDsl.g:284:2: ( RULE_ID )
             {
-            // InternalMyDsl.g:203:2: ( RULE_ID )
-            // InternalMyDsl.g:204:3: RULE_ID
+            // InternalMyDsl.g:284:2: ( RULE_ID )
+            // InternalMyDsl.g:285:3: RULE_ID
             {
              before(grammarAccess.getGreetingAccess().getNameIDTerminalRuleCall_1_0()); 
             match(input,RULE_ID,FOLLOW_2); 
@@ -549,6 +801,51 @@ public class InternalMyDslParser extends AbstractInternalContentAssistParser {
     }
     // $ANTLR end "rule__Greeting__NameAssignment_1"
 
+
+    // $ANTLR start "rule__Greeting__FromAssignment_2_1"
+    // InternalMyDsl.g:294:1: rule__Greeting__FromAssignment_2_1 : ( ( RULE_ID ) ) ;
+    public final void rule__Greeting__FromAssignment_2_1() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalMyDsl.g:298:1: ( ( ( RULE_ID ) ) )
+            // InternalMyDsl.g:299:2: ( ( RULE_ID ) )
+            {
+            // InternalMyDsl.g:299:2: ( ( RULE_ID ) )
+            // InternalMyDsl.g:300:3: ( RULE_ID )
+            {
+             before(grammarAccess.getGreetingAccess().getFromGreetingCrossReference_2_1_0()); 
+            // InternalMyDsl.g:301:3: ( RULE_ID )
+            // InternalMyDsl.g:302:4: RULE_ID
+            {
+             before(grammarAccess.getGreetingAccess().getFromGreetingIDTerminalRuleCall_2_1_0_1()); 
+            match(input,RULE_ID,FOLLOW_2); 
+             after(grammarAccess.getGreetingAccess().getFromGreetingIDTerminalRuleCall_2_1_0_1()); 
+
+            }
+
+             after(grammarAccess.getGreetingAccess().getFromGreetingCrossReference_2_1_0()); 
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Greeting__FromAssignment_2_1"
+
     // Delegated rules
 
 
@@ -558,6 +855,6 @@ public class InternalMyDslParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_2 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x0000000000000802L});
     public static final BitSet FOLLOW_4 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_5 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_5 = new BitSet(new long[]{0x0000000000003000L});
 
 }

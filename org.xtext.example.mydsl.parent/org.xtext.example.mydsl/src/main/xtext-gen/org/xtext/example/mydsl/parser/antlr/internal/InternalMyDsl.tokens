@@ -1,6 +1,6 @@
-'!'=12
+'!'=13
 'Hello'=11
-'from'=13
+'from'=12
 RULE_ANY_OTHER=10
 RULE_ID=4
 RULE_INT=5

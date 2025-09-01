@@ -6,12 +6,18 @@ dependencies {
 	api project(':xtextasciidocplugin')
 	api "org.eclipse.xtext:org.eclipse.xtext.ide:${xtextVersion}"
 	api "org.eclipse.xtext:org.eclipse.xtext.xbase.ide:${xtextVersion}"
+	
+	// LSP4J dependencies for Language Server Protocol
+	api 'org.eclipse.lsp4j:org.eclipse.lsp4j:0.22.0'
+	api 'org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.22.0'
 }
 
 apply plugin: 'application'
 apply plugin: 'com.gradleup.shadow'
+apply plugin: 'distribution'
+
 application {
-	mainClass = "org.eclipse.xtext.ide.server.ServerLauncher"
+	mainClass = "org.farhan.dsl.asciidoc.ide.AsciiDocServerLauncher"
 }
 
 shadowJar {
@@ -23,4 +29,37 @@ shadowJar {
 	archiveClassifier = 'ls'
 	append('plugin.properties')
 	mergeServiceFiles()
+}
+
+// Fat JAR configuration for standalone distribution
+task fatJar(type: Jar) {
+	dependsOn jar, ':xtextasciidocplugin:jar'
+	archiveClassifier = 'standalone'
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+	exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+	
+	manifest {
+		attributes 'Main-Class': 'org.farhan.dsl.asciidoc.ide.AsciiDocServerLauncher'
+	}
+}
+
+// Distribution configuration
+distributions {
+	main {
+		contents {
+			from(fatJar)
+			from('scripts') {
+				into 'bin'
+				fileMode = 0755
+			}
+		}
+	}
+}
+
+// Run configuration for development
+run {
+	mainClass = 'org.farhan.dsl.asciidoc.ide.AsciiDocServerLauncher'
+	standardInput = System.in
 }

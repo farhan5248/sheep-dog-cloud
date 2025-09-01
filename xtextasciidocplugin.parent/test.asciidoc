@@ -1,0 +1,4 @@
+Hello World!
+Hello Xtext!
+Hello Language Server!
+Hello AsciiDoc!

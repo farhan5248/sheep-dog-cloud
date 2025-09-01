@@ -23,8 +23,13 @@
     "languages": [
       {
         "id": "asciidoc",
-        "aliases": ["AsciiDoc", "asciidoc"],
-        "extensions": [".asciidoc", ".adoc"],
+        "aliases": [
+          "AsciiDoc",
+          "asciidoc"
+        ],
+        "extensions": [
+          ".asciidoc"
+        ],
         "configuration": "./asciidoc.configuration.json",
         "icon": {
           "light": "./icons/asciidoc-icon.svg",
@@ -59,6 +64,11 @@
         "command": "asciidoc.validateAllFiles",
         "title": "Validate All AsciiDoc Files",
         "category": "AsciiDoc"
+      },
+      {
+        "command": "asciidoc.helloWorld",
+        "title": "Hello World",
+        "category": "AsciiDoc"
       }
     ],
     "keybindings": [
@@ -79,50 +89,58 @@
       },
       {
         "command": "asciidoc.validateAllFiles",
-        "key": "ctrl+alt+v",
-        "when": "editorLangId == asciidoc"
+        "key": "ctrl+alt+v"
       }
     ],
     "menus": {
       "editor/context": [
         {
           "when": "editorLangId == asciidoc",
+          "command": "asciidoc.generateBoilerplate",
+          "group": "asciidoc"
+        },
+        {
+          "when": "editorLangId == asciidoc",
           "command": "asciidoc.generateTests",
-          "group": "asciidoc@1"
+          "group": "asciidoc"
         },
         {
           "when": "editorLangId == asciidoc",
           "command": "asciidoc.formatDocument",
-          "group": "asciidoc@2"
+          "group": "asciidoc"
         }
       ],
       "explorer/context": [
         {
           "when": "resourceExtname == .asciidoc",
-          "command": "asciidoc.generateBoilerplate",
-          "group": "asciidoc@1"
+          "command": "asciidoc.generateTests",
+          "group": "asciidoc"
         }
       ]
     },
     "configuration": {
       "type": "object",
-      "title": "AsciiDoc",
+      "title": "AsciiDoc Language Server",
       "properties": {
         "asciidoc.languageServer.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable AsciiDoc language server"
+          "description": "Enable/disable the AsciiDoc language server"
         },
         "asciidoc.languageServer.port": {
           "type": "number",
-          "default": 5008,
-          "description": "Language server port"
+          "default": 5007,
+          "description": "Port for the AsciiDoc language server"
         },
         "asciidoc.trace.server": {
           "type": "string",
-          "enum": ["off", "messages", "verbose"],
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
           "default": "off",
-          "description": "Traces the communication between VS Code and the language server"
+          "description": "Traces the communication between VS Code and the language server."
         },
         "asciidoc.formatting.enabled": {
           "type": "boolean",
@@ -136,8 +154,8 @@
         },
         "asciidoc.boilerplate.template": {
           "type": "string",
-          "default": "Hello World!\nHello AsciiDoc!\nHello VSCode!",
-          "description": "Template for new AsciiDoc files"
+          "default": "// AsciiDoc Boilerplate File\nHello World!\nHello Claude!\nHello VSCode!",
+          "description": "Template content for new AsciiDoc files"
         }
       }
     }

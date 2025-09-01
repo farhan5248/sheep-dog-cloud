@@ -66,7 +66,7 @@ function activate(context) {
     // Determine the correct working directory for the language server
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
     const projectDir = workspaceFolder ?
-        path.join(workspaceFolder.uri.fsPath, 'sheep-dog-local', 'org.xtext.example.mydsl.parent') :
+        path.join(workspaceFolder.uri.fsPath, 'sheep-dog-cloud', 'org.xtext.example.mydsl.parent') :
         undefined;
     // Server options - embedded JAR approach with correct working directory
     const serverOptions = {

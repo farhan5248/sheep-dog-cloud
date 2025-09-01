@@ -1,48 +1,40 @@
 @echo off
-echo AsciiDoc VSCode Extension - Phase 3 Test Script
-echo =================================================
+echo Testing AsciiDoc VSCode Extension Phase 3 Features
+echo ================================================
+echo.
 
-REM Compile the TypeScript extension
-echo Compiling extension...
+echo 1. Compiling TypeScript...
 call npm run compile
-if %errorlevel% neq 0 (
+if errorlevel 1 (
     echo ERROR: Compilation failed!
     pause
     exit /b 1
 )
 
 echo.
-echo Extension compiled successfully!
+echo 2. Extension compiled successfully!
 echo.
 
-echo Phase 3 Features to Test:
-echo --------------------------
-echo 1. Generate AsciiDoc Boilerplate (Ctrl+Alt+G)
-echo 2. Generate Tests from AsciiDoc (Ctrl+Alt+T)
-echo 3. Format AsciiDoc Document (Shift+Alt+F)
-echo 4. Validate All AsciiDoc Files (Ctrl+Alt+V)
+echo 3. Available commands in the extension:
+echo    - asciidoc.generateBoilerplate (Ctrl+Alt+G)
+echo    - asciidoc.generateTests (Ctrl+Alt+T) 
+echo    - asciidoc.formatDocument (Shift+Alt+F)
+echo    - asciidoc.validateAllFiles (Ctrl+Alt+V)
+echo    - asciidoc.helloWorld
 echo.
 
-echo Test Files:
-echo - example.asciidoc (sample file with Hello statements)
-echo - Custom icon: icons/asciidoc-icon.svg
+echo 4. Test files created:
+echo    - example.asciidoc (sample file to test commands)
+echo    - icons/asciidoc-icon.svg (custom file icon)
 echo.
 
-echo Instructions:
-echo 1. Open VSCode in this directory
-echo 2. Press F5 to launch Extension Development Host
-echo 3. Open example.asciidoc in the new window
-echo 4. Try each command using Ctrl+Shift+P or keybindings
-echo 5. Test context menus (right-click in editor and Explorer)
+echo 5. To test the extension:
+echo    a. Open VSCode in this directory
+echo    b. Press F5 to launch Extension Development Host
+echo    c. Open example.asciidoc in the new window
+echo    d. Use Ctrl+Shift+P to access the command palette
+echo    e. Type "AsciiDoc" to see all available commands
 echo.
 
-echo Configuration Settings:
-echo - asciidoc.languageServer.enabled
-echo - asciidoc.languageServer.port
-echo - asciidoc.formatting.enabled
-echo - asciidoc.validation.enabled  
-echo - asciidoc.boilerplate.template
-echo.
-
-echo Ready to test! Press F5 in VSCode to start testing.
+echo Extension is ready for testing!
 pause

@@ -1,49 +1,88 @@
 {
-    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-    "name": "AsciiDoc",
-    "patterns": [
-        {
-            "include": "#hello-statement"
-        },
-        {
-            "include": "#comments"
-        }
-    ],
-    "repository": {
-        "hello-statement": {
-            "begin": "\\b(Hello)\\s+",
-            "beginCaptures": {
-                "1": {
-                    "name": "keyword.other.hello.asciidoc"
-                }
-            },
-            "end": "!",
-            "endCaptures": {
-                "0": {
-                    "name": "punctuation.definition.exclamation.asciidoc"
-                }
-            },
-            "patterns": [
-                {
-                    "name": "entity.name.greeting.asciidoc",
-                    "match": "\\b\\w+\\b"
-                }
-            ]
-        },
-        "comments": {
-            "patterns": [
-                {
-                    "name": "comment.line.double-slash.asciidoc",
-                    "begin": "//",
-                    "end": "$\\n?"
-                },
-                {
-                    "name": "comment.block.asciidoc",
-                    "begin": "/\\*",
-                    "end": "\\*/"
-                }
-            ]
-        }
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "AsciiDoc",
+  "scopeName": "source.asciidoc",
+  "patterns": [
+    {
+      "include": "#greeting"
     },
-    "scopeName": "source.asciidoc"
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#whitespace"
+    }
+  ],
+  "repository": {
+    "greeting": {
+      "patterns": [
+        {
+          "name": "meta.greeting.asciidoc",
+          "match": "\b(Hello)\s+(\w+)\s*(!)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.greeting.asciidoc"
+            },
+            "2": {
+              "name": "entity.name.variable.asciidoc"
+            },
+            "3": {
+              "name": "punctuation.definition.exclamation.asciidoc"
+            }
+          }
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.asciidoc",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.asciidoc",
+          "begin": "/\*",
+          "end": "\*/",
+          "patterns": [
+            {
+              "name": "constant.character.escape.asciidoc",
+              "match": "\\."
+            }
+          ]
+        }
+      ]
+    },
+    "whitespace": {
+      "patterns": [
+        {
+          "name": "text.whitespace.asciidoc",
+          "match": "\s+"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.asciidoc",
+          "match": "\b(Hello)\b"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.definition.exclamation.asciidoc",
+          "match": "!"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "entity.name.variable.asciidoc",
+          "match": "\b[a-zA-Z_][a-zA-Z0-9_]*\b"
+        }
+      ]
+    }
+  }
 }

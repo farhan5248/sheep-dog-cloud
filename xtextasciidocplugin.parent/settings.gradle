@@ -1,2 +1,3 @@
 include 'xtextasciidocplugin'
 include 'xtextasciidocplugin.ide'
+include 'xtextasciidocplugin.vscode'

@@ -1,0 +1,49 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "AsciiDoc",
+    "patterns": [
+        {
+            "include": "#hello-statement"
+        },
+        {
+            "include": "#comments"
+        }
+    ],
+    "repository": {
+        "hello-statement": {
+            "begin": "\\b(Hello)\\s+",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.other.hello.asciidoc"
+                }
+            },
+            "end": "!",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.exclamation.asciidoc"
+                }
+            },
+            "patterns": [
+                {
+                    "name": "entity.name.greeting.asciidoc",
+                    "match": "\\b\\w+\\b"
+                }
+            ]
+        },
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.double-slash.asciidoc",
+                    "begin": "//",
+                    "end": "$\\n?"
+                },
+                {
+                    "name": "comment.block.asciidoc",
+                    "begin": "/\\*",
+                    "end": "\\*/"
+                }
+            ]
+        }
+    },
+    "scopeName": "source.asciidoc"
+}

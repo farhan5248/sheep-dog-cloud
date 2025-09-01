@@ -134,9 +134,28 @@ ruleGreeting returns [EObject current=null]
 				}
 			)
 		)
-		otherlv_2='!'
+		(
+			otherlv_2='from'
+			{
+				newLeafNode(otherlv_2, grammarAccess.getGreetingAccess().getFromKeyword_2_0());
+			}
+			(
+				(
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getGreetingRule());
+						}
+					}
+					otherlv_3=RULE_ID
+					{
+						newLeafNode(otherlv_3, grammarAccess.getGreetingAccess().getFromGreetingCrossReference_2_1_0());
+					}
+				)
+			)
+		)?
+		otherlv_4='!'
 		{
-			newLeafNode(otherlv_2, grammarAccess.getGreetingAccess().getExclamationMarkKeyword_2());
+			newLeafNode(otherlv_4, grammarAccess.getGreetingAccess().getExclamationMarkKeyword_3());
 		}
 	)
 ;

@@ -61,11 +61,6 @@
         "category": "MyDsl"
       },
       {
-        "command": "mydsl.validateAllFiles",
-        "title": "Validate All MyDsl Files",
-        "category": "MyDsl"
-      },
-      {
         "command": "mydsl.helloWorld",
         "title": "Hello World",
         "category": "MyDsl"
@@ -86,10 +81,6 @@
         "command": "mydsl.formatDocument",
         "key": "shift+alt+f",
         "when": "editorLangId == mydsl"
-      },
-      {
-        "command": "mydsl.validateAllFiles",
-        "key": "ctrl+alt+v"
       }
     ],
     "menus": {
@@ -146,11 +137,6 @@
           "type": "boolean",
           "default": true,
           "description": "Enable custom MyDsl formatting"
-        },
-        "mydsl.validation.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable MyDsl validation"
         },
         "mydsl.boilerplate.template": {
           "type": "string",

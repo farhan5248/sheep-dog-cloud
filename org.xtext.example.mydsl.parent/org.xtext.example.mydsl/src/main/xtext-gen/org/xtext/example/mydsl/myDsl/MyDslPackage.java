@@ -105,13 +105,22 @@ public interface MyDslPackage extends EPackage
   int GREETING__NAME = 0;
 
   /**
+   * The feature id for the '<em><b>From</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREETING__FROM = 1;
+
+  /**
    * The number of structural features of the '<em>Greeting</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GREETING_FEATURE_COUNT = 1;
+  int GREETING_FEATURE_COUNT = 2;
 
 
   /**
@@ -155,6 +164,17 @@ public interface MyDslPackage extends EPackage
    * @generated
    */
   EAttribute getGreeting_Name();
+
+  /**
+   * Returns the meta object for the reference '{@link org.xtext.example.mydsl.myDsl.Greeting#getFrom <em>From</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>From</em>'.
+   * @see org.xtext.example.mydsl.myDsl.Greeting#getFrom()
+   * @see #getGreeting()
+   * @generated
+   */
+  EReference getGreeting_From();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -214,6 +234,14 @@ public interface MyDslPackage extends EPackage
      * @generated
      */
     EAttribute GREETING__NAME = eINSTANCE.getGreeting_Name();
+
+    /**
+     * The meta object literal for the '<em><b>From</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference GREETING__FROM = eINSTANCE.getGreeting_From();
 
   }
 

@@ -159,6 +159,7 @@ rule__Greeting__Group__2
 	}
 :
 	rule__Greeting__Group__2__Impl
+	rule__Greeting__Group__3
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -170,9 +171,89 @@ rule__Greeting__Group__2__Impl
 	}
 :
 (
-	{ before(grammarAccess.getGreetingAccess().getExclamationMarkKeyword_2()); }
+	{ before(grammarAccess.getGreetingAccess().getGroup_2()); }
+	(rule__Greeting__Group_2__0)?
+	{ after(grammarAccess.getGreetingAccess().getGroup_2()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Greeting__Group__3
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__Greeting__Group__3__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Greeting__Group__3__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getGreetingAccess().getExclamationMarkKeyword_3()); }
 	'!'
-	{ after(grammarAccess.getGreetingAccess().getExclamationMarkKeyword_2()); }
+	{ after(grammarAccess.getGreetingAccess().getExclamationMarkKeyword_3()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Greeting__Group_2__0
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__Greeting__Group_2__0__Impl
+	rule__Greeting__Group_2__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Greeting__Group_2__0__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getGreetingAccess().getFromKeyword_2_0()); }
+	'from'
+	{ after(grammarAccess.getGreetingAccess().getFromKeyword_2_0()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Greeting__Group_2__1
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__Greeting__Group_2__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Greeting__Group_2__1__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getGreetingAccess().getFromAssignment_2_1()); }
+	(rule__Greeting__FromAssignment_2_1)
+	{ after(grammarAccess.getGreetingAccess().getFromAssignment_2_1()); }
 )
 ;
 finally {
@@ -204,6 +285,25 @@ rule__Greeting__NameAssignment_1
 		{ before(grammarAccess.getGreetingAccess().getNameIDTerminalRuleCall_1_0()); }
 		RULE_ID
 		{ after(grammarAccess.getGreetingAccess().getNameIDTerminalRuleCall_1_0()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Greeting__FromAssignment_2_1
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	(
+		{ before(grammarAccess.getGreetingAccess().getFromGreetingCrossReference_2_1_0()); }
+		(
+			{ before(grammarAccess.getGreetingAccess().getFromGreetingIDTerminalRuleCall_2_1_0_1()); }
+			RULE_ID
+			{ after(grammarAccess.getGreetingAccess().getFromGreetingIDTerminalRuleCall_2_1_0_1()); }
+		)
+		{ after(grammarAccess.getGreetingAccess().getFromGreetingCrossReference_2_1_0()); }
 	)
 ;
 finally {

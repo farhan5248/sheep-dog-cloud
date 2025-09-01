@@ -19,15 +19,16 @@ if %errorlevel% neq 0 (
 
 echo.
 echo Step 3: Ensuring language server JAR is present...
-if not exist "server\mydsl-language-server-1.0.0-SNAPSHOT-standalone.jar" (
-    echo Copying language server JAR...
-    if not exist "server" mkdir server
-    copy "..\org.xtext.example.mydsl.ide\build\libs\mydsl-language-server-1.0.0-SNAPSHOT-standalone.jar" "server\" > nul
-    if %errorlevel% neq 0 (
-        echo ERROR: Failed to copy language server JAR!
-        echo Make sure the language server has been built first with: gradlew build
-        exit /b %errorlevel%
-    )
+echo Copying language server JAR...
+if exist "server" (
+    rmdir /s /q "server"
+)
+mkdir server
+copy "..\org.xtext.example.mydsl.ide\build\libs\mydsl-language-server-1.0.0-SNAPSHOT-standalone.jar" "server\" > nul
+if %errorlevel% neq 0 (
+    echo ERROR: Failed to copy language server JAR!
+    echo Make sure the language server has been built first with: gradlew build
+    exit /b %errorlevel%
 )
 
 echo.

@@ -6,6 +6,7 @@ package org.xtext.example.mydsl.myDsl.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
@@ -22,6 +23,7 @@ import org.xtext.example.mydsl.myDsl.MyDslPackage;
  * </p>
  * <ul>
  *   <li>{@link org.xtext.example.mydsl.myDsl.impl.GreetingImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.xtext.example.mydsl.myDsl.impl.GreetingImpl#getFrom <em>From</em>}</li>
  * </ul>
  *
  * @generated
@@ -47,6 +49,16 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
    * @ordered
    */
   protected String name = NAME_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getFrom() <em>From</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFrom()
+   * @generated
+   * @ordered
+   */
+  protected Greeting from;
 
   /**
    * <!-- begin-user-doc -->
@@ -100,12 +112,60 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
    * @generated
    */
   @Override
+  public Greeting getFrom()
+  {
+    if (from != null && from.eIsProxy())
+    {
+      InternalEObject oldFrom = (InternalEObject)from;
+      from = (Greeting)eResolveProxy(oldFrom);
+      if (from != oldFrom)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, MyDslPackage.GREETING__FROM, oldFrom, from));
+      }
+    }
+    return from;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Greeting basicGetFrom()
+  {
+    return from;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setFrom(Greeting newFrom)
+  {
+    Greeting oldFrom = from;
+    from = newFrom;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MyDslPackage.GREETING__FROM, oldFrom, from));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
     {
       case MyDslPackage.GREETING__NAME:
         return getName();
+      case MyDslPackage.GREETING__FROM:
+        if (resolve) return getFrom();
+        return basicGetFrom();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -122,6 +182,9 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
     {
       case MyDslPackage.GREETING__NAME:
         setName((String)newValue);
+        return;
+      case MyDslPackage.GREETING__FROM:
+        setFrom((Greeting)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -140,6 +203,9 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
       case MyDslPackage.GREETING__NAME:
         setName(NAME_EDEFAULT);
         return;
+      case MyDslPackage.GREETING__FROM:
+        setFrom((Greeting)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -156,6 +222,8 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
     {
       case MyDslPackage.GREETING__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case MyDslPackage.GREETING__FROM:
+        return from != null;
     }
     return super.eIsSet(featureID);
   }

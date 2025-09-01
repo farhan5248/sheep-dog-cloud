@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.xtext.example.mydsl.myDsl.Greeting#getName <em>Name</em>}</li>
+ *   <li>{@link org.xtext.example.mydsl.myDsl.Greeting#getFrom <em>From</em>}</li>
  * </ul>
  *
  * @see org.xtext.example.mydsl.myDsl.MyDslPackage#getGreeting()
@@ -44,5 +45,27 @@ public interface Greeting extends EObject
    * @generated
    */
   void setName(String value);
+
+  /**
+   * Returns the value of the '<em><b>From</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>From</em>' reference.
+   * @see #setFrom(Greeting)
+   * @see org.xtext.example.mydsl.myDsl.MyDslPackage#getGreeting_From()
+   * @model
+   * @generated
+   */
+  Greeting getFrom();
+
+  /**
+   * Sets the value of the '{@link org.xtext.example.mydsl.myDsl.Greeting#getFrom <em>From</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>From</em>' reference.
+   * @see #getFrom()
+   * @generated
+   */
+  void setFrom(Greeting value);
 
 } // Greeting

@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.List;
 import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.CrossReference;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.Group;
@@ -42,13 +43,18 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		private final Keyword cHelloKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
-		private final Keyword cExclamationMarkKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cFromKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cFromAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final CrossReference cFromGreetingCrossReference_2_1_0 = (CrossReference)cFromAssignment_2_1.eContents().get(0);
+		private final RuleCall cFromGreetingIDTerminalRuleCall_2_1_0_1 = (RuleCall)cFromGreetingCrossReference_2_1_0.eContents().get(1);
+		private final Keyword cExclamationMarkKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//Greeting:
-		//    'Hello' name=ID '!';
+		//    'Hello' name=ID ('from' from=[Greeting])? '!';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'Hello' name=ID '!'
+		//'Hello' name=ID ('from' from=[Greeting])? '!'
 		public Group getGroup() { return cGroup; }
 		
 		//'Hello'
@@ -60,8 +66,23 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		//ID
 		public RuleCall getNameIDTerminalRuleCall_1_0() { return cNameIDTerminalRuleCall_1_0; }
 		
+		//('from' from=[Greeting])?
+		public Group getGroup_2() { return cGroup_2; }
+		
+		//'from'
+		public Keyword getFromKeyword_2_0() { return cFromKeyword_2_0; }
+		
+		//from=[Greeting]
+		public Assignment getFromAssignment_2_1() { return cFromAssignment_2_1; }
+		
+		//[Greeting]
+		public CrossReference getFromGreetingCrossReference_2_1_0() { return cFromGreetingCrossReference_2_1_0; }
+		
+		//ID
+		public RuleCall getFromGreetingIDTerminalRuleCall_2_1_0_1() { return cFromGreetingIDTerminalRuleCall_2_1_0_1; }
+		
 		//'!'
-		public Keyword getExclamationMarkKeyword_2() { return cExclamationMarkKeyword_2; }
+		public Keyword getExclamationMarkKeyword_3() { return cExclamationMarkKeyword_3; }
 	}
 	
 	
@@ -119,7 +140,7 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	}
 	
 	//Greeting:
-	//    'Hello' name=ID '!';
+	//    'Hello' name=ID ('from' from=[Greeting])? '!';
 	public GreetingElements getGreetingAccess() {
 		return pGreeting;
 	}

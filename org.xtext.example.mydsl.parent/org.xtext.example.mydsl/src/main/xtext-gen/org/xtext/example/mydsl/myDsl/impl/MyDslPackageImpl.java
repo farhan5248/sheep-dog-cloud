@@ -149,6 +149,17 @@ public class MyDslPackageImpl extends EPackageImpl implements MyDslPackage
    * @generated
    */
   @Override
+  public EReference getGreeting_From()
+  {
+    return (EReference)greetingEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public MyDslFactory getMyDslFactory()
   {
     return (MyDslFactory)getEFactoryInstance();
@@ -179,6 +190,7 @@ public class MyDslPackageImpl extends EPackageImpl implements MyDslPackage
 
     greetingEClass = createEClass(GREETING);
     createEAttribute(greetingEClass, GREETING__NAME);
+    createEReference(greetingEClass, GREETING__FROM);
   }
 
   /**
@@ -217,6 +229,7 @@ public class MyDslPackageImpl extends EPackageImpl implements MyDslPackage
 
     initEClass(greetingEClass, Greeting.class, "Greeting", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getGreeting_Name(), ecorePackage.getEString(), "name", null, 0, 1, Greeting.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getGreeting_From(), this.getGreeting(), null, "from", null, 0, 1, Greeting.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

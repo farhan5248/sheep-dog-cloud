@@ -1,0 +1,16 @@
+// Example AsciiDoc file for testing Phase 3 features
+// This file demonstrates the Hello statement syntax
+
+Hello World!
+Hello AsciiDoc!
+Hello VSCode!
+
+// Generated test statements
+Hello Test!
+Hello Extension!
+
+// Comments are supported
+// Use Ctrl+Alt+G to generate boilerplate
+// Use Ctrl+Alt+T to generate tests  
+// Use Shift+Alt+F to format document
+// Use Ctrl+Alt+V to validate all files

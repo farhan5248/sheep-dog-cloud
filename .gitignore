@@ -1,4 +1,7 @@
 **/target
+**/.gradle
+**/build
+**/node_modules
 **/bin
 release.properties
 **/*._trace
@@ -13,6 +16,7 @@ release.properties
 **/*.class
 **/*.jar
 **/*.tar
+**/*.vsix
 **/*.contrib
 **/*.copyarea.db
 **/*.keep
@@ -23,5 +27,5 @@ release.properties
 **/secrets.yaml
 **/*.env
 **/*.theia-workspace
-sheep-dog-dev-svc-maven-plugin/.classpath
+**/.classpath
 .vscode/settings.json

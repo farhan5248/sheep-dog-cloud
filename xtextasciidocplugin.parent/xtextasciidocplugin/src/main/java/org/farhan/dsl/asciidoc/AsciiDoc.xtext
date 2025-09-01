@@ -1,0 +1,9 @@
+grammar org.farhan.dsl.asciidoc.AsciiDoc with org.eclipse.xtext.common.Terminals
+
+generate asciiDoc "http://www.farhan.org/dsl/asciidoc/AsciiDoc"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';

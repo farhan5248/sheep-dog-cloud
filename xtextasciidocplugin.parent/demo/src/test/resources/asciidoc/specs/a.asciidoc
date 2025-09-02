@@ -20,7 +20,7 @@ Desc 3
 * When: The Object page is created as follows
 +
 |===
-| Grp | ins  
+| Grp | Ins  
 | 8   | {ins}
 |===
 

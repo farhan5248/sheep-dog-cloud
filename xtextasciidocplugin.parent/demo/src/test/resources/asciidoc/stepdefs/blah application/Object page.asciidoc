@@ -1,0 +1,10 @@
+= Step-Object: Object page
+
+== Step-Definition: is created as follows
+
+* Step-Parameters: 1
++
+|===
+| Grp | Ins
+|===
+

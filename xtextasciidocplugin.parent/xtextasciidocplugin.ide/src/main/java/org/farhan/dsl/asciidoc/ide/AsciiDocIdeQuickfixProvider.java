@@ -7,7 +7,6 @@ import org.eclipse.xtext.ide.editor.quickfix.AbstractDeclarativeIdeQuickfixProvi
 import org.eclipse.xtext.ide.editor.quickfix.DiagnosticResolutionAcceptor;
 import org.eclipse.xtext.ide.editor.quickfix.QuickFix;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
-import org.eclipse.xtext.validation.Issue;
 import org.farhan.dsl.asciidoc.validation.AsciiDocValidator;
 
 import com.google.gson.JsonArray;

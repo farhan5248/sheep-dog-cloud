@@ -1,16 +1,12 @@
 package org.farhan.dsl.asciidoc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -28,26 +24,11 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
-import org.farhan.dsl.asciidoc.generator.AsciiDocOutputConfigurationProvider;
 import org.farhan.dsl.common.*;
 
 public class LanguageAccessImpl implements ILanguageAccess {
 
 	public final static String STEP_PARAMETER_TEXT = "| Content";
-
-	private static ArrayList<String> getFolderResources(IFolder folder) throws Exception {
-		ArrayList<String> files = new ArrayList<String>();
-		if (folder.exists()) {
-			for (IResource r : folder.members()) {
-				if (r instanceof IFolder) {
-					files.addAll(getFolderResources((IFolder) r));
-				} else {
-					files.add(r.getProjectRelativePath().toString());
-				}
-			}
-		}
-		return files;
-	}
 
 	TestStep step;
 
@@ -165,10 +146,10 @@ public class LanguageAccessImpl implements ILanguageAccess {
 
 	@Override
 	public ArrayList<String> getFiles() throws Exception {
-		IFolder folder = getProject()
-				.getFolder(AsciiDocOutputConfigurationProvider.stepDefsOutput.getOutputDirectory());
+
+		File folder = new File(getProjectPath() + getOutputDirPath());
 		ArrayList<String> components = new ArrayList<String>();
-		for (IResource ir : folder.members()) {
+		for (File ir : folder.listFiles()) {
 			components.add(ir.getName());
 		}
 		return components;
@@ -176,15 +157,26 @@ public class LanguageAccessImpl implements ILanguageAccess {
 
 	@Override
 	public ArrayList<String> getFilesRecursively(String component) throws Exception {
-		IFolder folder = getProject()
-				.getFolder(AsciiDocOutputConfigurationProvider.stepDefsOutput.getOutputDirectory() + "/" + component);
-
 		ArrayList<String> components = new ArrayList<String>();
-		for (String stepDefObjectResource : getFolderResources(folder)) {
+		for (String stepDefObjectResource : getFolderResources(new File(getProjectPath() + getOutputDirPath()))) {
 			// ([^\/]+)\/([^\/]+)\/(.*).feature group 3
 			components.add(stepDefObjectResource.replaceFirst(".*" + component + "/", component + "/"));
 		}
 		return components;
+	}
+
+	private ArrayList<String> getFolderResources(File folder) throws Exception {
+		ArrayList<String> files = new ArrayList<String>();
+		if (folder.exists()) {
+			for (File r : folder.listFiles()) {
+				if (!r.isFile()) {
+					files.addAll(getFolderResources(r));
+				} else {
+					files.add(r.getAbsolutePath());
+				}
+			}
+		}
+		return files;
 	}
 
 	private List<Cell> getHeader() {
@@ -202,14 +194,13 @@ public class LanguageAccessImpl implements ILanguageAccess {
 	}
 
 	private URI getObjectURI(String objectQualifiedName) {
-		String projectName = getProjectName(getStepResource());
-		String outputDir = getOutputName();
-		String fileName = objectQualifiedName;
-		return URI.createPlatformResourceURI("/" + projectName + "/" + outputDir + "/" + fileName, true);
+		return URI.createFileURI(getProjectPath() + getOutputDirPath() + objectQualifiedName);
 	}
 
-	private String getOutputName() {
-		return AsciiDocOutputConfigurationProvider.stepDefsOutput.getOutputDirectory();
+	private String getOutputDirPath() {
+		// TODO fix output config
+		// AsciiDocOutputConfigurationProvider.stepDefsOutput.getOutputDirectory();
+		return "src/test/resources/asciidoc/stepdefs/";
 	}
 
 	public ArrayList<Object> getPreviousSteps() {
@@ -228,13 +219,8 @@ public class LanguageAccessImpl implements ILanguageAccess {
 		return steps;
 	}
 
-	private IProject getProject() {
-		return ResourcesPlugin.getWorkspace().getRoot()
-				.getFile(new Path(step.eResource().getURI().toPlatformString(true))).getProject();
-	}
-
-	private String getProjectName(Resource stepResource) {
-		return stepResource.getURI().toPlatformString(false).split("/")[1];
+	private String getProjectPath() {
+		return getStepResource().getURI().path().split("src/test/resources/asciidoc/specs/")[0];
 	}
 
 	public Object getStep() {

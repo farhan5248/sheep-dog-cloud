@@ -6,6 +6,7 @@ package org.farhan.dsl.asciidoc.validation;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.farhan.dsl.asciidoc.LanguageAccessImpl;
@@ -30,12 +31,19 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 	public static final String INVALID_STEP_TYPE = "invalidStepType";
 	public static final String MISSING_STEP_DEF = "missingStepDefinition";
 	public static final String MISSING_COMPONENT = "missingInitialComponent";
+	public static final String INVALID_PATH = "invalidpath";
 
 	@Check(CheckType.EXPENSIVE)
 	public void checkFeature(TestSuite feature) {
 		// TODO validate that feature file name and feature name are the same.
 		if (!Character.isUpperCase(feature.getName().charAt(0))) {
 			warning("TestSuite name should start with a capital", AsciiDocPackage.Literals.MODEL__NAME, INVALID_NAME);
+		}
+
+		String path = feature.eResource().getURI().path();
+		if (!path.contains("src/test/resources/asciidoc/specs/")) {
+			error("The resource " + path + " isn't in a src/test/resources/asciidoc/specs directory.",
+					AsciiDocPackage.Literals.MODEL__NAME, INVALID_PATH);
 		}
 	}
 
@@ -50,19 +58,17 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 	@Check(CheckType.FAST)
 	public void checkStepName(TestStep step) {
 		try {
+			LanguageAccessImpl lang = new LanguageAccessImpl(step);
 			if (step.getName() != null) {
-				String problems = LanguageHelper.validateError(new LanguageAccessImpl(step));
+				String problems = LanguageHelper.validateError(lang);
 				if (!problems.isEmpty()) {
 					error(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
-				} else {
-					ILanguageAccess lang = new LanguageAccessImpl(step);
-					problems = LanguageHelper.validateWarning(lang);
-					problems = LanguageHelper.getStepObjectQualifiedName(lang);
-					
-					if (!problems.isEmpty()) {
-						warning(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, MISSING_STEP_DEF,
-								getAlternateObjects(new LanguageAccessImpl(step)));
-					}
+				}
+
+				problems = LanguageHelper.validateWarning(lang);
+				if (!problems.isEmpty()) {
+					warning(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, MISSING_STEP_DEF,
+							getAlternateObjects(lang));
 				}
 			}
 		} catch (Exception e) {

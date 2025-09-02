@@ -3,9 +3,43 @@
  */
 package org.farhan.dsl.asciidoc;
 
+import org.eclipse.xtext.generator.IOutputConfigurationProvider;
+import org.eclipse.xtext.parser.IParser;
+import org.eclipse.xtext.parser.antlr.Lexer;
+import org.eclipse.xtext.parser.antlr.LexerBindings;
+import org.eclipse.xtext.parser.antlr.LexerProvider;
+import org.farhan.dsl.asciidoc.parser.antlr.MyAsciiDocParser;
+import org.farhan.dsl.asciidoc.parser.antlr.internal.InternalAsciiDocLexer;
+import org.farhan.dsl.asciidoc.parser.antlr.internal.MyAsciiDocLexer;
+
+import com.google.inject.Binder;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.google.inject.name.Names;
 
 /**
- * Use this class to register components to be used at runtime / without the Equinox extension registry.
+ * Use this class to register components to be used at runtime / without the
+ * Equinox extension registry.
  */
 public class AsciiDocRuntimeModule extends AbstractAsciiDocRuntimeModule {
+
+	@Override
+	public Class<? extends IParser> bindIParser() {
+		return MyAsciiDocParser.class;
+	}
+
+	@Override
+	public Class<? extends Lexer> bindLexer() {
+		return MyAsciiDocLexer.class;
+	}
+
+	@Override
+	public Provider<? extends InternalAsciiDocLexer> provideInternalAsciiDocLexer() {
+		return LexerProvider.create(MyAsciiDocLexer.class);
+	}
+
+	@Override
+	public void configureRuntimeLexer(Binder binder) {
+		binder.bind(Lexer.class).annotatedWith(Names.named(LexerBindings.RUNTIME)).to(MyAsciiDocLexer.class);
+	}
 }

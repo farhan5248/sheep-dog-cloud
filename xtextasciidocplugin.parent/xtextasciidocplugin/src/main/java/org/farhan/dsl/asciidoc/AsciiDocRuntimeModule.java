@@ -11,6 +11,7 @@ import org.eclipse.xtext.parser.antlr.LexerProvider;
 import org.farhan.dsl.asciidoc.parser.antlr.MyAsciiDocParser;
 import org.farhan.dsl.asciidoc.parser.antlr.internal.InternalAsciiDocLexer;
 import org.farhan.dsl.asciidoc.parser.antlr.internal.MyAsciiDocLexer;
+import org.farhan.dsl.asciidoc.generator.AsciiDocOutputConfigurationProvider;
 
 import com.google.inject.Binder;
 import com.google.inject.Provider;
@@ -23,6 +24,14 @@ import com.google.inject.name.Names;
  */
 public class AsciiDocRuntimeModule extends AbstractAsciiDocRuntimeModule {
 
+	
+	@Override
+	public void configure(Binder binder) {
+		super.configure(binder);
+		binder.bind(IOutputConfigurationProvider.class).to(AsciiDocOutputConfigurationProvider.class)
+				.in(Singleton.class);
+	}
+	
 	@Override
 	public Class<? extends IParser> bindIParser() {
 		return MyAsciiDocParser.class;

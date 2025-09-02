@@ -18,8 +18,19 @@ apply plugin: 'net.researchgate.release'
 // Configuration for Xtext projects
 configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') }) {
 	ext.xtextVersion = '2.40.0'
+	ext.sheepDogTestVersion = '1.23-SNAPSHOT'
 	repositories {
 		mavenCentral()
+		maven {
+			url = "https://maven.pkg.github.com/farhan5248/sheep-dog-local"
+			credentials {
+				username = project.findProperty("gpr.user") ?: 'farhan5248'
+				password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+			}
+		}
+		maven {
+			url = "https://repo.eclipse.org/content/groups/releases/"
+		}
 	}
 	
 	apply plugin: 'java-library'

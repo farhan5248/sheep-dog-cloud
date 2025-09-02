@@ -13,5 +13,5 @@ includeDateInGenerated=false
 outlet.DEFAULT_OUTPUT.hideLocalSyntheticVariables=true
 outlet.DEFAULT_OUTPUT.installDslAsPrimarySource=false
 outlet.DEFAULT_OUTPUT.userOutputPerSourceFolder=true
-targetJavaVersion=JAVA21
+targetJavaVersion=JAVA17
 useJavaCompilerCompliance=false

@@ -40,7 +40,7 @@ public class AsciiDocIdeQuickfixProvider extends AbstractDeclarativeIdeQuickfixP
 	}
 
 /* 
-
+	TODO add rename quickfix provider
 	@QuickFix(AsciiDocValidator.MISSING_STEP_DEF)
 	public void createDefinition(DiagnosticResolutionAcceptor acceptor) {
 

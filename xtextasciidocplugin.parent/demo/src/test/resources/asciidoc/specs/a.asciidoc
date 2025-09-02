@@ -15,7 +15,7 @@ The interfaces will be created in the src-gen/test/java/org/farhan/objects direc
 @tag3
 Desc 3
 
-* Given: The blah application, Objectf page is invalid
+* Given: The blah2 application, Objectf page is invalid
 
 * When: The Object page is created as follows
 +
@@ -23,4 +23,3 @@ Desc 3
 | Grp | Ins  
 | 8   | {ins}
 |===
-

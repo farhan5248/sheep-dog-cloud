@@ -3,10 +3,12 @@
  */
 package org.farhan.dsl.asciidoc.generator
 
+import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import org.farhan.dsl.asciidoc.asciiDoc.Greeting
 
 /**
  * Generates code from your model files on save.
@@ -16,10 +18,17 @@ import org.eclipse.xtext.generator.IGeneratorContext
 class AsciiDocGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(Greeting)
-//				.map[name]
-//				.join(', '))
+        val fileName = URI.decode(resource.URI.trimFileExtension.lastSegment)
+        fsa.generateFile(fileName+"Greeter.java", '''
+        public class «fileName»Greeter {
+            
+            public static void main(String[] args) {
+                «FOR g : resource.allContents.filter(Greeting).toIterable»
+                    System.out.println("Hello «g.name» «IF g.from !== null» from «g.from.name»«ENDIF»!");
+                «ENDFOR»
+            }
+            
+        }
+        ''')
 	}
 }

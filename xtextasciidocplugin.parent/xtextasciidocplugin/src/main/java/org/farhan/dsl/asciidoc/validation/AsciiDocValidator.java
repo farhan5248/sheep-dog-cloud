@@ -55,7 +55,10 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 				if (!problems.isEmpty()) {
 					error(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
 				} else {
-					problems = LanguageHelper.validateWarning(new LanguageAccessImpl(step));
+					ILanguageAccess lang = new LanguageAccessImpl(step);
+					problems = LanguageHelper.validateWarning(lang);
+					problems = LanguageHelper.getStepObjectQualifiedName(lang);
+					
 					if (!problems.isEmpty()) {
 						warning(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, MISSING_STEP_DEF,
 								getAlternateObjects(new LanguageAccessImpl(step)));
@@ -63,7 +66,7 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 				}
 			}
 		} catch (Exception e) {
-			logError(e, step.getName());
+			error(logError(e, step.getName()), AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
 		}
 	}
 
@@ -93,11 +96,12 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 		return alternates;
 	}
 
-	private void logError(Exception e, String name) {
+	private String logError(Exception e, String name) {
 		// TODO inject the logger instead
 		System.out.println("There was a problem listing directories for: " + name);
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new PrintWriter(sw));
 		System.out.println(sw.toString());
+		return sw.toString();
 	}
 }

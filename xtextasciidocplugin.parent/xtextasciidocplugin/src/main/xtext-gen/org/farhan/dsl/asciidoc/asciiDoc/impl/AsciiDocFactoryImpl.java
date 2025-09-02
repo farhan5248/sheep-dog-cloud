@@ -66,7 +66,25 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
     switch (eClass.getClassifierID())
     {
       case AsciiDocPackage.MODEL: return createModel();
-      case AsciiDocPackage.GREETING: return createGreeting();
+      case AsciiDocPackage.STEP_OBJECT: return createStepObject();
+      case AsciiDocPackage.STEP_DEFINITION: return createStepDefinition();
+      case AsciiDocPackage.STEP_PARAMETERS: return createStepParameters();
+      case AsciiDocPackage.TEST_SUITE: return createTestSuite();
+      case AsciiDocPackage.TEST_STEP_CONTAINER: return createTestStepContainer();
+      case AsciiDocPackage.TEST_SETUP: return createTestSetup();
+      case AsciiDocPackage.TEST_CASE: return createTestCase();
+      case AsciiDocPackage.TEST_DATA: return createTestData();
+      case AsciiDocPackage.TEST_STEP: return createTestStep();
+      case AsciiDocPackage.GIVEN: return createGiven();
+      case AsciiDocPackage.WHEN: return createWhen();
+      case AsciiDocPackage.THEN: return createThen();
+      case AsciiDocPackage.AND: return createAnd();
+      case AsciiDocPackage.TEXT: return createText();
+      case AsciiDocPackage.STATEMENT_LIST: return createStatementList();
+      case AsciiDocPackage.TABLE: return createTable();
+      case AsciiDocPackage.ROW: return createRow();
+      case AsciiDocPackage.CELL: return createCell();
+      case AsciiDocPackage.STATEMENT: return createStatement();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -90,10 +108,226 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
    * @generated
    */
   @Override
-  public Greeting createGreeting()
+  public StepObject createStepObject()
   {
-    GreetingImpl greeting = new GreetingImpl();
-    return greeting;
+    StepObjectImpl stepObject = new StepObjectImpl();
+    return stepObject;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public StepDefinition createStepDefinition()
+  {
+    StepDefinitionImpl stepDefinition = new StepDefinitionImpl();
+    return stepDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public StepParameters createStepParameters()
+  {
+    StepParametersImpl stepParameters = new StepParametersImpl();
+    return stepParameters;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public TestSuite createTestSuite()
+  {
+    TestSuiteImpl testSuite = new TestSuiteImpl();
+    return testSuite;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public TestStepContainer createTestStepContainer()
+  {
+    TestStepContainerImpl testStepContainer = new TestStepContainerImpl();
+    return testStepContainer;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public TestSetup createTestSetup()
+  {
+    TestSetupImpl testSetup = new TestSetupImpl();
+    return testSetup;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public TestCase createTestCase()
+  {
+    TestCaseImpl testCase = new TestCaseImpl();
+    return testCase;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public TestData createTestData()
+  {
+    TestDataImpl testData = new TestDataImpl();
+    return testData;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public TestStep createTestStep()
+  {
+    TestStepImpl testStep = new TestStepImpl();
+    return testStep;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Given createGiven()
+  {
+    GivenImpl given = new GivenImpl();
+    return given;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public When createWhen()
+  {
+    WhenImpl when = new WhenImpl();
+    return when;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Then createThen()
+  {
+    ThenImpl then = new ThenImpl();
+    return then;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public And createAnd()
+  {
+    AndImpl and = new AndImpl();
+    return and;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Text createText()
+  {
+    TextImpl text = new TextImpl();
+    return text;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public StatementList createStatementList()
+  {
+    StatementListImpl statementList = new StatementListImpl();
+    return statementList;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Table createTable()
+  {
+    TableImpl table = new TableImpl();
+    return table;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Row createRow()
+  {
+    RowImpl row = new RowImpl();
+    return row;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Cell createCell()
+  {
+    CellImpl cell = new CellImpl();
+    return cell;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Statement createStatement()
+  {
+    StatementImpl statement = new StatementImpl();
+    return statement;
   }
 
   /**

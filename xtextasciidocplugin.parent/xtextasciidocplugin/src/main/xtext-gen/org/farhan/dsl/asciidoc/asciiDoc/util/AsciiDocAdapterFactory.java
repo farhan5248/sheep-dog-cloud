@@ -81,9 +81,99 @@ public class AsciiDocAdapterFactory extends AdapterFactoryImpl
         return createModelAdapter();
       }
       @Override
-      public Adapter caseGreeting(Greeting object)
+      public Adapter caseStepObject(StepObject object)
       {
-        return createGreetingAdapter();
+        return createStepObjectAdapter();
+      }
+      @Override
+      public Adapter caseStepDefinition(StepDefinition object)
+      {
+        return createStepDefinitionAdapter();
+      }
+      @Override
+      public Adapter caseStepParameters(StepParameters object)
+      {
+        return createStepParametersAdapter();
+      }
+      @Override
+      public Adapter caseTestSuite(TestSuite object)
+      {
+        return createTestSuiteAdapter();
+      }
+      @Override
+      public Adapter caseTestStepContainer(TestStepContainer object)
+      {
+        return createTestStepContainerAdapter();
+      }
+      @Override
+      public Adapter caseTestSetup(TestSetup object)
+      {
+        return createTestSetupAdapter();
+      }
+      @Override
+      public Adapter caseTestCase(TestCase object)
+      {
+        return createTestCaseAdapter();
+      }
+      @Override
+      public Adapter caseTestData(TestData object)
+      {
+        return createTestDataAdapter();
+      }
+      @Override
+      public Adapter caseTestStep(TestStep object)
+      {
+        return createTestStepAdapter();
+      }
+      @Override
+      public Adapter caseGiven(Given object)
+      {
+        return createGivenAdapter();
+      }
+      @Override
+      public Adapter caseWhen(When object)
+      {
+        return createWhenAdapter();
+      }
+      @Override
+      public Adapter caseThen(Then object)
+      {
+        return createThenAdapter();
+      }
+      @Override
+      public Adapter caseAnd(And object)
+      {
+        return createAndAdapter();
+      }
+      @Override
+      public Adapter caseText(Text object)
+      {
+        return createTextAdapter();
+      }
+      @Override
+      public Adapter caseStatementList(StatementList object)
+      {
+        return createStatementListAdapter();
+      }
+      @Override
+      public Adapter caseTable(Table object)
+      {
+        return createTableAdapter();
+      }
+      @Override
+      public Adapter caseRow(Row object)
+      {
+        return createRowAdapter();
+      }
+      @Override
+      public Adapter caseCell(Cell object)
+      {
+        return createCellAdapter();
+      }
+      @Override
+      public Adapter caseStatement(Statement object)
+      {
+        return createStatementAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -123,16 +213,286 @@ public class AsciiDocAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Greeting <em>Greeting</em>}'.
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.StepObject <em>Step Object</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.Greeting
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepObject
    * @generated
    */
-  public Adapter createGreetingAdapter()
+  public Adapter createStepObjectAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.StepDefinition <em>Step Definition</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepDefinition
+   * @generated
+   */
+  public Adapter createStepDefinitionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.StepParameters <em>Step Parameters</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepParameters
+   * @generated
+   */
+  public Adapter createStepParametersAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestSuite <em>Test Suite</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestSuite
+   * @generated
+   */
+  public Adapter createTestSuiteAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer <em>Test Step Container</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer
+   * @generated
+   */
+  public Adapter createTestStepContainerAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestSetup <em>Test Setup</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestSetup
+   * @generated
+   */
+  public Adapter createTestSetupAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestCase <em>Test Case</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestCase
+   * @generated
+   */
+  public Adapter createTestCaseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData <em>Test Data</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestData
+   * @generated
+   */
+  public Adapter createTestDataAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep <em>Test Step</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStep
+   * @generated
+   */
+  public Adapter createTestStepAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Given <em>Given</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Given
+   * @generated
+   */
+  public Adapter createGivenAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.When <em>When</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.When
+   * @generated
+   */
+  public Adapter createWhenAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Then <em>Then</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Then
+   * @generated
+   */
+  public Adapter createThenAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.And <em>And</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.And
+   * @generated
+   */
+  public Adapter createAndAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Text <em>Text</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Text
+   * @generated
+   */
+  public Adapter createTextAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.StatementList <em>Statement List</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StatementList
+   * @generated
+   */
+  public Adapter createStatementListAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Table <em>Table</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Table
+   * @generated
+   */
+  public Adapter createTableAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Row <em>Row</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Row
+   * @generated
+   */
+  public Adapter createRowAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Cell <em>Cell</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Cell
+   * @generated
+   */
+  public Adapter createCellAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Statement <em>Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Statement
+   * @generated
+   */
+  public Adapter createStatementAdapter()
   {
     return null;
   }

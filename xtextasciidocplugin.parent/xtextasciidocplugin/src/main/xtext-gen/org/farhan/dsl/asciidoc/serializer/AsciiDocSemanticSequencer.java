@@ -11,10 +11,27 @@ import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Parameter;
 import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.serializer.ISerializationContext;
+import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
 import org.eclipse.xtext.serializer.sequencer.AbstractDelegatingSemanticSequencer;
+import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransient;
+import org.farhan.dsl.asciidoc.asciiDoc.And;
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
-import org.farhan.dsl.asciidoc.asciiDoc.Greeting;
-import org.farhan.dsl.asciidoc.asciiDoc.Model;
+import org.farhan.dsl.asciidoc.asciiDoc.Cell;
+import org.farhan.dsl.asciidoc.asciiDoc.Given;
+import org.farhan.dsl.asciidoc.asciiDoc.Row;
+import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.asciiDoc.StatementList;
+import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
+import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
+import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
+import org.farhan.dsl.asciidoc.asciiDoc.Table;
+import org.farhan.dsl.asciidoc.asciiDoc.TestCase;
+import org.farhan.dsl.asciidoc.asciiDoc.TestData;
+import org.farhan.dsl.asciidoc.asciiDoc.TestSetup;
+import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
+import org.farhan.dsl.asciidoc.asciiDoc.Text;
+import org.farhan.dsl.asciidoc.asciiDoc.Then;
+import org.farhan.dsl.asciidoc.asciiDoc.When;
 import org.farhan.dsl.asciidoc.services.AsciiDocGrammarAccess;
 
 @SuppressWarnings("all")
@@ -31,11 +48,56 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 		Set<Parameter> parameters = context.getEnabledBooleanParameters();
 		if (epackage == AsciiDocPackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
-			case AsciiDocPackage.GREETING:
-				sequence_Greeting(context, (Greeting) semanticObject); 
+			case AsciiDocPackage.AND:
+				sequence_And(context, (And) semanticObject); 
 				return; 
-			case AsciiDocPackage.MODEL:
-				sequence_Model(context, (Model) semanticObject); 
+			case AsciiDocPackage.CELL:
+				sequence_Cell(context, (Cell) semanticObject); 
+				return; 
+			case AsciiDocPackage.GIVEN:
+				sequence_Given(context, (Given) semanticObject); 
+				return; 
+			case AsciiDocPackage.ROW:
+				sequence_Row(context, (Row) semanticObject); 
+				return; 
+			case AsciiDocPackage.STATEMENT:
+				sequence_Statement(context, (Statement) semanticObject); 
+				return; 
+			case AsciiDocPackage.STATEMENT_LIST:
+				sequence_StatementList(context, (StatementList) semanticObject); 
+				return; 
+			case AsciiDocPackage.STEP_DEFINITION:
+				sequence_StepDefinition(context, (StepDefinition) semanticObject); 
+				return; 
+			case AsciiDocPackage.STEP_OBJECT:
+				sequence_StepObject(context, (StepObject) semanticObject); 
+				return; 
+			case AsciiDocPackage.STEP_PARAMETERS:
+				sequence_StepParameters(context, (StepParameters) semanticObject); 
+				return; 
+			case AsciiDocPackage.TABLE:
+				sequence_Table(context, (Table) semanticObject); 
+				return; 
+			case AsciiDocPackage.TEST_CASE:
+				sequence_TestCase(context, (TestCase) semanticObject); 
+				return; 
+			case AsciiDocPackage.TEST_DATA:
+				sequence_TestData(context, (TestData) semanticObject); 
+				return; 
+			case AsciiDocPackage.TEST_SETUP:
+				sequence_TestSetup(context, (TestSetup) semanticObject); 
+				return; 
+			case AsciiDocPackage.TEST_SUITE:
+				sequence_TestSuite(context, (TestSuite) semanticObject); 
+				return; 
+			case AsciiDocPackage.TEXT:
+				sequence_Text(context, (Text) semanticObject); 
+				return; 
+			case AsciiDocPackage.THEN:
+				sequence_Then(context, (Then) semanticObject); 
+				return; 
+			case AsciiDocPackage.WHEN:
+				sequence_When(context, (When) semanticObject); 
 				return; 
 			}
 		if (errorAcceptor != null)
@@ -45,13 +107,14 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	/**
 	 * <pre>
 	 * Contexts:
-	 *     Greeting returns Greeting
+	 *     TestStep returns And
+	 *     And returns And
 	 *
 	 * Constraint:
-	 *     (name=ID from=[Greeting|ID]?)
+	 *     (name=Title (table=Table | text=Text)?)
 	 * </pre>
 	 */
-	protected void sequence_Greeting(ISerializationContext context, Greeting semanticObject) {
+	protected void sequence_And(ISerializationContext context, And semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -59,13 +122,248 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	/**
 	 * <pre>
 	 * Contexts:
-	 *     Model returns Model
+	 *     Cell returns Cell
 	 *
 	 * Constraint:
-	 *     greetings+=Greeting+
+	 *     name=Title
 	 * </pre>
 	 */
-	protected void sequence_Model(ISerializationContext context, Model semanticObject) {
+	protected void sequence_Cell(ISerializationContext context, Cell semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, AsciiDocPackage.Literals.CELL__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AsciiDocPackage.Literals.CELL__NAME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getCellAccess().getNameTitleParserRuleCall_1_0(), semanticObject.getName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     TestStep returns Given
+	 *     Given returns Given
+	 *
+	 * Constraint:
+	 *     (name=Title (table=Table | text=Text)?)
+	 * </pre>
+	 */
+	protected void sequence_Given(ISerializationContext context, Given semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Row returns Row
+	 *
+	 * Constraint:
+	 *     cellList+=Cell+
+	 * </pre>
+	 */
+	protected void sequence_Row(ISerializationContext context, Row semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     StatementList returns StatementList
+	 *
+	 * Constraint:
+	 *     statementList+=Statement+
+	 * </pre>
+	 */
+	protected void sequence_StatementList(ISerializationContext context, StatementList semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Statement returns Statement
+	 *
+	 * Constraint:
+	 *     name=Title
+	 * </pre>
+	 */
+	protected void sequence_Statement(ISerializationContext context, Statement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, AsciiDocPackage.Literals.STATEMENT__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AsciiDocPackage.Literals.STATEMENT__NAME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getStatementAccess().getNameTitleParserRuleCall_0_0(), semanticObject.getName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     StepDefinition returns StepDefinition
+	 *
+	 * Constraint:
+	 *     (name=Title statementList+=Statement* stepParameterList+=StepParameters*)
+	 * </pre>
+	 */
+	protected void sequence_StepDefinition(ISerializationContext context, StepDefinition semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Model returns StepObject
+	 *     StepObject returns StepObject
+	 *
+	 * Constraint:
+	 *     (name=Title statementList+=Statement* stepDefinitionList+=StepDefinition*)
+	 * </pre>
+	 */
+	protected void sequence_StepObject(ISerializationContext context, StepObject semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     StepParameters returns StepParameters
+	 *
+	 * Constraint:
+	 *     (name=Title statementList=StatementList? table=Table)
+	 * </pre>
+	 */
+	protected void sequence_StepParameters(ISerializationContext context, StepParameters semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Table returns Table
+	 *
+	 * Constraint:
+	 *     rowList+=Row+
+	 * </pre>
+	 */
+	protected void sequence_Table(ISerializationContext context, Table semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     TestStepContainer returns TestCase
+	 *     TestCase returns TestCase
+	 *
+	 * Constraint:
+	 *     (name=Title statementList+=Statement* testStepList+=TestStep* testDataList+=TestData*)
+	 * </pre>
+	 */
+	protected void sequence_TestCase(ISerializationContext context, TestCase semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     TestData returns TestData
+	 *
+	 * Constraint:
+	 *     (name=Title statementList=StatementList? table=Table)
+	 * </pre>
+	 */
+	protected void sequence_TestData(ISerializationContext context, TestData semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     TestStepContainer returns TestSetup
+	 *     TestSetup returns TestSetup
+	 *
+	 * Constraint:
+	 *     (name=Title statementList+=Statement* testStepList+=TestStep*)
+	 * </pre>
+	 */
+	protected void sequence_TestSetup(ISerializationContext context, TestSetup semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Model returns TestSuite
+	 *     TestSuite returns TestSuite
+	 *
+	 * Constraint:
+	 *     (name=Title statementList+=Statement* testStepContainerList+=TestStepContainer*)
+	 * </pre>
+	 */
+	protected void sequence_TestSuite(ISerializationContext context, TestSuite semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Text returns Text
+	 *
+	 * Constraint:
+	 *     name=RAWTEXT
+	 * </pre>
+	 */
+	protected void sequence_Text(ISerializationContext context, Text semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, AsciiDocPackage.Literals.TEXT__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AsciiDocPackage.Literals.TEXT__NAME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getTextAccess().getNameRAWTEXTTerminalRuleCall_2_0(), semanticObject.getName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     TestStep returns Then
+	 *     Then returns Then
+	 *
+	 * Constraint:
+	 *     (name=Title (table=Table | text=Text)?)
+	 * </pre>
+	 */
+	protected void sequence_Then(ISerializationContext context, Then semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     TestStep returns When
+	 *     When returns When
+	 *
+	 * Constraint:
+	 *     (name=Title (table=Table | text=Text)?)
+	 * </pre>
+	 */
+	protected void sequence_When(ISerializationContext context, When semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

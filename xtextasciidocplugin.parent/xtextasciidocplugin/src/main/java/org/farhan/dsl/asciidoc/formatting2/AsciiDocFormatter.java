@@ -5,16 +5,12 @@ package org.farhan.dsl.asciidoc.formatting2;
 
 import org.eclipse.xtext.formatting2.AbstractJavaFormatter;
 import org.eclipse.xtext.formatting2.IFormattableDocument;
-import org.farhan.dsl.asciidoc.asciiDoc.Greeting;
 import org.farhan.dsl.asciidoc.asciiDoc.Model;
 
 public class AsciiDocFormatter extends AbstractJavaFormatter {
 
 	protected void format(Model model, IFormattableDocument doc) {
-		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
-		for (Greeting greeting : model.getGreetings()) {
-			doc.format(greeting);
-		}
+
 	}
 	
 }

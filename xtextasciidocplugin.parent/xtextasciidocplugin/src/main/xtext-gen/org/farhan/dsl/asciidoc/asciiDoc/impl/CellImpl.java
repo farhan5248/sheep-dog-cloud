@@ -6,29 +6,27 @@ package org.farhan.dsl.asciidoc.asciiDoc.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
-import org.farhan.dsl.asciidoc.asciiDoc.Greeting;
+import org.farhan.dsl.asciidoc.asciiDoc.Cell;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Greeting</b></em>'.
+ * An implementation of the model object '<em><b>Cell</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.GreetingImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.GreetingImpl#getFrom <em>From</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.CellImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeting
+public class CellImpl extends MinimalEObjectImpl.Container implements Cell
 {
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -51,21 +49,11 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getFrom() <em>From</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getFrom()
-   * @generated
-   * @ordered
-   */
-  protected Greeting from;
-
-  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected GreetingImpl()
+  protected CellImpl()
   {
     super();
   }
@@ -78,7 +66,7 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
   @Override
   protected EClass eStaticClass()
   {
-    return AsciiDocPackage.Literals.GREETING;
+    return AsciiDocPackage.Literals.CELL;
   }
 
   /**
@@ -103,52 +91,7 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
     String oldName = name;
     name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.GREETING__NAME, oldName, name));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public Greeting getFrom()
-  {
-    if (from != null && from.eIsProxy())
-    {
-      InternalEObject oldFrom = (InternalEObject)from;
-      from = (Greeting)eResolveProxy(oldFrom);
-      if (from != oldFrom)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, AsciiDocPackage.GREETING__FROM, oldFrom, from));
-      }
-    }
-    return from;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Greeting basicGetFrom()
-  {
-    return from;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setFrom(Greeting newFrom)
-  {
-    Greeting oldFrom = from;
-    from = newFrom;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.GREETING__FROM, oldFrom, from));
+      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.CELL__NAME, oldName, name));
   }
 
   /**
@@ -161,11 +104,8 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
   {
     switch (featureID)
     {
-      case AsciiDocPackage.GREETING__NAME:
+      case AsciiDocPackage.CELL__NAME:
         return getName();
-      case AsciiDocPackage.GREETING__FROM:
-        if (resolve) return getFrom();
-        return basicGetFrom();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -180,11 +120,8 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
   {
     switch (featureID)
     {
-      case AsciiDocPackage.GREETING__NAME:
+      case AsciiDocPackage.CELL__NAME:
         setName((String)newValue);
-        return;
-      case AsciiDocPackage.GREETING__FROM:
-        setFrom((Greeting)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -200,11 +137,8 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
   {
     switch (featureID)
     {
-      case AsciiDocPackage.GREETING__NAME:
+      case AsciiDocPackage.CELL__NAME:
         setName(NAME_EDEFAULT);
-        return;
-      case AsciiDocPackage.GREETING__FROM:
-        setFrom((Greeting)null);
         return;
     }
     super.eUnset(featureID);
@@ -220,10 +154,8 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
   {
     switch (featureID)
     {
-      case AsciiDocPackage.GREETING__NAME:
+      case AsciiDocPackage.CELL__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case AsciiDocPackage.GREETING__FROM:
-        return from != null;
     }
     return super.eIsSet(featureID);
   }
@@ -245,4 +177,4 @@ public class GreetingImpl extends MinimalEObjectImpl.Container implements Greeti
     return result.toString();
   }
 
-} //GreetingImpl
+} //CellImpl

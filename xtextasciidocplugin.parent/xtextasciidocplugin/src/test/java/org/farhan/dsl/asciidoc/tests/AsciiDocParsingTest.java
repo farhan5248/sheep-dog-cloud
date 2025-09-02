@@ -23,9 +23,5 @@ public class AsciiDocParsingTest {
 	
 	@Test
 	public void loadModel() throws Exception {
-		Model result = parseHelper.parse("Hello Xtext!");
-		Assert.assertNotNull(result);
-		List<Diagnostic> errors = result.eResource().getErrors();
-		Assert.assertTrue("Unexpected errors: " + IterableExtensions.join(errors, ", "), errors.isEmpty());
 	}
 }

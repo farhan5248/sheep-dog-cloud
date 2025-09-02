@@ -23,15 +23,5 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 	@Override
 	protected void _createProposals(RuleCall ruleCall, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
-		if (myDslGrammarAccess.getGreetingRule().equals(ruleCall.getRule()) && context.getCurrentModel() != null) {
-			IScope scope = scopeProvider.getScope(context.getCurrentModel(), AsciiDocPackage.Literals.GREETING__FROM);
-			acceptor.accept(getProposalCreator().createSnippet(
-					"Hello ${1|A,B,C|} from ${2|" + Joiner.on(",")
-							.join(Iterables.transform(scope.getAllElements(), it -> it.getName().toString())) + "|}!",
-					"New Greeting (Template with Choice)", context), 0);
-			acceptor.accept(getProposalCreator().createSnippet("Hello ${1:name} from ${2:fromName}!",
-					"New Greeting (Template with Placeholder)", context), 0);
-		}
-		super._createProposals(ruleCall, context, acceptor);
 	}
 }

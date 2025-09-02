@@ -5,6 +5,7 @@ package org.farhan.dsl.asciidoc.asciiDoc.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -12,14 +13,15 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
-import org.farhan.dsl.asciidoc.asciiDoc.Greeting;
 import org.farhan.dsl.asciidoc.asciiDoc.Model;
+import org.farhan.dsl.asciidoc.asciiDoc.Statement;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +31,8 @@ import org.farhan.dsl.asciidoc.asciiDoc.Model;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.ModelImpl#getGreetings <em>Greetings</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.ModelImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.ModelImpl#getStatementList <em>Statement List</em>}</li>
  * </ul>
  *
  * @generated
@@ -37,14 +40,34 @@ import org.farhan.dsl.asciidoc.asciiDoc.Model;
 public class ModelImpl extends MinimalEObjectImpl.Container implements Model
 {
   /**
-   * The cached value of the '{@link #getGreetings() <em>Greetings</em>}' containment reference list.
+   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getGreetings()
+   * @see #getName()
    * @generated
    * @ordered
    */
-  protected EList<Greeting> greetings;
+  protected static final String NAME_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected String name = NAME_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getStatementList() <em>Statement List</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStatementList()
+   * @generated
+   * @ordered
+   */
+  protected EList<Statement> statementList;
 
   /**
    * <!-- begin-user-doc -->
@@ -73,13 +96,38 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * @generated
    */
   @Override
-  public EList<Greeting> getGreetings()
+  public String getName()
   {
-    if (greetings == null)
+    return name;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setName(String newName)
+  {
+    String oldName = name;
+    name = newName;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.MODEL__NAME, oldName, name));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EList<Statement> getStatementList()
+  {
+    if (statementList == null)
     {
-      greetings = new EObjectContainmentEList<Greeting>(Greeting.class, this, AsciiDocPackage.MODEL__GREETINGS);
+      statementList = new EObjectContainmentEList<Statement>(Statement.class, this, AsciiDocPackage.MODEL__STATEMENT_LIST);
     }
-    return greetings;
+    return statementList;
   }
 
   /**
@@ -92,8 +140,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case AsciiDocPackage.MODEL__GREETINGS:
-        return ((InternalEList<?>)getGreetings()).basicRemove(otherEnd, msgs);
+      case AsciiDocPackage.MODEL__STATEMENT_LIST:
+        return ((InternalEList<?>)getStatementList()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -108,8 +156,10 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case AsciiDocPackage.MODEL__GREETINGS:
-        return getGreetings();
+      case AsciiDocPackage.MODEL__NAME:
+        return getName();
+      case AsciiDocPackage.MODEL__STATEMENT_LIST:
+        return getStatementList();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -125,9 +175,12 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case AsciiDocPackage.MODEL__GREETINGS:
-        getGreetings().clear();
-        getGreetings().addAll((Collection<? extends Greeting>)newValue);
+      case AsciiDocPackage.MODEL__NAME:
+        setName((String)newValue);
+        return;
+      case AsciiDocPackage.MODEL__STATEMENT_LIST:
+        getStatementList().clear();
+        getStatementList().addAll((Collection<? extends Statement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -143,8 +196,11 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case AsciiDocPackage.MODEL__GREETINGS:
-        getGreetings().clear();
+      case AsciiDocPackage.MODEL__NAME:
+        setName(NAME_EDEFAULT);
+        return;
+      case AsciiDocPackage.MODEL__STATEMENT_LIST:
+        getStatementList().clear();
         return;
     }
     super.eUnset(featureID);
@@ -160,10 +216,29 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case AsciiDocPackage.MODEL__GREETINGS:
-        return greetings != null && !greetings.isEmpty();
+      case AsciiDocPackage.MODEL__NAME:
+        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case AsciiDocPackage.MODEL__STATEMENT_LIST:
+        return statementList != null && !statementList.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (name: ");
+    result.append(name);
+    result.append(')');
+    return result.toString();
   }
 
 } //ModelImpl

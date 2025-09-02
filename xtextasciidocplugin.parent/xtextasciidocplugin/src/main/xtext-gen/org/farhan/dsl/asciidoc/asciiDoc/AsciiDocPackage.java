@@ -68,13 +68,22 @@ public interface AsciiDocPackage extends EPackage
   int MODEL = 0;
 
   /**
-   * The feature id for the '<em><b>Greetings</b></em>' containment reference list.
+   * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL__GREETINGS = 0;
+  int MODEL__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL__STATEMENT_LIST = 1;
 
   /**
    * The number of structural features of the '<em>Model</em>' class.
@@ -83,17 +92,17 @@ public interface AsciiDocPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MODEL_FEATURE_COUNT = 1;
+  int MODEL_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.GreetingImpl <em>Greeting</em>}' class.
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepObjectImpl <em>Step Object</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.GreetingImpl
-   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getGreeting()
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StepObjectImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStepObject()
    * @generated
    */
-  int GREETING = 1;
+  int STEP_OBJECT = 1;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -102,25 +111,763 @@ public interface AsciiDocPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GREETING__NAME = 0;
+  int STEP_OBJECT__NAME = MODEL__NAME;
 
   /**
-   * The feature id for the '<em><b>From</b></em>' reference.
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GREETING__FROM = 1;
+  int STEP_OBJECT__STATEMENT_LIST = MODEL__STATEMENT_LIST;
 
   /**
-   * The number of structural features of the '<em>Greeting</em>' class.
+   * The feature id for the '<em><b>Step Definition List</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GREETING_FEATURE_COUNT = 2;
+  int STEP_OBJECT__STEP_DEFINITION_LIST = MODEL_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Step Object</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_OBJECT_FEATURE_COUNT = MODEL_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepDefinitionImpl <em>Step Definition</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StepDefinitionImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStepDefinition()
+   * @generated
+   */
+  int STEP_DEFINITION = 2;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_DEFINITION__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_DEFINITION__STATEMENT_LIST = 1;
+
+  /**
+   * The feature id for the '<em><b>Step Parameter List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_DEFINITION__STEP_PARAMETER_LIST = 2;
+
+  /**
+   * The number of structural features of the '<em>Step Definition</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_DEFINITION_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepParametersImpl <em>Step Parameters</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StepParametersImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStepParameters()
+   * @generated
+   */
+  int STEP_PARAMETERS = 3;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_PARAMETERS__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_PARAMETERS__STATEMENT_LIST = 1;
+
+  /**
+   * The feature id for the '<em><b>Table</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_PARAMETERS__TABLE = 2;
+
+  /**
+   * The number of structural features of the '<em>Step Parameters</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STEP_PARAMETERS_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestSuiteImpl <em>Test Suite</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestSuiteImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestSuite()
+   * @generated
+   */
+  int TEST_SUITE = 4;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_SUITE__NAME = MODEL__NAME;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_SUITE__STATEMENT_LIST = MODEL__STATEMENT_LIST;
+
+  /**
+   * The feature id for the '<em><b>Test Step Container List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_SUITE__TEST_STEP_CONTAINER_LIST = MODEL_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Test Suite</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_SUITE_FEATURE_COUNT = MODEL_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepContainerImpl <em>Test Step Container</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepContainerImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestStepContainer()
+   * @generated
+   */
+  int TEST_STEP_CONTAINER = 5;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP_CONTAINER__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP_CONTAINER__STATEMENT_LIST = 1;
+
+  /**
+   * The feature id for the '<em><b>Test Step List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP_CONTAINER__TEST_STEP_LIST = 2;
+
+  /**
+   * The number of structural features of the '<em>Test Step Container</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP_CONTAINER_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestSetupImpl <em>Test Setup</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestSetupImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestSetup()
+   * @generated
+   */
+  int TEST_SETUP = 6;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_SETUP__NAME = TEST_STEP_CONTAINER__NAME;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_SETUP__STATEMENT_LIST = TEST_STEP_CONTAINER__STATEMENT_LIST;
+
+  /**
+   * The feature id for the '<em><b>Test Step List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_SETUP__TEST_STEP_LIST = TEST_STEP_CONTAINER__TEST_STEP_LIST;
+
+  /**
+   * The number of structural features of the '<em>Test Setup</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_SETUP_FEATURE_COUNT = TEST_STEP_CONTAINER_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestCaseImpl <em>Test Case</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestCaseImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestCase()
+   * @generated
+   */
+  int TEST_CASE = 7;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_CASE__NAME = TEST_STEP_CONTAINER__NAME;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_CASE__STATEMENT_LIST = TEST_STEP_CONTAINER__STATEMENT_LIST;
+
+  /**
+   * The feature id for the '<em><b>Test Step List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_CASE__TEST_STEP_LIST = TEST_STEP_CONTAINER__TEST_STEP_LIST;
+
+  /**
+   * The feature id for the '<em><b>Test Data List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_CASE__TEST_DATA_LIST = TEST_STEP_CONTAINER_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Test Case</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_CASE_FEATURE_COUNT = TEST_STEP_CONTAINER_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestDataImpl <em>Test Data</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestDataImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestData()
+   * @generated
+   */
+  int TEST_DATA = 8;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_DATA__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_DATA__STATEMENT_LIST = 1;
+
+  /**
+   * The feature id for the '<em><b>Table</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_DATA__TABLE = 2;
+
+  /**
+   * The number of structural features of the '<em>Test Data</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_DATA_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepImpl <em>Test Step</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestStep()
+   * @generated
+   */
+  int TEST_STEP = 9;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Table</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP__TABLE = 1;
+
+  /**
+   * The feature id for the '<em><b>Text</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP__TEXT = 2;
+
+  /**
+   * The number of structural features of the '<em>Test Step</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.GivenImpl <em>Given</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.GivenImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getGiven()
+   * @generated
+   */
+  int GIVEN = 10;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIVEN__NAME = TEST_STEP__NAME;
+
+  /**
+   * The feature id for the '<em><b>Table</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIVEN__TABLE = TEST_STEP__TABLE;
+
+  /**
+   * The feature id for the '<em><b>Text</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIVEN__TEXT = TEST_STEP__TEXT;
+
+  /**
+   * The number of structural features of the '<em>Given</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIVEN_FEATURE_COUNT = TEST_STEP_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.WhenImpl <em>When</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.WhenImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getWhen()
+   * @generated
+   */
+  int WHEN = 11;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHEN__NAME = TEST_STEP__NAME;
+
+  /**
+   * The feature id for the '<em><b>Table</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHEN__TABLE = TEST_STEP__TABLE;
+
+  /**
+   * The feature id for the '<em><b>Text</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHEN__TEXT = TEST_STEP__TEXT;
+
+  /**
+   * The number of structural features of the '<em>When</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHEN_FEATURE_COUNT = TEST_STEP_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.ThenImpl <em>Then</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.ThenImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getThen()
+   * @generated
+   */
+  int THEN = 12;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int THEN__NAME = TEST_STEP__NAME;
+
+  /**
+   * The feature id for the '<em><b>Table</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int THEN__TABLE = TEST_STEP__TABLE;
+
+  /**
+   * The feature id for the '<em><b>Text</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int THEN__TEXT = TEST_STEP__TEXT;
+
+  /**
+   * The number of structural features of the '<em>Then</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int THEN_FEATURE_COUNT = TEST_STEP_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.AndImpl <em>And</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AndImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getAnd()
+   * @generated
+   */
+  int AND = 13;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int AND__NAME = TEST_STEP__NAME;
+
+  /**
+   * The feature id for the '<em><b>Table</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int AND__TABLE = TEST_STEP__TABLE;
+
+  /**
+   * The feature id for the '<em><b>Text</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int AND__TEXT = TEST_STEP__TEXT;
+
+  /**
+   * The number of structural features of the '<em>And</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int AND_FEATURE_COUNT = TEST_STEP_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TextImpl <em>Text</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TextImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getText()
+   * @generated
+   */
+  int TEXT = 14;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEXT__NAME = 0;
+
+  /**
+   * The number of structural features of the '<em>Text</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEXT_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl <em>Statement List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStatementList()
+   * @generated
+   */
+  int STATEMENT_LIST = 15;
+
+  /**
+   * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT_LIST__STATEMENT_LIST = 0;
+
+  /**
+   * The number of structural features of the '<em>Statement List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT_LIST_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TableImpl <em>Table</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TableImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTable()
+   * @generated
+   */
+  int TABLE = 16;
+
+  /**
+   * The feature id for the '<em><b>Row List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE__ROW_LIST = 0;
+
+  /**
+   * The number of structural features of the '<em>Table</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.RowImpl <em>Row</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.RowImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getRow()
+   * @generated
+   */
+  int ROW = 17;
+
+  /**
+   * The feature id for the '<em><b>Cell List</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ROW__CELL_LIST = 0;
+
+  /**
+   * The number of structural features of the '<em>Row</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ROW_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.CellImpl <em>Cell</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.CellImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getCell()
+   * @generated
+   */
+  int CELL = 18;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CELL__NAME = 0;
+
+  /**
+   * The number of structural features of the '<em>Cell</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CELL_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StatementImpl <em>Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StatementImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStatement()
+   * @generated
+   */
+  int STATEMENT = 19;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT__NAME = 0;
+
+  /**
+   * The number of structural features of the '<em>Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT_FEATURE_COUNT = 1;
 
 
   /**
@@ -134,47 +881,480 @@ public interface AsciiDocPackage extends EPackage
   EClass getModel();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.Model#getGreetings <em>Greetings</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Greetings</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.Model#getGreetings()
-   * @see #getModel()
-   * @generated
-   */
-  EReference getModel_Greetings();
-
-  /**
-   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Greeting <em>Greeting</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Greeting</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.Greeting
-   * @generated
-   */
-  EClass getGreeting();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.Greeting#getName <em>Name</em>}'.
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.Model#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Name</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.Greeting#getName()
-   * @see #getGreeting()
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Model#getName()
+   * @see #getModel()
    * @generated
    */
-  EAttribute getGreeting_Name();
+  EAttribute getModel_Name();
 
   /**
-   * Returns the meta object for the reference '{@link org.farhan.dsl.asciidoc.asciiDoc.Greeting#getFrom <em>From</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.Model#getStatementList <em>Statement List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>From</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.Greeting#getFrom()
-   * @see #getGreeting()
+   * @return the meta object for the containment reference list '<em>Statement List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Model#getStatementList()
+   * @see #getModel()
    * @generated
    */
-  EReference getGreeting_From();
+  EReference getModel_StatementList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.StepObject <em>Step Object</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Step Object</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepObject
+   * @generated
+   */
+  EClass getStepObject();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.StepObject#getStepDefinitionList <em>Step Definition List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Step Definition List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepObject#getStepDefinitionList()
+   * @see #getStepObject()
+   * @generated
+   */
+  EReference getStepObject_StepDefinitionList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.StepDefinition <em>Step Definition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Step Definition</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepDefinition
+   * @generated
+   */
+  EClass getStepDefinition();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.StepDefinition#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepDefinition#getName()
+   * @see #getStepDefinition()
+   * @generated
+   */
+  EAttribute getStepDefinition_Name();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.StepDefinition#getStatementList <em>Statement List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statement List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepDefinition#getStatementList()
+   * @see #getStepDefinition()
+   * @generated
+   */
+  EReference getStepDefinition_StatementList();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.StepDefinition#getStepParameterList <em>Step Parameter List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Step Parameter List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepDefinition#getStepParameterList()
+   * @see #getStepDefinition()
+   * @generated
+   */
+  EReference getStepDefinition_StepParameterList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.StepParameters <em>Step Parameters</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Step Parameters</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepParameters
+   * @generated
+   */
+  EClass getStepParameters();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getName()
+   * @see #getStepParameters()
+   * @generated
+   */
+  EAttribute getStepParameters_Name();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getStatementList <em>Statement List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Statement List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getStatementList()
+   * @see #getStepParameters()
+   * @generated
+   */
+  EReference getStepParameters_StatementList();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getTable <em>Table</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Table</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getTable()
+   * @see #getStepParameters()
+   * @generated
+   */
+  EReference getStepParameters_Table();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestSuite <em>Test Suite</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Test Suite</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestSuite
+   * @generated
+   */
+  EClass getTestSuite();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.TestSuite#getTestStepContainerList <em>Test Step Container List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Test Step Container List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestSuite#getTestStepContainerList()
+   * @see #getTestSuite()
+   * @generated
+   */
+  EReference getTestSuite_TestStepContainerList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer <em>Test Step Container</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Test Step Container</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer
+   * @generated
+   */
+  EClass getTestStepContainer();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getName()
+   * @see #getTestStepContainer()
+   * @generated
+   */
+  EAttribute getTestStepContainer_Name();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getStatementList <em>Statement List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statement List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getStatementList()
+   * @see #getTestStepContainer()
+   * @generated
+   */
+  EReference getTestStepContainer_StatementList();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getTestStepList <em>Test Step List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Test Step List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getTestStepList()
+   * @see #getTestStepContainer()
+   * @generated
+   */
+  EReference getTestStepContainer_TestStepList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestSetup <em>Test Setup</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Test Setup</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestSetup
+   * @generated
+   */
+  EClass getTestSetup();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestCase <em>Test Case</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Test Case</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestCase
+   * @generated
+   */
+  EClass getTestCase();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.TestCase#getTestDataList <em>Test Data List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Test Data List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestCase#getTestDataList()
+   * @see #getTestCase()
+   * @generated
+   */
+  EReference getTestCase_TestDataList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData <em>Test Data</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Test Data</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestData
+   * @generated
+   */
+  EClass getTestData();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestData#getName()
+   * @see #getTestData()
+   * @generated
+   */
+  EAttribute getTestData_Name();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getStatementList <em>Statement List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Statement List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestData#getStatementList()
+   * @see #getTestData()
+   * @generated
+   */
+  EReference getTestData_StatementList();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getTable <em>Table</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Table</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestData#getTable()
+   * @see #getTestData()
+   * @generated
+   */
+  EReference getTestData_Table();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep <em>Test Step</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Test Step</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStep
+   * @generated
+   */
+  EClass getTestStep();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStep#getName()
+   * @see #getTestStep()
+   * @generated
+   */
+  EAttribute getTestStep_Name();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getTable <em>Table</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Table</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStep#getTable()
+   * @see #getTestStep()
+   * @generated
+   */
+  EReference getTestStep_Table();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getText <em>Text</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Text</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStep#getText()
+   * @see #getTestStep()
+   * @generated
+   */
+  EReference getTestStep_Text();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Given <em>Given</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Given</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Given
+   * @generated
+   */
+  EClass getGiven();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.When <em>When</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>When</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.When
+   * @generated
+   */
+  EClass getWhen();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Then <em>Then</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Then</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Then
+   * @generated
+   */
+  EClass getThen();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.And <em>And</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>And</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.And
+   * @generated
+   */
+  EClass getAnd();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Text <em>Text</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Text</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Text
+   * @generated
+   */
+  EClass getText();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.Text#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Text#getName()
+   * @see #getText()
+   * @generated
+   */
+  EAttribute getText_Name();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.StatementList <em>Statement List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Statement List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StatementList
+   * @generated
+   */
+  EClass getStatementList();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.StatementList#getStatementList <em>Statement List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statement List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StatementList#getStatementList()
+   * @see #getStatementList()
+   * @generated
+   */
+  EReference getStatementList_StatementList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Table <em>Table</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Table</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Table
+   * @generated
+   */
+  EClass getTable();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.Table#getRowList <em>Row List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Row List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Table#getRowList()
+   * @see #getTable()
+   * @generated
+   */
+  EReference getTable_RowList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Row <em>Row</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Row</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Row
+   * @generated
+   */
+  EClass getRow();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.Row#getCellList <em>Cell List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Cell List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Row#getCellList()
+   * @see #getRow()
+   * @generated
+   */
+  EReference getRow_CellList();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Cell <em>Cell</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Cell</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Cell
+   * @generated
+   */
+  EClass getCell();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.Cell#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Cell#getName()
+   * @see #getCell()
+   * @generated
+   */
+  EAttribute getCell_Name();
+
+  /**
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Statement <em>Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Statement</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Statement
+   * @generated
+   */
+  EClass getStatement();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.Statement#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Statement#getName()
+   * @see #getStatement()
+   * @generated
+   */
+  EAttribute getStatement_Name();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -210,22 +1390,48 @@ public interface AsciiDocPackage extends EPackage
     EClass MODEL = eINSTANCE.getModel();
 
     /**
-     * The meta object literal for the '<em><b>Greetings</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL__GREETINGS = eINSTANCE.getModel_Greetings();
+    EAttribute MODEL__NAME = eINSTANCE.getModel_Name();
 
     /**
-     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.GreetingImpl <em>Greeting</em>}' class.
+     * The meta object literal for the '<em><b>Statement List</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.GreetingImpl
-     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getGreeting()
      * @generated
      */
-    EClass GREETING = eINSTANCE.getGreeting();
+    EReference MODEL__STATEMENT_LIST = eINSTANCE.getModel_StatementList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepObjectImpl <em>Step Object</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StepObjectImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStepObject()
+     * @generated
+     */
+    EClass STEP_OBJECT = eINSTANCE.getStepObject();
+
+    /**
+     * The meta object literal for the '<em><b>Step Definition List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STEP_OBJECT__STEP_DEFINITION_LIST = eINSTANCE.getStepObject_StepDefinitionList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepDefinitionImpl <em>Step Definition</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StepDefinitionImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStepDefinition()
+     * @generated
+     */
+    EClass STEP_DEFINITION = eINSTANCE.getStepDefinition();
 
     /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -233,15 +1439,353 @@ public interface AsciiDocPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute GREETING__NAME = eINSTANCE.getGreeting_Name();
+    EAttribute STEP_DEFINITION__NAME = eINSTANCE.getStepDefinition_Name();
 
     /**
-     * The meta object literal for the '<em><b>From</b></em>' reference feature.
+     * The meta object literal for the '<em><b>Statement List</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference GREETING__FROM = eINSTANCE.getGreeting_From();
+    EReference STEP_DEFINITION__STATEMENT_LIST = eINSTANCE.getStepDefinition_StatementList();
+
+    /**
+     * The meta object literal for the '<em><b>Step Parameter List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STEP_DEFINITION__STEP_PARAMETER_LIST = eINSTANCE.getStepDefinition_StepParameterList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepParametersImpl <em>Step Parameters</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StepParametersImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStepParameters()
+     * @generated
+     */
+    EClass STEP_PARAMETERS = eINSTANCE.getStepParameters();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute STEP_PARAMETERS__NAME = eINSTANCE.getStepParameters_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Statement List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STEP_PARAMETERS__STATEMENT_LIST = eINSTANCE.getStepParameters_StatementList();
+
+    /**
+     * The meta object literal for the '<em><b>Table</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STEP_PARAMETERS__TABLE = eINSTANCE.getStepParameters_Table();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestSuiteImpl <em>Test Suite</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestSuiteImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestSuite()
+     * @generated
+     */
+    EClass TEST_SUITE = eINSTANCE.getTestSuite();
+
+    /**
+     * The meta object literal for the '<em><b>Test Step Container List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TEST_SUITE__TEST_STEP_CONTAINER_LIST = eINSTANCE.getTestSuite_TestStepContainerList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepContainerImpl <em>Test Step Container</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepContainerImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestStepContainer()
+     * @generated
+     */
+    EClass TEST_STEP_CONTAINER = eINSTANCE.getTestStepContainer();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TEST_STEP_CONTAINER__NAME = eINSTANCE.getTestStepContainer_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Statement List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TEST_STEP_CONTAINER__STATEMENT_LIST = eINSTANCE.getTestStepContainer_StatementList();
+
+    /**
+     * The meta object literal for the '<em><b>Test Step List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TEST_STEP_CONTAINER__TEST_STEP_LIST = eINSTANCE.getTestStepContainer_TestStepList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestSetupImpl <em>Test Setup</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestSetupImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestSetup()
+     * @generated
+     */
+    EClass TEST_SETUP = eINSTANCE.getTestSetup();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestCaseImpl <em>Test Case</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestCaseImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestCase()
+     * @generated
+     */
+    EClass TEST_CASE = eINSTANCE.getTestCase();
+
+    /**
+     * The meta object literal for the '<em><b>Test Data List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TEST_CASE__TEST_DATA_LIST = eINSTANCE.getTestCase_TestDataList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestDataImpl <em>Test Data</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestDataImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestData()
+     * @generated
+     */
+    EClass TEST_DATA = eINSTANCE.getTestData();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TEST_DATA__NAME = eINSTANCE.getTestData_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Statement List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TEST_DATA__STATEMENT_LIST = eINSTANCE.getTestData_StatementList();
+
+    /**
+     * The meta object literal for the '<em><b>Table</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TEST_DATA__TABLE = eINSTANCE.getTestData_Table();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepImpl <em>Test Step</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTestStep()
+     * @generated
+     */
+    EClass TEST_STEP = eINSTANCE.getTestStep();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TEST_STEP__NAME = eINSTANCE.getTestStep_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Table</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TEST_STEP__TABLE = eINSTANCE.getTestStep_Table();
+
+    /**
+     * The meta object literal for the '<em><b>Text</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TEST_STEP__TEXT = eINSTANCE.getTestStep_Text();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.GivenImpl <em>Given</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.GivenImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getGiven()
+     * @generated
+     */
+    EClass GIVEN = eINSTANCE.getGiven();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.WhenImpl <em>When</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.WhenImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getWhen()
+     * @generated
+     */
+    EClass WHEN = eINSTANCE.getWhen();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.ThenImpl <em>Then</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.ThenImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getThen()
+     * @generated
+     */
+    EClass THEN = eINSTANCE.getThen();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.AndImpl <em>And</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AndImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getAnd()
+     * @generated
+     */
+    EClass AND = eINSTANCE.getAnd();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TextImpl <em>Text</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TextImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getText()
+     * @generated
+     */
+    EClass TEXT = eINSTANCE.getText();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TEXT__NAME = eINSTANCE.getText_Name();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl <em>Statement List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStatementList()
+     * @generated
+     */
+    EClass STATEMENT_LIST = eINSTANCE.getStatementList();
+
+    /**
+     * The meta object literal for the '<em><b>Statement List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STATEMENT_LIST__STATEMENT_LIST = eINSTANCE.getStatementList_StatementList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TableImpl <em>Table</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.TableImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTable()
+     * @generated
+     */
+    EClass TABLE = eINSTANCE.getTable();
+
+    /**
+     * The meta object literal for the '<em><b>Row List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TABLE__ROW_LIST = eINSTANCE.getTable_RowList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.RowImpl <em>Row</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.RowImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getRow()
+     * @generated
+     */
+    EClass ROW = eINSTANCE.getRow();
+
+    /**
+     * The meta object literal for the '<em><b>Cell List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ROW__CELL_LIST = eINSTANCE.getRow_CellList();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.CellImpl <em>Cell</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.CellImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getCell()
+     * @generated
+     */
+    EClass CELL = eINSTANCE.getCell();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CELL__NAME = eINSTANCE.getCell_Name();
+
+    /**
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StatementImpl <em>Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StatementImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStatement()
+     * @generated
+     */
+    EClass STATEMENT = eINSTANCE.getStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute STATEMENT__NAME = eINSTANCE.getStatement_Name();
 
   }
 

@@ -1,4 +1,3 @@
-Hello Xtext!
-Hello VSCode from Xtext!
-Hello ThisFile from Other!
-Hello Farhan!
+= Step-Object: Test
+
+== Step-Definition: Definition

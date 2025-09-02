@@ -26,9 +26,20 @@ public class AsciiDocSyntacticSequencer extends AbstractSyntacticSequencer {
 	
 	@Override
 	protected String getUnassignedRuleCallToken(EObject semanticObject, RuleCall ruleCall, INode node) {
+		if (ruleCall.getRule() == grammarAccess.getEOLRule())
+			return getEOLToken(semanticObject, ruleCall, node);
 		return "";
 	}
 	
+	/**
+	 * terminal EOL:
+	 * 	('\n')+;
+	 */
+	protected String getEOLToken(EObject semanticObject, RuleCall ruleCall, INode node) {
+		if (node != null)
+			return getTokenText(node);
+		return "\n";
+	}
 	
 	@Override
 	protected void emitUnassignedTokens(EObject semanticObject, ISynTransition transition, INode fromNode, INode toNode) {

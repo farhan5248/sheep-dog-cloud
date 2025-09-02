@@ -33,13 +33,175 @@ public interface AsciiDocFactory extends EFactory
   Model createModel();
 
   /**
-   * Returns a new object of class '<em>Greeting</em>'.
+   * Returns a new object of class '<em>Step Object</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Greeting</em>'.
+   * @return a new object of class '<em>Step Object</em>'.
    * @generated
    */
-  Greeting createGreeting();
+  StepObject createStepObject();
+
+  /**
+   * Returns a new object of class '<em>Step Definition</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Step Definition</em>'.
+   * @generated
+   */
+  StepDefinition createStepDefinition();
+
+  /**
+   * Returns a new object of class '<em>Step Parameters</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Step Parameters</em>'.
+   * @generated
+   */
+  StepParameters createStepParameters();
+
+  /**
+   * Returns a new object of class '<em>Test Suite</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Test Suite</em>'.
+   * @generated
+   */
+  TestSuite createTestSuite();
+
+  /**
+   * Returns a new object of class '<em>Test Step Container</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Test Step Container</em>'.
+   * @generated
+   */
+  TestStepContainer createTestStepContainer();
+
+  /**
+   * Returns a new object of class '<em>Test Setup</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Test Setup</em>'.
+   * @generated
+   */
+  TestSetup createTestSetup();
+
+  /**
+   * Returns a new object of class '<em>Test Case</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Test Case</em>'.
+   * @generated
+   */
+  TestCase createTestCase();
+
+  /**
+   * Returns a new object of class '<em>Test Data</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Test Data</em>'.
+   * @generated
+   */
+  TestData createTestData();
+
+  /**
+   * Returns a new object of class '<em>Test Step</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Test Step</em>'.
+   * @generated
+   */
+  TestStep createTestStep();
+
+  /**
+   * Returns a new object of class '<em>Given</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Given</em>'.
+   * @generated
+   */
+  Given createGiven();
+
+  /**
+   * Returns a new object of class '<em>When</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>When</em>'.
+   * @generated
+   */
+  When createWhen();
+
+  /**
+   * Returns a new object of class '<em>Then</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Then</em>'.
+   * @generated
+   */
+  Then createThen();
+
+  /**
+   * Returns a new object of class '<em>And</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>And</em>'.
+   * @generated
+   */
+  And createAnd();
+
+  /**
+   * Returns a new object of class '<em>Text</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Text</em>'.
+   * @generated
+   */
+  Text createText();
+
+  /**
+   * Returns a new object of class '<em>Statement List</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Statement List</em>'.
+   * @generated
+   */
+  StatementList createStatementList();
+
+  /**
+   * Returns a new object of class '<em>Table</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Table</em>'.
+   * @generated
+   */
+  Table createTable();
+
+  /**
+   * Returns a new object of class '<em>Row</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Row</em>'.
+   * @generated
+   */
+  Row createRow();
+
+  /**
+   * Returns a new object of class '<em>Cell</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Cell</em>'.
+   * @generated
+   */
+  Cell createCell();
+
+  /**
+   * Returns a new object of class '<em>Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Statement</em>'.
+   * @generated
+   */
+  Statement createStatement();
 
   /**
    * Returns the package supported by this factory.

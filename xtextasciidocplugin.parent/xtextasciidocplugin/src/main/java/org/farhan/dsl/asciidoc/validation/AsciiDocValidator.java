@@ -4,7 +4,6 @@
 package org.farhan.dsl.asciidoc.validation;
 
 import org.eclipse.xtext.validation.Check;
-import org.farhan.dsl.asciidoc.asciiDoc.Greeting;
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
 
 /**
@@ -16,13 +15,5 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 	
 	public static final String INVALID_NAME = "invalidName";
 
-	@Check
-	public void checkGreetingStartsWithCapital(Greeting greeting) {
-		System.out.println("Checking greeting: " + greeting.getName());
-		if (!Character.isUpperCase(greeting.getName().charAt(0))) {
-			error("Name should start with a capital", 
-					AsciiDocPackage.Literals.GREETING__NAME,
-					INVALID_NAME);
-		}
-	}
+
 }

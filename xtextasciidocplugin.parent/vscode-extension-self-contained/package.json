@@ -46,13 +46,203 @@
         "commands": [
             {
                 "command": "asciidoc.a.proxy",
-                "title": "MyDsl Command A"
+                "title": "AsciiDoc Command A"
             },
             {
                 "command": "asciidoc.b",
-                "title": "MyDsl Command B"
+                "title": "AsciiDoc Command B"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Xtext AsciiDoc Configuration",
+            "properties": {
+                "asciidoc.languageServer.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable/disable the Xtext AsciiDoc language server"
+                },
+                "asciidoc.languageServer.port": {
+                    "type": "number",
+                    "default": 5008,
+                    "minimum": 1024,
+                    "maximum": 65535,
+                    "description": "Port for the AsciiDoc language server to bind to"
+                },
+                "asciidoc.languageServer.timeout": {
+                    "type": "number",
+                    "default": 30000,
+                    "minimum": 1000,
+                    "maximum": 120000,
+                    "description": "Timeout in milliseconds for language server operations"
+                },
+                "asciidoc.languageServer.maxRetries": {
+                    "type": "number",
+                    "default": 3,
+                    "minimum": 0,
+                    "maximum": 10,
+                    "description": "Maximum number of retry attempts when starting the language server"
+                },
+                "asciidoc.languageServer.restartOnConfigChange": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Automatically restart the language server when configuration changes"
+                },
+                "asciidoc.logDirectory": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Directory for language server logs (defaults to system temp directory)"
+                },
+                "asciidoc.debug.enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable debug mode for the language server"
+                },
+                "asciidoc.debug.port": {
+                    "type": "number",
+                    "default": 8000,
+                    "minimum": 1024,
+                    "maximum": 65535,
+                    "description": "Debug port for Java debugging (when debug mode is enabled)"
+                },
+                "asciidoc.debug.verboseLogging": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable verbose debug logging for troubleshooting"
+                },
+                "asciidoc.trace.server": {
+                    "type": "string",
+                    "enum": ["off", "messages", "verbose"],
+                    "default": "off",
+                    "description": "Trace level for language server protocol communication"
+                },
+                "asciidoc.trace.level": {
+                    "type": "string",
+                    "enum": ["Off", "Messages", "Verbose"],
+                    "default": "Messages",
+                    "description": "Legacy trace level setting (kept for backward compatibility)"
+                },
+                "asciidoc.features.validation.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable real-time validation of AsciiDoc content"
+                },
+                "asciidoc.features.validation.strictMode": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable strict validation mode with additional checks"
+                },
+                "asciidoc.features.completion.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable code completion and content assist"
+                },
+                "asciidoc.features.completion.snippets": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Include snippets in code completion suggestions"
+                },
+                "asciidoc.features.completion.maxSuggestions": {
+                    "type": "number",
+                    "default": 50,
+                    "minimum": 10,
+                    "maximum": 200,
+                    "description": "Maximum number of completion suggestions to show"
+                },
+                "asciidoc.features.formatting.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable document formatting support"
+                },
+                "asciidoc.features.formatting.preserveWhitespace": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Preserve original whitespace when formatting documents"
+                },
+                "asciidoc.features.formatting.indentSize": {
+                    "type": "number",
+                    "default": 2,
+                    "minimum": 1,
+                    "maximum": 8,
+                    "description": "Number of spaces to use for indentation"
+                },
+                "asciidoc.features.hover.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable hover information and documentation"
+                },
+                "asciidoc.features.references.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable find references and goto definition"
+                },
+                "asciidoc.features.outline.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable document outline and symbol navigation"
+                },
+                "asciidoc.features.outline.showSections": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show section headers in the document outline"
+                },
+                "asciidoc.features.outline.showTables": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show tables in the document outline"
+                },
+                "asciidoc.features.outline.showImages": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Show image references in the document outline"
+                },
+                "asciidoc.ui.statusBar.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show language server status in the status bar"
+                },
+                "asciidoc.ui.notifications.errors": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show error notifications for language server issues"
+                },
+                "asciidoc.ui.notifications.warnings": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show warning notifications for potential issues"
+                },
+                "asciidoc.ui.notifications.info": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Show informational notifications"
+                },
+                "asciidoc.workspace.enableGlobalSettings": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable workspace-level configuration override"
+                },
+                "asciidoc.workspace.configurationFiles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [".asciidoc.json", "asciidoc.config.json"],
+                    "description": "Configuration file names to search for in workspace"
+                },
+                "asciidoc.performance.maxFileSize": {
+                    "type": "number",
+                    "default": 10485760,
+                    "minimum": 1048576,
+                    "maximum": 104857600,
+                    "description": "Maximum file size in bytes for language server processing (10MB default)"
+                },
+                "asciidoc.performance.enableBackgroundProcessing": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable background processing for large documents"
+                }
+            }
+        }
     },
     "devDependencies": {
         "@types/node": "^20.19.11",

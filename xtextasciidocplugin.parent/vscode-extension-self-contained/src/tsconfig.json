@@ -8,6 +8,21 @@
         "declaration": true,
         "stripInternal": true,
         "lib": [ "es6" ],
-        "outDir": "../out"
-    }
+        "outDir": "../out",
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    },
+    "include": [
+        "**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "out"
+    ]
 }

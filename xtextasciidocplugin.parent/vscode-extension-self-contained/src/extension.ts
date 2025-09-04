@@ -1,18 +1,22 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as path from 'path';
 import * as os from 'os';
 import { Trace } from 'vscode-jsonrpc';
-import { LanguageClient, LanguageClientOptions, ServerOptions, State } from 'vscode-languageclient/node';
+import { LanguageClient, LanguageClientOptions } from 'vscode-languageclient/node';
 import * as constants from './constants';
 import { ConfigurationService, AsciidocConfiguration, ConfigurationChangeEvent } from './configurationService';
+import { ServerLauncher, ServerStatus } from './serverLauncher';
+import { ExtendedServerCapabilities } from './communicationService';
 
 // Global extension state
-let client: LanguageClient | undefined;
+let serverLauncher: ServerLauncher | undefined;
 let outputChannel: vscode.OutputChannel | undefined;
 let statusBarItem: vscode.StatusBarItem | undefined;
 let configurationService: ConfigurationService | undefined;
+
+// Legacy compatibility
+let client: LanguageClient | undefined;
 
 /**
  * Extension activation function
@@ -43,8 +47,8 @@ export function activate(context: vscode.ExtensionContext): void {
         // Setup configuration change handlers
         setupConfigurationChangeHandlers(context);
         
-        // Initialize language server
-        initializeLanguageServer(context, configuration);
+        // Initialize server launcher
+        initializeServerLauncher(context, configuration);
         
         // Register commands
         registerCommands(context);
@@ -83,62 +87,51 @@ export function deactivate(): Thenable<void> | undefined {
         configurationService = undefined;
     }
     
-    // Stop language client
-    if (!client) {
-        return undefined;
+    // Stop server launcher gracefully
+    if (serverLauncher) {
+        return serverLauncher.stopServer().then(() => {
+            serverLauncher?.dispose();
+            serverLauncher = undefined;
+            client = undefined;
+            outputChannel?.appendLine('Xtext AsciiDoc Extension: Deactivated successfully');
+        }).catch((error) => {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            outputChannel?.appendLine(`Xtext AsciiDoc Extension: Error during deactivation: ${errorMessage}`);
+        });
     }
     
-    const clientToStop = client;
-    client = undefined;
-    
-    return clientToStop.stop().then(() => {
-        outputChannel?.appendLine('Xtext AsciiDoc Extension: Deactivated successfully');
-    }).catch((error) => {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        outputChannel?.appendLine(`Xtext AsciiDoc Extension: Error during deactivation: ${errorMessage}`);
-    });
+    return undefined;
 }
 
 /**
- * Initialize the language server
+ * Initialize the server launcher with production-ready capabilities
  */
-function initializeLanguageServer(context: vscode.ExtensionContext, configuration: AsciidocConfiguration): void {
+function initializeServerLauncher(context: vscode.ExtensionContext, configuration: AsciidocConfiguration): void {
     outputChannel?.appendLine(`Log directory: ${configuration.logDirectory}`);
     outputChannel?.appendLine(`Debug mode: ${configuration.debug.enabled}`);
     outputChannel?.appendLine(`Server port: ${configuration.languageServer.port}`);
     outputChannel?.appendLine(`Server timeout: ${configuration.languageServer.timeout}ms`);
     outputChannel?.appendLine(`Max retries: ${configuration.languageServer.maxRetries}`);
 
-    // Determine server executable
-    const launcher = os.platform() === 'win32' 
-        ? constants.SERVER_EXECUTABLES.WINDOWS 
-        : constants.SERVER_EXECUTABLES.UNIX;
-    
-    const script = context.asAbsolutePath(path.join(...constants.SERVER_PATHS.RELATIVE_PATH, launcher));
-    outputChannel?.appendLine(`Resolved script path: ${script}`);
-
-    // Configure server options
-    const serverOptions: ServerOptions = createServerOptions(script, configuration);
+    // Create server launcher
+    serverLauncher = new ServerLauncher(context, configuration, outputChannel!, statusBarItem);
     
     // Configure client options
     const clientOptions: LanguageClientOptions = createClientOptions(configuration);
 
-    // Create and start the language client
-    client = new LanguageClient(
-        'xtextAsciiDocLanguageServer',
-        constants.LANGUAGE_SERVER_NAME,
-        serverOptions,
-        clientOptions
-    );
-
     // Configure tracing
     const trace = getTraceLevel(configuration.trace.server || configuration.trace.level);
-    client.setTrace(trace);
 
-    // Start the client with retry logic
-    startLanguageServerWithRetry(configuration).then(() => {
-        outputChannel?.appendLine('Xtext AsciiDoc language server started successfully');
-        updateStatusBar(true, configuration);
+    // Start the server using the new launcher
+    serverLauncher.startServer(clientOptions).then(() => {
+        client = serverLauncher?.getClient();
+        
+        if (client) {
+            client.setTrace(trace);
+            context.subscriptions.push(client);
+        }
+        
+        outputChannel?.appendLine('Xtext AsciiDoc language server started successfully using ServerLauncher');
     }).catch(error => {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         outputChannel?.appendLine(`Failed to start Xtext AsciiDoc language server: ${errorMessage}`);
@@ -146,74 +139,14 @@ function initializeLanguageServer(context: vscode.ExtensionContext, configuratio
         if (configuration.ui.notifications.errors) {
             vscode.window.showErrorMessage(`Failed to start Xtext AsciiDoc language server: ${errorMessage}`);
         }
-        updateStatusBar(false, configuration);
     });
 
-    context.subscriptions.push(client);
-}
-
-/**
- * Create server options based on platform and configuration
- */
-function createServerOptions(script: string, configuration: AsciidocConfiguration): ServerOptions {
-    const env = createEnvironment(configuration);
-    
-    if (os.platform() === 'win32') {
-        return {
-            run: { 
-                command: script, 
-                options: { shell: true, env } 
-            },
-            debug: { 
-                command: script, 
-                options: { shell: true, env } 
-            }
-        };
-    } else {
-        return {
-            run: { 
-                command: script, 
-                options: { env } 
-            },
-            debug: { 
-                command: script, 
-                args: [], 
-                options: { env } 
-            }
-        };
-    }
-}
-
-/**
- * Create environment variables for the server process
- */
-function createEnvironment(configuration: AsciidocConfiguration): NodeJS.ProcessEnv {
-    const env = { ...process.env };
-    
-    // Set log directory
-    env[constants.SERVER_PATHS.LOG_DIR_KEY] = configuration.logDirectory;
-    
-    // Set server port
-    env.SERVER_PORT = configuration.languageServer.port.toString();
-    
-    // Set server timeout
-    env.SERVER_TIMEOUT = configuration.languageServer.timeout.toString();
-    
-    // Set debug options if debug mode is enabled
-    if (configuration.debug.enabled) {
-        const debugPort = configuration.debug.port;
-        env.JAVA_OPTS = `-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=${debugPort},suspend=n,quiet=y`;
-        
-        if (configuration.debug.verboseLogging) {
-            env.DEBUG_VERBOSE = 'true';
+    context.subscriptions.push({
+        dispose: () => {
+            serverLauncher?.dispose();
+            serverLauncher = undefined;
         }
-    }
-    
-    // Set performance options
-    env.MAX_FILE_SIZE = configuration.performance.maxFileSize.toString();
-    env.BACKGROUND_PROCESSING = configuration.performance.enableBackgroundProcessing.toString();
-    
-    return env;
+    });
 }
 
 /**
@@ -238,37 +171,7 @@ function createClientOptions(configuration: AsciidocConfiguration): LanguageClie
     return clientOptions;
 }
 
-/**
- * Start language server with retry logic
- */
-async function startLanguageServerWithRetry(configuration: AsciidocConfiguration): Promise<void> {
-    if (!client) {
-        throw new Error('Language client not initialized');
-    }
-
-    const maxRetries = configuration.languageServer.maxRetries;
-    let retryCount = 0;
-
-    while (retryCount <= maxRetries) {
-        try {
-            outputChannel?.appendLine(`Starting language server (attempt ${retryCount + 1}/${maxRetries + 1})`);
-            await client.start();
-            return; // Success
-        } catch (error) {
-            retryCount++;
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            outputChannel?.appendLine(`Language server start attempt ${retryCount} failed: ${errorMessage}`);
-            
-            if (retryCount <= maxRetries) {
-                const delayMs = Math.min(1000 * Math.pow(2, retryCount - 1), 10000); // Exponential backoff, max 10s
-                outputChannel?.appendLine(`Retrying in ${delayMs}ms...`);
-                await new Promise(resolve => setTimeout(resolve, delayMs));
-            } else {
-                throw error; // Re-throw after all retries exhausted
-            }
-        }
-    }
-}
+// Note: startLanguageServerWithRetry function is now handled by ServerLauncher class
 
 /**
  * Convert string trace level to VSCode trace enum
@@ -283,7 +186,7 @@ function getTraceLevel(traceLevel: string): Trace {
 }
 
 /**
- * Register extension commands
+ * Register extension commands including server management
  */
 function registerCommands(context: vscode.ExtensionContext): void {
     // Register proxy command
@@ -301,8 +204,264 @@ function registerCommands(context: vscode.ExtensionContext): void {
         }
     });
     
-    context.subscriptions.push(proxyCommand);
-    outputChannel?.appendLine('Commands registered successfully');
+    // Register server management commands
+    const restartServerCommand = vscode.commands.registerCommand('asciidoc.server.restart', async () => {
+        outputChannel?.appendLine('Manual server restart requested');
+        
+        if (!serverLauncher) {
+            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
+            return;
+        }
+        
+        try {
+            const configuration = configurationService?.getConfiguration();
+            if (!configuration) {
+                throw new Error('Configuration not available');
+            }
+            
+            const clientOptions = createClientOptions(configuration);
+            await serverLauncher.restartServer(clientOptions);
+            
+            // Update client reference
+            client = serverLauncher.getClient();
+            
+            vscode.window.showInformationMessage('AsciiDoc Language Server restarted successfully');
+            outputChannel?.appendLine('Manual server restart completed successfully');
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            vscode.window.showErrorMessage(`Failed to restart AsciiDoc Language Server: ${errorMessage}`);
+            outputChannel?.appendLine(`Manual server restart failed: ${errorMessage}`);
+        }
+    });
+    
+    const showServerHealthCommand = vscode.commands.registerCommand('asciidoc.server.showHealth', () => {
+        if (!serverLauncher) {
+            vscode.window.showInformationMessage('AsciiDoc Language Server is not running');
+            return;
+        }
+        
+        const healthInfo = serverLauncher.getHealthInfo();
+        const connectionStatus = serverLauncher.getConnectionStatus();
+        const uptimeStr = healthInfo.uptime ? `${Math.round(healthInfo.uptime / 1000)}s` : 'Unknown';
+        const startTimeStr = healthInfo.startTime ? healthInfo.startTime.toLocaleString() : 'Unknown';
+        const lastCheckStr = healthInfo.lastHealthCheck ? healthInfo.lastHealthCheck.toLocaleString() : 'Never';
+        const connectTimeStr = connectionStatus.lastConnectTime ? connectionStatus.lastConnectTime.toLocaleString() : 'Never';
+        
+        const healthMessage = [
+            `Status: ${healthInfo.status}`,
+            `Connection: ${connectionStatus.isConnected ? 'Connected' : 'Disconnected'}`,
+            `Start Time: ${startTimeStr}`,
+            `Last Connect: ${connectTimeStr}`,
+            `Uptime: ${uptimeStr}`,
+            `Last Health Check: ${lastCheckStr}`,
+            `Retry Count: ${connectionStatus.retryCount}`,
+            healthInfo.pid ? `Process ID: ${healthInfo.pid}` : '',
+            healthInfo.errorMessage ? `Error: ${healthInfo.errorMessage}` : '',
+            connectionStatus.lastError ? `Connection Error: ${connectionStatus.lastError}` : ''
+        ].filter(line => line).join('\n');
+        
+        vscode.window.showInformationMessage(`AsciiDoc Language Server Health:\n\n${healthMessage}`, { modal: true });
+    });
+    
+    const stopServerCommand = vscode.commands.registerCommand('asciidoc.server.stop', async () => {
+        outputChannel?.appendLine('Manual server stop requested');
+        
+        if (!serverLauncher) {
+            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
+            return;
+        }
+        
+        try {
+            await serverLauncher.stopServer();
+            client = undefined;
+            
+            vscode.window.showInformationMessage('AsciiDoc Language Server stopped');
+            outputChannel?.appendLine('Manual server stop completed successfully');
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            vscode.window.showErrorMessage(`Failed to stop AsciiDoc Language Server: ${errorMessage}`);
+            outputChannel?.appendLine(`Manual server stop failed: ${errorMessage}`);
+        }
+    });
+    
+    // Add command to show server capabilities
+    const showCapabilitiesCommand = vscode.commands.registerCommand('asciidoc.server.showCapabilities', () => {
+        if (!serverLauncher) {
+            vscode.window.showInformationMessage('AsciiDoc Language Server is not running');
+            return;
+        }
+        
+        const connectionStatus = serverLauncher.getConnectionStatus();
+        const capabilities = connectionStatus.capabilities;
+        
+        if (!capabilities) {
+            vscode.window.showInformationMessage('Server capabilities not yet detected. Please wait for server to start.');
+            return;
+        }
+        
+        const capabilitiesInfo = [
+            'Standard Language Server Features:',
+            `• Text Document Sync: ${capabilities.textDocumentSync ? '✓' : '✗'}`,
+            `• Completion Provider: ${capabilities.completionProvider ? '✓' : '✗'}`,
+            `• Hover Provider: ${capabilities.hoverProvider ? '✓' : '✗'}`,
+            `• Definition Provider: ${capabilities.definitionProvider ? '✓' : '✗'}`,
+            `• References Provider: ${capabilities.referencesProvider ? '✓' : '✗'}`,
+            `• Document Symbol Provider: ${capabilities.documentSymbolProvider ? '✓' : '✗'}`,
+            `• Code Action Provider: ${capabilities.codeActionProvider ? '✓' : '✗'}`,
+            `• Document Formatting: ${capabilities.documentFormattingProvider ? '✓' : '✗'}`,
+            `• Range Formatting: ${capabilities.documentRangeFormattingProvider ? '✓' : '✗'}`,
+            `• Rename Provider: ${capabilities.renameProvider ? '✓' : '✗'}`,
+        ];
+        
+        const asciidocFeatures = capabilities.experimental?.asciidocFeatures;
+        if (asciidocFeatures) {
+            capabilitiesInfo.push(
+                '',
+                'Extended AsciiDoc Features:',
+                `• Custom Validation: ${asciidocFeatures.customValidation ? '✓' : '✗'}`,
+                `• Advanced Formatting: ${asciidocFeatures.advancedFormatting ? '✓' : '✗'}`,
+                `• Table Support: ${asciidocFeatures.tableSupport ? '✓' : '✗'}`,
+                `• Cross References: ${asciidocFeatures.crossReferences ? '✓' : '✗'}`,
+                `• Document Generation: ${asciidocFeatures.documentGeneration ? '✓' : '✗'}`
+            );
+        }
+        
+        const capabilitiesMessage = capabilitiesInfo.join('\n');
+        vscode.window.showInformationMessage(`AsciiDoc Language Server Capabilities:\n\n${capabilitiesMessage}`, { modal: true });
+    });
+    
+    const startServerCommand = vscode.commands.registerCommand('asciidoc.server.start', async () => {
+        outputChannel?.appendLine('Manual server start requested');
+        
+        if (serverLauncher && serverLauncher.getHealthInfo().status === ServerStatus.RUNNING) {
+            vscode.window.showWarningMessage('AsciiDoc Language Server is already running');
+            return;
+        }
+        
+        try {
+            const configuration = configurationService?.getConfiguration();
+            if (!configuration) {
+                throw new Error('Configuration not available');
+            }
+            
+            if (!serverLauncher) {
+                // Reinitialize if needed
+                initializeServerLauncher(context, configuration);
+            } else {
+                const clientOptions = createClientOptions(configuration);
+                await serverLauncher.startServer(clientOptions);
+                
+                // Update client reference
+                client = serverLauncher.getClient();
+            }
+            
+            vscode.window.showInformationMessage('AsciiDoc Language Server started successfully');
+            outputChannel?.appendLine('Manual server start completed successfully');
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            vscode.window.showErrorMessage(`Failed to start AsciiDoc Language Server: ${errorMessage}`);
+            outputChannel?.appendLine(`Manual server start failed: ${errorMessage}`);
+        }
+    });
+    
+    // Add diagnostic management commands
+    const clearDiagnosticsCommand = vscode.commands.registerCommand('asciidoc.diagnostics.clear', () => {
+        outputChannel?.appendLine('Clearing AsciiDoc diagnostics...');
+        
+        // Clear diagnostics for all AsciiDoc files
+        if (client) {
+            const diagnosticCollection = vscode.languages.createDiagnosticCollection('asciidoc');
+            diagnosticCollection.clear();
+            vscode.window.showInformationMessage('AsciiDoc diagnostics cleared');
+        } else {
+            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
+        }
+    });
+    
+    const refreshDiagnosticsCommand = vscode.commands.registerCommand('asciidoc.diagnostics.refresh', async () => {
+        outputChannel?.appendLine('Refreshing AsciiDoc diagnostics...');
+        
+        if (!client) {
+            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
+            return;
+        }
+        
+        // Force re-validation of current document
+        const activeEditor = vscode.window.activeTextEditor;
+        if (activeEditor && activeEditor.document.languageId === constants.LANGUAGE_ID) {
+            try {
+                // Send a didChange notification to trigger re-validation
+                await vscode.commands.executeCommand('vscode.executeDocumentSymbolProvider', activeEditor.document.uri);
+                vscode.window.showInformationMessage('AsciiDoc diagnostics refreshed');
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                vscode.window.showErrorMessage(`Failed to refresh diagnostics: ${errorMessage}`);
+            }
+        } else {
+            vscode.window.showWarningMessage('Please open an AsciiDoc file to refresh diagnostics');
+        }
+    });
+    
+    const configureDiagnosticFilterCommand = vscode.commands.registerCommand('asciidoc.diagnostics.configureFilter', async () => {
+        const configuration = configurationService?.getConfiguration();
+        if (!configuration) {
+            vscode.window.showErrorMessage('Configuration not available');
+            return;
+        }
+        
+        // Show quick pick for diagnostic severity filter
+        const severityOptions = [
+            { label: 'Error', description: 'Show only errors', value: 1 },
+            { label: 'Warning', description: 'Show errors and warnings', value: 2 },
+            { label: 'Information', description: 'Show errors, warnings, and info', value: 3 },
+            { label: 'Hint', description: 'Show all diagnostics including hints', value: 4 }
+        ];
+        
+        const currentSeverity = configuration.diagnostics.minSeverity;
+        const currentOption = severityOptions.find(opt => opt.value === currentSeverity);
+        
+        const selectedSeverity = await vscode.window.showQuickPick(severityOptions, {
+            placeHolder: `Current: ${currentOption?.label || 'Unknown'} - Select minimum diagnostic severity to display`,
+            canPickMany: false
+        });
+        
+        if (selectedSeverity) {
+            // Update configuration
+            const config = vscode.workspace.getConfiguration('asciidoc');
+            await config.update('diagnostics.minSeverity', selectedSeverity.value, vscode.ConfigurationTarget.Global);
+            
+            vscode.window.showInformationMessage(`Diagnostic filter updated to show ${selectedSeverity.label} and above`);
+            outputChannel?.appendLine(`Diagnostic filter updated: minSeverity = ${selectedSeverity.value}`);
+        }
+    });
+    
+    context.subscriptions.push(
+        proxyCommand,
+        restartServerCommand,
+        showServerHealthCommand,
+        showCapabilitiesCommand,
+        stopServerCommand,
+        startServerCommand,
+        clearDiagnosticsCommand,
+        refreshDiagnosticsCommand,
+        configureDiagnosticFilterCommand
+    );
+    
+    outputChannel?.appendLine('Commands registered successfully (including enhanced server management)');
+    
+    // Setup capability change handler if server launcher exists
+    if (serverLauncher) {
+        const communicationService = serverLauncher.getCommunicationService();
+        communicationService.onCapabilityChange((_capabilities: ExtendedServerCapabilities) => {
+            outputChannel?.appendLine('Extension: Server capabilities updated');
+            
+            // Update status bar with capability information if desired
+            if (statusBarItem && configurationService) {
+                const config = configurationService.getConfiguration();
+                updateStatusBar(true, config);
+            }
+        });
+    }
 }
 
 /**
@@ -319,8 +478,11 @@ function setupConfigurationChangeHandlers(context: vscode.ExtensionContext): voi
         // Handle UI changes immediately
         if (event.changed.some(key => key.startsWith('ui.'))) {
             const currentConfig = configurationService?.getConfiguration();
-            if (currentConfig && statusBarItem) {
-                updateStatusBar(client?.state === State.Running, currentConfig);
+            if (currentConfig && statusBarItem && serverLauncher) {
+                // Status bar is now managed by ServerLauncher
+                const healthInfo = serverLauncher.getHealthInfo();
+                const isRunning = healthInfo.status === ServerStatus.RUNNING;
+                updateStatusBar(isRunning, currentConfig);
             }
         }
         
@@ -334,7 +496,9 @@ function setupConfigurationChangeHandlers(context: vscode.ExtensionContext): voi
                 }
                 
                 try {
-                    await restartLanguageServer(context, event.newConfig);
+                    if (serverLauncher) {
+                        await restartServerLauncher(context, event.newConfig);
+                    }
                 } catch (error) {
                     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
                     outputChannel?.appendLine(`Failed to restart language server: ${errorMessage}`);
@@ -347,24 +511,52 @@ function setupConfigurationChangeHandlers(context: vscode.ExtensionContext): voi
                 outputChannel?.appendLine('Configuration change affects language server but restart not required or disabled');
             }
         }
+        
+        // Handle diagnostic configuration changes
+        if (event.changed.some(key => key.startsWith('diagnostics.'))) {
+            outputChannel?.appendLine('Diagnostic configuration changed');
+            
+            if (serverLauncher) {
+                const communicationService = serverLauncher.getCommunicationService();
+                communicationService.updateConfiguration(event.newConfig);
+                
+                if (event.newConfig.ui.notifications.info) {
+                    vscode.window.showInformationMessage('Diagnostic filter settings updated');
+                }
+            }
+        }
     });
     
     context.subscriptions.push(configChangeHandler);
 }
 
 /**
- * Restart the language server with new configuration
+ * Restart the server launcher with new configuration
  */
-async function restartLanguageServer(context: vscode.ExtensionContext, configuration: AsciidocConfiguration): Promise<void> {
-    if (client) {
-        outputChannel?.appendLine('Stopping current language server...');
-        await client.stop();
-        client.dispose();
-        client = undefined;
+async function restartServerLauncher(context: vscode.ExtensionContext, configuration: AsciidocConfiguration): Promise<void> {
+    if (serverLauncher) {
+        outputChannel?.appendLine('Restarting server launcher with new configuration...');
+        
+        // Create client options for restart
+        const clientOptions: LanguageClientOptions = createClientOptions(configuration);
+        
+        // Restart using the server launcher
+        await serverLauncher.restartServer(clientOptions);
+        
+        // Update client reference
+        client = serverLauncher.getClient();
+        
+        // Configure tracing
+        if (client) {
+            const trace = getTraceLevel(configuration.trace.server || configuration.trace.level);
+            client.setTrace(trace);
+        }
+        
+        outputChannel?.appendLine('Server launcher restarted successfully');
+    } else {
+        outputChannel?.appendLine('No server launcher to restart, initializing new one...');
+        initializeServerLauncher(context, configuration);
     }
-    
-    outputChannel?.appendLine('Starting language server with new configuration...');
-    initializeLanguageServer(context, configuration);
 }
 
 /**

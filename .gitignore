@@ -3,7 +3,7 @@
 **/build
 **/out
 **/node_modules
-release.properties
+**/bin
 **/*._trace
 **/*.xtextbin
 **/*.xtendbin
@@ -24,8 +24,9 @@ release.properties
 **/*.releaseBackup
 **/*.lnk
 **/*.idea
-**/secrets.yaml
 **/*.env
 **/*.theia-workspace
 **/.classpath
+**/secrets.yaml
+**/release.properties
 .vscode/settings.json

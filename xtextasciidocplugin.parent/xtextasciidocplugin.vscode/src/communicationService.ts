@@ -232,42 +232,18 @@ export class CommunicationService {
 
     /**
      * Diagnostic message filtering and formatting (2.2.4)
+     * Note: Client-side diagnostic filtering removed to allow proper VSCode diagnostic display
      */
     public setupDiagnosticHandling(): void {
         if (!this.client) {
             return;
         }
 
-        this.outputChannel.appendLine('CommunicationService: Setting up diagnostic filtering and formatting...');
+        this.outputChannel.appendLine('CommunicationService: Diagnostic handling setup (filtering disabled to allow proper VSCode display)');
         
-        // Only set up filtering if enabled in configuration
-        if (!this.configuration.diagnostics.enableFiltering) {
-            this.outputChannel.appendLine('CommunicationService: Diagnostic filtering disabled in configuration');
-            return;
-        }
-        
-        // Intercept diagnostic notifications
-        this.client.onNotification('textDocument/publishDiagnostics', (params) => {
-            const originalCount = params.diagnostics.length;
-            const filteredDiagnostics = this.filterDiagnostics(params.diagnostics);
-            const formattedDiagnostics = this.formatDiagnostics(filteredDiagnostics);
-            
-            // Log diagnostic summary
-            if (originalCount > 0 || formattedDiagnostics.length > 0) {
-                this.outputChannel.appendLine(
-                    `CommunicationService: Processed ${formattedDiagnostics.length} diagnostics for ${params.uri} ` +
-                    `(filtered from ${originalCount})`
-                );
-                
-                // Show summary in status bar if configured
-                if (this.configuration.ui.statusBar.enabled) {
-                    this.showDiagnosticsSummary(formattedDiagnostics);
-                }
-            }
-            
-            // Pass filtered diagnostics to VSCode
-            params.diagnostics = formattedDiagnostics;
-        });
+        // Client-side diagnostic filtering has been removed to fix validation display issues
+        // All diagnostics are now passed directly to VSCode for proper rendering
+        // Server-side filtering can be implemented if needed
     }
 
     /**
@@ -641,77 +617,7 @@ export class CommunicationService {
         };
     }
 
-    /**
-     * Filter diagnostics based on configuration
-     */
-    private filterDiagnostics(diagnostics: any[]): any[] {
-        return diagnostics
-            .filter(diagnostic => {
-                // Filter by severity
-                if (diagnostic.severity < this.diagnosticFilter.minSeverity) {
-                    return false;
-                }
-                
-                // Filter by exclude patterns
-                if (this.diagnosticFilter.excludePatterns.some(pattern => 
-                    new RegExp(pattern, 'i').test(diagnostic.message))) {
-                    return false;
-                }
-                
-                // Filter by include patterns (if specified)
-                if (this.diagnosticFilter.includeOnlyPatterns && 
-                    !this.diagnosticFilter.includeOnlyPatterns.some(pattern => 
-                        new RegExp(pattern, 'i').test(diagnostic.message))) {
-                    return false;
-                }
-                
-                return true;
-            })
-            .slice(0, this.diagnosticFilter.maxDiagnosticsPerFile); // Limit per file
-    }
-
-    /**
-     * Format diagnostics for better user experience
-     */
-    private formatDiagnostics(diagnostics: any[]): any[] {
-        return diagnostics.map(diagnostic => {
-            // Enhance diagnostic messages
-            if (diagnostic.message) {
-                diagnostic.message = this.formatDiagnosticMessage(diagnostic.message);
-            }
-            
-            // Add source information if not present
-            if (!diagnostic.source) {
-                diagnostic.source = 'AsciiDoc';
-            }
-            
-            return diagnostic;
-        });
-    }
-
-    /**
-     * Format individual diagnostic message
-     */
-    private formatDiagnosticMessage(message: string): string {
-        // Clean up common technical jargon
-        return message
-            .replace(/org\.eclipse\.xtext/, 'Xtext')
-            .replace(/java\.lang\./, '')
-            .replace(/\$\d+/g, '') // Remove anonymous class numbers
-            .trim();
-    }
-
-    /**
-     * Show diagnostics summary in status bar
-     */
-    private showDiagnosticsSummary(diagnostics: any[]): void {
-        const errors = diagnostics.filter(d => d.severity === DiagnosticSeverity.ERROR).length;
-        const warnings = diagnostics.filter(d => d.severity === DiagnosticSeverity.WARNING).length;
-        
-        if (errors > 0 || warnings > 0) {
-            this.outputChannel.appendLine(`CommunicationService: Document has ${errors} errors, ${warnings} warnings`);
-        }
-    }
+    // Diagnostic filtering methods removed - no longer needed after fixing validation display issue
 
     /**
      * Utility method for delays

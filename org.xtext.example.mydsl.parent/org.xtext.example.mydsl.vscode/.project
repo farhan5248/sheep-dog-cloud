@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>xtextasciidocplugin.vscode</name>
-	<comment>Project xtextasciidocplugin.vscode created by Buildship.</comment>
+	<name>org.xtext.example.mydsl.vscode</name>
+	<comment>Project org.xtext.example.mydsl.vscode created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -28,7 +28,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1756950730905</id>
+			<id>1756950730898</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

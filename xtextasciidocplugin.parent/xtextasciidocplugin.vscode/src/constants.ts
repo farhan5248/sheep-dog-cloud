@@ -36,7 +36,6 @@ export const FILE_PATTERNS = {
 // Server executables
 export const SERVER_EXECUTABLES = {
     WINDOWS: 'asciidoc-standalone.bat',
-    WINDOWS_ENHANCED: 'asciidoc-standalone-enhanced.bat',
     UNIX: 'asciidoc-standalone'
 } as const;
 

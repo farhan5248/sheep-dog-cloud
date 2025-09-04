@@ -57,7 +57,7 @@ configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') }) {
 }
 
 // Configuration for vscode projects
-configure(subprojects.findAll { it.name.startsWith('vscode') }) {
+configure(subprojects.findAll { it.name.contains('.vscode') }) {
 
 	apply plugin: 'com.github.node-gradle.node'
 	node {
@@ -99,13 +99,16 @@ configure(subprojects.findAll { it.name.startsWith('vscode') }) {
 		}
 	}
 
-	task clean {
+	task cleanVscodeOutput {
 		doLast {
 			delete vscodeExtension.destDir
 			delete 'out' // output of npmInstall - don't want to delete node_modules
 		}
 		
 	}
+	
+	// Hook into the main clean task
+	clean.dependsOn cleanVscodeOutput
 
 }
 
@@ -122,7 +125,7 @@ updateVersion {
 			def encoding = 'UTF-8'
 			def filesToUpdate = [
 				new File('vscode-extension', 'package.json'),
-				new File('vscode-extension-self-contained', 'package.json'),
+				new File('xtextasciidocplugin.vscode', 'package.json'),
 			]
 
 			// String replacements - isn't long enough to justify advanced code ;)

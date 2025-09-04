@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>vscode-extension-self-contained</name>
-	<comment>Project vscode-extension-self-contained created by Buildship.</comment>
+	<name>xtextasciidocplugin.vscode</name>
+	<comment>Project xtextasciidocplugin.vscode created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

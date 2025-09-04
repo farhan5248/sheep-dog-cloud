@@ -162,7 +162,7 @@ The extension is now ready for:
 ## Files Modified/Created
 
 ```
-📁 vscode-extension-self-contained/
+📁 xtextasciidocplugin.vscode/
 ├── 📄 package.json (✏️ modified - added commands)
 ├── 📁 src/
 │   ├── 📄 extension.ts (🔄 completely refactored)

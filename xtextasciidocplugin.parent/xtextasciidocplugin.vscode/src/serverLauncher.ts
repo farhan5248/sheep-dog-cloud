@@ -268,19 +268,10 @@ export class ServerLauncher {
     }
 
     /**
-     * Get the path to the server script (prefer enhanced version on Windows)
+     * Get the path to the server script
      */
     private getServerScriptPath(): string {
         if (os.platform() === 'win32') {
-            // Try enhanced script first
-            const enhancedScript = this.extensionContext.asAbsolutePath(
-                path.join(...constants.SERVER_PATHS.RELATIVE_PATH, constants.SERVER_EXECUTABLES.WINDOWS_ENHANCED)
-            );
-            if (fs.existsSync(enhancedScript)) {
-                return enhancedScript;
-            }
-            
-            // Fall back to standard script
             return this.extensionContext.asAbsolutePath(
                 path.join(...constants.SERVER_PATHS.RELATIVE_PATH, constants.SERVER_EXECUTABLES.WINDOWS)
             );

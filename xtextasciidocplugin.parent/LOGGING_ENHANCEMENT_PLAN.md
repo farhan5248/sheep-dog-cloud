@@ -35,8 +35,8 @@
 - **Debug visibility**: Complete request/response flow tracing for all LSP operations
 
 ## **Implementation Progress**
-- [ ] Step 1: Add SLF4J + Logback dependencies to `build.gradle`
-- [ ] Step 2: Create `logback.xml` configuration with file rotation
+- [x] Step 1: Add SLF4J + Logback dependencies to `build.gradle`
+- [x] Step 2: Create `logback.xml` configuration with file rotation
 - [ ] Step 3: Replace all `System.out.println()` calls with proper logger statements
 - [ ] Step 4: Add structured logging to `AsciidocGenerator.doGenerateResource()` method
 - [ ] Step 5: Add entry/exit logging to all public methods in custom Java classes

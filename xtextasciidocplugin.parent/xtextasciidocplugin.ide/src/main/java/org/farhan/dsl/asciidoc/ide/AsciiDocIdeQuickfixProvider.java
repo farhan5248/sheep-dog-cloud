@@ -7,6 +7,8 @@ import org.eclipse.xtext.ide.editor.quickfix.AbstractDeclarativeIdeQuickfixProvi
 import org.eclipse.xtext.ide.editor.quickfix.DiagnosticResolutionAcceptor;
 import org.eclipse.xtext.ide.editor.quickfix.QuickFix;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
+import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
+import org.farhan.dsl.asciidoc.generator.AsciiDocGenerator;
 import org.farhan.dsl.asciidoc.validation.AsciiDocValidator;
 
 import com.google.gson.JsonArray;
@@ -39,22 +41,12 @@ public class AsciiDocIdeQuickfixProvider extends AbstractDeclarativeIdeQuickfixP
 		});
 	}
 
-/* 
-	TODO add rename quickfix provider
 	@QuickFix(AsciiDocValidator.MISSING_STEP_DEF)
 	public void createDefinition(DiagnosticResolutionAcceptor acceptor) {
-
-		for (String issueData : issue.getData()) {
-			acceptor.accept(issue, "Rename object to: " + issueData, "Rename the object to an existing one",
-					"upcase.png", new IModification() {
-						public void apply(IModificationContext context) throws BadLocationException {
-							Resource resource = new ResourceSetImpl().getResource(issue.getUriToProblem(), true);
-							TestStep TestStep = (TestStep) resource
-									.getEObject(issue.getUriToProblem().toString().split("#")[1]);
-							IXtextDocument xtextDocument = context.getXtextDocument();
-							xtextDocument.replace(issue.getOffset(), TestStep.getName().length(), issueData);
-						}
-					});
-		}
-	}*/
+		acceptor.accept("Create TestStep definition", (diagnostic, obj, document) -> {
+			TestStep testStep = (TestStep) obj;
+			AsciiDocGenerator.doGenerate(testStep);
+			return createTextEdit(diagnostic, testStep.getName()); // No text change needed, files are generated externally
+		});
+	}
 }

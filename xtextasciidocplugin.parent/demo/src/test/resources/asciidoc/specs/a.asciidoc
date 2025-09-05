@@ -17,9 +17,9 @@ Desc 3
 
 * Given: The blah2 application, Objectf page is invalid
 
-* When: The Object page is created as follows
+* When: The blah application, Objectf page is validef
 +
 |===
-| Grp | Ins  
+| Grp | Infs  
 | 8   | {ins}
 |===

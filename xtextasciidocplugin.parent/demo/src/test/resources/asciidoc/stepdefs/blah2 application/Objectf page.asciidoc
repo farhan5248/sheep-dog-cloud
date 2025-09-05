@@ -1,18 +1,4 @@
 = Step-Object: Objectf page
 
-== Step-Definition: is i
-
-== Step-Definition: is in
-
-== Step-Definition: is inv
-
-== Step-Definition: is inva
-
-== Step-Definition: is inval
-
-== Step-Definition: is invali
-
-== Step-Definition: is invali\
-
 == Step-Definition: is invalid
 

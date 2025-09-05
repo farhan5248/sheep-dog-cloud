@@ -12,19 +12,12 @@ export const LANGUAGE_ID = 'asciidoc';
 
 // Commands
 export const COMMANDS = {
-    ASCIIDOC_A_PROXY: 'asciidoc.a.proxy',
-    ASCIIDOC_A: 'asciidoc.a',
-    ASCIIDOC_B: 'asciidoc.b',
     // Server management commands
     SERVER_RESTART: 'asciidoc.server.restart',
     SERVER_START: 'asciidoc.server.start',
     SERVER_STOP: 'asciidoc.server.stop',
     SERVER_SHOW_HEALTH: 'asciidoc.server.showHealth',
-    SERVER_SHOW_CAPABILITIES: 'asciidoc.server.showCapabilities',
-    // Diagnostic commands
-    DIAGNOSTICS_CLEAR: 'asciidoc.diagnostics.clear',
-    DIAGNOSTICS_REFRESH: 'asciidoc.diagnostics.refresh',
-    DIAGNOSTICS_CONFIGURE_FILTER: 'asciidoc.diagnostics.configureFilter'
+    SERVER_SHOW_CAPABILITIES: 'asciidoc.server.showCapabilities'
 } as const;
 
 // File patterns and paths

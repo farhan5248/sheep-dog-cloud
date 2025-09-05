@@ -45,14 +45,6 @@
         ],
         "commands": [
             {
-                "command": "asciidoc.a.proxy",
-                "title": "AsciiDoc Command A"
-            },
-            {
-                "command": "asciidoc.b",
-                "title": "AsciiDoc Command B"
-            },
-            {
                 "command": "asciidoc.server.restart",
                 "title": "AsciiDoc: Restart Language Server",
                 "category": "AsciiDoc Server"
@@ -78,19 +70,25 @@
                 "category": "AsciiDoc Server"
             },
             {
-                "command": "asciidoc.diagnostics.clear",
-                "title": "AsciiDoc: Clear Diagnostics",
-                "category": "AsciiDoc Diagnostics"
-            },
+                "command": "asciidoc.generateCode",
+                "title": "AsciiDoc: Generate Code",
+                "category": "AsciiDoc"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "asciidoc.generateCode",
+                    "when": "editorLangId == asciidoc"
+                }
+            ]
+        },
+        "keybindings": [
             {
-                "command": "asciidoc.diagnostics.refresh",
-                "title": "AsciiDoc: Refresh Diagnostics",
-                "category": "AsciiDoc Diagnostics"
-            },
-            {
-                "command": "asciidoc.diagnostics.configureFilter",
-                "title": "AsciiDoc: Configure Diagnostic Filter",
-                "category": "AsciiDoc Diagnostics"
+                "command": "asciidoc.generateCode",
+                "key": "ctrl+shift+g",
+                "mac": "cmd+shift+g",
+                "when": "editorLangId == asciidoc"
             }
         ],
         "configuration": {

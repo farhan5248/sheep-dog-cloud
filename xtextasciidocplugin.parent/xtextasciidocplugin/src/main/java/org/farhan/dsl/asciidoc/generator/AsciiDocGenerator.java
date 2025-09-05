@@ -34,7 +34,13 @@ public class AsciiDocGenerator extends AbstractGenerator {
 
 	@Override
 	public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
+		// Automatic generation disabled - use command-based generation instead
+		// Generation logic moved to generateFromResource() method
+		// The reason is that I didn't want to generate code until the user was ready
+		// to do so.
+	}
 
+	public static void generateFromResource(final Resource resource) {
 		if (resource.getContents().get(0) instanceof TestSuite) {
 			TestSuite theTestSuite = (TestSuite) resource.getContents().get(0);
 			for (TestStepContainer scenario : theTestSuite.getTestStepContainerList()) {

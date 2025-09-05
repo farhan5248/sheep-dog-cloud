@@ -1,4 +1,32 @@
 = Step-Object: Objectf page
 
-== Step-Definition: is invalid
+== Step-Definition: is valid
+
+* Step-Parameters: 1
++
+|===
+| Grp | Ins
+|===
+
+* Step-Parameters: 2
++
+|===
+| Grp | Infs
+|===
+
+== Step-Definition: is valide
+
+* Step-Parameters: 1
++
+|===
+| Grp | Infs
+|===
+
+== Step-Definition: is validef
+
+* Step-Parameters: 1
++
+|===
+| Grp | Infs
+|===
 

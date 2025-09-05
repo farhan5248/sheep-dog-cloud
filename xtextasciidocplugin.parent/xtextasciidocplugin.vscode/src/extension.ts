@@ -189,20 +189,6 @@ function getTraceLevel(traceLevel: string): Trace {
  * Register extension commands including server management
  */
 function registerCommands(context: vscode.ExtensionContext): void {
-    // Register proxy command
-    const proxyCommand = vscode.commands.registerCommand(constants.COMMANDS.ASCIIDOC_A_PROXY, async () => {
-        outputChannel?.appendLine('Executing AsciiDoc proxy command');
-        
-        const activeEditor = vscode.window.activeTextEditor;
-        if (!activeEditor || !activeEditor.document || activeEditor.document.languageId !== constants.LANGUAGE_ID) {
-            vscode.window.showWarningMessage('Please open an AsciiDoc file to use this command');
-            return;
-        }
-
-        if (activeEditor.document.uri instanceof vscode.Uri) {
-            await vscode.commands.executeCommand(constants.COMMANDS.ASCIIDOC_A, activeEditor.document.uri.toString());
-        }
-    });
     
     // Register server management commands
     const restartServerCommand = vscode.commands.registerCommand('asciidoc.server.restart', async () => {
@@ -364,87 +350,50 @@ function registerCommands(context: vscode.ExtensionContext): void {
         }
     });
     
-    // Add diagnostic management commands
-    const clearDiagnosticsCommand = vscode.commands.registerCommand('asciidoc.diagnostics.clear', () => {
-        outputChannel?.appendLine('Clearing AsciiDoc diagnostics...');
+    // Add code generation command
+    const generateCodeCommand = vscode.commands.registerCommand('asciidoc.generateCode', async () => {
+        outputChannel?.appendLine('Manual code generation requested');
         
-        // Clear diagnostics for all AsciiDoc files
-        if (client) {
-            const diagnosticCollection = vscode.languages.createDiagnosticCollection('asciidoc');
-            diagnosticCollection.clear();
-            vscode.window.showInformationMessage('AsciiDoc diagnostics cleared');
-        } else {
-            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
-        }
-    });
-    
-    const refreshDiagnosticsCommand = vscode.commands.registerCommand('asciidoc.diagnostics.refresh', async () => {
-        outputChannel?.appendLine('Refreshing AsciiDoc diagnostics...');
-        
-        if (!client) {
-            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
-            return;
-        }
-        
-        // Force re-validation of current document
         const activeEditor = vscode.window.activeTextEditor;
-        if (activeEditor && activeEditor.document.languageId === constants.LANGUAGE_ID) {
-            try {
-                // Send a didChange notification to trigger re-validation
-                await vscode.commands.executeCommand('vscode.executeDocumentSymbolProvider', activeEditor.document.uri);
-                vscode.window.showInformationMessage('AsciiDoc diagnostics refreshed');
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                vscode.window.showErrorMessage(`Failed to refresh diagnostics: ${errorMessage}`);
-            }
-        } else {
-            vscode.window.showWarningMessage('Please open an AsciiDoc file to refresh diagnostics');
-        }
-    });
-    
-    const configureDiagnosticFilterCommand = vscode.commands.registerCommand('asciidoc.diagnostics.configureFilter', async () => {
-        const configuration = configurationService?.getConfiguration();
-        if (!configuration) {
-            vscode.window.showErrorMessage('Configuration not available');
+        if (!activeEditor || activeEditor.document.languageId !== 'asciidoc') {
+            vscode.window.showWarningMessage('No active AsciiDoc document');
+            outputChannel?.appendLine('Code generation failed: No active AsciiDoc document');
             return;
         }
         
-        // Show quick pick for diagnostic severity filter
-        const severityOptions = [
-            { label: 'Error', description: 'Show only errors', value: 1 },
-            { label: 'Warning', description: 'Show errors and warnings', value: 2 },
-            { label: 'Information', description: 'Show errors, warnings, and info', value: 3 },
-            { label: 'Hint', description: 'Show all diagnostics including hints', value: 4 }
-        ];
+        if (!serverLauncher) {
+            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
+            outputChannel?.appendLine('Code generation failed: Language server not running');
+            return;
+        }
         
-        const currentSeverity = configuration.diagnostics.minSeverity;
-        const currentOption = severityOptions.find(opt => opt.value === currentSeverity);
-        
-        const selectedSeverity = await vscode.window.showQuickPick(severityOptions, {
-            placeHolder: `Current: ${currentOption?.label || 'Unknown'} - Select minimum diagnostic severity to display`,
-            canPickMany: false
-        });
-        
-        if (selectedSeverity) {
-            // Update configuration
-            const config = vscode.workspace.getConfiguration('asciidoc');
-            await config.update('diagnostics.minSeverity', selectedSeverity.value, vscode.ConfigurationTarget.Global);
+        try {
+            const client = serverLauncher.getClient();
+            if (!client) {
+                throw new Error('Language client not available');
+            }
             
-            vscode.window.showInformationMessage(`Diagnostic filter updated to show ${selectedSeverity.label} and above`);
-            outputChannel?.appendLine(`Diagnostic filter updated: minSeverity = ${selectedSeverity.value}`);
+            const result = await client.sendRequest('workspace/executeCommand', {
+                command: 'asciidoc.generate',
+                arguments: [activeEditor.document.uri.toString()]
+            });
+            
+            vscode.window.showInformationMessage(`Code generation result: ${result}`);
+            outputChannel?.appendLine(`Code generation completed: ${result}`);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            vscode.window.showErrorMessage(`Code generation failed: ${errorMessage}`);
+            outputChannel?.appendLine(`Code generation failed: ${errorMessage}`);
         }
     });
     
     context.subscriptions.push(
-        proxyCommand,
         restartServerCommand,
         showServerHealthCommand,
         showCapabilitiesCommand,
         stopServerCommand,
         startServerCommand,
-        clearDiagnosticsCommand,
-        refreshDiagnosticsCommand,
-        configureDiagnosticFilterCommand
+        generateCodeCommand
     );
     
     outputChannel?.appendLine('Commands registered successfully (including enhanced server management)');

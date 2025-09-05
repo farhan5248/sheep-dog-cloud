@@ -192,10 +192,14 @@ function registerCommands(context: vscode.ExtensionContext): void {
     
     // Register server management commands
     const restartServerCommand = vscode.commands.registerCommand('asciidoc.server.restart', async () => {
-        outputChannel?.appendLine('Manual server restart requested');
+        const commandName = 'asciidoc.server.restart';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
         
         if (!serverLauncher) {
-            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
             return;
         }
         
@@ -206,54 +210,83 @@ function registerCommands(context: vscode.ExtensionContext): void {
             }
             
             const clientOptions = createClientOptions(configuration);
+            outputChannel?.appendLine(`Command ${commandName} parameters: {configuration: ${JSON.stringify({
+                enabled: configuration.languageServer.enabled,
+                port: configuration.languageServer.port,
+                timeout: configuration.languageServer.timeout
+            })}}`);
+            
             await serverLauncher.restartServer(clientOptions);
             
             // Update client reference
             client = serverLauncher.getClient();
             
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
             vscode.window.showInformationMessage('AsciiDoc Language Server restarted successfully');
-            outputChannel?.appendLine('Manual server restart completed successfully');
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
             vscode.window.showErrorMessage(`Failed to restart AsciiDoc Language Server: ${errorMessage}`);
-            outputChannel?.appendLine(`Manual server restart failed: ${errorMessage}`);
         }
     });
     
     const showServerHealthCommand = vscode.commands.registerCommand('asciidoc.server.showHealth', () => {
+        const commandName = 'asciidoc.server.showHealth';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        
         if (!serverLauncher) {
-            vscode.window.showInformationMessage('AsciiDoc Language Server is not running');
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showInformationMessage(errorMsg);
             return;
         }
         
-        const healthInfo = serverLauncher.getHealthInfo();
-        const connectionStatus = serverLauncher.getConnectionStatus();
-        const uptimeStr = healthInfo.uptime ? `${Math.round(healthInfo.uptime / 1000)}s` : 'Unknown';
-        const startTimeStr = healthInfo.startTime ? healthInfo.startTime.toLocaleString() : 'Unknown';
-        const lastCheckStr = healthInfo.lastHealthCheck ? healthInfo.lastHealthCheck.toLocaleString() : 'Never';
-        const connectTimeStr = connectionStatus.lastConnectTime ? connectionStatus.lastConnectTime.toLocaleString() : 'Never';
-        
-        const healthMessage = [
-            `Status: ${healthInfo.status}`,
-            `Connection: ${connectionStatus.isConnected ? 'Connected' : 'Disconnected'}`,
-            `Start Time: ${startTimeStr}`,
-            `Last Connect: ${connectTimeStr}`,
-            `Uptime: ${uptimeStr}`,
-            `Last Health Check: ${lastCheckStr}`,
-            `Retry Count: ${connectionStatus.retryCount}`,
-            healthInfo.pid ? `Process ID: ${healthInfo.pid}` : '',
-            healthInfo.errorMessage ? `Error: ${healthInfo.errorMessage}` : '',
-            connectionStatus.lastError ? `Connection Error: ${connectionStatus.lastError}` : ''
-        ].filter(line => line).join('\n');
-        
-        vscode.window.showInformationMessage(`AsciiDoc Language Server Health:\n\n${healthMessage}`, { modal: true });
+        try {
+            const healthInfo = serverLauncher.getHealthInfo();
+            const connectionStatus = serverLauncher.getConnectionStatus();
+            
+            outputChannel?.appendLine(`Command ${commandName} retrieving health info: {status: ${healthInfo.status}, connected: ${connectionStatus.isConnected}}`);
+            
+            const uptimeStr = healthInfo.uptime ? `${Math.round(healthInfo.uptime / 1000)}s` : 'Unknown';
+            const startTimeStr = healthInfo.startTime ? healthInfo.startTime.toLocaleString() : 'Unknown';
+            const lastCheckStr = healthInfo.lastHealthCheck ? healthInfo.lastHealthCheck.toLocaleString() : 'Never';
+            const connectTimeStr = connectionStatus.lastConnectTime ? connectionStatus.lastConnectTime.toLocaleString() : 'Never';
+            
+            const healthMessage = [
+                `Status: ${healthInfo.status}`,
+                `Connection: ${connectionStatus.isConnected ? 'Connected' : 'Disconnected'}`,
+                `Start Time: ${startTimeStr}`,
+                `Last Connect: ${connectTimeStr}`,
+                `Uptime: ${uptimeStr}`,
+                `Last Health Check: ${lastCheckStr}`,
+                `Retry Count: ${connectionStatus.retryCount}`,
+                healthInfo.pid ? `Process ID: ${healthInfo.pid}` : '',
+                healthInfo.errorMessage ? `Error: ${healthInfo.errorMessage}` : '',
+                connectionStatus.lastError ? `Connection Error: ${connectionStatus.lastError}` : ''
+            ].filter(line => line).join('\n');
+            
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            vscode.window.showInformationMessage(`AsciiDoc Language Server Health:\n\n${healthMessage}`, { modal: true });
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+        }
     });
     
     const stopServerCommand = vscode.commands.registerCommand('asciidoc.server.stop', async () => {
-        outputChannel?.appendLine('Manual server stop requested');
+        const commandName = 'asciidoc.server.stop';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
         
         if (!serverLauncher) {
-            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
             return;
         }
         
@@ -261,66 +294,90 @@ function registerCommands(context: vscode.ExtensionContext): void {
             await serverLauncher.stopServer();
             client = undefined;
             
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
             vscode.window.showInformationMessage('AsciiDoc Language Server stopped');
-            outputChannel?.appendLine('Manual server stop completed successfully');
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
             vscode.window.showErrorMessage(`Failed to stop AsciiDoc Language Server: ${errorMessage}`);
-            outputChannel?.appendLine(`Manual server stop failed: ${errorMessage}`);
         }
     });
     
     // Add command to show server capabilities
     const showCapabilitiesCommand = vscode.commands.registerCommand('asciidoc.server.showCapabilities', () => {
+        const commandName = 'asciidoc.server.showCapabilities';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        
         if (!serverLauncher) {
-            vscode.window.showInformationMessage('AsciiDoc Language Server is not running');
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showInformationMessage(errorMsg);
             return;
         }
         
-        const connectionStatus = serverLauncher.getConnectionStatus();
-        const capabilities = connectionStatus.capabilities;
-        
-        if (!capabilities) {
-            vscode.window.showInformationMessage('Server capabilities not yet detected. Please wait for server to start.');
-            return;
+        try {
+            const connectionStatus = serverLauncher.getConnectionStatus();
+            const capabilities = connectionStatus.capabilities;
+            
+            outputChannel?.appendLine(`Command ${commandName} retrieving capabilities: {hasCapabilities: ${!!capabilities}}`);
+            
+            if (!capabilities) {
+                const warningMsg = 'Server capabilities not yet detected. Please wait for server to start.';
+                outputChannel?.appendLine(`Command ${commandName} warning: ${warningMsg}`);
+                vscode.window.showInformationMessage(warningMsg);
+                return;
+            }
+            
+            const capabilitiesInfo = [
+                'Standard Language Server Features:',
+                `• Text Document Sync: ${capabilities.textDocumentSync ? '✓' : '✗'}`,
+                `• Completion Provider: ${capabilities.completionProvider ? '✓' : '✗'}`,
+                `• Hover Provider: ${capabilities.hoverProvider ? '✓' : '✗'}`,
+                `• Definition Provider: ${capabilities.definitionProvider ? '✓' : '✗'}`,
+                `• References Provider: ${capabilities.referencesProvider ? '✓' : '✗'}`,
+                `• Document Symbol Provider: ${capabilities.documentSymbolProvider ? '✓' : '✗'}`,
+                `• Code Action Provider: ${capabilities.codeActionProvider ? '✓' : '✗'}`,
+                `• Document Formatting: ${capabilities.documentFormattingProvider ? '✓' : '✗'}`,
+                `• Range Formatting: ${capabilities.documentRangeFormattingProvider ? '✓' : '✗'}`,
+                `• Rename Provider: ${capabilities.renameProvider ? '✓' : '✗'}`,
+            ];
+            
+            const asciidocFeatures = capabilities.experimental?.asciidocFeatures;
+            if (asciidocFeatures) {
+                capabilitiesInfo.push(
+                    '',
+                    'Extended AsciiDoc Features:',
+                    `• Custom Validation: ${asciidocFeatures.customValidation ? '✓' : '✗'}`,
+                    `• Advanced Formatting: ${asciidocFeatures.advancedFormatting ? '✓' : '✗'}`,
+                    `• Table Support: ${asciidocFeatures.tableSupport ? '✓' : '✗'}`,
+                    `• Cross References: ${asciidocFeatures.crossReferences ? '✓' : '✗'}`,
+                    `• Document Generation: ${asciidocFeatures.documentGeneration ? '✓' : '✗'}`
+                );
+            }
+            
+            const capabilitiesMessage = capabilitiesInfo.join('\n');
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            vscode.window.showInformationMessage(`AsciiDoc Language Server Capabilities:\n\n${capabilitiesMessage}`, { modal: true });
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
         }
-        
-        const capabilitiesInfo = [
-            'Standard Language Server Features:',
-            `• Text Document Sync: ${capabilities.textDocumentSync ? '✓' : '✗'}`,
-            `• Completion Provider: ${capabilities.completionProvider ? '✓' : '✗'}`,
-            `• Hover Provider: ${capabilities.hoverProvider ? '✓' : '✗'}`,
-            `• Definition Provider: ${capabilities.definitionProvider ? '✓' : '✗'}`,
-            `• References Provider: ${capabilities.referencesProvider ? '✓' : '✗'}`,
-            `• Document Symbol Provider: ${capabilities.documentSymbolProvider ? '✓' : '✗'}`,
-            `• Code Action Provider: ${capabilities.codeActionProvider ? '✓' : '✗'}`,
-            `• Document Formatting: ${capabilities.documentFormattingProvider ? '✓' : '✗'}`,
-            `• Range Formatting: ${capabilities.documentRangeFormattingProvider ? '✓' : '✗'}`,
-            `• Rename Provider: ${capabilities.renameProvider ? '✓' : '✗'}`,
-        ];
-        
-        const asciidocFeatures = capabilities.experimental?.asciidocFeatures;
-        if (asciidocFeatures) {
-            capabilitiesInfo.push(
-                '',
-                'Extended AsciiDoc Features:',
-                `• Custom Validation: ${asciidocFeatures.customValidation ? '✓' : '✗'}`,
-                `• Advanced Formatting: ${asciidocFeatures.advancedFormatting ? '✓' : '✗'}`,
-                `• Table Support: ${asciidocFeatures.tableSupport ? '✓' : '✗'}`,
-                `• Cross References: ${asciidocFeatures.crossReferences ? '✓' : '✗'}`,
-                `• Document Generation: ${asciidocFeatures.documentGeneration ? '✓' : '✗'}`
-            );
-        }
-        
-        const capabilitiesMessage = capabilitiesInfo.join('\n');
-        vscode.window.showInformationMessage(`AsciiDoc Language Server Capabilities:\n\n${capabilitiesMessage}`, { modal: true });
     });
     
     const startServerCommand = vscode.commands.registerCommand('asciidoc.server.start', async () => {
-        outputChannel?.appendLine('Manual server start requested');
+        const commandName = 'asciidoc.server.start';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
         
         if (serverLauncher && serverLauncher.getHealthInfo().status === ServerStatus.RUNNING) {
-            vscode.window.showWarningMessage('AsciiDoc Language Server is already running');
+            const warningMsg = 'AsciiDoc Language Server is already running';
+            outputChannel?.appendLine(`Command ${commandName} warning: ${warningMsg}`);
+            vscode.window.showWarningMessage(warningMsg);
             return;
         }
         
@@ -329,6 +386,12 @@ function registerCommands(context: vscode.ExtensionContext): void {
             if (!configuration) {
                 throw new Error('Configuration not available');
             }
+            
+            outputChannel?.appendLine(`Command ${commandName} parameters: {configuration: ${JSON.stringify({
+                enabled: configuration.languageServer.enabled,
+                port: configuration.languageServer.port,
+                timeout: configuration.languageServer.timeout
+            })}}`);
             
             if (!serverLauncher) {
                 // Reinitialize if needed
@@ -341,29 +404,35 @@ function registerCommands(context: vscode.ExtensionContext): void {
                 client = serverLauncher.getClient();
             }
             
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
             vscode.window.showInformationMessage('AsciiDoc Language Server started successfully');
-            outputChannel?.appendLine('Manual server start completed successfully');
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
             vscode.window.showErrorMessage(`Failed to start AsciiDoc Language Server: ${errorMessage}`);
-            outputChannel?.appendLine(`Manual server start failed: ${errorMessage}`);
         }
     });
     
     // Add code generation command
     const generateCodeCommand = vscode.commands.registerCommand('asciidoc.generateCode', async () => {
-        outputChannel?.appendLine('Manual code generation requested');
+        const commandName = 'asciidoc.generateCode';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
         
         const activeEditor = vscode.window.activeTextEditor;
         if (!activeEditor || activeEditor.document.languageId !== 'asciidoc') {
-            vscode.window.showWarningMessage('No active AsciiDoc document');
-            outputChannel?.appendLine('Code generation failed: No active AsciiDoc document');
+            const errorMsg = 'No active AsciiDoc document';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
             return;
         }
         
         if (!serverLauncher) {
-            vscode.window.showWarningMessage('AsciiDoc Language Server is not running');
-            outputChannel?.appendLine('Code generation failed: Language server not running');
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
             return;
         }
         
@@ -373,17 +442,22 @@ function registerCommands(context: vscode.ExtensionContext): void {
                 throw new Error('Language client not available');
             }
             
+            const documentUri = activeEditor.document.uri.toString();
+            outputChannel?.appendLine(`Command ${commandName} parameters: {documentUri: ${documentUri}, serverCommand: "asciidoc.generate"}`);
+            
             const result = await client.sendRequest('workspace/executeCommand', {
                 command: 'asciidoc.generate',
-                arguments: [activeEditor.document.uri.toString()]
+                arguments: [documentUri]
             });
             
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms: ${result}`);
             vscode.window.showInformationMessage(`Code generation result: ${result}`);
-            outputChannel?.appendLine(`Code generation completed: ${result}`);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
             vscode.window.showErrorMessage(`Code generation failed: ${errorMessage}`);
-            outputChannel?.appendLine(`Code generation failed: ${errorMessage}`);
         }
     });
     

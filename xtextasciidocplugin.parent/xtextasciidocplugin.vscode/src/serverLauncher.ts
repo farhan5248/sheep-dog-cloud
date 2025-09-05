@@ -83,11 +83,16 @@ export class ServerLauncher {
      * Start the language server with intelligent launch mode detection and robust error handling
      */
     public async startServer(clientOptions: LanguageClientOptions): Promise<void> {
+        const commandName = 'startServer';
+        const startTime = Date.now();
+        
         try {
-            this.outputChannel.appendLine('ServerLauncher: Starting server...');
+            this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {timeout: ${this.configuration.languageServer.timeout}, maxRetries: ${this.configuration.languageServer.maxRetries}}`);
             this.updateHealthInfo({ status: ServerStatus.STARTING, startTime: new Date() });
             
             const launchOptions = this.createLaunchOptions();
+            this.outputChannel.appendLine(`Command ${commandName} launch options: {mode: ${launchOptions.mode}, timeout: ${launchOptions.timeout}, javaExecutable: ${launchOptions.javaExecutable}}`);
+            
             const serverOptions = await this.createServerOptions(launchOptions);
             
             // Create language client
@@ -114,11 +119,14 @@ export class ServerLauncher {
             
             this.updateHealthInfo({ status: ServerStatus.RUNNING });
             this.updateStatusBar();
-            this.outputChannel.appendLine('ServerLauncher: Server started successfully with enhanced communication');
+            
+            const duration = Date.now() - startTime;
+            this.outputChannel.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
             
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            this.outputChannel.appendLine(`ServerLauncher: Failed to start server: ${errorMessage}`);
+            const duration = Date.now() - startTime;
+            this.outputChannel.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
             this.updateHealthInfo({ status: ServerStatus.ERROR, errorMessage });
             this.updateStatusBar();
             throw error;
@@ -129,8 +137,11 @@ export class ServerLauncher {
      * Stop the language server gracefully
      */
     public async stopServer(): Promise<void> {
+        const commandName = 'stopServer';
+        const startTime = Date.now();
+        
         try {
-            this.outputChannel.appendLine('ServerLauncher: Stopping server...');
+            this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {hasClient: ${!!this.client}, hasProcess: ${!!this.serverProcess}}`);
             this.updateHealthInfo({ status: ServerStatus.STOPPING });
             this.updateStatusBar();
             
@@ -139,6 +150,7 @@ export class ServerLauncher {
             
             // Stop language client
             if (this.client) {
+                this.outputChannel.appendLine(`Command ${commandName} stopping language client...`);
                 await this.client.stop();
                 this.client.dispose();
                 this.client = undefined;
@@ -146,7 +158,7 @@ export class ServerLauncher {
             
             // Terminate server process if it exists
             if (this.serverProcess && !this.serverProcess.killed) {
-                this.outputChannel.appendLine('ServerLauncher: Terminating server process...');
+                this.outputChannel.appendLine(`Command ${commandName} terminating server process (PID: ${this.serverProcess.pid})...`);
                 
                 if (os.platform() === 'win32') {
                     // Windows: use taskkill for graceful shutdown
@@ -166,11 +178,14 @@ export class ServerLauncher {
             
             this.updateHealthInfo({ status: ServerStatus.STOPPED });
             this.updateStatusBar();
-            this.outputChannel.appendLine('ServerLauncher: Server stopped successfully');
+            
+            const duration = Date.now() - startTime;
+            this.outputChannel.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
             
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            this.outputChannel.appendLine(`ServerLauncher: Error stopping server: ${errorMessage}`);
+            const duration = Date.now() - startTime;
+            this.outputChannel.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
             this.updateHealthInfo({ status: ServerStatus.ERROR, errorMessage });
             this.updateStatusBar();
         }
@@ -180,13 +195,31 @@ export class ServerLauncher {
      * Restart the language server
      */
     public async restartServer(clientOptions: LanguageClientOptions): Promise<void> {
-        this.outputChannel.appendLine('ServerLauncher: Restarting server...');
-        await this.stopServer();
+        const commandName = 'restartServer';
+        const startTime = Date.now();
         
-        // Wait a moment before restarting
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        await this.startServer(clientOptions);
+        try {
+            this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {clientOptions: ${JSON.stringify({
+                documentSelector: clientOptions.documentSelector?.[0] || null,
+                hasOutputChannel: !!clientOptions.outputChannel
+            })}}`);
+            
+            await this.stopServer();
+            
+            // Wait a moment before restarting
+            this.outputChannel.appendLine(`Command ${commandName} waiting 2000ms before restart...`);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            await this.startServer(clientOptions);
+            
+            const duration = Date.now() - startTime;
+            this.outputChannel.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            this.outputChannel.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            throw error;
+        }
     }
 
     /**

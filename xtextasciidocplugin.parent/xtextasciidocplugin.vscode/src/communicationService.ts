@@ -73,14 +73,21 @@ export class CommunicationService {
      * Enhanced connection setup with timeout and retry logic (2.2.1)
      */
     public async setupConnection(client: LanguageClient): Promise<void> {
+        const commandName = 'setupConnection';
+        const startTime = Date.now();
+        
         this.client = client;
-        this.outputChannel.appendLine('CommunicationService: Setting up enhanced connection...');
+        this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {clientId: ${client.id}}`);
 
         // Configure enhanced error handling
         this.setupErrorHandling();
         
+        // Setup LSP request/response logging
+        this.setupLSPLogging();
+        
         // Configure connection timeout
         const retryConfig = this.createRetryConfiguration();
+        this.outputChannel.appendLine(`Command ${commandName} retry config: ${JSON.stringify(retryConfig)}`);
         
         try {
             await this.connectWithRetry(retryConfig);
@@ -91,10 +98,12 @@ export class CommunicationService {
             // Detect server capabilities once connected
             await this.detectServerCapabilities();
             
-            this.outputChannel.appendLine('CommunicationService: Connection established successfully');
+            const duration = Date.now() - startTime;
+            this.outputChannel.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown connection error';
-            this.outputChannel.appendLine(`CommunicationService: Failed to establish connection: ${errorMessage}`);
+            const duration = Date.now() - startTime;
+            this.outputChannel.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
             this.connectionStatus.lastError = errorMessage;
             throw error;
         }
@@ -496,6 +505,42 @@ export class CommunicationService {
     }
 
     /**
+     * Setup LSP request/response logging
+     */
+    private setupLSPLogging(): void {
+        if (!this.client) {
+            return;
+        }
+
+        // Log LSP requests
+        const originalSendRequest = this.client.sendRequest.bind(this.client);
+        this.client.sendRequest = (method: string, ...args: any[]) => {
+            const requestId = Math.random().toString(36).substring(7);
+            const startTime = Date.now();
+            
+            this.outputChannel.appendLine(`LSP Request [${requestId}]: ${method} with parameters: ${JSON.stringify(args)}`);
+            
+            const result = originalSendRequest(method, ...args);
+            
+            // Handle promise response
+            if (result && typeof result.then === 'function') {
+                result.then(
+                    (response: any) => {
+                        const duration = Date.now() - startTime;
+                        this.outputChannel.appendLine(`LSP Response [${requestId}] completed successfully in ${duration}ms: ${JSON.stringify(response)}`);
+                    },
+                    (error: any) => {
+                        const duration = Date.now() - startTime;
+                        this.outputChannel.appendLine(`LSP Response [${requestId}] failed after ${duration}ms: ${JSON.stringify(error)}`);
+                    }
+                );
+            }
+            
+            return result;
+        };
+    }
+
+    /**
      * Setup notification handlers for enhanced communication
      */
     private setupNotificationHandlers(): void {
@@ -505,19 +550,26 @@ export class CommunicationService {
 
         // Custom notification for server status
         this.client.onNotification('asciidoc/serverStatus', (params: any) => {
-            this.outputChannel.appendLine(`CommunicationService: Server status update: ${JSON.stringify(params)}`);
+            this.outputChannel.appendLine(`LSP Notification: asciidoc/serverStatus with parameters: ${JSON.stringify(params)}`);
         });
 
         // Custom notification for capability changes
         this.client.onNotification('asciidoc/capabilityChanged', (params: any) => {
-            this.outputChannel.appendLine(`CommunicationService: Server capabilities changed: ${JSON.stringify(params)}`);
+            this.outputChannel.appendLine(`LSP Notification: asciidoc/capabilityChanged with parameters: ${JSON.stringify(params)}`);
             this.detectServerCapabilities(); // Re-detect capabilities
         });
 
         // Progress notifications
         this.client.onNotification('$/progress', (params: any) => {
             if (this.configuration.debug.verboseLogging) {
-                this.outputChannel.appendLine(`CommunicationService: Progress: ${JSON.stringify(params)}`);
+                this.outputChannel.appendLine(`LSP Notification: $/progress with parameters: ${JSON.stringify(params)}`);
+            }
+        });
+
+        // Text document diagnostics
+        this.client.onNotification('textDocument/publishDiagnostics', (params: any) => {
+            if (this.configuration.debug.verboseLogging) {
+                this.outputChannel.appendLine(`LSP Notification: textDocument/publishDiagnostics for ${params.uri} with ${params.diagnostics?.length || 0} diagnostics`);
             }
         });
     }

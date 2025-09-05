@@ -41,7 +41,7 @@
 - [x] Step 4: Add entry/exit debug logging to all public methods in Java classes or classes that use the logger
 - [x] Step 5: Add structured logging to `AsciidocGenerator`, `AsciiDocIdeContentProposalProvider`, `AsciiDocIdeQuickfixProvider`, `AsciiDocValidator` classes, focus on try catch blocks
 - [x] Step 6: Add detailed logging to `AsciidocGenerator`, `AsciiDocIdeContentProposalProvider`, `AsciiDocIdeQuickfixProvider`, `AsciiDocValidator` classes workflows
-- [ ] Step 7: Log all command executions and their parameters
+- [x] Step 7: Log all command executions and their parameters
 - [ ] Step 8: Add request/response logging for LSP communication
 - [ ] Step 9: Enhance diagnostic event logging with detailed context
 - [ ] Step 10: Add code action request/response tracing

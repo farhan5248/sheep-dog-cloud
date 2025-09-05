@@ -75,7 +75,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 				return;
 			}
 
-			logger.debug("Calling LanguageHelper.generate with step: {}", step.getName());
+			logger.info("Calling LanguageHelper.generate with step: {}", step.getName());
 			LanguageHelper.generate(new LanguageAccessImpl(step),
 					SaveOptions.newBuilder().format().getOptions().toOptionsMap());
 			logger.debug("Exiting {}", "doGenerate");

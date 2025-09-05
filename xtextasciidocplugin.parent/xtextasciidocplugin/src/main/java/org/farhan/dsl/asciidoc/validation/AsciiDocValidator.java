@@ -6,6 +6,9 @@ package org.farhan.dsl.asciidoc.validation;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
@@ -25,6 +28,8 @@ import org.farhan.dsl.common.*;
  * https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 public class AsciiDocValidator extends AbstractAsciiDocValidator {
+
+	private static final Logger logger = LoggerFactory.getLogger(AsciiDocValidator.class);
 
 	public static final String INVALID_NAME = "invalidName";
 	public static final String INVALID_HEADER = "invalidHeader";
@@ -72,7 +77,10 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 				}
 			}
 		} catch (Exception e) {
-			error(logError(e, step.getName()), AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
+			logger.error("There was a problem listing directories for: {}", step.getName(), e);
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			error(sw.toString(), AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
 		}
 	}
 
@@ -100,14 +108,5 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 			alternates[i] = alternateProposals[i].toString();
 		}
 		return alternates;
-	}
-
-	private String logError(Exception e, String name) {
-		// TODO inject the logger instead
-		System.out.println("There was a problem listing directories for: " + name);
-		StringWriter sw = new StringWriter();
-		e.printStackTrace(new PrintWriter(sw));
-		System.out.println(sw.toString());
-		return sw.toString();
 	}
 }

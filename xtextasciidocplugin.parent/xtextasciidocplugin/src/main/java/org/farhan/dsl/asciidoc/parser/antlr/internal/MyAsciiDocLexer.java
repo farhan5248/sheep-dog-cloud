@@ -32,7 +32,6 @@ public class MyAsciiDocLexer extends InternalAsciiDocLexer {
 			}
 			i++;
 		}
-		// System.out.println(">>>" + s + "<<<");
 		return true;
 	}
 

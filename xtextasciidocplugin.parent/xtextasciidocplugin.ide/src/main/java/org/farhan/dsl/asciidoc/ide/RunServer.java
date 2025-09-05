@@ -1,4 +1,8 @@
 package org.farhan.dsl.asciidoc.ide;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -28,6 +32,8 @@ import com.google.inject.Injector;
  */
 public class RunServer {
 
+	private static final Logger logger = LoggerFactory.getLogger(RunServer.class);
+
 	public static void main(String[] args) throws InterruptedException, IOException {
 		Injector injector = Guice.createInjector(new ServerModule());
 		LanguageServerImpl languageServer = injector.getInstance(LanguageServerImpl.class);
@@ -36,7 +42,7 @@ public class RunServer {
 				
 				@Override
 				public void consume(Message message) throws MessageIssueException, JsonRpcException {
-					System.out.println(message);
+					logger.debug("LSP Message: {}", message);
 					consumer.consume(message);
 					
 				}

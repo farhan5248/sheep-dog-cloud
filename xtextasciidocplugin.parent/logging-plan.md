@@ -37,10 +37,10 @@
 ## **Implementation Progress**
 - [x] Step 1: Add SLF4J + Logback dependencies to `build.gradle`
 - [x] Step 2: Create `logback.xml` configuration with file rotation
-- [ ] Step 3: Replace all `System.out.println()` calls with proper logger statements
-- [ ] Step 4: Add structured logging to `AsciidocGenerator.doGenerateResource()` method
-- [ ] Step 5: Add entry/exit logging to all public methods in custom Java classes
-- [ ] Step 6: Add detailed logging to validation workflows
+- [x] Step 3: Replace all `System.out.println()` calls with proper logger statements
+- [ ] Step 4: Add entry/exit logging to all public methods in Java classes or classes that use the logger
+- [ ] Step 5: Add structured logging to `AsciidocGenerator`, `AsciiDocIdeContentProposalProvider`, `AsciiDocIdeQuickfixProvider`, `AsciiDocValidator` classes, focus on try catch blocks
+- [ ] Step 6: Add detailed logging to `AsciidocGenerator`, `AsciiDocIdeContentProposalProvider`, `AsciiDocIdeQuickfixProvider`, `AsciiDocValidator` classes workflows
 - [ ] Step 7: Log all command executions and their parameters
 - [ ] Step 8: Add request/response logging for LSP communication
 - [ ] Step 9: Enhance diagnostic event logging with detailed context

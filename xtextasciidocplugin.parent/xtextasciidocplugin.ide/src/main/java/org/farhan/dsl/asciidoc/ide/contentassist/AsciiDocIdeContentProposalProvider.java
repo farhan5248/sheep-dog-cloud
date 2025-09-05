@@ -1,5 +1,8 @@
 package org.farhan.dsl.asciidoc.ide.contentassist;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.eclipse.xtext.ide.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ide.editor.contentassist.ContentAssistEntry;
 import org.eclipse.xtext.ide.editor.contentassist.IIdeContentProposalAcceptor;
@@ -23,6 +26,8 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
  * on how to customize the content assistant.
  */
 public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvider {
+
+	private static final Logger logger = LoggerFactory.getLogger(AsciiDocIdeContentProposalProvider.class);
 
 	@Inject
 	private AsciiDocGrammarAccess myDslGrammarAccess;
@@ -70,17 +75,10 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			}
 
 		} catch (Exception e) {
-			// TODO temp hack
-			getProposalCreator().createSnippet(logError(e, step.getName()), "There was an error", context);
+			logger.error("There was an error listing proposals for: {}", "There was an error", e);
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			getProposalCreator().createSnippet(sw.toString(), "There was an error", context);
 		}
-	}
-
-	private String logError(Exception e, String name) {
-		// TODO inject the logger instead
-		System.out.println("There was an error listing proposals for: " + name);
-		StringWriter sw = new StringWriter();
-		e.printStackTrace(new PrintWriter(sw));
-		System.out.println(sw.toString());
-		return sw.toString();
 	}
 }

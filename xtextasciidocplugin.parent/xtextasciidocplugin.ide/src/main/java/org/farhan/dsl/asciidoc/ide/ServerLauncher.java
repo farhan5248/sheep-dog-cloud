@@ -7,6 +7,9 @@
  */
 package org.farhan.dsl.asciidoc.ide;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -31,6 +34,8 @@ import com.google.inject.Inject;
  */
 public class ServerLauncher {
 	
+	private static final Logger logger = LoggerFactory.getLogger(ServerLauncher.class);
+	
 	// TODO this has hardcoded names
 	private static boolean IS_DEBUG = true;
 
@@ -46,14 +51,14 @@ public class ServerLauncher {
 	private LanguageServerImpl languageServer;
 
 	public void start(final InputStream in, final OutputStream out) throws Exception {
-		System.err.println("Starting Xtext Language Server.");
+		logger.info("Starting Xtext Language Server.");
 		String id = ServerLauncher.class.getName() + "-"
 				+ new Timestamp(System.currentTimeMillis()).toString().replaceAll(" ", "_");
 		Launcher<LanguageClient> launcher = Launcher.createLauncher(languageServer, LanguageClient.class, in, out, true,
 				new PrintWriter(new FileOutputStream((("/Users/Farhan/logs/xxx-" + id) + ".log")), true));
 		languageServer.connect(launcher.getRemoteProxy());
 		Future<Void> future = launcher.startListening();
-		System.err.println("started.");
+		logger.info("started.");
 		while (!future.isDone()) {
 			Thread.sleep(10_000l);
 		}

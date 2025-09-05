@@ -1,5 +1,8 @@
 package org.farhan.dsl.asciidoc.ide;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -20,6 +23,9 @@ import com.google.inject.Guice;
 import com.google.inject.util.Modules;
 
 public class MultiProjectServerLauncher {
+
+	private static final Logger logger = LoggerFactory.getLogger(MultiProjectServerLauncher.class);
+
 	private static boolean IS_DEBUG = false;
 
 	public static void main(String[] args) throws Exception {
@@ -36,12 +42,12 @@ public class MultiProjectServerLauncher {
 	private LanguageServerImpl languageServer;
 
 	public void start(InputStream in, OutputStream out) throws Exception {
-		System.err.println("Starting Xtext Language Server.");
+		logger.info("Starting Xtext Language Server.");
 		Launcher<LanguageClient> launcher = Launcher.createLauncher(languageServer, LanguageClient.class, in, out, true,
 				new PrintWriter(System.out));
 		languageServer.connect(launcher.getRemoteProxy());
 		Future<Void> future = launcher.startListening();
-		System.err.println("started.");
+		logger.info("started.");
 		while (!future.isDone()) {
 			Thread.sleep(10_000l);
 		}

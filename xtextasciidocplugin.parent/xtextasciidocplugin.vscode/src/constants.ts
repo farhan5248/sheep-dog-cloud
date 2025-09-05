@@ -107,13 +107,6 @@ export const CONFIG_KEYS = {
     // Performance Configuration
     PERFORMANCE_MAX_FILE_SIZE: 'asciidoc.performance.maxFileSize',
     PERFORMANCE_ENABLE_BACKGROUND_PROCESSING: 'asciidoc.performance.enableBackgroundProcessing',
-    
-    // Diagnostic Configuration
-    DIAGNOSTICS_MIN_SEVERITY: 'asciidoc.diagnostics.minSeverity',
-    DIAGNOSTICS_EXCLUDE_PATTERNS: 'asciidoc.diagnostics.excludePatterns',
-    DIAGNOSTICS_INCLUDE_PATTERNS: 'asciidoc.diagnostics.includePatterns',
-    DIAGNOSTICS_MAX_PER_FILE: 'asciidoc.diagnostics.maxPerFile',
-    DIAGNOSTICS_ENABLE_FILTERING: 'asciidoc.diagnostics.enableFiltering'
 } as const;
 
 // Default values
@@ -174,13 +167,6 @@ export const DEFAULTS = {
     // Performance Configuration
     PERFORMANCE_MAX_FILE_SIZE: 10485760, // 10MB
     PERFORMANCE_ENABLE_BACKGROUND_PROCESSING: true,
-    
-    // Diagnostic Configuration
-    DIAGNOSTICS_MIN_SEVERITY: 4, // Include all (Hint = 4, Info = 3, Warning = 2, Error = 1)
-    DIAGNOSTICS_EXCLUDE_PATTERNS: ['deprecated', 'unused.*import'] as string[],
-    DIAGNOSTICS_INCLUDE_PATTERNS: [] as string[], // Empty means include all
-    DIAGNOSTICS_MAX_PER_FILE: 100,
-    DIAGNOSTICS_ENABLE_FILTERING: true
 } as const;
 
 // Status bar

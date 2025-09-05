@@ -45,25 +45,6 @@ export interface ConnectionStatus {
     capabilities?: ExtendedServerCapabilities;
 }
 
-/**
- * Diagnostic severity levels for filtering
- */
-export enum DiagnosticSeverity {
-    ERROR = 1,
-    WARNING = 2,
-    INFORMATION = 3,
-    HINT = 4
-}
-
-/**
- * Diagnostic filter configuration
- */
-export interface DiagnosticFilter {
-    minSeverity: DiagnosticSeverity;
-    excludePatterns: string[];
-    includeOnlyPatterns?: string[];
-    maxDiagnosticsPerFile: number;
-}
 
 /**
  * Communication service for enhanced client-server interactions
@@ -75,7 +56,6 @@ export class CommunicationService {
     private connectionStatus: ConnectionStatus;
     private retryTimer: NodeJS.Timeout | undefined;
     private capabilityChangeHandlers: ((capabilities: ExtendedServerCapabilities) => void)[] = [];
-    private diagnosticFilter: DiagnosticFilter;
     
     constructor(
         outputChannel: vscode.OutputChannel,
@@ -87,7 +67,6 @@ export class CommunicationService {
             isConnected: false,
             retryCount: 0
         };
-        this.diagnosticFilter = this.createDiagnosticFilter(configuration);
     }
 
     /**
@@ -272,21 +251,13 @@ export class CommunicationService {
         });
     }
 
-    /**
-     * Update diagnostic filter configuration
-     */
-    public updateDiagnosticFilter(filter: Partial<DiagnosticFilter>): void {
-        this.diagnosticFilter = { ...this.diagnosticFilter, ...filter };
-        this.outputChannel.appendLine(`CommunicationService: Diagnostic filter updated: ${JSON.stringify(filter)}`);
-    }
     
     /**
-     * Update configuration and refresh diagnostic filter
+     * Update configuration
      */
     public updateConfiguration(config: AsciidocConfiguration): void {
         this.configuration = config;
-        this.diagnosticFilter = this.createDiagnosticFilter(config);
-        this.outputChannel.appendLine('CommunicationService: Configuration updated, diagnostic filter refreshed');
+        this.outputChannel.appendLine('CommunicationService: Configuration updated');
     }
 
     /**
@@ -603,18 +574,6 @@ export class CommunicationService {
                 this.outputChannel.appendLine(`CommunicationService: Error in capability change handler: ${error}`);
             }
         });
-    }
-
-    /**
-     * Create diagnostic filter from configuration
-     */
-    private createDiagnosticFilter(config: AsciidocConfiguration): DiagnosticFilter {
-        return {
-            minSeverity: config.diagnostics.minSeverity,
-            excludePatterns: config.diagnostics.excludePatterns,
-            includeOnlyPatterns: config.diagnostics.includePatterns.length > 0 ? config.diagnostics.includePatterns : undefined,
-            maxDiagnosticsPerFile: config.diagnostics.maxPerFile
-        };
     }
 
     // Diagnostic filtering methods removed - no longer needed after fixing validation display issue

@@ -278,46 +278,6 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Enable background processing for large documents"
-                },
-                "asciidoc.diagnostics.enableFiltering": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable diagnostic message filtering and formatting"
-                },
-                "asciidoc.diagnostics.minSeverity": {
-                    "type": "number",
-                    "enum": [1, 2, 3, 4],
-                    "enumDescriptions": [
-                        "Error (1) - Show only errors",
-                        "Warning (2) - Show errors and warnings",
-                        "Information (3) - Show errors, warnings, and information",
-                        "Hint (4) - Show all diagnostics including hints"
-                    ],
-                    "default": 4,
-                    "description": "Minimum diagnostic severity level to display"
-                },
-                "asciidoc.diagnostics.excludePatterns": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": ["deprecated", "unused.*import"],
-                    "description": "Regular expression patterns for diagnostic messages to exclude"
-                },
-                "asciidoc.diagnostics.includePatterns": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [],
-                    "description": "Regular expression patterns for diagnostic messages to include (empty = include all)"
-                },
-                "asciidoc.diagnostics.maxPerFile": {
-                    "type": "number",
-                    "default": 100,
-                    "minimum": 10,
-                    "maximum": 1000,
-                    "description": "Maximum number of diagnostics to display per file"
                 }
             }
         }

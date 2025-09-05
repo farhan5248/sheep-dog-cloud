@@ -460,20 +460,6 @@ function setupConfigurationChangeHandlers(context: vscode.ExtensionContext): voi
                 outputChannel?.appendLine('Configuration change affects language server but restart not required or disabled');
             }
         }
-        
-        // Handle diagnostic configuration changes
-        if (event.changed.some(key => key.startsWith('diagnostics.'))) {
-            outputChannel?.appendLine('Diagnostic configuration changed');
-            
-            if (serverLauncher) {
-                const communicationService = serverLauncher.getCommunicationService();
-                communicationService.updateConfiguration(event.newConfig);
-                
-                if (event.newConfig.ui.notifications.info) {
-                    vscode.window.showInformationMessage('Diagnostic filter settings updated');
-                }
-            }
-        }
     });
     
     context.subscriptions.push(configChangeHandler);

@@ -88,15 +88,6 @@ export interface AsciidocConfiguration {
         maxFileSize: number;
         enableBackgroundProcessing: boolean;
     };
-    
-    // Diagnostic Configuration
-    diagnostics: {
-        enableFiltering: boolean;
-        minSeverity: number;
-        excludePatterns: string[];
-        includePatterns: string[];
-        maxPerFile: number;
-    };
 }
 
 /**
@@ -277,13 +268,6 @@ export class ConfigurationService {
             performance: {
                 maxFileSize: config.get(constants.CONFIG_KEYS.PERFORMANCE_MAX_FILE_SIZE, constants.DEFAULTS.PERFORMANCE_MAX_FILE_SIZE),
                 enableBackgroundProcessing: config.get(constants.CONFIG_KEYS.PERFORMANCE_ENABLE_BACKGROUND_PROCESSING, constants.DEFAULTS.PERFORMANCE_ENABLE_BACKGROUND_PROCESSING)
-            },
-            diagnostics: {
-                enableFiltering: config.get(constants.CONFIG_KEYS.DIAGNOSTICS_ENABLE_FILTERING, constants.DEFAULTS.DIAGNOSTICS_ENABLE_FILTERING),
-                minSeverity: config.get(constants.CONFIG_KEYS.DIAGNOSTICS_MIN_SEVERITY, constants.DEFAULTS.DIAGNOSTICS_MIN_SEVERITY),
-                excludePatterns: config.get(constants.CONFIG_KEYS.DIAGNOSTICS_EXCLUDE_PATTERNS, constants.DEFAULTS.DIAGNOSTICS_EXCLUDE_PATTERNS),
-                includePatterns: config.get(constants.CONFIG_KEYS.DIAGNOSTICS_INCLUDE_PATTERNS, constants.DEFAULTS.DIAGNOSTICS_INCLUDE_PATTERNS),
-                maxPerFile: config.get(constants.CONFIG_KEYS.DIAGNOSTICS_MAX_PER_FILE, constants.DEFAULTS.DIAGNOSTICS_MAX_PER_FILE)
             }
         };
     }

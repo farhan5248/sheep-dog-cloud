@@ -60,11 +60,10 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		}
 	}
 
-	private static void logError(Exception e, TestStep step) {
+	private static String logError(Exception e, TestStep step) {
 		// TODO inject the logger instead
-		System.out.println("There was a problem generating for step: " + step.getName());
 		StringWriter sw = new StringWriter();
-		System.out.println(sw.toString());
 		e.printStackTrace(new PrintWriter(sw));
+		return sw.toString();
 	}
 }

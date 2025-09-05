@@ -37,10 +37,7 @@ public class CommandService implements IExecutableCommandService {
 		try {
 			if ("asciidoc.generate".equals(commandName)) {
 				JsonPrimitive uriArg = (JsonPrimitive) Iterables.getFirst(params.getArguments(), null);
-				String uri = null;
-				if (uriArg != null) {
-					uri = uriArg.getAsString();
-				}
+				final String uri = (uriArg != null) ? uriArg.getAsString() : null;
 
 				logger.debug("Command {} parameters: {uri: {}}", commandName, uri);
 

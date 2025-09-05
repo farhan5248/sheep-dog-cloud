@@ -6,6 +6,10 @@ dependencies {
 	api project(':xtextasciidocplugin')
 	api "org.eclipse.xtext:org.eclipse.xtext.ide:${xtextVersion}"
 	api "org.eclipse.xtext:org.eclipse.xtext.xbase.ide:${xtextVersion}"
+	
+	// Logging dependencies - SLF4J API and Logback Classic
+	implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+	implementation "ch.qos.logback:logback-classic:${logbackVersion}"
 }
 
 

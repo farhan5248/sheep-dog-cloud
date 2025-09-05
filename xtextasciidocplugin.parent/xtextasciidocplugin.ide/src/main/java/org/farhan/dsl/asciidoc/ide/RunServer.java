@@ -35,6 +35,7 @@ public class RunServer {
 	private static final Logger logger = LoggerFactory.getLogger(RunServer.class);
 
 	public static void main(String[] args) throws InterruptedException, IOException {
+		logger.debug("Entering {}", "main");
 		Injector injector = Guice.createInjector(new ServerModule());
 		LanguageServerImpl languageServer = injector.getInstance(LanguageServerImpl.class);
 		Function<MessageConsumer, MessageConsumer> wrapper = consumer -> {
@@ -55,9 +56,11 @@ public class RunServer {
 		while (!future.isDone()) {
 			Thread.sleep(10_000l);
 		}
+		logger.debug("Exiting {}", "main");
 	}
 	
     static <T> Launcher<T> createSocketLauncher(Object localService, Class<T> remoteInterface, SocketAddress socketAddress, ExecutorService executorService, Function<MessageConsumer, MessageConsumer> wrapper) throws IOException {
+        logger.debug("Entering {}", "createSocketLauncher");
         AsynchronousServerSocketChannel serverSocket = AsynchronousServerSocketChannel.open().bind(socketAddress);
         AsynchronousSocketChannel socketChannel;
         try {
@@ -66,6 +69,7 @@ public class RunServer {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+        logger.debug("Exiting {}", "createSocketLauncher");
         return null;
     }
 

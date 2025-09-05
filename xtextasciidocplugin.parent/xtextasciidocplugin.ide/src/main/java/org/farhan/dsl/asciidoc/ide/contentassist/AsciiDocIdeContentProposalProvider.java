@@ -35,15 +35,18 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 	@Override
 	protected void _createProposals(Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
+		logger.debug("Entering {}", "_createProposals");
 
 		if (context.getCurrentModel() != null && context.getCurrentModel() instanceof TestStep) {
 			completeName((TestStep) context.getCurrentModel(), assignment, context, acceptor);
 		}
 		super._createProposals(assignment, context, acceptor);
+		logger.debug("Exiting {}", "_createProposals");
 	}
 
 	private void completeName(TestStep step, Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
+		logger.debug("Entering {}", "completeName");
 		try {
 			for (Entry<String, Proposal> p : LanguageHelper.proposeTestStepName(new LanguageAccessImpl(step))
 					.entrySet()) {
@@ -80,5 +83,6 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			e.printStackTrace(new PrintWriter(sw));
 			getProposalCreator().createSnippet(sw.toString(), "There was an error", context);
 		}
+		logger.debug("Exiting {}", "completeName");
 	}
 }

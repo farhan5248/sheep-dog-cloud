@@ -40,17 +40,20 @@ public class ServerLauncher {
 	private static boolean IS_DEBUG = true;
 
 	public static void main(final String[] args) throws Exception {
+		logger.debug("Entering {}", "main");
 		InputStream stdin = System.in;
 		PrintStream stdout = System.out;
 		ServerLauncher.redirectStandardStreams();
 		ServerLauncher launcher = Guice.createInjector(new ServerModule()).getInstance(ServerLauncher.class);
 		launcher.start(stdin, stdout);
+		logger.debug("Exiting {}", "main");
 	}
 
 	@Inject
 	private LanguageServerImpl languageServer;
 
 	public void start(final InputStream in, final OutputStream out) throws Exception {
+		logger.debug("Entering {}", "start");
 		logger.info("Starting Xtext Language Server.");
 		String id = ServerLauncher.class.getName() + "-"
 				+ new Timestamp(System.currentTimeMillis()).toString().replaceAll(" ", "_");
@@ -62,9 +65,11 @@ public class ServerLauncher {
 		while (!future.isDone()) {
 			Thread.sleep(10_000l);
 		}
+		logger.debug("Exiting {}", "start");
 	}
 
 	public static void redirectStandardStreams() throws Exception {
+		logger.debug("Entering {}", "redirectStandardStreams");
 		System.setIn(new ByteArrayInputStream(new byte[0]));
 		String id = ServerLauncher.class.getName() + "-"
 				+ new Timestamp(System.currentTimeMillis()).toString().replaceAll(" ", "_");
@@ -77,5 +82,6 @@ public class ServerLauncher {
 			System.setOut(new PrintStream(new ByteArrayOutputStream()));
 			System.setErr(new PrintStream(new ByteArrayOutputStream()));
 		}
+		logger.debug("Exiting {}", "redirectStandardStreams");
 	}
 }

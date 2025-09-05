@@ -40,6 +40,7 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 
 	@Check(CheckType.EXPENSIVE)
 	public void checkFeature(TestSuite feature) {
+		logger.debug("Entering {}", "checkFeature");
 		// TODO validate that feature file name and feature name are the same.
 		if (!Character.isUpperCase(feature.getName().charAt(0))) {
 			warning("TestSuite name should start with a capital", AsciiDocPackage.Literals.MODEL__NAME, INVALID_NAME);
@@ -50,18 +51,22 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 			error("The resource " + path + " isn't in a src/test/resources/asciidoc/specs directory.",
 					AsciiDocPackage.Literals.MODEL__NAME, INVALID_PATH);
 		}
+		logger.debug("Exiting {}", "checkFeature");
 	}
 
 	@Check(CheckType.NORMAL)
 	public void checkScenario(TestStepContainer abstractScenario) {
+		logger.debug("Entering {}", "checkScenario");
 		if (!Character.isUpperCase(abstractScenario.getName().charAt(0))) {
 			warning("Scenario name should start with a capital", AsciiDocPackage.Literals.TEST_STEP_CONTAINER__NAME,
 					INVALID_NAME);
 		}
+		logger.debug("Exiting {}", "checkScenario");
 	}
 
 	@Check(CheckType.FAST)
 	public void checkStepName(TestStep step) {
+		logger.debug("Entering {}", "checkStepName");
 		try {
 			LanguageAccessImpl lang = new LanguageAccessImpl(step);
 			if (step.getName() != null) {
@@ -82,10 +87,12 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 			e.printStackTrace(new PrintWriter(sw));
 			error(sw.toString(), AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
 		}
+		logger.debug("Exiting {}", "checkStepName");
 	}
 
 	@Check(CheckType.FAST)
 	public void checkStepTableName(Table stepTable) {
+		logger.debug("Entering {}", "checkStepTableName");
 		// TODO Add table column row validation, each row should have the max number of
 		// columns
 		// TODO make tests for this
@@ -99,14 +106,17 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 				}
 			}
 		}
+		logger.debug("Exiting {}", "checkStepTableName");
 	}
 
 	public String[] getAlternateObjects(LanguageAccessImpl la) throws Exception {
+		logger.debug("Entering {}", "getAlternateObjects");
 		Object[] alternateProposals = LanguageHelper.getAlternateObjects(la);
 		String[] alternates = new String[alternateProposals.length];
 		for (int i = 0; i < alternates.length; i++) {
 			alternates[i] = alternateProposals[i].toString();
 		}
+		logger.debug("Exiting {}", "getAlternateObjects");
 		return alternates;
 	}
 }

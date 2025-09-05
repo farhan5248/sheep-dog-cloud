@@ -35,19 +35,40 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 	@Override
 	protected void _createProposals(Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
-		logger.debug("Entering {}", "_createProposals");
-
-		if (context.getCurrentModel() != null && context.getCurrentModel() instanceof TestStep) {
-			completeName((TestStep) context.getCurrentModel(), assignment, context, acceptor);
+		logger.debug("Entering _createProposals with assignment: {}", assignment != null ? assignment.getFeature() : "null");
+		try {
+			if (context == null) {
+				logger.warn("ContentAssistContext is null, cannot provide proposals");
+				return;
+			}
+			
+			if (context.getCurrentModel() != null && context.getCurrentModel() instanceof TestStep) {
+				logger.debug("Current model is TestStep: {}", ((TestStep) context.getCurrentModel()).getName());
+				completeName((TestStep) context.getCurrentModel(), assignment, context, acceptor);
+			} else {
+				logger.debug("Current model is not TestStep or is null: {}", 
+					context.getCurrentModel() != null ? context.getCurrentModel().getClass() : "null");
+			}
+			
+			super._createProposals(assignment, context, acceptor);
+			logger.debug("Exiting {}", "_createProposals");
+		} catch (Exception e) {
+			logger.error("Error creating proposals for assignment '{}': {}", 
+				assignment != null ? assignment.getFeature() : "null", e.getMessage(), e);
 		}
-		super._createProposals(assignment, context, acceptor);
-		logger.debug("Exiting {}", "_createProposals");
 	}
 
 	private void completeName(TestStep step, Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
-		logger.debug("Entering {}", "completeName");
+		logger.debug("Entering completeName for step: {}", step != null ? step.getName() : "null");
 		try {
+			if (step == null) {
+				logger.warn("TestStep is null, cannot provide completion proposals");
+				return;
+			}
+			
+			logger.debug("Creating TestStep name proposals for: {}", step.getName());
+			int proposalCount = 0;
 			for (Entry<String, Proposal> p : LanguageHelper.proposeTestStepName(new LanguageAccessImpl(step))
 					.entrySet()) {
 				ContentAssistEntry proposal = getProposalCreator().createSnippet(p.getValue().getReplacement(),
@@ -55,9 +76,14 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 				if (proposal != null) {
 					proposal.setDocumentation(p.getValue().getDocumentation());
 					acceptor.accept(proposal, 0);
+					proposalCount++;
+					logger.debug("Added TestStep name proposal: {}", p.getValue().getDisplay());
 				}
 			}
+			logger.debug("Created {} TestStep name proposals", proposalCount);
 
+			logger.debug("Creating step parameter proposals for: {}", step.getName());
+			int paramProposalCount = 0;
 			for (Entry<String, Proposal> p : LanguageHelper.proposeStepParameters(new LanguageAccessImpl(step))
 					.entrySet()) {
 				// TODO this is an ugly hack to make the proposals work. The |=== and ----
@@ -65,8 +91,10 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 				String replacement;
 				if (p.getValue().getReplacement().contentEquals(LanguageAccessImpl.STEP_PARAMETER_TEXT)) {
 					replacement = "----\n" + "todo" + "\n----";
+					logger.debug("Creating text parameter proposal");
 				} else {
 					replacement = "|===\n" + p.getValue().getReplacement() + "\n|===";
+					logger.debug("Creating table parameter proposal with replacement: {}", p.getValue().getReplacement());
 				}
 
 				ContentAssistEntry proposal = getProposalCreator().createSnippet(replacement, p.getValue().getDisplay(),
@@ -74,14 +102,26 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 				if (proposal != null) {
 					proposal.setDocumentation(p.getValue().getDocumentation());
 					acceptor.accept(proposal, 0);
+					paramProposalCount++;
+					logger.debug("Added parameter proposal: {}", p.getValue().getDisplay());
 				}
 			}
+			logger.debug("Created {} parameter proposals", paramProposalCount);
 
 		} catch (Exception e) {
-			logger.error("There was an error listing proposals for: {}", "There was an error", e);
+			logger.error("Error creating completion proposals for step '{}': {}", 
+				step != null ? step.getName() : "null", e.getMessage(), e);
+			
+			try {
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
-			getProposalCreator().createSnippet(sw.toString(), "There was an error", context);
+				ContentAssistEntry errorProposal = getProposalCreator().createSnippet(sw.toString(), "There was an error", context);
+				if (errorProposal != null) {
+					acceptor.accept(errorProposal, 0);
+				}
+			} catch (Exception innerE) {
+				logger.error("Failed to create error proposal: {}", innerE.getMessage(), innerE);
+			}
 		}
 		logger.debug("Exiting {}", "completeName");
 	}

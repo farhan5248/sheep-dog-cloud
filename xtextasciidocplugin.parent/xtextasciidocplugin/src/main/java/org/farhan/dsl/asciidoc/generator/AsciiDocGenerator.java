@@ -6,6 +6,8 @@ package org.farhan.dsl.asciidoc.generator;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
@@ -24,46 +26,63 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
  */
 public class AsciiDocGenerator extends AbstractGenerator {
 
-	@Override
-	public void beforeGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
-	}
-
-	@Override
-	public void afterGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
-	}
+	private static final Logger logger = LoggerFactory.getLogger(AsciiDocGenerator.class);
 
 	@Override
 	public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
+		logger.debug("Entering doGenerate for resource: {}", resource != null ? resource.getURI() : "null");
 		// Automatic generation disabled - use command-based generation instead
 		// Generation logic moved to generateFromResource() method
 		// The reason is that I didn't want to generate code until the user was ready
 		// to do so.
+		logger.debug("Exiting {}", "doGenerate");
 	}
 
 	public static void generateFromResource(final Resource resource) {
-		if (resource.getContents().get(0) instanceof TestSuite) {
-			TestSuite theTestSuite = (TestSuite) resource.getContents().get(0);
-			for (TestStepContainer scenario : theTestSuite.getTestStepContainerList()) {
-				for (TestStep step : scenario.getTestStepList()) {
-					doGenerate(step);
-				}
+		logger.info("Starting generation from resource: {}", resource != null ? resource.getURI() : "null");
+		try {
+			if (resource == null || resource.getContents().isEmpty()) {
+				logger.warn("Resource is null or has no contents");
+				return;
 			}
+
+			if (resource.getContents().get(0) instanceof TestSuite) {
+				TestSuite theTestSuite = (TestSuite) resource.getContents().get(0);
+				logger.debug("Processing TestSuite: {}", theTestSuite.getName());
+
+				for (TestStepContainer scenario : theTestSuite.getTestStepContainerList()) {
+					logger.debug("Processing scenario: {}", scenario.getName());
+					for (TestStep step : scenario.getTestStepList()) {
+						logger.debug("Processing step: {}", step.getName());
+						doGenerate(step);
+					}
+				}
+			} else {
+				logger.warn("Resource content is not a TestSuite: {}", resource.getContents().get(0).getClass());
+			}
+			logger.debug("Exiting {}", "generateFromResource");
+		} catch (Exception e) {
+			logger.error("Failed to generate from resource {}: {}", resource != null ? resource.getURI() : "null",
+					e.getMessage(), e);
 		}
 	}
 
 	public static void doGenerate(TestStep step) {
+		logger.debug("Starting generation for step: {}", step != null ? step.getName() : "null");
 		try {
+			if (step == null) {
+				logger.warn("Cannot generate from null TestStep");
+				return;
+			}
+
+			logger.debug("Calling LanguageHelper.generate with step: {}", step.getName());
 			LanguageHelper.generate(new LanguageAccessImpl(step),
 					SaveOptions.newBuilder().format().getOptions().toOptionsMap());
+			logger.debug("Exiting {}", "doGenerate");
 		} catch (Exception e) {
-			logError(e, step);
+			logger.error("Generation failed for step '{}': {}", step != null ? step.getName() : "null", e.getMessage(),
+					e);
 		}
 	}
 
-	private static String logError(Exception e, TestStep step) {
-		// TODO inject the logger instead
-		StringWriter sw = new StringWriter();
-		e.printStackTrace(new PrintWriter(sw));
-		return sw.toString();
-	}
 }

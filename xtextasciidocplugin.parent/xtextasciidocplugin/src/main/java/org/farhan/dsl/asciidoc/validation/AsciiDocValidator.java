@@ -40,83 +40,176 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 
 	@Check(CheckType.EXPENSIVE)
 	public void checkFeature(TestSuite feature) {
-		logger.debug("Entering {}", "checkFeature");
-		// TODO validate that feature file name and feature name are the same.
-		if (!Character.isUpperCase(feature.getName().charAt(0))) {
-			warning("TestSuite name should start with a capital", AsciiDocPackage.Literals.MODEL__NAME, INVALID_NAME);
-		}
+		logger.debug("Entering checkFeature for TestSuite: {}", feature != null ? feature.getName() : "null");
+		try {
+			if (feature == null) {
+				logger.warn("TestSuite is null, cannot perform validation");
+				return;
+			}
 
-		String path = feature.eResource().getURI().path();
-		if (!path.contains("src/test/resources/asciidoc/specs/")) {
-			error("The resource " + path + " isn't in a src/test/resources/asciidoc/specs directory.",
-					AsciiDocPackage.Literals.MODEL__NAME, INVALID_PATH);
+			if (feature.getName() == null || feature.getName().isEmpty()) {
+				logger.warn("TestSuite name is null or empty");
+				return;
+			}
+
+			logger.debug("Validating TestSuite name format for: {}", feature.getName());
+			// TODO validate that feature file name and feature name are the same.
+			if (!Character.isUpperCase(feature.getName().charAt(0))) {
+				logger.debug("TestSuite name does not start with capital: {}", feature.getName());
+				warning("TestSuite name should start with a capital", AsciiDocPackage.Literals.MODEL__NAME,
+						INVALID_NAME);
+			}
+
+			logger.debug("Validating TestSuite path location");
+			String path = feature.eResource().getURI().path();
+			logger.debug("TestSuite resource path: {}", path);
+			if (!path.contains("src/test/resources/asciidoc/specs/")) {
+				logger.warn("TestSuite not in correct directory structure: {}", path);
+				error("The resource " + path + " isn't in a src/test/resources/asciidoc/specs directory.",
+						AsciiDocPackage.Literals.MODEL__NAME, INVALID_PATH);
+			}
+
+		} catch (Exception e) {
+			logger.error("Error validating TestSuite '{}': {}",
+					feature != null ? feature.getName() : "null", e.getMessage(), e);
 		}
 		logger.debug("Exiting {}", "checkFeature");
 	}
 
 	@Check(CheckType.NORMAL)
 	public void checkScenario(TestStepContainer abstractScenario) {
-		logger.debug("Entering {}", "checkScenario");
-		if (!Character.isUpperCase(abstractScenario.getName().charAt(0))) {
-			warning("Scenario name should start with a capital", AsciiDocPackage.Literals.TEST_STEP_CONTAINER__NAME,
-					INVALID_NAME);
+		logger.debug("Entering checkScenario for container: {}",
+				abstractScenario != null ? abstractScenario.getName() : "null");
+		try {
+			if (abstractScenario == null) {
+				logger.warn("TestStepContainer is null, cannot perform validation");
+				return;
+			}
+
+			if (abstractScenario.getName() == null || abstractScenario.getName().isEmpty()) {
+				logger.warn("TestStepContainer name is null or empty");
+				return;
+			}
+
+			logger.debug("Validating scenario name format for: {}", abstractScenario.getName());
+			if (!Character.isUpperCase(abstractScenario.getName().charAt(0))) {
+				logger.debug("Scenario name does not start with capital: {}", abstractScenario.getName());
+				warning("Scenario name should start with a capital", AsciiDocPackage.Literals.TEST_STEP_CONTAINER__NAME,
+						INVALID_NAME);
+			}
+		} catch (Exception e) {
+			logger.error("Error validating TestStepContainer '{}': {}",
+					abstractScenario != null ? abstractScenario.getName() : "null", e.getMessage(), e);
 		}
 		logger.debug("Exiting {}", "checkScenario");
 	}
 
 	@Check(CheckType.FAST)
 	public void checkStepName(TestStep step) {
-		logger.debug("Entering {}", "checkStepName");
+		logger.debug("Entering checkStepName for step: {}", step != null ? step.getName() : "null");
 		try {
+			if (step == null) {
+				logger.warn("TestStep is null, cannot perform validation");
+				return;
+			}
+
+			logger.debug("Creating LanguageAccessImpl for step: {}", step.getName());
 			LanguageAccessImpl lang = new LanguageAccessImpl(step);
+
 			if (step.getName() != null) {
+				logger.debug("Validating step name errors for: {}", step.getName());
 				String problems = LanguageHelper.validateError(lang);
 				if (!problems.isEmpty()) {
+					logger.debug("Found error problems for step '{}': {}", step.getName(), problems);
 					error(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
 				}
 
+				logger.debug("Validating step name warnings for: {}", step.getName());
 				problems = LanguageHelper.validateWarning(lang);
 				if (!problems.isEmpty()) {
+					logger.debug("Found warning problems for step '{}': {}", step.getName(), problems);
 					warning(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, MISSING_STEP_DEF,
 							getAlternateObjects(lang));
 				}
+			} else {
+				logger.warn("TestStep name is null for step object");
 			}
+			logger.debug("Exiting {}", "checkStepName");
 		} catch (Exception e) {
-			logger.error("There was a problem listing directories for: {}", step.getName(), e);
+			logger.error("Error validating TestStep '{}': {}",
+					step != null ? step.getName() : "null", e.getMessage(), e);
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
-			error(sw.toString(), AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
+			String stackTrace = sw.toString();
+			error("Validation error: " + e.getMessage(), AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
 		}
-		logger.debug("Exiting {}", "checkStepName");
 	}
 
 	@Check(CheckType.FAST)
 	public void checkStepTableName(Table stepTable) {
-		logger.debug("Entering {}", "checkStepTableName");
-		// TODO Add table column row validation, each row should have the max number of
-		// columns
-		// TODO make tests for this
-		if (stepTable.getRowList() != null) {
-			if (stepTable.getRowList().size() > 0) {
-				for (Cell header : stepTable.getRowList().get(0).getCellList()) {
-					if (!Character.isUpperCase(header.getName().charAt(0))) {
-						warning("Table header names should start with a capital: " + header.getName(),
-								AsciiDocPackage.Literals.TABLE__ROW_LIST, INVALID_HEADER, header.getName());
-					}
-				}
+		logger.debug("Entering checkStepTableName for table");
+		try {
+			if (stepTable == null) {
+				logger.warn("Table is null, cannot perform validation");
+				return;
 			}
+
+			// TODO Add table column row validation, each row should have the max number of
+			// columns
+			// TODO make tests for this
+			logger.debug("Validating table headers");
+			if (stepTable.getRowList() != null) {
+				logger.debug("Table has {} rows", stepTable.getRowList().size());
+				if (stepTable.getRowList().size() > 0) {
+					logger.debug("Processing first row headers");
+					for (Cell header : stepTable.getRowList().get(0).getCellList()) {
+						if (header == null || header.getName() == null || header.getName().isEmpty()) {
+							logger.warn("Header cell is null or has no name");
+							continue;
+						}
+
+						logger.debug("Validating header: {}", header.getName());
+						if (!Character.isUpperCase(header.getName().charAt(0))) {
+							logger.debug("Header '{}' does not start with capital", header.getName());
+							warning("Table header names should start with a capital: " + header.getName(),
+									AsciiDocPackage.Literals.TABLE__ROW_LIST, INVALID_HEADER, header.getName());
+						}
+					}
+				} else {
+					logger.debug("Table has no rows");
+				}
+			} else {
+				logger.debug("Table has no row list");
+			}
+			logger.debug("Exiting {}", "checkStepTableName");
+		} catch (Exception e) {
+			logger.error("Error validating table headers: {}", e.getMessage(), e);
 		}
-		logger.debug("Exiting {}", "checkStepTableName");
 	}
 
 	public String[] getAlternateObjects(LanguageAccessImpl la) throws Exception {
-		logger.debug("Entering {}", "getAlternateObjects");
-		Object[] alternateProposals = LanguageHelper.getAlternateObjects(la);
-		String[] alternates = new String[alternateProposals.length];
-		for (int i = 0; i < alternates.length; i++) {
-			alternates[i] = alternateProposals[i].toString();
+		logger.debug("Entering getAlternateObjects");
+		try {
+			if (la == null) {
+				logger.warn("LanguageAccessImpl is null, returning empty alternatives");
+				return new String[0];
+			}
+
+			logger.debug("Getting alternate proposals from LanguageHelper");
+			Object[] alternateProposals = LanguageHelper.getAlternateObjects(la);
+			String[] alternates = new String[alternateProposals.length];
+
+			logger.debug("Converting {} alternate proposals to strings", alternateProposals.length);
+			for (int i = 0; i < alternates.length; i++) {
+				alternates[i] = alternateProposals[i] != null ? alternateProposals[i].toString() : "null";
+				logger.debug("Alternate {}: {}", i, alternates[i]);
+			}
+
+			logger.debug("Exiting {}", "getAlternateObjects");
+			return alternates;
+		} catch (Exception e) {
+			logger.error("Error getting alternate objects: {}", e.getMessage(), e);
+			throw e;
 		}
-		logger.debug("Exiting {}", "getAlternateObjects");
-		return alternates;
 	}
 }

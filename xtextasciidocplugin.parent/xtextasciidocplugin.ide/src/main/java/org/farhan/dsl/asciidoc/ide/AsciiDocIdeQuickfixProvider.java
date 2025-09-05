@@ -3,6 +3,8 @@
  */
 package org.farhan.dsl.asciidoc.ide;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.xtext.ide.editor.quickfix.AbstractDeclarativeIdeQuickfixProvider;
 import org.eclipse.xtext.ide.editor.quickfix.DiagnosticResolutionAcceptor;
 import org.eclipse.xtext.ide.editor.quickfix.QuickFix;
@@ -21,32 +23,74 @@ import com.google.gson.JsonArray;
  */
 public class AsciiDocIdeQuickfixProvider extends AbstractDeclarativeIdeQuickfixProvider {
 
+	private static final Logger logger = LoggerFactory.getLogger(AsciiDocIdeQuickfixProvider.class);
+
 	@QuickFix(AsciiDocValidator.INVALID_NAME)
 	public void capitalizeName(DiagnosticResolutionAcceptor acceptor) {
-		acceptor.accept("Capitalize name", (diagnostic, obj, document) -> {
-			return createTextEdit(diagnostic,
-					StringExtensions.toFirstUpper(document.getSubstring(diagnostic.getRange())));
-		});
+		logger.debug("Entering capitalizeName quickfix");
+		try {
+			acceptor.accept("Capitalize name", (diagnostic, obj, document) -> {
+				logger.debug("Applying capitalizeName quickfix for diagnostic: {}", diagnostic.getMessage());
+				try {
+					String originalText = document.getSubstring(diagnostic.getRange());
+					String capitalizedText = StringExtensions.toFirstUpper(originalText);
+					logger.debug("Capitalizing '{}' to '{}'", originalText, capitalizedText);
+					return createTextEdit(diagnostic, capitalizedText);
+				} catch (Exception e) {
+					logger.error("Failed to apply capitalizeName quickfix: {}", e.getMessage(), e);
+					throw e;
+				}
+			});
+			logger.debug("Exiting {}", "capitalizeName");
+		} catch (Exception e) {
+			logger.error("Error registering capitalizeName quickfix: {}", e.getMessage(), e);
+		}
 	}
 
 	@QuickFix(AsciiDocValidator.INVALID_HEADER)
 	public void capitalizeTestStepTableName(DiagnosticResolutionAcceptor acceptor) {
-		acceptor.accept("Capitalize TestStep table name", (diagnostic, obj, document) -> {
-
-			String oldHeader = ((JsonArray) diagnostic.getData()).get(0).getAsString();
-			String newHeader = StringExtensions.toFirstUpper(oldHeader);
-			String oldRow = document.getSubstring(diagnostic.getRange());
-			String newRow = oldRow.replace(oldHeader, newHeader);
-			return createTextEdit(diagnostic, newRow);
-		});
+		logger.debug("Entering capitalizeTestStepTableName quickfix");
+		try {
+			acceptor.accept("Capitalize TestStep table name", (diagnostic, obj, document) -> {
+				logger.debug("Applying capitalizeTestStepTableName quickfix for diagnostic: {}", diagnostic.getMessage());
+				try {
+					String oldHeader = ((JsonArray) diagnostic.getData()).get(0).getAsString();
+					String newHeader = StringExtensions.toFirstUpper(oldHeader);
+					String oldRow = document.getSubstring(diagnostic.getRange());
+					String newRow = oldRow.replace(oldHeader, newHeader);
+					logger.debug("Capitalizing table header '{}' to '{}' in row", oldHeader, newHeader);
+					return createTextEdit(diagnostic, newRow);
+				} catch (Exception e) {
+					logger.error("Failed to apply capitalizeTestStepTableName quickfix: {}", e.getMessage(), e);
+					throw e;
+				}
+			});
+			logger.debug("Exiting {}", "capitalizeTestStepTableName");
+		} catch (Exception e) {
+			logger.error("Error registering capitalizeTestStepTableName quickfix: {}", e.getMessage(), e);
+		}
 	}
 
 	@QuickFix(AsciiDocValidator.MISSING_STEP_DEF)
 	public void createDefinition(DiagnosticResolutionAcceptor acceptor) {
-		acceptor.accept("Create TestStep definition", (diagnostic, obj, document) -> {
-			TestStep testStep = (TestStep) obj;
-			AsciiDocGenerator.doGenerate(testStep);
-			return createTextEdit(diagnostic, testStep.getName()); // No text change needed, files are generated externally
-		});
+		logger.debug("Entering createDefinition quickfix");
+		try {
+			acceptor.accept("Create TestStep definition", (diagnostic, obj, document) -> {
+				logger.debug("Applying createDefinition quickfix for diagnostic: {}", diagnostic.getMessage());
+				try {
+					TestStep testStep = (TestStep) obj;
+					logger.debug("Generating TestStep definition for: {}", testStep != null ? testStep.getName() : "null");
+					AsciiDocGenerator.doGenerate(testStep);
+					logger.debug("Exiting {}", "doGenerate");
+					return createTextEdit(diagnostic, testStep.getName()); // No text change needed, files are generated externally
+				} catch (Exception e) {
+					logger.error("Failed to create TestStep definition: {}", e.getMessage(), e);
+					throw e;
+				}
+			});
+			logger.debug("Exiting {}", "createDefinition");
+		} catch (Exception e) {
+			logger.error("Error registering createDefinition quickfix: {}", e.getMessage(), e);
+		}
 	}
 }

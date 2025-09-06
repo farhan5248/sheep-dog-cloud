@@ -17,7 +17,14 @@ export const COMMANDS = {
     SERVER_START: 'asciidoc.server.start',
     SERVER_STOP: 'asciidoc.server.stop',
     SERVER_SHOW_HEALTH: 'asciidoc.server.showHealth',
-    SERVER_SHOW_CAPABILITIES: 'asciidoc.server.showCapabilities'
+    SERVER_SHOW_CAPABILITIES: 'asciidoc.server.showCapabilities',
+    
+    // Logging management commands
+    LOGGING_SET_LEVEL: 'asciidoc.logging.setLevel',
+    LOGGING_SHOW_OUTPUT: 'asciidoc.logging.showOutput',
+    LOGGING_SHOW_SERVER_OUTPUT: 'asciidoc.logging.showServerOutput',
+    LOGGING_CLEAR_LOGS: 'asciidoc.logging.clearLogs',
+    LOGGING_EXPORT_LOGS: 'asciidoc.logging.exportLogs'
 } as const;
 
 // File patterns and paths
@@ -67,6 +74,15 @@ export const CONFIG_KEYS = {
     // Tracing
     TRACE_SERVER: 'asciidoc.trace.server',
     TRACE_LEVEL: 'asciidoc.trace.level', // Legacy support
+    
+    // Logging Configuration
+    LOGGING_LEVEL: 'asciidoc.logging.level',
+    LOGGING_LOG_REQUESTS: 'asciidoc.logging.logRequests',
+    LOGGING_LOG_RESPONSES: 'asciidoc.logging.logResponses',
+    LOGGING_LOG_NOTIFICATIONS: 'asciidoc.logging.logNotifications',
+    LOGGING_LOG_LIFECYCLE_EVENTS: 'asciidoc.logging.logLifecycleEvents',
+    LOGGING_LOG_SERVER_OUTPUT: 'asciidoc.logging.logServerOutput',
+    LOGGING_MAX_LOG_ENTRIES: 'asciidoc.logging.maxLogEntries',
     
     // Language Features - Validation
     FEATURES_VALIDATION_ENABLED: 'asciidoc.features.validation.enabled',
@@ -127,6 +143,15 @@ export const DEFAULTS = {
     // Tracing
     TRACE_SERVER: 'off',
     TRACE_LEVEL: 'Messages', // Legacy support
+    
+    // Logging Configuration
+    LOGGING_LEVEL: 'INFO',
+    LOGGING_LOG_REQUESTS: false,
+    LOGGING_LOG_RESPONSES: false,
+    LOGGING_LOG_NOTIFICATIONS: false,
+    LOGGING_LOG_LIFECYCLE_EVENTS: true,
+    LOGGING_LOG_SERVER_OUTPUT: false,
+    LOGGING_MAX_LOG_ENTRIES: 1000,
     
     // Language Features - Validation
     FEATURES_VALIDATION_ENABLED: true,

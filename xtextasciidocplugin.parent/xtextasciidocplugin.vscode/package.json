@@ -73,6 +73,31 @@
                 "command": "asciidoc.generateCode",
                 "title": "AsciiDoc: Generate Code",
                 "category": "AsciiDoc Server"
+            },
+            {
+                "command": "asciidoc.logging.setLevel",
+                "title": "AsciiDoc: Set Logging Level",
+                "category": "AsciiDoc Logging"
+            },
+            {
+                "command": "asciidoc.logging.showOutput",
+                "title": "AsciiDoc: Show Extension Logs",
+                "category": "AsciiDoc Logging"
+            },
+            {
+                "command": "asciidoc.logging.showServerOutput",
+                "title": "AsciiDoc: Show Language Server Logs",
+                "category": "AsciiDoc Logging"
+            },
+            {
+                "command": "asciidoc.logging.clearLogs",
+                "title": "AsciiDoc: Clear All Logs",
+                "category": "AsciiDoc Logging"
+            },
+            {
+                "command": "asciidoc.logging.exportLogs",
+                "title": "AsciiDoc: Export Logs to File",
+                "category": "AsciiDoc Logging"
             }
         ],
         "menus": {
@@ -147,6 +172,52 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Enable verbose debug logging for troubleshooting"
+                },
+                "asciidoc.logging.level": {
+                    "type": "string",
+                    "enum": ["OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE"],
+                    "default": "INFO",
+                    "description": "Set the logging level for the extension and language server",
+                    "enumDescriptions": [
+                        "Turn off all logging",
+                        "Only log errors and critical issues",
+                        "Log warnings and errors",
+                        "Log general information, warnings, and errors",
+                        "Log detailed debugging information",
+                        "Log all activity including LSP communication traces"
+                    ]
+                },
+                "asciidoc.logging.logRequests": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Log all LSP requests sent to the language server"
+                },
+                "asciidoc.logging.logResponses": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Log all LSP responses received from the language server"
+                },
+                "asciidoc.logging.logNotifications": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Log all LSP notifications (both sent and received)"
+                },
+                "asciidoc.logging.logLifecycleEvents": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Log language server lifecycle events (start, stop, restart)"
+                },
+                "asciidoc.logging.logServerOutput": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Log raw output from the language server process"
+                },
+                "asciidoc.logging.maxLogEntries": {
+                    "type": "number",
+                    "default": 1000,
+                    "minimum": 100,
+                    "maximum": 10000,
+                    "description": "Maximum number of log entries to keep in memory"
                 },
                 "asciidoc.trace.server": {
                     "type": "string",

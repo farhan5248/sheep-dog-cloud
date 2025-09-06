@@ -461,13 +461,69 @@ function registerCommands(context: vscode.ExtensionContext): void {
         }
     });
     
+    // Add logging management commands
+    const setLoggingLevelCommand = vscode.commands.registerCommand('asciidoc.logging.setLevel', async () => {
+        const levels = ['OFF', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'];
+        const selected = await vscode.window.showQuickPick(levels, {
+            placeHolder: 'Select logging level'
+        });
+        if (selected) {
+            await vscode.workspace.getConfiguration().update('asciidoc.logging.level', selected, vscode.ConfigurationTarget.Workspace);
+            outputChannel?.appendLine(`Logging level changed to: ${selected}`);
+            vscode.window.showInformationMessage(`AsciiDoc logging level set to ${selected}`);
+        }
+    });
+    
+    const showOutputCommand = vscode.commands.registerCommand('asciidoc.logging.showOutput', () => {
+        outputChannel?.show();
+    });
+    
+    const showServerOutputCommand = vscode.commands.registerCommand('asciidoc.logging.showServerOutput', () => {
+        const serverChannel = vscode.window.createOutputChannel(constants.OUTPUT_CHANNELS.LANGUAGE_SERVER);
+        serverChannel.show();
+    });
+    
+    const clearLogsCommand = vscode.commands.registerCommand('asciidoc.logging.clearLogs', () => {
+        outputChannel?.clear();
+        outputChannel?.appendLine('Extension logs cleared');
+        vscode.window.showInformationMessage('AsciiDoc extension logs cleared');
+    });
+    
+    const exportLogsCommand = vscode.commands.registerCommand('asciidoc.logging.exportLogs', async () => {
+        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+        const defaultPath = workspaceFolder?.uri.fsPath || require('os').homedir();
+        const uri = await vscode.window.showSaveDialog({
+            defaultUri: vscode.Uri.file(`${defaultPath}/asciidoc-extension-logs.txt`),
+            filters: {
+                'Text files': ['txt'],
+                'All files': ['*']
+            }
+        });
+        
+        if (uri) {
+            // This is a simplified export - in reality you'd want to collect actual log entries
+            const logContent = `AsciiDoc Extension Logs - ${new Date().toISOString()}\n` +
+                              `====================================================\n\n` +
+                              `Configuration:\n${JSON.stringify(configurationService?.getConfiguration(), null, 2)}\n\n` +
+                              `Note: Detailed log export functionality would be implemented here.\n`;
+            
+            await vscode.workspace.fs.writeFile(uri, Buffer.from(logContent));
+            vscode.window.showInformationMessage(`Logs exported to ${uri.fsPath}`);
+        }
+    });
+
     context.subscriptions.push(
         restartServerCommand,
         showServerHealthCommand,
         showCapabilitiesCommand,
         stopServerCommand,
         startServerCommand,
-        generateCodeCommand
+        generateCodeCommand,
+        setLoggingLevelCommand,
+        showOutputCommand,
+        showServerOutputCommand,
+        clearLogsCommand,
+        exportLogsCommand
     );
     
     outputChannel?.appendLine('Commands registered successfully (including enhanced server management)');

@@ -529,6 +529,10 @@ export class CommunicationService {
         }
 
         this.outputChannel.appendLine('CommunicationService: Setting up comprehensive LSP request/response logging');
+        this.outputChannel.appendLine(`CommunicationService: Current logging level: ${this.configuration.logging.level}`);
+        this.outputChannel.appendLine(`CommunicationService: Log requests: ${this.configuration.logging.logRequests}`);
+        this.outputChannel.appendLine(`CommunicationService: Log responses: ${this.configuration.logging.logResponses}`);
+        this.outputChannel.appendLine(`CommunicationService: Log notifications: ${this.configuration.logging.logNotifications}`);
 
         // Store reference to client for logging purposes
         const client = this.client;
@@ -561,13 +565,19 @@ export class CommunicationService {
                 }
             }
             
-            // Log outgoing request
-            outputChannel.appendLine(`LSP Request [${requestId}] ${timestamp}: ${method}`);
-            if (param !== undefined && configuration.debug.verboseLogging) {
-                try {
-                    outputChannel.appendLine(`LSP Request [${requestId}] Parameters: ${JSON.stringify(param, null, 2)}`);
-                } catch {
-                    outputChannel.appendLine(`LSP Request [${requestId}] Parameters: [not serializable]`);
+            // Log outgoing request based on configuration
+            const shouldLogRequests = configuration.logging.logRequests || 
+                                     configuration.logging.level === 'DEBUG' || 
+                                     configuration.logging.level === 'TRACE';
+            
+            if (shouldLogRequests) {
+                outputChannel.appendLine(`LSP Request [${requestId}] ${timestamp}: ${method}`);
+                if (param !== undefined && (configuration.debug.verboseLogging || configuration.logging.level === 'DEBUG' || configuration.logging.level === 'TRACE')) {
+                    try {
+                        outputChannel.appendLine(`LSP Request [${requestId}] Parameters: ${JSON.stringify(param, null, 2)}`);
+                    } catch {
+                        outputChannel.appendLine(`LSP Request [${requestId}] Parameters: [not serializable]`);
+                    }
                 }
             }
             
@@ -579,17 +589,23 @@ export class CommunicationService {
             // Add response logging
             return result.then((response: any) => {
                 const duration = Date.now() - startTime;
-                outputChannel.appendLine(`LSP Response [${requestId}] ${new Date().toISOString()}: ${method} (${duration}ms)`);
+                const shouldLogResponses = configuration.logging.logResponses || 
+                                          configuration.logging.level === 'DEBUG' || 
+                                          configuration.logging.level === 'TRACE';
                 
-                if (configuration.debug.verboseLogging && response !== undefined) {
-                    try {
-                        // Limit result logging to avoid overwhelming output
-                        const resultStr = typeof response === 'object' ? 
-                            JSON.stringify(response, null, 2).substring(0, 1000) + (JSON.stringify(response).length > 1000 ? '...' : '') :
-                            String(response);
-                        outputChannel.appendLine(`LSP Response [${requestId}] Result: ${resultStr}`);
-                    } catch {
-                        outputChannel.appendLine(`LSP Response [${requestId}] Result: [not serializable]`);
+                if (shouldLogResponses) {
+                    outputChannel.appendLine(`LSP Response [${requestId}] ${new Date().toISOString()}: ${method} (${duration}ms)`);
+                    
+                    if ((configuration.debug.verboseLogging || configuration.logging.level === 'DEBUG' || configuration.logging.level === 'TRACE') && response !== undefined) {
+                        try {
+                            // Limit result logging to avoid overwhelming output
+                            const resultStr = typeof response === 'object' ? 
+                                JSON.stringify(response, null, 2).substring(0, 1000) + (JSON.stringify(response).length > 1000 ? '...' : '') :
+                                String(response);
+                            outputChannel.appendLine(`LSP Response [${requestId}] Result: ${resultStr}`);
+                        } catch {
+                            outputChannel.appendLine(`LSP Response [${requestId}] Result: [not serializable]`);
+                        }
                     }
                 }
                 
@@ -626,13 +642,19 @@ export class CommunicationService {
                 }
             }
             
-            outputChannel.appendLine(`LSP Notification ${timestamp}: ${method}`);
+            const shouldLogNotifications = configuration.logging.logNotifications || 
+                                           configuration.logging.level === 'DEBUG' || 
+                                           configuration.logging.level === 'TRACE';
             
-            if (params !== undefined && configuration.debug.verboseLogging) {
-                try {
-                    outputChannel.appendLine(`LSP Notification Parameters: ${JSON.stringify(params, null, 2)}`);
-                } catch {
-                    outputChannel.appendLine(`LSP Notification Parameters: [not serializable]`);
+            if (shouldLogNotifications) {
+                outputChannel.appendLine(`LSP Notification ${timestamp}: ${method}`);
+                
+                if (params !== undefined && (configuration.debug.verboseLogging || configuration.logging.level === 'DEBUG' || configuration.logging.level === 'TRACE')) {
+                    try {
+                        outputChannel.appendLine(`LSP Notification Parameters: ${JSON.stringify(params, null, 2)}`);
+                    } catch {
+                        outputChannel.appendLine(`LSP Notification Parameters: [not serializable]`);
+                    }
                 }
             }
             
@@ -655,29 +677,34 @@ export class CommunicationService {
 
         // Log client state changes
         this.client.onDidChangeState((stateChangeEvent) => {
-            const timestamp = new Date().toISOString();
-            this.outputChannel.appendLine(`LSP Lifecycle ${timestamp}: Client state changed from ${stateChangeEvent.oldState} to ${stateChangeEvent.newState}`);
-            
-            // Log state-specific information using State enum
-            switch (stateChangeEvent.newState) {
-                case State.Stopped:
-                    this.outputChannel.appendLine(`LSP Lifecycle: Client is now stopped`);
-                    break;
-                case State.Starting:
-                    this.outputChannel.appendLine(`LSP Lifecycle: Client is starting...`);
-                    break;
-                case State.Running:
-                    this.outputChannel.appendLine(`LSP Lifecycle: Client is now running and ready`);
-                    // Log capabilities when client becomes ready
-                    if (this.configuration.debug.verboseLogging) {
-                        setTimeout(() => {
-                            const capabilities = this.client?.initializeResult?.capabilities;
-                            if (capabilities) {
-                                this.outputChannel.appendLine(`LSP Lifecycle: Server capabilities received during initialization`);
-                            }
-                        }, 100);
-                    }
-                    break;
+            const shouldLogLifecycle = this.configuration.logging.logLifecycleEvents || 
+                                       ['INFO', 'DEBUG', 'TRACE'].includes(this.configuration.logging.level);
+                                       
+            if (shouldLogLifecycle) {
+                const timestamp = new Date().toISOString();
+                this.outputChannel.appendLine(`LSP Lifecycle ${timestamp}: Client state changed from ${stateChangeEvent.oldState} to ${stateChangeEvent.newState}`);
+                
+                // Log state-specific information using State enum
+                switch (stateChangeEvent.newState) {
+                    case State.Stopped:
+                        this.outputChannel.appendLine(`LSP Lifecycle: Client is now stopped`);
+                        break;
+                    case State.Starting:
+                        this.outputChannel.appendLine(`LSP Lifecycle: Client is starting...`);
+                        break;
+                    case State.Running:
+                        this.outputChannel.appendLine(`LSP Lifecycle: Client is now running and ready`);
+                        // Log capabilities when client becomes ready
+                        if (this.configuration.debug.verboseLogging || ['DEBUG', 'TRACE'].includes(this.configuration.logging.level)) {
+                            setTimeout(() => {
+                                const capabilities = this.client?.initializeResult?.capabilities;
+                                if (capabilities) {
+                                    this.outputChannel.appendLine(`LSP Lifecycle: Server capabilities received during initialization`);
+                                }
+                            }, 100);
+                        }
+                        break;
+                }
             }
         });
 
@@ -696,10 +723,15 @@ export class CommunicationService {
 
         // Custom notification for server status
         this.client.onNotification('asciidoc/serverStatus', (params: any) => {
-            const timestamp = new Date().toISOString();
-            this.outputChannel.appendLine(`LSP Server Notification ${timestamp}: asciidoc/serverStatus`);
-            if (this.configuration.debug.verboseLogging && params) {
-                this.outputChannel.appendLine(`LSP Server Notification Parameters: ${JSON.stringify(params, null, 2)}`);
+            const shouldLogNotifications = this.configuration.logging.logNotifications || 
+                                           ['DEBUG', 'TRACE'].includes(this.configuration.logging.level);
+            
+            if (shouldLogNotifications) {
+                const timestamp = new Date().toISOString();
+                this.outputChannel.appendLine(`LSP Server Notification ${timestamp}: asciidoc/serverStatus`);
+                if ((this.configuration.debug.verboseLogging || ['DEBUG', 'TRACE'].includes(this.configuration.logging.level)) && params) {
+                    this.outputChannel.appendLine(`LSP Server Notification Parameters: ${JSON.stringify(params, null, 2)}`);
+                }
             }
         });
 

@@ -35,6 +35,17 @@ export interface AsciidocConfiguration {
         level: string; // Legacy support
     };
     
+    // Logging Configuration
+    logging: {
+        level: string;
+        logRequests: boolean;
+        logResponses: boolean;
+        logNotifications: boolean;
+        logLifecycleEvents: boolean;
+        logServerOutput: boolean;
+        maxLogEntries: number;
+    };
+    
     // Language Features
     features: {
         validation: {
@@ -222,6 +233,15 @@ export class ConfigurationService {
             trace: {
                 server: config.get(constants.CONFIG_KEYS.TRACE_SERVER, constants.DEFAULTS.TRACE_SERVER),
                 level: config.get(constants.CONFIG_KEYS.TRACE_LEVEL, constants.DEFAULTS.TRACE_LEVEL)
+            },
+            logging: {
+                level: config.get(constants.CONFIG_KEYS.LOGGING_LEVEL, constants.DEFAULTS.LOGGING_LEVEL),
+                logRequests: config.get(constants.CONFIG_KEYS.LOGGING_LOG_REQUESTS, constants.DEFAULTS.LOGGING_LOG_REQUESTS),
+                logResponses: config.get(constants.CONFIG_KEYS.LOGGING_LOG_RESPONSES, constants.DEFAULTS.LOGGING_LOG_RESPONSES),
+                logNotifications: config.get(constants.CONFIG_KEYS.LOGGING_LOG_NOTIFICATIONS, constants.DEFAULTS.LOGGING_LOG_NOTIFICATIONS),
+                logLifecycleEvents: config.get(constants.CONFIG_KEYS.LOGGING_LOG_LIFECYCLE_EVENTS, constants.DEFAULTS.LOGGING_LOG_LIFECYCLE_EVENTS),
+                logServerOutput: config.get(constants.CONFIG_KEYS.LOGGING_LOG_SERVER_OUTPUT, constants.DEFAULTS.LOGGING_LOG_SERVER_OUTPUT),
+                maxLogEntries: config.get(constants.CONFIG_KEYS.LOGGING_MAX_LOG_ENTRIES, constants.DEFAULTS.LOGGING_MAX_LOG_ENTRIES)
             },
             features: {
                 validation: {

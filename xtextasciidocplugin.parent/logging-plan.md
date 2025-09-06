@@ -40,6 +40,6 @@
 - [x] Step 6: Add detailed logging to `AsciidocGenerator`, `AsciiDocIdeContentProposalProvider`, `AsciiDocIdeQuickfixProvider`, `AsciiDocValidator` classes workflows
 - [x] Step 7: Log all command executions and their parameters
 - [x] Step 8: Add request/response logging for LSP communication
-- [ ] Step 9: Add logging level configuration to `configuration.json`
+- [x] Step 9: Add logging level configuration to `configuration.json`
 - [ ] Step 10: Document log file locations and viewing methods
 - [ ] Step 11: Add examples for tracing specific method calls

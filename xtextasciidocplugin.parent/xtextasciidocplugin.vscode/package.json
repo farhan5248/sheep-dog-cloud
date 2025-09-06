@@ -73,21 +73,6 @@
                 "command": "asciidoc.generateCode",
                 "title": "AsciiDoc: Generate Code",
                 "category": "AsciiDoc"
-            },
-            {
-                "command": "asciidoc.lsp.showStatistics",
-                "title": "AsciiDoc: Show LSP Communication Statistics",
-                "category": "AsciiDoc LSP"
-            },
-            {
-                "command": "asciidoc.lsp.resetStatistics",
-                "title": "AsciiDoc: Reset LSP Statistics",
-                "category": "AsciiDoc LSP"
-            },
-            {
-                "command": "asciidoc.lsp.toggleLogging",
-                "title": "AsciiDoc: Toggle LSP Detailed Logging",
-                "category": "AsciiDoc LSP"
             }
         ],
         "menus": {

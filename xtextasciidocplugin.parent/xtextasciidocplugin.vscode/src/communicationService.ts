@@ -7,7 +7,6 @@
 import * as vscode from 'vscode';
 import { LanguageClient, ServerCapabilities, ErrorHandler, ErrorAction, CloseAction, Message, ErrorHandlerResult, CloseHandlerResult } from 'vscode-languageclient/node';
 import { AsciidocConfiguration } from './configurationService';
-import { LSPMiddleware } from './lspMiddleware';
 
 /**
  * Connection retry configuration
@@ -57,7 +56,6 @@ export class CommunicationService {
     private connectionStatus: ConnectionStatus;
     private retryTimer: NodeJS.Timeout | undefined;
     private capabilityChangeHandlers: ((capabilities: ExtendedServerCapabilities) => void)[] = [];
-    private lspMiddleware: LSPMiddleware | undefined;
     
     constructor(
         outputChannel: vscode.OutputChannel,
@@ -69,10 +67,6 @@ export class CommunicationService {
             isConnected: false,
             retryCount: 0
         };
-        
-        // Initialize LSP middleware for comprehensive logging
-        this.lspMiddleware = new LSPMiddleware(outputChannel);
-        this.configureLSPMiddleware();
     }
 
     /**
@@ -88,8 +82,8 @@ export class CommunicationService {
         // Configure enhanced error handling
         this.setupErrorHandling();
         
-        // Setup comprehensive LSP request/response logging via middleware
-        this.setupEnhancedLSPLogging();
+        // Setup LSP request/response logging
+        this.setupLSPLogging();
         
         // Configure connection timeout
         const retryConfig = this.createRetryConfiguration();
@@ -279,62 +273,13 @@ export class CommunicationService {
         });
     }
 
-    /**
-     * Get the LSP middleware for direct access to logging features
-     */
-    public getLSPMiddleware(): LSPMiddleware | undefined {
-        return this.lspMiddleware;
-    }
-
-    /**
-     * Get LSP communication statistics
-     */
-    public getLSPStatistics() {
-        return this.lspMiddleware?.getStatistics();
-    }
-
-    /**
-     * Log current LSP statistics
-     */
-    public logLSPStatistics(): void {
-        this.lspMiddleware?.logStatistics();
-    }
-
-    /**
-     * Reset LSP statistics
-     */
-    public resetLSPStatistics(): void {
-        this.lspMiddleware?.resetStatistics();
-    }
-
     
     /**
-     * Configure LSP middleware based on current settings
-     */
-    private configureLSPMiddleware(): void {
-        if (!this.lspMiddleware) {
-            return;
-        }
-
-        // Configure middleware based on configuration settings
-        this.lspMiddleware.configure({
-            detailedLogging: this.configuration.debug.verboseLogging,
-            performanceLogging: this.configuration.performance.enableBackgroundProcessing
-        });
-
-        this.outputChannel.appendLine('CommunicationService: LSP middleware configured');
-    }
-
-    /**
-     * Update configuration and reconfigure middleware
+     * Update configuration
      */
     public updateConfiguration(config: AsciidocConfiguration): void {
         this.configuration = config;
-        
-        // Reconfigure middleware with new settings
-        this.configureLSPMiddleware();
-        
-        this.outputChannel.appendLine('CommunicationService: Configuration updated and middleware reconfigured');
+        this.outputChannel.appendLine('CommunicationService: Configuration updated');
     }
 
     /**
@@ -573,45 +518,17 @@ export class CommunicationService {
     }
 
     /**
-     * Setup enhanced LSP request/response logging with comprehensive middleware
-     * This replaces the simplified logging with full request/response correlation and timing
+     * Setup LSP request/response logging
+     * Note: Simplified logging due to sendRequest method signature complexity in v9.0.1
      */
-    private setupEnhancedLSPLogging(): void {
-        if (!this.client || !this.lspMiddleware) {
-            this.outputChannel.appendLine('CommunicationService: Cannot setup enhanced LSP logging - missing client or middleware');
+    private setupLSPLogging(): void {
+        if (!this.client) {
             return;
         }
 
-        this.outputChannel.appendLine('CommunicationService: Setting up comprehensive LSP request/response logging via middleware');
-        
-        // Configure middleware based on current configuration
-        this.lspMiddleware.configure({
-            detailedLogging: this.configuration.debug.verboseLogging,
-            performanceLogging: this.configuration.performance.enableBackgroundProcessing
-        });
-        
-        // Enable middleware logging
-        this.lspMiddleware.setEnabled(true);
-        
-        // Attach middleware to the language client using the new interface
-        if (!this.client.clientOptions.middleware) {
-            this.client.clientOptions.middleware = {};
-        }
-        
-        // Get our middleware configuration
-        const lspMiddlewareConfig = this.lspMiddleware.createMiddleware();
-        
-        // Merge our middleware with existing middleware
-        const existingMiddleware = this.client.clientOptions.middleware;
-        const enhancedMiddleware = {
-            ...existingMiddleware,
-            ...lspMiddlewareConfig
-        };
-        
-        // Set the enhanced middleware
-        this.client.clientOptions.middleware = enhancedMiddleware;
-        
-        this.outputChannel.appendLine('CommunicationService: Enhanced LSP logging middleware configured successfully');
+        this.outputChannel.appendLine('CommunicationService: LSP request/response logging setup (simplified for compatibility)');
+        // Note: Advanced request/response logging removed due to method signature incompatibility
+        // in vscode-languageclient v9.0.1. Basic logging is handled through trace settings.
     }
 
     /**
@@ -714,12 +631,6 @@ export class CommunicationService {
         if (this.retryTimer) {
             clearTimeout(this.retryTimer);
             this.retryTimer = undefined;
-        }
-        
-        // Dispose of LSP middleware
-        if (this.lspMiddleware) {
-            this.lspMiddleware.dispose();
-            this.lspMiddleware = undefined;
         }
         
         this.capabilityChangeHandlers = [];

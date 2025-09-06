@@ -81,7 +81,7 @@ public class AsciiDocIdeQuickfixProvider extends AbstractDeclarativeIdeQuickfixP
 					TestStep testStep = (TestStep) obj;
 					logger.debug("Generating TestStep definition for: {}", testStep != null ? testStep.getName() : "null");
 					AsciiDocGenerator.doGenerateFromTestStep(testStep);
-					logger.debug("Exiting {}", "doGenerate");
+					logger.debug("Exiting {}", "createDefinition");
 					return createTextEdit(diagnostic, testStep.getName()); // No text change needed, files are generated externally
 				} catch (Exception e) {
 					logger.error("Failed to create TestStep definition: {}", e.getMessage(), e);

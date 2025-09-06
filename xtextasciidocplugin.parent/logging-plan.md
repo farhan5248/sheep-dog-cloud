@@ -19,14 +19,11 @@
 
 ## **Phase 3: TypeScript Client Enhancements**
 8. Add request/response logging for LSP communication
-9. Enhance diagnostic event logging with detailed context
-10. Add code action request/response tracing
 
 ## **Phase 4: Configuration & Documentation**
-11. Add logging level configuration to `configuration.json`
-12. Create debug commands for runtime log level changes
-13. Document log file locations and viewing methods
-14. Add examples for tracing specific method calls
+9. Add logging level configuration to `configuration.json`
+10. Document log file locations and viewing methods
+11. Add examples for tracing specific method calls
 
 ## **Expected Outcome**
 - **doGenerateResource tracing**: See method entry, parameters, execution time, and results
@@ -42,10 +39,7 @@
 - [x] Step 5: Add structured logging to `AsciidocGenerator`, `AsciiDocIdeContentProposalProvider`, `AsciiDocIdeQuickfixProvider`, `AsciiDocValidator` classes, focus on try catch blocks
 - [x] Step 6: Add detailed logging to `AsciidocGenerator`, `AsciiDocIdeContentProposalProvider`, `AsciiDocIdeQuickfixProvider`, `AsciiDocValidator` classes workflows
 - [x] Step 7: Log all command executions and their parameters
-- [x] Step 8: Add request/response logging for LSP communication
-- [ ] Step 9: Enhance diagnostic event logging with detailed context
-- [ ] Step 10: Add code action request/response tracing
-- [ ] Step 11: Add logging level configuration to `configuration.json`
-- [ ] Step 12: Create debug commands for runtime log level changes
-- [ ] Step 13: Document log file locations and viewing methods
-- [ ] Step 14: Add examples for tracing specific method calls
+- [ ] Step 8: Add request/response logging for LSP communication
+- [ ] Step 9: Add logging level configuration to `configuration.json`
+- [ ] Step 10: Document log file locations and viewing methods
+- [ ] Step 11: Add examples for tracing specific method calls

@@ -23,7 +23,7 @@ public class CommandService implements IExecutableCommandService {
 	@Override
 	public List<String> initialize() {
 		logger.debug("Entering initialize");
-		List<String> commands = Lists.newArrayList("asciidoc.generate");
+		List<String> commands = Lists.newArrayList("asciidoc.server.generateCode");
 		logger.debug("Exiting initialize");
 		return commands;
 	}
@@ -35,7 +35,7 @@ public class CommandService implements IExecutableCommandService {
 		final long startTime = System.currentTimeMillis();
 
 		try {
-			if ("asciidoc.generate".equals(commandName)) {
+			if ("asciidoc.server.generateCode".equals(commandName)) {
 				JsonPrimitive uriArg = (JsonPrimitive) Iterables.getFirst(params.getArguments(), null);
 				final String uri = (uriArg != null) ? uriArg.getAsString() : null;
 

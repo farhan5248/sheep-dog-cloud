@@ -9,7 +9,6 @@ import java.io.StringWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.farhan.dsl.asciidoc.LanguageAccessImpl;

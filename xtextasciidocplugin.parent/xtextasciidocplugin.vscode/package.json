@@ -70,7 +70,7 @@
                 "category": "AsciiDoc Server"
             },
             {
-                "command": "asciidoc.generateCode",
+                "command": "asciidoc.server.generateCode",
                 "title": "AsciiDoc: Generate Code",
                 "category": "AsciiDoc Server"
             },
@@ -103,14 +103,14 @@
         "menus": {
             "commandPalette": [
                 {
-                    "command": "asciidoc.generateCode",
+                    "command": "asciidoc.server.generateCode",
                     "when": "editorLangId == asciidoc"
                 }
             ]
         },
         "keybindings": [
             {
-                "command": "asciidoc.generateCode",
+                "command": "asciidoc.server.generateCode",
                 "key": "ctrl+shift+g",
                 "mac": "cmd+shift+g",
                 "when": "editorLangId == asciidoc"

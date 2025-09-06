@@ -416,8 +416,8 @@ function registerCommands(context: vscode.ExtensionContext): void {
     });
     
     // Add code generation command
-    const generateCodeCommand = vscode.commands.registerCommand('asciidoc.generateCode', async () => {
-        const commandName = 'asciidoc.generateCode';
+    const generateCodeCommand = vscode.commands.registerCommand('asciidoc.server.generateCode', async () => {
+        const commandName = 'asciidoc.server.generateCode';
         const startTime = Date.now();
         outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
         

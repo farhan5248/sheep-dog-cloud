@@ -39,7 +39,7 @@
         "grammars": [
             {
                 "language": "asciidoc",
-                "scopeName": "text.asciidoc",
+                "scopeName": "source.asciidoc.sheepdog",
                 "path": "./syntaxes/asciidoc.tmLanguage.json"
             }
         ],

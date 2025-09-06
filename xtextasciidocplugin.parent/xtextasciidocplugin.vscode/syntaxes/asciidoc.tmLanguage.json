@@ -1,38 +1,257 @@
 {
-    "name": "AsciiDoc",
-    "scopeName": "text.asciidoc",
+    "name": "SheepDog AsciiDoc",
+    "scopeName": "source.asciidoc.sheepdog",
     "fileTypes": [
-        "mydsl"
+        "asciidoc"
     ],
     "repository": {
         "general": {
             "patterns": [
                 {
-                    "include": "#linecomment"
+                    "include": "#comments"
                 },
                 {
-                    "include": "#blockcomment"
+                    "include": "#level1-keywords"
                 },
                 {
-                    "include": "#keyword"
+                    "include": "#level2-keywords"
+                },
+                {
+                    "include": "#level3-keywords"
+                },
+                {
+                    "include": "#tables"
+                },
+                {
+                    "include": "#text-blocks"
+                },
+                {
+                    "include": "#statement-lists"
+                },
+                {
+                    "include": "#statements"
                 }
             ]
         },
-        "linecomment": {
-            "name": "comment.line.double-dash.asciidoc",
-            "begin": "(^[ \\t]+)?(?=//)",
-            "end": "(?=$)"
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.number-sign.sheepdog-asciidoc",
+                    "begin": "^\\s*#",
+                    "end": "$",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.sheepdog-asciidoc"
+                        }
+                    }
+                }
+            ]
         },
-        "blockcomment": {
-            "name": "comment.block.asciidoc",
-            "begin": "/\\*(\\*)?(?!/)",
-            "end": "\\*/"
+        "level1-keywords": {
+            "patterns": [
+                {
+                    "name": "markup.heading.1.sheepdog-asciidoc",
+                    "match": "^(=)\\s+(Step-Object:|Test-Suite:)\\s+(.+)$",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.heading.sheepdog-asciidoc"
+                        },
+                        "2": {
+                            "name": "keyword.control.level1.sheepdog-asciidoc"
+                        },
+                        "3": {
+                            "name": "entity.name.section.sheepdog-asciidoc"
+                        }
+                    }
+                }
+            ]
         },
-        
-        "keyword": {
-            "name": "keyword.control.asciidoc",
-            "match": "\\b(Hello|from)\\b|!"
-
+        "level2-keywords": {
+            "patterns": [
+                {
+                    "name": "markup.heading.2.sheepdog-asciidoc",
+                    "match": "^(==)\\s+(Step-Definition:|Test-Setup:|Test-Case:)\\s+(.+)$",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.heading.sheepdog-asciidoc"
+                        },
+                        "2": {
+                            "name": "keyword.control.level2.sheepdog-asciidoc"
+                        },
+                        "3": {
+                            "name": "entity.name.section.sheepdog-asciidoc"
+                        }
+                    }
+                }
+            ]
+        },
+        "level3-keywords": {
+            "patterns": [
+                {
+                    "name": "markup.heading.3.sheepdog-asciidoc",
+                    "match": "^(\\*)\\s+(Given:|When:|Then:|And:|Step-Parameters:|Test-Data:)\\s+(.+)$",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.heading.sheepdog-asciidoc"
+                        },
+                        "2": {
+                            "name": "keyword.control.level3.sheepdog-asciidoc"
+                        },
+                        "3": {
+                            "name": "entity.name.section.sheepdog-asciidoc"
+                        }
+                    }
+                }
+            ]
+        },
+        "tables": {
+            "patterns": [
+                {
+                    "name": "markup.table.sheepdog-asciidoc",
+                    "begin": "^\\+$",
+                    "end": "^(?!\\|===|\\|)",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.table.start.sheepdog-asciidoc"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "name": "markup.table.delimiter.sheepdog-asciidoc",
+                            "match": "^\\|===$",
+                            "captures": {
+                                "0": {
+                                    "name": "punctuation.definition.table.delimiter.sheepdog-asciidoc"
+                                }
+                            }
+                        },
+                        {
+                            "name": "markup.table.row.sheepdog-asciidoc",
+                            "begin": "^\\|",
+                            "end": "$",
+                            "beginCaptures": {
+                                "0": {
+                                    "name": "punctuation.definition.table.cell.sheepdog-asciidoc"
+                                }
+                            },
+                            "patterns": [
+                                {
+                                    "name": "markup.table.cell.sheepdog-asciidoc",
+                                    "match": "\\|([^|\\n]*)",
+                                    "captures": {
+                                        "0": {
+                                            "name": "punctuation.definition.table.cell.sheepdog-asciidoc"
+                                        },
+                                        "1": {
+                                            "name": "string.unquoted.table.cell.sheepdog-asciidoc"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "text-blocks": {
+            "patterns": [
+                {
+                    "name": "markup.raw.block.sheepdog-asciidoc",
+                    "begin": "^\\+$",
+                    "end": "^(?!----)",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.raw.start.sheepdog-asciidoc"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "name": "markup.raw.content.sheepdog-asciidoc",
+                            "begin": "^----$",
+                            "end": "^----$",
+                            "beginCaptures": {
+                                "0": {
+                                    "name": "punctuation.definition.raw.delimiter.sheepdog-asciidoc"
+                                }
+                            },
+                            "endCaptures": {
+                                "0": {
+                                    "name": "punctuation.definition.raw.delimiter.sheepdog-asciidoc"
+                                }
+                            },
+                            "contentName": "string.unquoted.raw.text.sheepdog-asciidoc"
+                        }
+                    ]
+                }
+            ]
+        },
+        "statement-lists": {
+            "patterns": [
+                {
+                    "name": "markup.list.sheepdog-asciidoc",
+                    "begin": "^\\+$",
+                    "end": "^(?![^#*=|+\\n])",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.list.start.sheepdog-asciidoc"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#statements"
+                        }
+                    ]
+                }
+            ]
+        },
+        "statements": {
+            "patterns": [
+                {
+                    "name": "markup.other.statement.sheepdog-asciidoc",
+                    "match": "^([^#*=|+\\n].*)$",
+                    "captures": {
+                        "1": {
+                            "name": "string.unquoted.statement.sheepdog-asciidoc",
+                            "patterns": [
+                                {
+                                    "include": "#statement-content"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "statement-content": {
+            "patterns": [
+                {
+                    "name": "markup.tag.sheepdog-asciidoc",
+                    "match": "\\b(@[a-zA-Z0-9_-]+)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.tag.sheepdog-asciidoc"
+                        }
+                    }
+                },
+                {
+                    "name": "markup.todo.sheepdog-asciidoc",
+                    "match": "\\b(TODO|FIXME|HACK|NOTE|XXX)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.other.todo.sheepdog-asciidoc"
+                        }
+                    }
+                },
+                {
+                    "name": "markup.parameter.sheepdog-asciidoc",
+                    "match": "(\\{[^}\\s]+\\})",
+                    "captures": {
+                        "1": {
+                            "name": "variable.parameter.sheepdog-asciidoc"
+                        }
+                    }
+                }
+            ]
         }
     },
     "patterns": [

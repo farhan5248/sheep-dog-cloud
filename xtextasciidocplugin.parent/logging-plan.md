@@ -19,9 +19,9 @@
 
 ## **Phase 3: TypeScript Client Enhancements**
 8. Add request/response logging for LSP communication
+9. Add logging level configuration to `configuration.json`
 
 ## **Phase 4: Configuration & Documentation**
-9. Add logging level configuration to `configuration.json`
 10. Document log file locations and viewing methods
 11. Add examples for tracing specific method calls
 

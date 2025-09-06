@@ -29,7 +29,7 @@ public class AsciiDocIdeModule extends AbstractAsciiDocIdeModule {
 	}
 	
 	public Class<? extends ICodeActionService2> bindICodeActionService2() {
-		return MyDslCodeActionService.class;
+		return AsciidocCodeActionService.class;
 	}
 	
 	public Class<? extends IdeContentProposalProvider> bindIdeContentProposalProvider() {

@@ -3,6 +3,9 @@
  */
 package org.farhan.dsl.asciidoc.generator;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+
 import org.eclipse.emf.ecore.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +55,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 					logger.debug("Processing scenario: {}", scenario.getName());
 					for (TestStep step : scenario.getTestStepList()) {
 						logger.debug("Processing step: {}", step.getName());
-						doGenerateFromTestStep(step);
+						doGenerateFromTestStep(step, null);
 					}
 				}
 			} else {
@@ -65,22 +68,22 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		}
 	}
 
-	public static void doGenerateFromTestStep(TestStep step) {
+	public static LanguageAccessImpl doGenerateFromTestStep(TestStep step, OutputStream os) {
+		// TODO make another method, one that returns a string vs one that writes to a
+		// file. The quickfix one shouldn't write to the file so undo the changes to save
 		logger.debug("Entering doGenerateFromTestStep for step: {}", step != null ? step.getName() : "null");
 		try {
-			if (step == null) {
-				logger.warn("Cannot generate from null TestStep");
-				return;
-			}
-
 			logger.info("Calling LanguageHelper.generate with step: {}", step.getName());
-			LanguageHelper.generate(new LanguageAccessImpl(step),
+			LanguageAccessImpl la = new LanguageAccessImpl(step, os);
+			LanguageHelper.generate(la,
 					SaveOptions.newBuilder().format().getOptions().toOptionsMap());
 			logger.debug("Exiting {}", "doGenerateFromTestStep");
+			return la;
 		} catch (Exception e) {
 			logger.error("Generation failed for step '{}': {}", step != null ? step.getName() : "null", e.getMessage(),
 					e);
 		}
+		return null;
 	}
 
 }

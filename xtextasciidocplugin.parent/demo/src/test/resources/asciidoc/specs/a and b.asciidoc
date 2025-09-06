@@ -1,4 +1,4 @@
-= Test-Suite: create Code From Documentation
+= Test-Suite: Create Code From Documentation
 
 @sheep-dog-dev
 @round-trip
@@ -15,7 +15,7 @@ The interfaces will be created in the src-gen/test/java/org/farhan/objects direc
 @tag3
 Desc 3
 
-* Given: The blah2 application, Objectf page is invalid
+* Given: The blah2 application, Object page is invalid
 
 * When: The blah application, Objectf page is validef
 +

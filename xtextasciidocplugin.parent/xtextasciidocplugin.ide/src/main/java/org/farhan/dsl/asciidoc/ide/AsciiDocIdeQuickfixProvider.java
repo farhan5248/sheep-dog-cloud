@@ -6,6 +6,8 @@ package org.farhan.dsl.asciidoc.ide;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
+
 import org.eclipse.xtext.ide.editor.quickfix.AbstractDeclarativeIdeQuickfixProvider;
 import org.eclipse.xtext.ide.editor.quickfix.DiagnosticResolutionAcceptor;
 import org.eclipse.xtext.ide.editor.quickfix.QuickFix;
@@ -53,7 +55,8 @@ public class AsciiDocIdeQuickfixProvider extends AbstractDeclarativeIdeQuickfixP
 		logger.debug("Entering capitalizeTestStepTableName quickfix");
 		try {
 			acceptor.accept("Capitalize TestStep table name", (diagnostic, obj, document) -> {
-				logger.debug("Applying capitalizeTestStepTableName quickfix for diagnostic: {}", diagnostic.getMessage());
+				logger.debug("Applying capitalizeTestStepTableName quickfix for diagnostic: {}",
+						diagnostic.getMessage());
 				try {
 					String oldHeader = ((JsonArray) diagnostic.getData()).get(0).getAsString();
 					String newHeader = StringExtensions.toFirstUpper(oldHeader);
@@ -72,26 +75,4 @@ public class AsciiDocIdeQuickfixProvider extends AbstractDeclarativeIdeQuickfixP
 		}
 	}
 
-	@QuickFix(AsciiDocValidator.MISSING_STEP_DEF)
-	public void createDefinition(DiagnosticResolutionAcceptor acceptor) {
-		logger.debug("Entering createDefinition quickfix");
-		try {
-			acceptor.accept("Create TestStep definition", (diagnostic, obj, document) -> {
-				logger.debug("Applying createDefinition quickfix for diagnostic: {}", diagnostic.getMessage());
-				try {
-					TestStep testStep = (TestStep) obj;
-					logger.debug("Generating TestStep definition for: {}", testStep != null ? testStep.getName() : "null");
-					AsciiDocGenerator.doGenerateFromTestStep(testStep);
-					logger.debug("Exiting {}", "createDefinition");
-					return createTextEdit(diagnostic, testStep.getName()); // No text change needed, files are generated externally
-				} catch (Exception e) {
-					logger.error("Failed to create TestStep definition: {}", e.getMessage(), e);
-					throw e;
-				}
-			});
-			logger.debug("Exiting {}", "createDefinition");
-		} catch (Exception e) {
-			logger.error("Error registering createDefinition quickfix: {}", e.getMessage(), e);
-		}
-	}
 }

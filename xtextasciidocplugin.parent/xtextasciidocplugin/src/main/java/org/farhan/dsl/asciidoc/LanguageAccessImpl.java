@@ -1,6 +1,8 @@
 package org.farhan.dsl.asciidoc;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.xtext.resource.SaveOptions;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSetup;
 import org.farhan.dsl.asciidoc.asciiDoc.Cell;
@@ -25,14 +28,27 @@ import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
 import org.farhan.dsl.common.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LanguageAccessImpl implements ILanguageAccess {
 
+	private static final Logger logger = LoggerFactory.getLogger(LanguageAccessImpl.class);
 	public final static String STEP_PARAMETER_TEXT = "| Content";
 
 	TestStep step;
 
+	// Temp hack to support LSP code generation
+	OutputStream os;
+	String fileName;
+
 	public LanguageAccessImpl(TestStep step) {
+		this.step = step;
+		this.os = null;
+	}
+
+	public LanguageAccessImpl(TestStep step, OutputStream os) {
+		this.os = os;
 		this.step = step;
 	}
 
@@ -192,17 +208,6 @@ public class LanguageAccessImpl implements ILanguageAccess {
 			return null;
 		}
 	}
-
-	private URI getObjectURI(String objectQualifiedName) {
-		return URI.createFileURI(getProjectPath() + getOutputDirPath() + objectQualifiedName);
-	}
-
-	private String getOutputDirPath() {
-		// TODO fix output config
-		// AsciiDocOutputConfigurationProvider.stepDefsOutput.getOutputDirectory();
-		return "src/test/resources/asciidoc/stepdefs/";
-	}
-
 	public ArrayList<Object> getPreviousSteps() {
 		// TODO add a test to make sure the previous steps only are returned
 		TestStepContainer as = (TestStepContainer) step.eContainer();
@@ -218,9 +223,29 @@ public class LanguageAccessImpl implements ILanguageAccess {
 		}
 		return steps;
 	}
+	private URI getObjectURI(String objectQualifiedName) {
+		// TODO this is so not safe to run on Ubuntu
+		logger.debug("Entering getObjectURI with objectQualifiedName {}", objectQualifiedName);
+		String objectPath = getProjectPath() + getOutputDirPath() + objectQualifiedName.replace("/", File.separator);
+		logger.debug("objectPath {}", objectPath);
+		URI uri = URI.createFileURI(objectPath);
+		logger.debug("uri {}", uri);
+		return uri;
+	}
+
+	private String getOutputDirPath() {
+		// TODO fix output config
+		// AsciiDocOutputConfigurationProvider.stepDefsOutput.getOutputDirectory();
+		return "src/test/resources/asciidoc/stepdefs/".replace("/", File.separator);
+	}
+
+
 
 	private String getProjectPath() {
-		return getStepResource().getURI().path().split("src/test/resources/asciidoc/specs/")[0];
+		String uriPath = getStepResource().getURI().toFileString().replace(File.separator, "/");
+		String projectPath = uriPath.split("src/test/resources/asciidoc/specs/")[0].replace("/", File.separator);
+		logger.debug("projectPath {}", projectPath);
+		return projectPath;
 	}
 
 	public Object getStep() {
@@ -334,7 +359,22 @@ public class LanguageAccessImpl implements ILanguageAccess {
 
 	@Override
 	public void saveObject(Object theObject, Map<Object, Object> options) throws Exception {
-		((EObject) theObject).eResource().save(options);
+		Resource resource = ((EObject) theObject).eResource();
+		if (os == null) {
+			resource.save(options);
+		} else {
+			resource.save(os, SaveOptions.newBuilder().format().getOptions().toOptionsMap());
+			fileName = resource.getURI().toString();
+		}
+	}
+
+	public String getStepObjectContent() {
+		// This is a temp hack until I change how code generation works to support LSP.
+		return os.toString();
+	}
+
+	public String getStepObjectFileName() {
+		return fileName;
 	}
 
 }

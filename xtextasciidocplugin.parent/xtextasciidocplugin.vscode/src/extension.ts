@@ -463,6 +463,54 @@ function registerCommands(context: vscode.ExtensionContext): void {
         }
     });
     
+    // Add document validation command
+    const validateCommand = vscode.commands.registerCommand('asciidoc.server.validate', async () => {
+        const commandName = 'asciidoc.server.validate';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor || activeEditor.document.languageId !== 'asciidoc') {
+            const errorMsg = 'No active AsciiDoc document';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
+            return;
+        }
+        
+        if (!serverLauncher) {
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
+            return;
+        }
+        
+        try {
+            const client = serverLauncher.getClient();
+            if (!client) {
+                throw new Error('Language client not available');
+            }
+            
+            const documentUri = activeEditor.document.uri.toString();
+            outputChannel?.appendLine(`Command ${commandName} parameters: {documentUri: ${documentUri}, serverCommand: "asciidoc.validate"}`);
+            
+            await client.sendNotification('workspace/executeCommand', {
+                command: 'asciidoc.validate',
+                arguments: [documentUri]
+            });
+            
+            const result = 'Document validation command sent';
+            
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms: ${result}`);
+            vscode.window.showInformationMessage(`Validation result: Document validation triggered`);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            vscode.window.showErrorMessage(`Document validation failed: ${errorMessage}`);
+        }
+    });
+    
     // Add logging management commands
     const setLoggingLevelCommand = vscode.commands.registerCommand('asciidoc.logging.setLevel', async () => {
         const levels = ['OFF', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'];
@@ -521,6 +569,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
         stopServerCommand,
         startServerCommand,
         generateCodeCommand,
+        validateCommand,
         setLoggingLevelCommand,
         showOutputCommand,
         showServerOutputCommand,

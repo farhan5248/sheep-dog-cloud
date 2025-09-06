@@ -75,6 +75,11 @@
                 "category": "AsciiDoc Server"
             },
             {
+                "command": "asciidoc.server.validate",
+                "title": "AsciiDoc: Validate Document",
+                "category": "AsciiDoc Server"
+            },
+            {
                 "command": "asciidoc.logging.setLevel",
                 "title": "AsciiDoc: Set Logging Level",
                 "category": "AsciiDoc Logging"
@@ -105,6 +110,10 @@
                 {
                     "command": "asciidoc.server.generateCode",
                     "when": "editorLangId == asciidoc"
+                },
+                {
+                    "command": "asciidoc.server.validate",
+                    "when": "editorLangId == asciidoc"
                 }
             ]
         },
@@ -113,6 +122,12 @@
                 "command": "asciidoc.server.generateCode",
                 "key": "ctrl+shift+g",
                 "mac": "cmd+shift+g",
+                "when": "editorLangId == asciidoc"
+            },
+            {
+                "command": "asciidoc.server.validate",
+                "key": "ctrl+shift+v",
+                "mac": "cmd+shift+v",
                 "when": "editorLangId == asciidoc"
             }
         ],

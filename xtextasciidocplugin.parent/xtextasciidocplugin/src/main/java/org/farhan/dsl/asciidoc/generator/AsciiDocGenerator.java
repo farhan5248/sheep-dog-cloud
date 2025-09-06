@@ -3,8 +3,6 @@
  */
 package org.farhan.dsl.asciidoc.generator;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +37,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 	}
 
 	public static void generateFromResource(final Resource resource) {
-		logger.info("Starting generation from resource: {}", resource != null ? resource.getURI() : "null");
+		logger.info("Entering generateFromResource for resource: {}", resource != null ? resource.getURI() : "null");
 		try {
 			if (resource == null || resource.getContents().isEmpty()) {
 				logger.warn("Resource is null or has no contents");
@@ -54,7 +52,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 					logger.debug("Processing scenario: {}", scenario.getName());
 					for (TestStep step : scenario.getTestStepList()) {
 						logger.debug("Processing step: {}", step.getName());
-						doGenerate(step);
+						doGenerateFromTestStep(step);
 					}
 				}
 			} else {
@@ -67,8 +65,8 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		}
 	}
 
-	public static void doGenerate(TestStep step) {
-		logger.debug("Starting generation for step: {}", step != null ? step.getName() : "null");
+	public static void doGenerateFromTestStep(TestStep step) {
+		logger.debug("Entering doGenerateFromTestStep for step: {}", step != null ? step.getName() : "null");
 		try {
 			if (step == null) {
 				logger.warn("Cannot generate from null TestStep");
@@ -78,7 +76,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 			logger.info("Calling LanguageHelper.generate with step: {}", step.getName());
 			LanguageHelper.generate(new LanguageAccessImpl(step),
 					SaveOptions.newBuilder().format().getOptions().toOptionsMap());
-			logger.debug("Exiting {}", "doGenerate");
+			logger.debug("Exiting {}", "doGenerateFromTestStep");
 		} catch (Exception e) {
 			logger.error("Generation failed for step '{}': {}", step != null ? step.getName() : "null", e.getMessage(),
 					e);

@@ -80,7 +80,7 @@ public class AsciiDocIdeQuickfixProvider extends AbstractDeclarativeIdeQuickfixP
 				try {
 					TestStep testStep = (TestStep) obj;
 					logger.debug("Generating TestStep definition for: {}", testStep != null ? testStep.getName() : "null");
-					AsciiDocGenerator.doGenerate(testStep);
+					AsciiDocGenerator.doGenerateFromTestStep(testStep);
 					logger.debug("Exiting {}", "doGenerate");
 					return createTextEdit(diagnostic, testStep.getName()); // No text change needed, files are generated externally
 				} catch (Exception e) {

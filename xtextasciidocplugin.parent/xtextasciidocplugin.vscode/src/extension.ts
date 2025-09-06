@@ -461,13 +461,152 @@ function registerCommands(context: vscode.ExtensionContext): void {
         }
     });
     
+    // Add LSP logging management commands
+    const showLSPStatisticsCommand = vscode.commands.registerCommand('asciidoc.lsp.showStatistics', () => {
+        const commandName = 'asciidoc.lsp.showStatistics';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        
+        if (!serverLauncher) {
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
+            return;
+        }
+        
+        try {
+            const communicationService = serverLauncher.getCommunicationService();
+            const statistics = communicationService.getLSPStatistics();
+            
+            outputChannel?.appendLine(`Command ${commandName} retrieving LSP statistics: {hasStats: ${!!statistics}}`);
+            
+            if (!statistics) {
+                const warningMsg = 'LSP statistics not available. Please wait for server to start processing requests.';
+                outputChannel?.appendLine(`Command ${commandName} warning: ${warningMsg}`);
+                vscode.window.showInformationMessage(warningMsg);
+                return;
+            }
+            
+            // Log detailed statistics to output channel
+            communicationService.logLSPStatistics();
+            
+            // Show summary to user
+            const summaryInfo = [
+                'LSP Communication Statistics:',
+                `• Total Requests: ${statistics.totalRequests}`,
+                `• Total Responses: ${statistics.totalResponses}`,
+                `• Total Notifications: ${statistics.totalNotifications}`,
+                `• Total Errors: ${statistics.totalErrors}`,
+                ''
+            ];
+            
+            if (statistics.totalResponses > 0) {
+                summaryInfo.push(
+                    `• Average Response Time: ${statistics.averageResponseTime.toFixed(2)}ms`,
+                    `• Longest Response: ${statistics.longestResponseTime}ms`,
+                    `• Shortest Response: ${statistics.shortestResponseTime}ms`
+                );
+            }
+            
+            summaryInfo.push(
+                '',
+                'See Output Channel for detailed method statistics.'
+            );
+            
+            const summaryMessage = summaryInfo.join('\n');
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            vscode.window.showInformationMessage(`${summaryMessage}`, { modal: true });
+            
+            // Focus on output channel to show detailed stats
+            outputChannel?.show();
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            vscode.window.showErrorMessage(`Failed to retrieve LSP statistics: ${errorMessage}`);
+        }
+    });
+    
+    const resetLSPStatisticsCommand = vscode.commands.registerCommand('asciidoc.lsp.resetStatistics', () => {
+        const commandName = 'asciidoc.lsp.resetStatistics';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        
+        if (!serverLauncher) {
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
+            return;
+        }
+        
+        try {
+            const communicationService = serverLauncher.getCommunicationService();
+            communicationService.resetLSPStatistics();
+            
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            vscode.window.showInformationMessage('LSP communication statistics reset successfully');
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            vscode.window.showErrorMessage(`Failed to reset LSP statistics: ${errorMessage}`);
+        }
+    });
+    
+    const toggleLSPLoggingCommand = vscode.commands.registerCommand('asciidoc.lsp.toggleLogging', () => {
+        const commandName = 'asciidoc.lsp.toggleLogging';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        
+        if (!serverLauncher) {
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
+            return;
+        }
+        
+        try {
+            const communicationService = serverLauncher.getCommunicationService();
+            const middleware = communicationService.getLSPMiddleware();
+            
+            if (!middleware) {
+                throw new Error('LSP middleware not available');
+            }
+            
+            // Toggle logging (note: this is a simple toggle - in practice you might want to track state)
+            const currentConfig = configurationService?.getConfiguration();
+            const newLoggingState = !currentConfig?.debug.verboseLogging;
+            
+            middleware.configure({
+                detailedLogging: newLoggingState,
+                performanceLogging: currentConfig?.performance.enableBackgroundProcessing || false
+            });
+            
+            outputChannel?.appendLine(`Command ${commandName} parameters: {newLoggingState: ${newLoggingState}}`);
+            
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            vscode.window.showInformationMessage(`LSP detailed logging ${newLoggingState ? 'enabled' : 'disabled'}`);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            vscode.window.showErrorMessage(`Failed to toggle LSP logging: ${errorMessage}`);
+        }
+    });
+    
     context.subscriptions.push(
         restartServerCommand,
         showServerHealthCommand,
         showCapabilitiesCommand,
         stopServerCommand,
         startServerCommand,
-        generateCodeCommand
+        generateCodeCommand,
+        showLSPStatisticsCommand,
+        resetLSPStatisticsCommand,
+        toggleLSPLoggingCommand
     );
     
     outputChannel?.appendLine('Commands registered successfully (including enhanced server management)');

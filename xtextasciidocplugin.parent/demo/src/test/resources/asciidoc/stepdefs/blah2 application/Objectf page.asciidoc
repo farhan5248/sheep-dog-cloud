@@ -1,4 +1,0 @@
-= Step-Object: Objectf page
-
-== Step-Definition: is invalid
-

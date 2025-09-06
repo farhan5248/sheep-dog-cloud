@@ -20,6 +20,6 @@ Desc 3
 * When: The blah application, Objectf page is validef
 +
 |===
-| Grp | Infs  
+| Grp | Irnfs  
 | 8   | {ins}
 |===

@@ -95,12 +95,15 @@ export class ServerLauncher {
             
             const serverOptions = await this.createServerOptions(launchOptions);
             
-            // Create language client
+            // Prepare middleware for client options BEFORE creating the client
+            const enhancedClientOptions = this.communicationService.prepareClientOptions(clientOptions);
+            
+            // Create language client with enhanced client options
             this.client = new LanguageClient(
                 'xtextAsciiDocLanguageServer',
                 constants.LANGUAGE_SERVER_NAME,
                 serverOptions,
-                clientOptions
+                enhancedClientOptions
             );
 
             // Setup enhanced communication with timeout and retry logic

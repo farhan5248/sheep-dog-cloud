@@ -5,7 +5,7 @@
  */
 
 import * as vscode from 'vscode';
-import { LanguageClient, ServerCapabilities, ErrorHandler, ErrorAction, CloseAction, Message, ErrorHandlerResult, CloseHandlerResult } from 'vscode-languageclient/node';
+import { LanguageClient, ServerCapabilities, ErrorHandler, ErrorAction, CloseAction, Message, ErrorHandlerResult, CloseHandlerResult, State } from 'vscode-languageclient/node';
 import { AsciidocConfiguration } from './configurationService';
 
 /**
@@ -84,6 +84,9 @@ export class CommunicationService {
         
         // Setup LSP request/response logging
         this.setupLSPLogging();
+        
+        // Setup LSP lifecycle event logging
+        this.setupLSPLifecycleLogging();
         
         // Configure connection timeout
         const retryConfig = this.createRetryConfiguration();
@@ -518,17 +521,167 @@ export class CommunicationService {
     }
 
     /**
-     * Setup LSP request/response logging
-     * Note: Simplified logging due to sendRequest method signature complexity in v9.0.1
+     * Setup LSP request/response logging for comprehensive communication tracing
      */
     private setupLSPLogging(): void {
         if (!this.client) {
             return;
         }
 
-        this.outputChannel.appendLine('CommunicationService: LSP request/response logging setup (simplified for compatibility)');
-        // Note: Advanced request/response logging removed due to method signature incompatibility
-        // in vscode-languageclient v9.0.1. Basic logging is handled through trace settings.
+        this.outputChannel.appendLine('CommunicationService: Setting up comprehensive LSP request/response logging');
+
+        // Store reference to client for logging purposes
+        const client = this.client;
+        const outputChannel = this.outputChannel;
+        const configuration = this.configuration;
+        
+        // Override sendRequest method using proper type casting
+        const originalSendRequest = client.sendRequest.bind(client);
+        
+        (client as any).sendRequest = function(this: any, type: any, param?: any, token?: any): Promise<any> {
+            const requestId = Math.random().toString(36).substr(2, 9);
+            const timestamp = new Date().toISOString();
+            
+            // Extract method name from type parameter
+            let method = 'unknown';
+            if (typeof type === 'string') {
+                method = type;
+            } else if (type && typeof type === 'object') {
+                if (type.method) {
+                    method = type.method;
+                } else if (type._method) {
+                    method = type._method;
+                } else {
+                    // Log the full object to understand its structure
+                    try {
+                        method = `[TypeObject: ${JSON.stringify(type)}]`;
+                    } catch {
+                        method = '[TypeObject: not serializable]';
+                    }
+                }
+            }
+            
+            // Log outgoing request
+            outputChannel.appendLine(`LSP Request [${requestId}] ${timestamp}: ${method}`);
+            if (param !== undefined && configuration.debug.verboseLogging) {
+                try {
+                    outputChannel.appendLine(`LSP Request [${requestId}] Parameters: ${JSON.stringify(param, null, 2)}`);
+                } catch {
+                    outputChannel.appendLine(`LSP Request [${requestId}] Parameters: [not serializable]`);
+                }
+            }
+            
+            const startTime = Date.now();
+            
+            // Call original method with proper arguments
+            const result = originalSendRequest(type, param, token);
+            
+            // Add response logging
+            return result.then((response: any) => {
+                const duration = Date.now() - startTime;
+                outputChannel.appendLine(`LSP Response [${requestId}] ${new Date().toISOString()}: ${method} (${duration}ms)`);
+                
+                if (configuration.debug.verboseLogging && response !== undefined) {
+                    try {
+                        // Limit result logging to avoid overwhelming output
+                        const resultStr = typeof response === 'object' ? 
+                            JSON.stringify(response, null, 2).substring(0, 1000) + (JSON.stringify(response).length > 1000 ? '...' : '') :
+                            String(response);
+                        outputChannel.appendLine(`LSP Response [${requestId}] Result: ${resultStr}`);
+                    } catch {
+                        outputChannel.appendLine(`LSP Response [${requestId}] Result: [not serializable]`);
+                    }
+                }
+                
+                return response;
+            }).catch((error: any) => {
+                const duration = Date.now() - startTime;
+                outputChannel.appendLine(`LSP Response [${requestId}] ERROR ${new Date().toISOString()}: ${method} (${duration}ms) - ${error.message || error}`);
+                throw error;
+            });
+        };
+
+        // Override sendNotification method
+        const originalSendNotification = client.sendNotification.bind(client);
+        
+        (client as any).sendNotification = function(this: any, type: any, params?: any): Promise<void> {
+            const timestamp = new Date().toISOString();
+            
+            // Extract method name from type parameter
+            let method = 'unknown';
+            if (typeof type === 'string') {
+                method = type;
+            } else if (type && typeof type === 'object') {
+                if (type.method) {
+                    method = type.method;
+                } else if (type._method) {
+                    method = type._method;
+                } else {
+                    // Log the full object to understand its structure
+                    try {
+                        method = `[TypeObject: ${JSON.stringify(type)}]`;
+                    } catch {
+                        method = '[TypeObject: not serializable]';
+                    }
+                }
+            }
+            
+            outputChannel.appendLine(`LSP Notification ${timestamp}: ${method}`);
+            
+            if (params !== undefined && configuration.debug.verboseLogging) {
+                try {
+                    outputChannel.appendLine(`LSP Notification Parameters: ${JSON.stringify(params, null, 2)}`);
+                } catch {
+                    outputChannel.appendLine(`LSP Notification Parameters: [not serializable]`);
+                }
+            }
+            
+            return originalSendNotification(type, params);
+        };
+
+        this.outputChannel.appendLine('CommunicationService: LSP request/response logging setup completed');
+    }
+
+
+    /**
+     * Setup LSP lifecycle event logging for comprehensive communication monitoring
+     */
+    private setupLSPLifecycleLogging(): void {
+        if (!this.client) {
+            return;
+        }
+
+        this.outputChannel.appendLine('CommunicationService: Setting up LSP lifecycle event logging');
+
+        // Log client state changes
+        this.client.onDidChangeState((stateChangeEvent) => {
+            const timestamp = new Date().toISOString();
+            this.outputChannel.appendLine(`LSP Lifecycle ${timestamp}: Client state changed from ${stateChangeEvent.oldState} to ${stateChangeEvent.newState}`);
+            
+            // Log state-specific information using State enum
+            switch (stateChangeEvent.newState) {
+                case State.Stopped:
+                    this.outputChannel.appendLine(`LSP Lifecycle: Client is now stopped`);
+                    break;
+                case State.Starting:
+                    this.outputChannel.appendLine(`LSP Lifecycle: Client is starting...`);
+                    break;
+                case State.Running:
+                    this.outputChannel.appendLine(`LSP Lifecycle: Client is now running and ready`);
+                    // Log capabilities when client becomes ready
+                    if (this.configuration.debug.verboseLogging) {
+                        setTimeout(() => {
+                            const capabilities = this.client?.initializeResult?.capabilities;
+                            if (capabilities) {
+                                this.outputChannel.appendLine(`LSP Lifecycle: Server capabilities received during initialization`);
+                            }
+                        }, 100);
+                    }
+                    break;
+            }
+        });
+
+        this.outputChannel.appendLine('CommunicationService: LSP lifecycle event logging setup completed');
     }
 
     /**
@@ -539,26 +692,71 @@ export class CommunicationService {
             return;
         }
 
+        this.outputChannel.appendLine('CommunicationService: Setting up enhanced notification handlers');
+
         // Custom notification for server status
         this.client.onNotification('asciidoc/serverStatus', (params: any) => {
-            this.outputChannel.appendLine(`LSP Notification: asciidoc/serverStatus with parameters: ${JSON.stringify(params)}`);
+            const timestamp = new Date().toISOString();
+            this.outputChannel.appendLine(`LSP Server Notification ${timestamp}: asciidoc/serverStatus`);
+            if (this.configuration.debug.verboseLogging && params) {
+                this.outputChannel.appendLine(`LSP Server Notification Parameters: ${JSON.stringify(params, null, 2)}`);
+            }
         });
 
         // Custom notification for capability changes
         this.client.onNotification('asciidoc/capabilityChanged', (params: any) => {
-            this.outputChannel.appendLine(`LSP Notification: asciidoc/capabilityChanged with parameters: ${JSON.stringify(params)}`);
+            const timestamp = new Date().toISOString();
+            this.outputChannel.appendLine(`LSP Server Notification ${timestamp}: asciidoc/capabilityChanged - Re-detecting capabilities`);
+            if (this.configuration.debug.verboseLogging && params) {
+                this.outputChannel.appendLine(`LSP Server Notification Parameters: ${JSON.stringify(params, null, 2)}`);
+            }
             this.detectServerCapabilities(); // Re-detect capabilities
         });
 
         // Progress notifications
         this.client.onNotification('$/progress', (params: any) => {
+            const timestamp = new Date().toISOString();
             if (this.configuration.debug.verboseLogging) {
-                this.outputChannel.appendLine(`LSP Notification: $/progress with parameters: ${JSON.stringify(params)}`);
+                this.outputChannel.appendLine(`LSP Server Notification ${timestamp}: $/progress`);
+                if (params) {
+                    this.outputChannel.appendLine(`LSP Server Notification Parameters: ${JSON.stringify(params, null, 2)}`);
+                }
+            }
+        });
+
+        // Log configuration notifications
+        this.client.onNotification('workspace/didChangeConfiguration', (params: any) => {
+            const timestamp = new Date().toISOString();
+            this.outputChannel.appendLine(`LSP Server Notification ${timestamp}: workspace/didChangeConfiguration`);
+            if (this.configuration.debug.verboseLogging && params) {
+                this.outputChannel.appendLine(`LSP Server Notification Parameters: ${JSON.stringify(params, null, 2)}`);
+            }
+        });
+
+        // Log show message notifications from server
+        this.client.onNotification('window/showMessage', (params: any) => {
+            const timestamp = new Date().toISOString();
+            this.outputChannel.appendLine(`LSP Server Notification ${timestamp}: window/showMessage`);
+            if (params) {
+                this.outputChannel.appendLine(`LSP Server Message: ${params.message} (type: ${params.type})`);
+            }
+        });
+
+        // Log telemetry events
+        this.client.onNotification('telemetry/event', (params: any) => {
+            const timestamp = new Date().toISOString();
+            if (this.configuration.debug.verboseLogging) {
+                this.outputChannel.appendLine(`LSP Server Notification ${timestamp}: telemetry/event`);
+                if (params) {
+                    this.outputChannel.appendLine(`LSP Telemetry Data: ${JSON.stringify(params, null, 2)}`);
+                }
             }
         });
 
         // Note: We do NOT intercept textDocument/publishDiagnostics here as it prevents 
         // VSCode from properly displaying diagnostics. The language client handles this automatically.
+        
+        this.outputChannel.appendLine('CommunicationService: Enhanced notification handlers setup completed');
     }
 
     /**

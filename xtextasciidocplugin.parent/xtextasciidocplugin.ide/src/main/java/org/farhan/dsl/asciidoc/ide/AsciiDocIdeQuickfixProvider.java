@@ -5,6 +5,7 @@ package org.farhan.dsl.asciidoc.ide;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.eclipse.xtext.ide.editor.quickfix.AbstractDeclarativeIdeQuickfixProvider;
 import org.eclipse.xtext.ide.editor.quickfix.DiagnosticResolutionAcceptor;
 import org.eclipse.xtext.ide.editor.quickfix.QuickFix;

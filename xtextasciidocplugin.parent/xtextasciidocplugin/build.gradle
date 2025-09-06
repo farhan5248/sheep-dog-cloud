@@ -24,6 +24,7 @@ dependencies {
 	mwe2 "org.eclipse.xtext:org.eclipse.xtext.common.types:${xtextVersion}"
 	mwe2 "org.eclipse.xtext:org.eclipse.xtext.xtext.generator:${xtextVersion}"
 	mwe2 'org.eclipse.xtext:xtext-antlr-generator'
+	mwe2 "org.slf4j:slf4j-simple:${slf4jVersion}"
 }
 
 task generateXtextLanguage(type: JavaExec) {

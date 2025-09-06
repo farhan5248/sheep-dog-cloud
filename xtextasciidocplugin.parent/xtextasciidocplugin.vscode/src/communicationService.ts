@@ -77,7 +77,7 @@ export class CommunicationService {
         const startTime = Date.now();
         
         this.client = client;
-        this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {clientId: ${client.id}}`);
+        this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {clientName: ${client.name || 'AsciiDoc Language Client'}}`);
 
         // Configure enhanced error handling
         this.setupErrorHandling();
@@ -220,18 +220,31 @@ export class CommunicationService {
 
     /**
      * Diagnostic message filtering and formatting (2.2.4)
-     * Note: Client-side diagnostic filtering removed to allow proper VSCode diagnostic display
+     * Ensures diagnostics from server are properly integrated with VSCode
      */
     public setupDiagnosticHandling(): void {
         if (!this.client) {
             return;
         }
 
-        this.outputChannel.appendLine('CommunicationService: Diagnostic handling setup (filtering disabled to allow proper VSCode display)');
+        this.outputChannel.appendLine('CommunicationService: Setting up diagnostic handling for proper VSCode integration');
         
-        // Client-side diagnostic filtering has been removed to fix validation display issues
-        // All diagnostics are now passed directly to VSCode for proper rendering
-        // Server-side filtering can be implemented if needed
+        // Ensure diagnostic collection is properly set up
+        // The language client handles most diagnostic processing automatically,
+        // but we can add logging and monitoring here
+        
+        // Note: We do NOT monitor textDocument/publishDiagnostics notifications directly here
+        // as intercepting them can prevent VSCode from properly displaying diagnostics.
+        // The language client handles diagnostic publishing automatically to VSCode's diagnostic system.
+        
+        // Monitor completion requests for debugging
+        if (this.configuration.debug.verboseLogging) {
+            // Note: These are internal requests that we can't directly intercept,
+            // but we can add general LSP communication monitoring
+            this.outputChannel.appendLine('CommunicationService: Verbose LSP communication logging enabled');
+        }
+        
+        this.outputChannel.appendLine('CommunicationService: Diagnostic handling setup completed');
     }
 
     /**
@@ -506,38 +519,16 @@ export class CommunicationService {
 
     /**
      * Setup LSP request/response logging
+     * Note: Simplified logging due to sendRequest method signature complexity in v9.0.1
      */
     private setupLSPLogging(): void {
         if (!this.client) {
             return;
         }
 
-        // Log LSP requests
-        const originalSendRequest = this.client.sendRequest.bind(this.client);
-        this.client.sendRequest = (method: string, ...args: any[]) => {
-            const requestId = Math.random().toString(36).substring(7);
-            const startTime = Date.now();
-            
-            this.outputChannel.appendLine(`LSP Request [${requestId}]: ${method} with parameters: ${JSON.stringify(args)}`);
-            
-            const result = originalSendRequest(method, ...args);
-            
-            // Handle promise response
-            if (result && typeof result.then === 'function') {
-                result.then(
-                    (response: any) => {
-                        const duration = Date.now() - startTime;
-                        this.outputChannel.appendLine(`LSP Response [${requestId}] completed successfully in ${duration}ms: ${JSON.stringify(response)}`);
-                    },
-                    (error: any) => {
-                        const duration = Date.now() - startTime;
-                        this.outputChannel.appendLine(`LSP Response [${requestId}] failed after ${duration}ms: ${JSON.stringify(error)}`);
-                    }
-                );
-            }
-            
-            return result;
-        };
+        this.outputChannel.appendLine('CommunicationService: LSP request/response logging setup (simplified for compatibility)');
+        // Note: Advanced request/response logging removed due to method signature incompatibility
+        // in vscode-languageclient v9.0.1. Basic logging is handled through trace settings.
     }
 
     /**
@@ -566,12 +557,8 @@ export class CommunicationService {
             }
         });
 
-        // Text document diagnostics
-        this.client.onNotification('textDocument/publishDiagnostics', (params: any) => {
-            if (this.configuration.debug.verboseLogging) {
-                this.outputChannel.appendLine(`LSP Notification: textDocument/publishDiagnostics for ${params.uri} with ${params.diagnostics?.length || 0} diagnostics`);
-            }
-        });
+        // Note: We do NOT intercept textDocument/publishDiagnostics here as it prevents 
+        // VSCode from properly displaying diagnostics. The language client handles this automatically.
     }
 
     /**

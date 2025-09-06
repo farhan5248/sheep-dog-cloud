@@ -57,7 +57,7 @@
     </root>
 
     <!-- Set specific logger levels -->
-    <logger name="org.farhan" level="${LOG_LEVEL}" additivity="true">
+    <logger name="org.farhan" level="DEBUG" additivity="true">
         <appender-ref ref="FARHAN_FILE" />
     </logger>
 

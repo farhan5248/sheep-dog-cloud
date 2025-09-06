@@ -106,8 +106,8 @@ export class ServerLauncher {
             // Setup enhanced communication with timeout and retry logic
             await this.communicationService.setupConnection(this.client);
             
-            // Diagnostic handling setup removed to fix validation display issues
-            // All diagnostics now pass through normally to VSCode
+            // Setup diagnostic handling to ensure proper VSCode integration
+            this.communicationService.setupDiagnosticHandling();
             
             // Start server with retry logic and timeout handling
             await this.startWithRetryAndTimeout(launchOptions);

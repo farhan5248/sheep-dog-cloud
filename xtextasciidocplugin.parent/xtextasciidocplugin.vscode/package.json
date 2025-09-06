@@ -72,7 +72,7 @@
             {
                 "command": "asciidoc.generateCode",
                 "title": "AsciiDoc: Generate Code",
-                "category": "AsciiDoc"
+                "category": "AsciiDoc Server"
             }
         ],
         "menus": {

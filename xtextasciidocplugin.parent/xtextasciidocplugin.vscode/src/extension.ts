@@ -445,10 +445,12 @@ function registerCommands(context: vscode.ExtensionContext): void {
             const documentUri = activeEditor.document.uri.toString();
             outputChannel?.appendLine(`Command ${commandName} parameters: {documentUri: ${documentUri}, serverCommand: "asciidoc.generate"}`);
             
-            const result = await client.sendRequest('workspace/executeCommand', {
+            await client.sendNotification('workspace/executeCommand', {
                 command: 'asciidoc.generate',
                 arguments: [documentUri]
             });
+            
+            const result = 'Code generation command sent';
             
             const duration = Date.now() - startTime;
             outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms: ${result}`);

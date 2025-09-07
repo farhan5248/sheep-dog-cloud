@@ -463,54 +463,6 @@ function registerCommands(context: vscode.ExtensionContext): void {
         }
     });
     
-    // Add document validation command
-    const validateCommand = vscode.commands.registerCommand('asciidoc.server.validate', async () => {
-        const commandName = 'asciidoc.server.validate';
-        const startTime = Date.now();
-        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
-        
-        const activeEditor = vscode.window.activeTextEditor;
-        if (!activeEditor || activeEditor.document.languageId !== 'asciidoc') {
-            const errorMsg = 'No active AsciiDoc document';
-            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
-            vscode.window.showWarningMessage(errorMsg);
-            return;
-        }
-        
-        if (!serverLauncher) {
-            const errorMsg = 'AsciiDoc Language Server is not running';
-            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
-            vscode.window.showWarningMessage(errorMsg);
-            return;
-        }
-        
-        try {
-            const client = serverLauncher.getClient();
-            if (!client) {
-                throw new Error('Language client not available');
-            }
-            
-            const documentUri = activeEditor.document.uri.toString();
-            outputChannel?.appendLine(`Command ${commandName} parameters: {documentUri: ${documentUri}, serverCommand: "asciidoc.validate"}`);
-            
-            await client.sendNotification('workspace/executeCommand', {
-                command: 'asciidoc.validate',
-                arguments: [documentUri]
-            });
-            
-            const result = 'Document validation command sent';
-            
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms: ${result}`);
-            vscode.window.showInformationMessage(`Validation result: Document validation triggered`);
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
-            vscode.window.showErrorMessage(`Document validation failed: ${errorMessage}`);
-        }
-    });
-    
     // Add logging management commands
     const setLoggingLevelCommand = vscode.commands.registerCommand('asciidoc.logging.setLevel', async () => {
         const levels = ['OFF', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'];
@@ -561,6 +513,150 @@ function registerCommands(context: vscode.ExtensionContext): void {
             vscode.window.showInformationMessage(`Logs exported to ${uri.fsPath}`);
         }
     });
+    
+    // Add workspace validation command
+    const validateWorkspaceCommand = vscode.commands.registerCommand('asciidoc.server.validateWorkspace', async () => {
+        const commandName = 'asciidoc.server.validateWorkspace';
+        const startTime = Date.now();
+        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        
+        if (!serverLauncher) {
+            const errorMsg = 'AsciiDoc Language Server is not running';
+            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            vscode.window.showWarningMessage(errorMsg);
+            return;
+        }
+        
+        try {
+            const client = serverLauncher.getClient();
+            if (!client) {
+                throw new Error('Language client not available');
+            }
+            
+            // Find all AsciiDoc files in workspace, handling multiple workspace folders
+            const excludePatterns = '{**/node_modules/**,**/.git/**,**/target/**,**/build/**,**/dist/**,**/out/**}';
+            let asciidocFiles: vscode.Uri[] = [];
+            
+            if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0) {
+                // Handle multiple workspace folders
+                for (const workspaceFolder of vscode.workspace.workspaceFolders) {
+                    const pattern = new vscode.RelativePattern(workspaceFolder, '**/*.asciidoc');
+                    const folderFiles = await vscode.workspace.findFiles(pattern, excludePatterns);
+                    asciidocFiles = asciidocFiles.concat(folderFiles);
+                }
+                outputChannel?.appendLine(`Command ${commandName} discovered files across ${vscode.workspace.workspaceFolders.length} workspace folders`);
+            } else {
+                // Fallback to global search if no workspace folders
+                asciidocFiles = await vscode.workspace.findFiles('**/*.asciidoc', excludePatterns);
+                outputChannel?.appendLine(`Command ${commandName} discovered files using global search`);
+            }
+            
+            if (asciidocFiles.length === 0) {
+                const warningMsg = 'No AsciiDoc files found in workspace';
+                outputChannel?.appendLine(`Command ${commandName} warning: ${warningMsg}`);
+                vscode.window.showInformationMessage(warningMsg);
+                return;
+            }
+            
+            outputChannel?.appendLine(`Command ${commandName} parameters: {fileCount: ${asciidocFiles.length}, action: "trigger diagnostics via didChange"}`);
+            
+            // Show progress notification
+            await vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: 'Triggering diagnostics for AsciiDoc workspace files',
+                cancellable: true
+            }, async (progress, token) => {
+                const increment = 100 / asciidocFiles.length;
+                let processedCount = 0;
+                
+                // Get currently open documents to avoid duplicate didOpen notifications
+                const openDocuments = vscode.workspace.textDocuments
+                    .filter(doc => doc.languageId === 'asciidoc')
+                    .map(doc => doc.uri.toString());
+                
+                for (const file of asciidocFiles) {
+                    if (token.isCancellationRequested) {
+                        outputChannel?.appendLine(`Command ${commandName} cancelled by user after processing ${processedCount} files`);
+                        return;
+                    }
+                    
+                    try {
+                        const documentUri = file.toString();
+                        const fileName = file.fsPath.split(/[\\/]/).pop();
+                        progress.report({ 
+                            increment, 
+                            message: `Triggering diagnostics for ${fileName} (${processedCount + 1}/${asciidocFiles.length})` 
+                        });
+                        
+                        // Check if document is already open in editor
+                        const isDocumentOpen = openDocuments.includes(documentUri);
+                        
+                        let documentVersion = 1;
+                        
+                        if (!isDocumentOpen) {
+                            // Send textDocument/didOpen notification for unopened files
+                            try {
+                                const document = await vscode.workspace.openTextDocument(file);
+                                await client.sendNotification('textDocument/didOpen', {
+                                    textDocument: {
+                                        uri: documentUri,
+                                        languageId: 'asciidoc',
+                                        version: documentVersion,
+                                        text: document.getText()
+                                    }
+                                });
+                                outputChannel?.appendLine(`Command ${commandName} sent didOpen for unopened file: ${fileName}`);
+                                documentVersion = 2; // Increment for next notification
+                            } catch (openError) {
+                                const openErrorMessage = openError instanceof Error ? openError.message : 'Unknown error';
+                                outputChannel?.appendLine(`Command ${commandName} failed to open document ${fileName}: ${openErrorMessage}`);
+                                // Continue with didChange even if didOpen fails
+                            }
+                        } else {
+                            // For already open documents, use higher version number
+                            documentVersion = 2;
+                        }
+                        
+                        // Send textDocument/didChange to trigger diagnostics and UI updates
+                        try {
+                            const document = await vscode.workspace.openTextDocument(file);
+                            await client.sendNotification('textDocument/didChange', {
+                                textDocument: {
+                                    uri: documentUri,
+                                    version: documentVersion
+                                },
+                                contentChanges: [{
+                                    text: document.getText()
+                                }]
+                            });
+                            outputChannel?.appendLine(`Command ${commandName} sent didChange to trigger diagnostics for: ${fileName}`);
+                        } catch (changeError) {
+                            const changeErrorMessage = changeError instanceof Error ? changeError.message : 'Unknown error';
+                            outputChannel?.appendLine(`Command ${commandName} failed to send didChange for ${fileName}: ${changeErrorMessage}`);
+                        }
+                        
+                        // Small delay to prevent overwhelming the language server
+                        await new Promise(resolve => setTimeout(resolve, 10));
+                        
+                        processedCount++;
+                        outputChannel?.appendLine(`Command ${commandName} triggered diagnostics for file ${processedCount}/${asciidocFiles.length}: ${fileName}`);
+                    } catch (fileError) {
+                        const errorMessage = fileError instanceof Error ? fileError.message : 'Unknown error';
+                        outputChannel?.appendLine(`Command ${commandName} file error for ${file.fsPath}: ${errorMessage}`);
+                    }
+                }
+                
+                const duration = Date.now() - startTime;
+                outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms: processed ${processedCount} files`);
+                vscode.window.showInformationMessage(`Workspace diagnostics triggered: ${processedCount} AsciiDoc files processed`);
+            });
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const duration = Date.now() - startTime;
+            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            vscode.window.showErrorMessage(`Workspace diagnostic triggering failed: ${errorMessage}`);
+        }
+    });
 
     context.subscriptions.push(
         restartServerCommand,
@@ -569,7 +665,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
         stopServerCommand,
         startServerCommand,
         generateCodeCommand,
-        validateCommand,
+        validateWorkspaceCommand,
         setLoggingLevelCommand,
         showOutputCommand,
         showServerOutputCommand,

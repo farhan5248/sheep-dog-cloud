@@ -32,7 +32,7 @@ public class CommandService implements IExecutableCommandService {
 	@Override
 	public List<String> initialize() {
 		logger.debug("Entering initialize");
-		List<String> commands = Lists.newArrayList("asciidoc.generate", "asciidoc.validate");
+		List<String> commands = Lists.newArrayList("asciidoc.generate");
 		logger.debug("Exiting initialize");
 		return commands;
 	}
@@ -78,70 +78,7 @@ public class CommandService implements IExecutableCommandService {
 					logger.error("Command {} failed: {}", commandName, errorMsg);
 					return errorMsg;
 				}
-			} else if ("asciidoc.validate".equals(commandName)) {
-				JsonPrimitive uriArg = (JsonPrimitive) Iterables.getFirst(params.getArguments(), null);
-				final String uri = (uriArg != null) ? uriArg.getAsString() : null;
-
-				logger.debug("Command {} parameters: {uri: {}}", commandName, uri);
-
-				if (uri != null && !uri.isEmpty()) {
-					try {
-						Object result = access.doRead(uri, (ILanguageServerAccess.Context context) -> {
-							Resource resource = context.getResource();
-							if (resource != null) {
-								logger.debug("Command {} executing validation for resource: {}", commandName,
-										resource.getURI());
-								
-								// Use the injected validator to validate the resource
-								List<Issue> issues = resourceValidator.validate(resource, CheckMode.ALL, cancelIndicator);
-								
-								// Count issues by severity
-								int errorCount = 0;
-								int warningCount = 0;
-								int infoCount = 0;
-								
-								for (Issue issue : issues) {
-									switch (issue.getSeverity()) {
-										case ERROR:
-											errorCount++;
-											break;
-										case WARNING:
-											warningCount++;
-											break;
-										case INFO:
-											infoCount++;
-											break;
-									}
-								}
-								
-								String summary = String.format("Validation completed: %d errors, %d warnings, %d info messages", 
-									errorCount, warningCount, infoCount);
-								logger.debug("Validation summary: {}", summary);
-								return summary;
-							}
-							logger.warn("Command {} failed: Resource not found for uri: {}", commandName, uri);
-							return "Resource not found";
-						}).get();
-
-						// Note: Diagnostics should show automatically when validation is triggered
-						// The manual validation above should be sufficient to identify issues
-						// If diagnostics aren't showing, check if the language server has automatic validation enabled
-
-						long duration = System.currentTimeMillis() - startTime;
-						logger.info("Command {} completed successfully in {}ms: {}", commandName, duration, result);
-						return result;
-					} catch (InterruptedException | ExecutionException e) {
-						long duration = System.currentTimeMillis() - startTime;
-						String errorMsg = "Validation failed: " + e.getMessage();
-						logger.error("Command {} failed after {}ms: {}", commandName, duration, errorMsg, e);
-						return errorMsg;
-					}
-				} else {
-					String errorMsg = "Document URI missing";
-					logger.error("Command {} failed: {}", commandName, errorMsg);
-					return errorMsg;
-				}
-			}
+			} 
 
 			String errorMsg = "Bad Command: " + commandName;
 			logger.error("Command execution failed: {}", errorMsg);

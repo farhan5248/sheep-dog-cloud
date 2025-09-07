@@ -75,11 +75,6 @@
                 "category": "AsciiDoc Server"
             },
             {
-                "command": "asciidoc.server.validate",
-                "title": "AsciiDoc: Validate Document",
-                "category": "AsciiDoc Server"
-            },
-            {
                 "command": "asciidoc.logging.setLevel",
                 "title": "AsciiDoc: Set Logging Level",
                 "category": "AsciiDoc Logging"
@@ -103,6 +98,11 @@
                 "command": "asciidoc.logging.exportLogs",
                 "title": "AsciiDoc: Export Logs to File",
                 "category": "AsciiDoc Logging"
+            },
+            {
+                "command": "asciidoc.server.validateWorkspace",
+                "title": "AsciiDoc: Validate All Workspace Files",
+                "category": "AsciiDoc Server"
             }
         ],
         "menus": {
@@ -112,8 +112,7 @@
                     "when": "editorLangId == asciidoc"
                 },
                 {
-                    "command": "asciidoc.server.validate",
-                    "when": "editorLangId == asciidoc"
+                    "command": "asciidoc.server.validateWorkspace"
                 }
             ]
         },
@@ -125,10 +124,9 @@
                 "when": "editorLangId == asciidoc"
             },
             {
-                "command": "asciidoc.server.validate",
-                "key": "ctrl+shift+v",
-                "mac": "cmd+shift+v",
-                "when": "editorLangId == asciidoc"
+                "command": "asciidoc.server.validateWorkspace",
+                "key": "ctrl+shift+r",
+                "mac": "cmd+shift+r"
             }
         ],
         "configuration": {

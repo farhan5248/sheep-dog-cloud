@@ -14,9 +14,11 @@ buildscript {
 
 apply plugin: 'net.researchgate.release'
 
+// Root project version - applies to all artifacts
+version = '1.0.0-SNAPSHOT'
 
 // Configuration for Xtext projects
-configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') }) {
+configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') && !it.name.contains('.vscode') }) {
 	ext.xtextVersion = '2.40.0'
 	ext.sheepDogTestVersion = '1.23-SNAPSHOT'
 	ext.slf4jVersion = '2.0.16'
@@ -36,6 +38,7 @@ configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') }) {
 	}
 	
 	apply plugin: 'java-library'
+	apply plugin: 'maven-publish'
 	dependencies {
 		api platform("org.eclipse.xtext:xtext-dev-bom:${xtextVersion}")
 	}
@@ -44,8 +47,8 @@ configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') }) {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
 	
-	group = 'xtextasciidocplugin'
-	version = '1.0.0-SNAPSHOT'
+	group = 'org.farhan'
+	version = rootProject.version
 	
 	java {
 		sourceCompatibility = JavaVersion.VERSION_21
@@ -56,10 +59,38 @@ configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') }) {
 		exclude group: 'asm'
 	}
 
+	publishing {
+		publications {
+			maven(MavenPublication) {
+				from components.java
+				
+				groupId = 'org.farhan'
+				artifactId = project.name
+				version = project.version
+			}
+		}
+		repositories {
+			maven {
+				name = "GitHub"
+				url = uri("https://maven.pkg.github.com/farhan5248/sheep-dog-local")
+				credentials {
+					username = project.findProperty("gpr.user") ?: 'farhan5248'
+					password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+				}
+			}
+		}
+	}
+	
+	// Make publish behave like Maven's deploy (install + deploy)
+	publish.dependsOn publishToMavenLocal
+
 }
 
 // Configuration for vscode projects
 configure(subprojects.findAll { it.name.contains('.vscode') }) {
+
+	// Use root project version for consistency
+	version = rootProject.version
 
 	apply plugin: 'com.github.node-gradle.node'
 	node {
@@ -78,9 +109,9 @@ configure(subprojects.findAll { it.name.contains('.vscode') }) {
 		outputs.dir('out')
 	}
 
-	task vscodeExtension(dependsOn: [npmInstall]) {
+	task packageExtension(dependsOn: [npmInstall]) {
 		ext.destDir = new File(buildDir, 'vscode')
-		ext.archiveName = "$project.name-${project.version}.vsix"
+		ext.archiveName = "$project.name-${rootProject.version}.vsix"
 		ext.destPath = "$destDir/$archiveName"
 		outputs.dir destDir
 		doFirst {
@@ -103,7 +134,7 @@ configure(subprojects.findAll { it.name.contains('.vscode') }) {
 
 	task cleanVscodeOutput {
 		doLast {
-			delete vscodeExtension.destDir
+			delete packageExtension.destDir
 			delete 'out' // output of npmInstall - don't want to delete node_modules
 		}
 		
@@ -122,20 +153,20 @@ plugins.withType(com.github.gradle.node.NodePlugin) {
 
 updateVersion {
 		doLast {
-			// custom code
+			// Update VSCode extension package.json with new version
 			def versionPattern = /\d+.\d+(.\d+)?/
 			def encoding = 'UTF-8'
 			def filesToUpdate = [
-				new File('vscode-extension', 'package.json'),
 				new File('xtextasciidocplugin.vscode', 'package.json'),
 			]
 
-			// String replacements - isn't long enough to justify advanced code ;)
+			// String replacements - sync package.json version with project version
 			filesToUpdate.forEach { file ->
-
-				String text = file.getText(encoding)
-				text = text.replaceAll("\"version\": \"$versionPattern\",", "\"version\": \"$project.version\",")
-				file.setText(text, encoding)
+				if (file.exists()) {
+					String text = file.getText(encoding)
+					text = text.replaceAll("\"version\": \"$versionPattern\",", "\"version\": \"$project.version\",")
+					file.setText(text, encoding)
+				}
 			}
 		}
 	}

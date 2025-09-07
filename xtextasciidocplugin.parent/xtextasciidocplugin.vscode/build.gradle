@@ -4,21 +4,26 @@ task copyApplication(type: Sync) {
     into 'src/asciidoc'
 }
 
-clean {
-    doLast {
-        delete copyApplication.outputs
+task cleanCopyApplication(type: Delete) {
+    delete copyApplication.outputs
+}
+
+// Hook the clean task from the root configuration
+afterEvaluate {
+    if (tasks.findByName('clean')) {
+        clean.dependsOn cleanCopyApplication
     }
 }
 
 npmInstall.dependsOn copyApplication
 
-task installExtension(type: Exec, dependsOn: vscodeExtension) {
+task installExtension(type: Exec, dependsOn: packageExtension) {
     if (System.properties['os.name'].toLowerCase().contains('windows')) {
         commandLine 'code.cmd'
     } else {
         commandLine 'code'
     }
-    args '--install-extension', vscodeExtension.destPath
+    args '--install-extension', packageExtension.destPath
 }
 
 task startCode(type:Exec, dependsOn: installExtension) {
@@ -30,7 +35,7 @@ task startCode(type:Exec, dependsOn: installExtension) {
     args "$rootProject.projectDir/demo/", '--new-window'
 }
 
-task publish(dependsOn: vscodeExtension, type: NodeTask) {
+task publishExtension(dependsOn: packageExtension, type: NodeTask) {
     script = file("$rootProject.projectDir/node_modules/vsce/out/vsce")
     args = [ 'publish', '-p', System.getenv('ACCESS_TOKEN'), "--packagePath", "${project.buildDir}/vscode/xtextasciidocplugin.vscode-${project.version}.vsix"]
     execOverrides {

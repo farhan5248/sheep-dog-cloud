@@ -1,25 +1,5 @@
 = Test-Suite: Create Code From Documentation
 
-@sheep-dog-dev
-@round-trip
-
-This is the most common usage of the sheep-dog plugin, create test automation code from documentation.
-The sheep-dog plugin will create feature files, step definition glue code and Java interfaces from the documentation.
-
-The feature files will be created in the src-gen/test/resources/cucumber/specs directory.
-The step definition glue code will be created in the src-gen/test/java/org/farhan/stepdefs directory.
-The interfaces will be created in the src-gen/test/java/org/farhan/objects directory.
-
 == Test-Case: Story Two
 
-@tag3
-Desc 3
-
-* Given: The blah2 application, Object page is invalid
-
-* When: The blah application, Objectf page is validef
-+
-|===
-| Grp | Irnfs  
-| 8   | {ins}
-|===
+* Given: The blah application,

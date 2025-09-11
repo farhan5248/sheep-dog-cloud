@@ -174,19 +174,19 @@ public class LanguageAccessImpl implements ILanguageAccess {
 	@Override
 	public ArrayList<String> getFilesRecursively(String component) throws Exception {
 		ArrayList<String> components = new ArrayList<String>();
-		for (String stepDefObjectResource : getFolderResources(new File(getProjectPath() + getOutputDirPath()))) {
-			// ([^\/]+)\/([^\/]+)\/(.*).feature group 3
+		for (String stepDefObjectResource : getFiles(new File(getProjectPath() + getOutputDirPath() + component))) {
+			stepDefObjectResource = stepDefObjectResource.replace(File.separator, "/");
 			components.add(stepDefObjectResource.replaceFirst(".*" + component + "/", component + "/"));
 		}
 		return components;
 	}
 
-	private ArrayList<String> getFolderResources(File folder) throws Exception {
+	private ArrayList<String> getFiles(File folder) throws Exception {
 		ArrayList<String> files = new ArrayList<String>();
 		if (folder.exists()) {
 			for (File r : folder.listFiles()) {
 				if (!r.isFile()) {
-					files.addAll(getFolderResources(r));
+					files.addAll(getFiles(r));
 				} else {
 					files.add(r.getAbsolutePath());
 				}
@@ -208,6 +208,7 @@ public class LanguageAccessImpl implements ILanguageAccess {
 			return null;
 		}
 	}
+
 	public ArrayList<Object> getPreviousSteps() {
 		// TODO add a test to make sure the previous steps only are returned
 		TestStepContainer as = (TestStepContainer) step.eContainer();
@@ -223,13 +224,11 @@ public class LanguageAccessImpl implements ILanguageAccess {
 		}
 		return steps;
 	}
+
 	private URI getObjectURI(String objectQualifiedName) {
 		// TODO this is so not safe to run on Ubuntu
-		logger.debug("Entering getObjectURI with objectQualifiedName {}", objectQualifiedName);
 		String objectPath = getProjectPath() + getOutputDirPath() + objectQualifiedName.replace("/", File.separator);
-		logger.debug("objectPath {}", objectPath);
 		URI uri = URI.createFileURI(objectPath);
-		logger.debug("uri {}", uri);
 		return uri;
 	}
 
@@ -239,12 +238,9 @@ public class LanguageAccessImpl implements ILanguageAccess {
 		return "src/test/resources/asciidoc/stepdefs/".replace("/", File.separator);
 	}
 
-
-
 	private String getProjectPath() {
 		String uriPath = getStepResource().getURI().toFileString().replace(File.separator, "/");
 		String projectPath = uriPath.split("src/test/resources/asciidoc/specs/")[0].replace("/", File.separator);
-		logger.debug("projectPath {}", projectPath);
 		return projectPath;
 	}
 
@@ -297,7 +293,7 @@ public class LanguageAccessImpl implements ILanguageAccess {
 	}
 
 	public String getStepName() {
-		return step.getName();
+		return step.getName() != null ? step.getName() : "";
 	}
 
 	@Override

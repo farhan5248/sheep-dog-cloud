@@ -12,10 +12,10 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/xtextasciidocplugin-lsp.log</file>
+        <file>${LOG_PATH}/xtextasciidocplugin-ide.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- Daily rollover with compression -->
-            <fileNamePattern>${LOG_PATH}/xtextasciidocplugin-lsp-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/xtextasciidocplugin-ide-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
             <!-- Keep 1 day worth of history -->
             <maxHistory>1</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
@@ -26,7 +26,7 @@
     </appender>
 
     <appender name="FARHAN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/xtextasciidocplugin-lsp.org.farhan.log</file>
+        <file>${LOG_PATH}/xtextasciidocplugin-ide.org.farhan.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/farhan-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
             <maxHistory>1</maxHistory>
@@ -38,9 +38,9 @@
     </appender>
 
     <appender name="LSP_TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/xtextasciidocplugin-lsp-trace.log</file>
+        <file>${LOG_PATH}/xtextasciidocplugin-ide-trace.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/lsp-trace-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/xtextasciidocplugin-ide-trace-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
             <maxHistory>1</maxHistory>
             <totalSizeCap>200MB</totalSizeCap>
         </rollingPolicy>
@@ -57,7 +57,7 @@
     </root>
 
     <!-- Set specific logger levels -->
-    <logger name="org.farhan" level="DEBUG" additivity="true">
+    <logger name="org.farhan" level="${LOG_LEVEL}" additivity="true">
         <appender-ref ref="FARHAN_FILE" />
     </logger>
 

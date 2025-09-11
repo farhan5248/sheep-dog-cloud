@@ -2,4 +2,7 @@
 
 == Test-Case: Story Two
 
-* Given: The blah application,
+* Given: The blah application, Objectf page is validef
+
+* And: The blah2 application, Object page is invalid
+

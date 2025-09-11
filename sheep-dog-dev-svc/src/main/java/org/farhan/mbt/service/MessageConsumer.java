@@ -2,14 +2,13 @@ package org.farhan.mbt.service;
 
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
 import org.farhan.mbt.config.JmsConfig;
-import org.farhan.mbt.controller.LoggerImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.farhan.mbt.core.Converter;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.exception.MessageConsumingException;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.cucumber.ConvertCucumberToUML;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -42,9 +41,9 @@ public class MessageConsumer {
             try {
                 Converter mojo;
                 if (file.getFileName().endsWith(".asciidoc")) {
-                    mojo = new ConvertAsciidoctorToUML(file.getTags(), repository, new LoggerImpl(logger));
+                    mojo = new ConvertAsciidoctorToUML(file.getTags(), repository);
                 } else if (file.getFileName().endsWith(".feature")) {
-                    mojo = new ConvertCucumberToUML(file.getTags(), repository, new LoggerImpl(logger));
+                    mojo = new ConvertCucumberToUML(file.getTags(), repository);
                 } else {
                     logger.warn("Unsupported file type: " + file.getFileName());
                     IN_FLIGHT = 0;

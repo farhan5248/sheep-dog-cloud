@@ -3,7 +3,6 @@
  */
 package org.farhan.dsl.asciidoc.generator;
 
-import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 import org.eclipse.emf.ecore.resource.Resource;

@@ -1,13 +1,16 @@
 package org.farhan.mbt.service.cucumber;
 
-import org.farhan.mbt.core.Logger;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.core.UMLTestProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConvertUMLToCucumberSpring extends ConvertUMLToCucumber {
 
-	public ConvertUMLToCucumberSpring(String tags, ObjectRepository fa, Logger log, String serverHost, int serverPort) {
-		super(tags, fa, log, serverHost, serverPort);
+	private static final Logger log = LoggerFactory.getLogger(ConvertUMLToCucumberSpring.class);
+
+	public ConvertUMLToCucumberSpring(String tags, ObjectRepository fa, String serverHost, int serverPort) {
+		super(tags, fa, serverHost, serverPort);
 	}
 
 	public void initProjects() throws Exception {

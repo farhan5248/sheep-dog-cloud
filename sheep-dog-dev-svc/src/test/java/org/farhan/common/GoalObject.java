@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 import org.farhan.mbt.model.TransformableFile;
 import org.junit.jupiter.api.Assertions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -14,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class GoalObject extends TestObject {
-
+	private static final Logger logger = LoggerFactory.getLogger(GoalObject.class);
 	private final RestTemplate restTemplate;
 	private final int RETRY_COUNT = 10;
 
@@ -106,12 +108,12 @@ public class GoalObject extends TestObject {
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK &&
 						response.getBody().contains("\"status\":\"UP\"")) {
-					System.out.println("Service ready");
+					logger.info("Service ready");
 					return;
 				}
 			} catch (Exception e) {
 				long timeLeft = (timeout - (System.currentTimeMillis() - startTime)) / 1000;
-				System.out.println("Service not ready yet, " + timeLeft + " seconds remaining");
+				logger.warn("Service not ready yet, " + timeLeft + " seconds remaining");
 			}
 
 			try {

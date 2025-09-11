@@ -7,7 +7,6 @@ import org.farhan.dsl.cucumber.cucumber.Scenario;
 import org.farhan.dsl.cucumber.cucumber.ScenarioOutline;
 import org.farhan.dsl.cucumber.cucumber.Step;
 import org.farhan.mbt.core.Converter;
-import org.farhan.mbt.core.Logger;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.core.UMLTestCase;
 import org.farhan.mbt.core.UMLTestData;
@@ -15,14 +14,17 @@ import org.farhan.mbt.core.UMLTestSuite;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.core.UMLTestSetup;
 import org.farhan.mbt.core.UMLTestStep;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConvertCucumberToUML extends Converter {
 
+	private static final Logger log = LoggerFactory.getLogger(ConvertCucumberToUML.class);
 	protected CucumberPathConverter pathConverter;
 	private CucumberFeature srcObjTestSuite;
 
-	public ConvertCucumberToUML(String tags, ObjectRepository fa, Logger log) {
-		super(tags, fa, log);
+	public ConvertCucumberToUML(String tags, ObjectRepository fa) {
+		super(tags, fa);
 	}
 
 	@Override
@@ -124,7 +126,7 @@ public class ConvertCucumberToUML extends Converter {
 	private boolean isAnyTestCaseSelected() {
 		for (AbstractScenario a : srcObjTestSuite.getAbstractScenarioList()) {
 			if (isTestCaseSelected(a)) {
-				return true;				
+				return true;
 			}
 		}
 		return false;

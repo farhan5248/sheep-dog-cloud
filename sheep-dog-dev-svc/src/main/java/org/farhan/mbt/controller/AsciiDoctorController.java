@@ -43,7 +43,7 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting clearConvertAsciidoctorToUMLObjects");
 		logger.info("tags:" + tags);
-		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)));
+		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository));
 		logger.info("Ending clearConvertAsciidoctorToUMLObjects");
 	}
 
@@ -52,7 +52,7 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToAsciidoctorObjectNames");
 		List<TransformableFile> fileList = service.getObjectNames(
-				new ConvertUMLToAsciidoctor(tags, repository, new LoggerImpl(logger)),
+				new ConvertUMLToAsciidoctor(tags, repository),
 				tags);
 		logger.info("Ending getConvertUMLToAsciidoctorObjectNames");
 		return fileList;
@@ -73,7 +73,7 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 		// return value
 		TransformableFile mtr = new TransformableFile(fileName, contents, tags);
 		service.convertSourceObject(
-				new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)),
+				new ConvertAsciidoctorToUML(tags, repository),
 				mtr);
 		logger.info("Ending runConvertAsciidoctorToUML");
 		return mtr;
@@ -87,7 +87,7 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
 		TransformableFile mtr = service.convertObject(
-				new ConvertUMLToAsciidoctor(tags, repository, new LoggerImpl(logger)),
+				new ConvertUMLToAsciidoctor(tags, repository),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToAsciidoctor");

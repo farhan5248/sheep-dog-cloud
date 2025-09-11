@@ -53,7 +53,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting clearConvertCucumberToUMLObjects");
 		logger.info("tags:" + tags);
-		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository, new LoggerImpl(logger)));
+		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository));
 		logger.info("Ending clearConvertCucumberToUMLObjects");
 	}
 
@@ -62,7 +62,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberGuiceObjectNames");
 		List<TransformableFile> fileList = service.getObjectNames(
-				new ConvertUMLToCucumberGuice(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
+				new ConvertUMLToCucumberGuice(tags, repository, serverHost, serverPort),
 				tags);
 		logger.info("Ending getConvertUMLToCucumberGuiceObjectNames");
 		return fileList;
@@ -73,7 +73,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberObjectNames");
 		List<TransformableFile> fileList = service.getObjectNames(
-				new ConvertUMLToCucumber(tags, repository, new LoggerImpl(logger), serverHost, serverPort), tags);
+				new ConvertUMLToCucumber(tags, repository, serverHost, serverPort), tags);
 		logger.info("Ending getConvertUMLToCucumberObjectNames");
 		return fileList;
 	}
@@ -83,7 +83,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting getConvertUMLToCucumberSpringObjectNames");
 		List<TransformableFile> fileList = service.getObjectNames(
-				new ConvertUMLToCucumberSpring(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
+				new ConvertUMLToCucumberSpring(tags, repository, serverHost, serverPort),
 				tags);
 		logger.info("Ending getConvertUMLToCucumberSpringObjectNames");
 		return fileList;
@@ -98,7 +98,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("fileName:" + fileName);
 		TransformableFile mtr = new TransformableFile(fileName, contents, tags);
 		service.convertSourceObject(
-				new ConvertCucumberToUML(tags, repository, new LoggerImpl(logger)),
+				new ConvertCucumberToUML(tags, repository),
 				mtr);
 		logger.info("Ending runConvertCucumberToUML");
 		return mtr;
@@ -116,7 +116,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
 		TransformableFile mtr = service.convertObject(
-				new ConvertUMLToCucumber(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
+				new ConvertUMLToCucumber(tags, repository, serverHost, serverPort),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumber");
@@ -131,7 +131,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
 		TransformableFile mtr = service.convertObject(
-				new ConvertUMLToCucumberGuice(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
+				new ConvertUMLToCucumberGuice(tags, repository, serverHost, serverPort),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumberGuice");
@@ -146,7 +146,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("tags:" + tags);
 		logger.info("fileName:" + fileName);
 		TransformableFile mtr = service.convertObject(
-				new ConvertUMLToCucumberSpring(tags, repository, new LoggerImpl(logger), serverHost, serverPort),
+				new ConvertUMLToCucumberSpring(tags, repository, serverHost, serverPort),
 				fileName, contents);
 		logger.debug("response: " + mtr.toString());
 		logger.info("Ending runConvertUMLToCucumberSpring");

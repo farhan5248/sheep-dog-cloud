@@ -13,7 +13,6 @@ import org.farhan.dsl.cucumber.cucumber.ScenarioOutline;
 import org.farhan.dsl.cucumber.cucumber.Step;
 import org.farhan.dsl.cucumber.cucumber.StepTable;
 import org.farhan.mbt.core.Converter;
-import org.farhan.mbt.core.Logger;
 import org.farhan.mbt.core.ObjectRepository;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.model.UMLStepObject;
@@ -28,12 +27,16 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConvertUMLToCucumber extends Converter {
 
 	protected UMLTestSuite srcObj;
 	protected CucumberFeature tgtObjTestSuite;
 	protected CucumberJava tgtObjStepObject;
+
+	private static final Logger log = LoggerFactory.getLogger(ConvertUMLToCucumber.class);
 	protected CucumberPathConverter pathConverter;
 
 	private final RestTemplate restTemplate;
@@ -41,8 +44,8 @@ public class ConvertUMLToCucumber extends Converter {
 	private String serverHost;
 	private int serverPort;
 
-	public ConvertUMLToCucumber(String tags, ObjectRepository fa, Logger log, String serverHost, int serverPort) {
-		super(tags, fa, log);
+	public ConvertUMLToCucumber(String tags, ObjectRepository fa, String serverHost, int serverPort) {
+		super(tags, fa);
 		restTemplate = new RestTemplate();
 		this.serverHost = serverHost;
 		this.serverPort = serverPort;

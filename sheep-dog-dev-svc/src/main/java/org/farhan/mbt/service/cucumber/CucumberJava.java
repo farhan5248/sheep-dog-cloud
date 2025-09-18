@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import org.apache.commons.lang3.StringUtils;
-import org.farhan.dsl.common.TestStepNameHelper;
+import org.farhan.dsl.lang.TestStepUtility;
 import org.farhan.mbt.core.ConvertibleObject;
 
 import com.github.javaparser.JavaParser;
@@ -74,7 +74,7 @@ public abstract class CucumberJava implements ConvertibleObject {
 	}
 
 	protected String getSetOrAssert(String stepName) throws Exception {
-		if (TestStepNameHelper.getStateModality(stepName).endsWith("be")) {
+		if (TestStepUtility.getStateModality(stepName).endsWith("be")) {
 			return "assert";
 		} else {
 			return "set";

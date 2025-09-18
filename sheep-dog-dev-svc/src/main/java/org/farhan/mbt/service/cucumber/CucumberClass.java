@@ -3,7 +3,7 @@ package org.farhan.mbt.service.cucumber;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
-import org.farhan.dsl.common.TestStepNameHelper;
+import org.farhan.dsl.lang.TestStepUtility;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -26,22 +26,22 @@ public class CucumberClass extends CucumberJava {
 			ConstructorDeclaration constructor = getType().addConstructor(Modifier.Keyword.PUBLIC);
 			constructor.createBody()
 					.addStatement("super(\"" + getObjectNameFromPath(thePath) + "\",\""
-							+ TestStepNameHelper.getComponentName(name) + "\",\""
-							+ TestStepNameHelper.getObjectName(name) + "\");");
+							+ TestStepUtility.getComponentName(name) + "\",\""
+							+ TestStepUtility.getObjectName(name) + "\");");
 		}
 	}
 
 	public void addStepDefinition(String name, ArrayList<String> paramList) throws Exception {
 		addConstructor(name);
 		MethodDeclaration aMethod = addMethod(
-				convertToCamelCase(TestStepNameHelper.getPredicate(name)).replace("'", ""));
+				convertToCamelCase(TestStepUtility.getPredicate(name)).replace("'", ""));
 		BlockStmt body = aMethod.getBody().get();
 		if (body.isEmpty()) {
 			if (aMethod.getAnnotations().isEmpty()) {
 				aMethod.addSingleMemberAnnotation("Given", "\"^" + name + "$\"");
 			}
 			body = aMethod.createBody();
-			if (paramList.size() == 0 && !TestStepNameHelper.isEdge(name)) {
+			if (paramList.size() == 0 && !TestStepUtility.isEdge(name)) {
 				body.addStatement("object" + getCallForInputOutputsForState(name) + ";");
 			} else if (paramList.size() == 1 && paramList.get(0).contentEquals("Content")) {
 				addParameter(aMethod, "String", "docString");
@@ -51,7 +51,7 @@ public class CucumberClass extends CucumberJava {
 				addParameter(aMethod, "DataTable", "dataTable");
 				body.addStatement("object" + getCallForInputOutputsForDataTable(name) + ";");
 			}
-			if (TestStepNameHelper.isEdge(name)) {
+			if (TestStepUtility.isEdge(name)) {
 				body.addStatement("object" + getCallForTransition() + ";");
 			}
 		}
@@ -69,7 +69,7 @@ public class CucumberClass extends CucumberJava {
 
 	private String getCallForInputOutputsForState(String step) throws Exception {
 		return "." + getSetOrAssert(step) + "InputOutputs(\""
-				+ StringUtils.capitalize(TestStepNameHelper.getStateType(step)) + "\"" + getSectionArg(step)
+				+ StringUtils.capitalize(TestStepUtility.getStateType(step)) + "\"" + getSectionArg(step)
 				+ getNegativeArg(step) + ")";
 	}
 
@@ -78,13 +78,13 @@ public class CucumberClass extends CucumberJava {
 	}
 
 	protected String getInterfaceName(String step) {
-		String nameParts[] = TestStepNameHelper.getObjectName(step).split("/");
+		String nameParts[] = TestStepUtility.getObjectName(step).split("/");
 		String name = nameParts[nameParts.length - 1];
-		return convertToPascalCase(name) + StringUtils.capitalize(TestStepNameHelper.getObjectType(step));
+		return convertToPascalCase(name) + StringUtils.capitalize(TestStepUtility.getObjectType(step));
 	}
 
 	private String getNegativeArg(String step) {
-		if (TestStepNameHelper.isNegativeStep(step)) {
+		if (TestStepUtility.isNegativeStep(step)) {
 			return ", true";
 		} else {
 			return "";
@@ -104,7 +104,7 @@ public class CucumberClass extends CucumberJava {
 	}
 
 	private String getSectionArg(String step) {
-		String section = convertToPascalCase(TestStepNameHelper.getDetails(step));
+		String section = convertToPascalCase(TestStepUtility.getDetails(step));
 		if (!section.isEmpty()) {
 			section = ", \"" + section + "\"";
 		}

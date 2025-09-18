@@ -1,6 +1,6 @@
 package org.farhan.mbt.service.cucumber;
 
-import org.farhan.dsl.common.TestStepNameHelper;
+import org.farhan.dsl.lang.TestStepUtility;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -15,8 +15,8 @@ public class CucumberSpringClass extends CucumberClass {
 		if (getType().getConstructors().isEmpty()) {
 			ConstructorDeclaration constructor = getType().addConstructor(Modifier.Keyword.PUBLIC);
 			constructor.addAndGetParameter(getObjectNameFromPath(thePath), "object");
-			constructor.createBody().addStatement("super(object,\"" + TestStepNameHelper.getComponentName(name)
-					+ "\",\"" + TestStepNameHelper.getObjectName(name) + "\");");
+			constructor.createBody().addStatement("super(object,\"" + TestStepUtility.getComponentName(name)
+					+ "\",\"" + TestStepUtility.getObjectName(name) + "\");");
 			theJavaClass.addImport(getPackageDeclaration().replaceFirst(".stepdefs.", ".objects.") + "."
 					+ getObjectNameFromPath(thePath));
 		}

@@ -1,11 +1,11 @@
 package org.farhan.mbt.service.cucumber;
 
 import org.farhan.mbt.core.IConvertibleObject;
-import org.farhan.mbt.core.IObjectRepository;
+import org.farhan.dsl.lang.IResourceRepository;
 
 public class CucumberGuiceTestProject extends CucumberTestProject {
 
-	public CucumberGuiceTestProject(String tags, IObjectRepository fa) {
+	public CucumberGuiceTestProject(String tags, IResourceRepository fa) {
 		super(tags, fa);
 	}
 

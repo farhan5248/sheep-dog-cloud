@@ -64,12 +64,7 @@ public abstract class MBTMojo extends AbstractMojo {
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
-				restTemplate.exchange(
-						url,
-						HttpMethod.DELETE,
-						requestEntity,
-						Void.class,
-						parameters);
+				restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, parameters);
 
 				return; // Exit if successful
 			} catch (Exception e) {
@@ -92,13 +87,10 @@ public abstract class MBTMojo extends AbstractMojo {
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
-				ResponseEntity<TransformableFile> postResponse = restTemplate.exchange(
-						url,
-						HttpMethod.POST,
+				ResponseEntity<TransformableFile> postResponse = restTemplate.exchange(url, HttpMethod.POST,
 						new HttpEntity<>(contents,
 								requestEntity != null ? requestEntity.getHeaders() : new HttpHeaders()),
-						TransformableFile.class,
-						parameters);
+						TransformableFile.class, parameters);
 				return postResponse.getBody().getFileContent();
 			} catch (Exception e) {
 				getLog().error("Retry attempt " + (retryCount + 1), e);
@@ -120,11 +112,8 @@ public abstract class MBTMojo extends AbstractMojo {
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
-				ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(
-						url,
-						HttpMethod.GET,
-						requestEntity,
-						new ParameterizedTypeReference<List<TransformableFile>>() {
+				ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(url, HttpMethod.GET,
+						requestEntity, new ParameterizedTypeReference<List<TransformableFile>>() {
 						}, parameters);
 				List<TransformableFile> fileList = response.getBody();
 				for (TransformableFile tf : fileList) {
@@ -144,8 +133,7 @@ public abstract class MBTMojo extends AbstractMojo {
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() - startTime < timeout) {
 			try {
-				ResponseEntity<String> response = restTemplate.getForEntity(
-						getHost() + "actuator/health",
+				ResponseEntity<String> response = restTemplate.getForEntity(getHost() + "actuator/health",
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("\"status\":\"UP\"")) {
 					getLog().info("Service ready");
@@ -178,7 +166,7 @@ public abstract class MBTMojo extends AbstractMojo {
 		if (!baseDir.endsWith("/")) {
 			baseDir += "/";
 		}
-		SourceRepository sr = new SourceRepository(baseDir);
+		SourceFileRepository sr = new SourceFileRepository(baseDir);
 		// TODO get the layer 1 directory from the converter
 		String[] dirs = { "src/test/resources/asciidoc/", "src-gen/test/resources/cucumber/" };
 		try {
@@ -187,26 +175,26 @@ public abstract class MBTMojo extends AbstractMojo {
 				clearObjects(resource, goal);
 				for (String dir : dirs) {
 					ArrayList<String> tempFiles = new ArrayList<String>();
-					for (String fileName : sr.list(dir, extension)) {
+					for (String fileName : sr.list("", dir, extension)) {
 						if (fileName.startsWith(dir + "stepdefs")) {
 							tempFiles.add(fileName);
 						} else {
 							getLog().info("Converting: " + fileName);
-							convertObject(resource, goal, fileName, sr.get(fileName));
+							convertObject(resource, goal, fileName, sr.get("", fileName));
 						}
 					}
 					for (String fileName : tempFiles) {
 						getLog().info("Converting: " + fileName);
-						convertObject(resource, goal, fileName, sr.get(fileName));
+						convertObject(resource, goal, fileName, sr.get("", fileName));
 					}
 				}
 			} else {
 				for (TransformableFile tf : getObjectNames(resource, goal)) {
 					String content = convertObject(resource, goal, tf.getFileName(),
-							sr.contains(tf.getFileName()) ? sr.get(tf.getFileName()) : null);
+							sr.contains("", tf.getFileName()) ? sr.get("", tf.getFileName()) : null);
 					if (!content.isEmpty()) {
 						getLog().info("Converting: " + tf.getFileName());
-						sr.put(tf.getFileName(), content);
+						sr.put("", tf.getFileName(), content);
 					}
 				}
 			}

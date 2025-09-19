@@ -1,6 +1,6 @@
 package org.farhan.mbt.service;
 
-import org.farhan.mbt.core.IObjectRepository;
+import org.farhan.dsl.lang.IResourceRepository;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.model.UMLTestStep;
 import org.farhan.mbt.model.UMLTestSuite;
@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 public class UMLService {
 
     private static final Logger logger = LoggerFactory.getLogger(UMLService.class);
-    private final IObjectRepository repository;
+    private final IResourceRepository repository;
 
     @Autowired
-    public UMLService(IObjectRepository repository) {
+    public UMLService(IResourceRepository repository) {
         this.repository = repository;
     }
 

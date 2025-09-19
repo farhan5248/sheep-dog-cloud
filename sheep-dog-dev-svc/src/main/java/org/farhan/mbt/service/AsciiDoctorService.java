@@ -52,7 +52,7 @@ public class AsciiDoctorService {
     public ArrayList<TransformableFile> getObjectNames(Converter mojo, String tags) {
         ArrayList<TransformableFile> fileList = new ArrayList<TransformableFile>();
         try {
-            // TODO this is temp, there should be a separate class like the IObjectRepository
+            // TODO this is temp, there should be a separate class like the IResourceRepository
             // if not the object repo itself. For a given tag, it should keep track of the
             // source files and output files checksums
             for (String fileName : (mojo).getFileNames()) {

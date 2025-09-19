@@ -3,7 +3,7 @@ package org.farhan.mbt.controller;
 import java.util.List;
 
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
-import org.farhan.mbt.core.IObjectRepository;
+import org.farhan.dsl.lang.IResourceRepository;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.CucumberService;
 import org.farhan.mbt.service.cucumber.ConvertCucumberToUML;
@@ -33,7 +33,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 	Logger logger = LoggerFactory.getLogger(CucumberController.class);
 	// TODO this repo and any mojo should be in the service layer, not the
 	// controller
-	private final IObjectRepository repository;
+	private final IResourceRepository repository;
 	private final CucumberService service;
 
 	@Value("${sheepdog.host:dev.sheepdogdev.io}")
@@ -43,7 +43,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 	private int serverPort;
 
 	@Autowired
-	public CucumberController(IObjectRepository repository, CucumberService service) {
+	public CucumberController(IResourceRepository repository, CucumberService service) {
 		this.repository = repository;
 		this.service = service;
 	}

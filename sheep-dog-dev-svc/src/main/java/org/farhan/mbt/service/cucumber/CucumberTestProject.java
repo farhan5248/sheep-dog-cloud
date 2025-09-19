@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.farhan.dsl.cucumber.CucumberStandaloneSetup;
 import org.farhan.mbt.core.IConvertibleObject;
 import org.farhan.mbt.core.ConvertibleProject;
-import org.farhan.mbt.core.IObjectRepository;
+import org.farhan.dsl.lang.IResourceRepository;
 
 public class CucumberTestProject extends ConvertibleProject {
 
-	public CucumberTestProject(String tags, IObjectRepository fa) {
+	public CucumberTestProject(String tags, IResourceRepository fa) {
 		super(tags, fa);
 	}
 

@@ -7,7 +7,7 @@ import org.farhan.dsl.cucumber.cucumber.Scenario;
 import org.farhan.dsl.cucumber.cucumber.ScenarioOutline;
 import org.farhan.dsl.cucumber.cucumber.Step;
 import org.farhan.mbt.core.Converter;
-import org.farhan.mbt.core.IObjectRepository;
+import org.farhan.dsl.lang.IResourceRepository;
 import org.farhan.mbt.core.UMLTestCase;
 import org.farhan.mbt.core.UMLTestData;
 import org.farhan.mbt.core.UMLTestSuite;
@@ -23,7 +23,7 @@ public class ConvertCucumberToUML extends Converter {
 	protected CucumberPathConverter pathConverter;
 	private CucumberFeature srcObjTestSuite;
 
-	public ConvertCucumberToUML(String tags, IObjectRepository fa) {
+	public ConvertCucumberToUML(String tags, IResourceRepository fa) {
 		super(tags, fa);
 	}
 

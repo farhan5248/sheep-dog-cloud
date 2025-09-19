@@ -65,8 +65,7 @@ public class GoalObject extends TestObject {
 			try {
 				return restTemplate
 						.postForObject(getHost() + resource + "/run" + goal + "?tags={tags}&fileName={fileName}",
-								contents,
-								TransformableFile.class, parameters)
+								contents, TransformableFile.class, parameters)
 						.getFileContent();
 			} catch (Exception e) {
 				Thread.sleep(1000);
@@ -84,9 +83,7 @@ public class GoalObject extends TestObject {
 		while (retryCount < RETRY_COUNT) {
 			try {
 				ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(
-						getHost() + resource + "/get" + goal + "ObjectNames?tags={tags}",
-						HttpMethod.GET,
-						null,
+						getHost() + resource + "/get" + goal + "ObjectNames?tags={tags}", HttpMethod.GET, null,
 						new ParameterizedTypeReference<List<TransformableFile>>() {
 						}, parameters);
 				List<TransformableFile> fileList = response.getBody();
@@ -103,11 +100,9 @@ public class GoalObject extends TestObject {
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() - startTime < timeout) {
 			try {
-				ResponseEntity<String> response = restTemplate.getForEntity(
-						getHost() + "actuator/health",
+				ResponseEntity<String> response = restTemplate.getForEntity(getHost() + "actuator/health",
 						String.class);
-				if (response.getStatusCode() == HttpStatus.OK &&
-						response.getBody().contains("\"status\":\"UP\"")) {
+				if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("\"status\":\"UP\"")) {
 					logger.info("Service ready");
 					return;
 				}
@@ -129,7 +124,7 @@ public class GoalObject extends TestObject {
 
 	protected void runGoal(String resource, String goal) {
 
-		SourceRepository sr = new SourceRepository();
+		SourceFileRepository sr = new SourceFileRepository();
 		String[] dirs = { "src/test/resources/asciidoc/", "src-gen/test/resources/cucumber/" };
 		try {
 			waitForService();
@@ -137,23 +132,23 @@ public class GoalObject extends TestObject {
 				clearObjects(resource, goal);
 				for (String dir : dirs) {
 					ArrayList<String> tempFiles = new ArrayList<String>();
-					for (String fileName : sr.list(dir, "")) {
+					for (String fileName : sr.list("", dir, "")) {
 						if (fileName.startsWith(dir + "stepdefs")) {
 							tempFiles.add(fileName);
 						} else {
-							convertObject(resource, goal, fileName, sr.get(fileName));
+							convertObject(resource, goal, fileName, sr.get("", fileName));
 						}
 					}
 					for (String fileName : tempFiles) {
-						convertObject(resource, goal, fileName, sr.get(fileName));
+						convertObject(resource, goal, fileName, sr.get("", fileName));
 					}
 				}
 			} else {
 				for (TransformableFile tf : getObjectNames(resource, goal)) {
 					String content = convertObject(resource, goal, tf.getFileName(),
-							sr.contains(tf.getFileName()) ? sr.get(tf.getFileName()) : null);
+							sr.contains("", tf.getFileName()) ? sr.get("", tf.getFileName()) : null);
 					if (!content.isEmpty()) {
-						sr.put(tf.getFileName(), content);
+						sr.put("", tf.getFileName(), content);
 					}
 				}
 			}

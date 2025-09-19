@@ -5,7 +5,7 @@ import org.farhan.mbt.config.JmsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.farhan.mbt.core.Converter;
-import org.farhan.mbt.core.IObjectRepository;
+import org.farhan.dsl.lang.IResourceRepository;
 import org.farhan.mbt.exception.MessageConsumingException;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.cucumber.ConvertCucumberToUML;
@@ -23,10 +23,10 @@ public class MessageConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageConsumer.class);
 
-    private final IObjectRepository repository;
+    private final IResourceRepository repository;
 
     @Autowired
-    public MessageConsumer(IObjectRepository repository) {
+    public MessageConsumer(IResourceRepository repository) {
         this.repository = repository;
     }
 

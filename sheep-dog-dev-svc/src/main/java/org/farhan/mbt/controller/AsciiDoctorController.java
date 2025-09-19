@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
 import org.farhan.mbt.asciidoctor.ConvertUMLToAsciidoctor;
-import org.farhan.mbt.core.ObjectRepository;
+import org.farhan.mbt.core.IObjectRepository;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.AsciiDoctorService;
 import org.slf4j.Logger;
@@ -29,11 +29,11 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 	Logger logger = LoggerFactory.getLogger(AsciiDoctorController.class);
 	// TODO this repo and any mojo should be in the service layer, not the
 	// controller
-	private final ObjectRepository repository;
+	private final IObjectRepository repository;
 	private final AsciiDoctorService service;
 
 	@Autowired
-	public AsciiDoctorController(ObjectRepository repository, AsciiDoctorService service) {
+	public AsciiDoctorController(IObjectRepository repository, AsciiDoctorService service) {
 		this.repository = repository;
 		this.service = service;
 	}

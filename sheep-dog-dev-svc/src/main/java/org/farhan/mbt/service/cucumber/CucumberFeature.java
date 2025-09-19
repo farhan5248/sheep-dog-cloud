@@ -33,9 +33,9 @@ import org.farhan.dsl.cucumber.cucumber.Statement;
 import org.farhan.dsl.cucumber.cucumber.Step;
 import org.farhan.dsl.cucumber.cucumber.StepTable;
 import org.farhan.dsl.cucumber.cucumber.Tag;
-import org.farhan.mbt.core.ConvertibleObject;
+import org.farhan.mbt.core.IConvertibleObject;
 
-public class CucumberFeature implements ConvertibleObject {
+public class CucumberFeature implements IConvertibleObject {
 
 	private Feature theFeature;
 	private String thePath;

@@ -13,7 +13,7 @@ import org.farhan.dsl.cucumber.cucumber.ScenarioOutline;
 import org.farhan.dsl.cucumber.cucumber.Step;
 import org.farhan.dsl.cucumber.cucumber.StepTable;
 import org.farhan.mbt.core.Converter;
-import org.farhan.mbt.core.ObjectRepository;
+import org.farhan.mbt.core.IObjectRepository;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.model.UMLStepObject;
 import org.farhan.mbt.model.UMLStepDefinition;
@@ -44,7 +44,7 @@ public class ConvertUMLToCucumber extends Converter {
 	private String serverHost;
 	private int serverPort;
 
-	public ConvertUMLToCucumber(String tags, ObjectRepository fa, String serverHost, int serverPort) {
+	public ConvertUMLToCucumber(String tags, IObjectRepository fa, String serverHost, int serverPort) {
 		super(tags, fa);
 		restTemplate = new RestTemplate();
 		this.serverHost = serverHost;

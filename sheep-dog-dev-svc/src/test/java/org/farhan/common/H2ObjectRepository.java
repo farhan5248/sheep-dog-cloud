@@ -3,7 +3,7 @@ package org.farhan.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.farhan.mbt.core.ObjectRepository;
+import org.farhan.mbt.core.IObjectRepository;
 import org.farhan.mbt.model.ModelSourceFile;
 import org.farhan.mbt.repository.ModelSourceFileRepository;
 import org.springframework.context.annotation.Profile;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Profile("surefire")
-public class H2ObjectRepository implements ObjectRepository {
+public class H2ObjectRepository implements IObjectRepository {
 
 	private final ModelSourceFileRepository repository;
 
@@ -59,5 +59,11 @@ public class H2ObjectRepository implements ObjectRepository {
 	public void clear(String tags) {
 		List<ModelSourceFile> filesToDelete = repository.findByFileNameLike(tags + "/%");
 		repository.deleteAll(filesToDelete);
+	}
+
+	@Override
+	public void delete(String tags, String path) {
+		// TODO Auto-generated method stub
+		
 	}
 }

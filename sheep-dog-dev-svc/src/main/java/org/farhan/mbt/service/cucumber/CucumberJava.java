@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 import org.apache.commons.lang3.StringUtils;
 import org.farhan.dsl.lang.TestStepUtility;
-import org.farhan.mbt.core.ConvertibleObject;
+import org.farhan.mbt.core.IConvertibleObject;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -16,7 +16,7 @@ import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-public abstract class CucumberJava implements ConvertibleObject {
+public abstract class CucumberJava implements IConvertibleObject {
 
 	protected String thePath;
 	protected CompilationUnit theJavaClass;

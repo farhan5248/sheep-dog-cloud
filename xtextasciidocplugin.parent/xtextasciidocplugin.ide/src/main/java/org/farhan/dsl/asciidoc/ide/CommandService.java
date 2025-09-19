@@ -3,16 +3,12 @@ package org.farhan.dsl.asciidoc.ide;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.lsp4j.ExecuteCommandParams;
-import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.xtext.ide.server.ILanguageServerAccess;
 import org.eclipse.xtext.ide.server.commands.IExecutableCommandService;
 import org.eclipse.xtext.util.CancelIndicator;
-import org.eclipse.xtext.validation.CheckMode;
 import org.eclipse.xtext.validation.IResourceValidator;
-import org.eclipse.xtext.validation.Issue;
 import org.farhan.dsl.asciidoc.generator.AsciiDocGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

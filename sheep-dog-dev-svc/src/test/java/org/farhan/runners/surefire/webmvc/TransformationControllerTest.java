@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
 import org.farhan.mbt.controller.AsciiDoctorController;
-import org.farhan.mbt.core.ObjectRepository;
+import org.farhan.mbt.core.IObjectRepository;
 import org.farhan.mbt.exception.TransformationException;
 import org.farhan.mbt.service.AsciiDoctorService;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class TransformationControllerTest {
         private MockMvc mockMvc;
 
         @MockitoBean
-        private ObjectRepository repository;
+        private IObjectRepository repository;
 
         @MockitoBean
         private AsciiDoctorService service;

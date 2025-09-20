@@ -144,11 +144,6 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
 			<groupId>org.farhan</groupId>
 			<artifactId>sheep-dog-dev</artifactId>
 			<version>${sheep-dog-dev.version}</version>
@@ -360,7 +355,7 @@
 					</execution>
 					<execution>
 						<id>push-image</id>
-						<phase>pre-integration-test</phase>
+						<phase>post-integration-test</phase>
 						<goals>
 							<goal>push</goal>
 						</goals>

@@ -161,7 +161,7 @@
                     </execution>
                     <execution>
                         <id>push-image</id>
-                        <phase>pre-integration-test</phase>
+                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>push</goal>
                         </goals>

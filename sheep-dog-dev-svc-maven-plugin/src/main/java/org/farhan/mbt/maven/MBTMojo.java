@@ -29,7 +29,7 @@ public abstract class MBTMojo extends AbstractMojo {
 
 	private final RestTemplate restTemplate;
 	private HttpEntity<Void> requestEntity;
-	private final int RETRY_COUNT = 10;
+	private final int RETRY_COUNT = 60;
 
 	public MBTMojo() {
 		baseDir = new File("").getAbsolutePath();

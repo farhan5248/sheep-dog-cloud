@@ -18,7 +18,8 @@ import org.springframework.web.client.RestTemplate;
 public class GoalObject extends TestObject {
 	private static final Logger logger = LoggerFactory.getLogger(GoalObject.class);
 	private final RestTemplate restTemplate;
-	private final int RETRY_COUNT = 10;
+	// TODO make this a property
+	private final int RETRY_COUNT = 60;
 
 	public GoalObject() {
 		attributes.put("tags", "");

@@ -17,6 +17,7 @@
 		<project.build.sourceEncoding>
 			UTF-8</project.build.sourceEncoding>
 		<java.version>21</java.version>
+		<sheep-dog-test.version>1.24</sheep-dog-test.version>
 	</properties>
 
 	<scm>
@@ -162,7 +163,7 @@
 		<dependency>
 			<groupId>org.farhan</groupId>
 			<artifactId>sheep-dog-test</artifactId>
-			<version>1.24-SNAPSHOT</version>
+			<version>${sheep-dog-test.version}</version>
 		</dependency>
 	</dependencies>
 

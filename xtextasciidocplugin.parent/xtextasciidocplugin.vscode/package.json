@@ -46,62 +46,62 @@
         "commands": [
             {
                 "command": "asciidoc.server.restart",
-                "title": "AsciiDoc: Restart Language Server",
+                "title": "Restart Language Server",
                 "category": "AsciiDoc Server"
             },
             {
                 "command": "asciidoc.server.start",
-                "title": "AsciiDoc: Start Language Server",
+                "title": "Start Language Server",
                 "category": "AsciiDoc Server"
             },
             {
                 "command": "asciidoc.server.stop",
-                "title": "AsciiDoc: Stop Language Server",
+                "title": "Stop Language Server",
                 "category": "AsciiDoc Server"
             },
             {
                 "command": "asciidoc.server.showHealth",
-                "title": "AsciiDoc: Show Server Health",
+                "title": "Show Server Health",
                 "category": "AsciiDoc Server"
             },
             {
                 "command": "asciidoc.server.showCapabilities",
-                "title": "AsciiDoc: Show Server Capabilities",
+                "title": "Show Server Capabilities",
                 "category": "AsciiDoc Server"
             },
             {
                 "command": "asciidoc.server.generateCode",
-                "title": "AsciiDoc: Generate Code",
+                "title": "Generate Code",
                 "category": "AsciiDoc Server"
             },
             {
                 "command": "asciidoc.logging.setLevel",
-                "title": "AsciiDoc: Set Logging Level",
+                "title": "Set Logging Level",
                 "category": "AsciiDoc Logging"
             },
             {
                 "command": "asciidoc.logging.showOutput",
-                "title": "AsciiDoc: Show Extension Logs",
+                "title": "Show Extension Logs",
                 "category": "AsciiDoc Logging"
             },
             {
                 "command": "asciidoc.logging.showServerOutput",
-                "title": "AsciiDoc: Show Language Server Logs",
+                "title": "Show Language Server Logs",
                 "category": "AsciiDoc Logging"
             },
             {
                 "command": "asciidoc.logging.clearLogs",
-                "title": "AsciiDoc: Clear All Logs",
+                "title": "Clear All Logs",
                 "category": "AsciiDoc Logging"
             },
             {
                 "command": "asciidoc.logging.exportLogs",
-                "title": "AsciiDoc: Export Logs to File",
+                "title": "Export Logs to File",
                 "category": "AsciiDoc Logging"
             },
             {
                 "command": "asciidoc.server.validateWorkspace",
-                "title": "AsciiDoc: Validate All Workspace Files",
+                "title": "Validate All Workspace Files",
                 "category": "AsciiDoc Server"
             }
         ],

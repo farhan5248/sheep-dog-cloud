@@ -3,6 +3,7 @@
  */
 package org.farhan.dsl.asciidoc.validation;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -11,14 +12,16 @@ import org.slf4j.LoggerFactory;
 
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
-import org.farhan.dsl.asciidoc.LanguageAccessImpl;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.Cell;
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
+import org.farhan.dsl.asciidoc.impl.SourceFileRepository;
+import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
+import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.Table;
-import org.farhan.dsl.common.*;
+import org.farhan.dsl.lang.*;
 
 /**
  * This class contains custom validation rules.
@@ -113,28 +116,40 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 			}
 
 			logger.debug("Creating LanguageAccessImpl for step: {}", step.getName());
-			LanguageAccessImpl lang = new LanguageAccessImpl(step);
 
 			if (step.getName() != null) {
 				logger.debug("Validating step name errors for: {}", step.getName());
-				String problems = LanguageHelper.validateError(lang);
+				ITestStep iTestStep = new TestStepImpl(step);
+				String problems = TestStepIssueDetector.validateSyntax(iTestStep);
 				if (!problems.isEmpty()) {
 					logger.debug("Found error problems for step '{}': {}", step.getName(), problems);
 					error(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
 				}
 
 				logger.debug("Validating step name warnings for: {}", step.getName());
-				problems = LanguageHelper.validateWarning(lang);
+				ITestProject testProject = new TestProjectImpl(
+						new SourceFileRepository(
+								step.eResource().getURI().toFileString().replace(File.separator, "/")));
+				iTestStep.getParent().getParent().setParent(testProject);
+				problems = TestStepIssueDetector.validateSemantics(iTestStep, testProject);
 				if (!problems.isEmpty()) {
 					logger.debug("Found warning problems for step '{}': {}", step.getName(), problems);
+
+					Object[] alternateProposals = TestStepIssueResolver.proposeStepObject(iTestStep, testProject);
+					String[] alternates = new String[alternateProposals.length];
+					for (int i = 0; i < alternates.length; i++) {
+						alternates[i] = alternateProposals[i].toString();
+					}
+
 					warning(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, MISSING_STEP_DEF,
-							getAlternateObjects(lang));
+							alternates);
 				}
 			} else {
 				logger.warn("TestStep name is null for step object");
 			}
 			logger.debug("Exiting {}", "checkStepName");
 		} catch (Exception e) {
+			// TODO why is stackTrace not used?
 			logger.error("Error validating TestStep '{}': {}",
 					step != null ? step.getName() : "null", e.getMessage(), e);
 			StringWriter sw = new StringWriter();
@@ -186,29 +201,4 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 		}
 	}
 
-	public String[] getAlternateObjects(LanguageAccessImpl la) throws Exception {
-		logger.debug("Entering getAlternateObjects");
-		try {
-			if (la == null) {
-				logger.warn("LanguageAccessImpl is null, returning empty alternatives");
-				return new String[0];
-			}
-
-			logger.debug("Getting alternate proposals from LanguageHelper");
-			Object[] alternateProposals = LanguageHelper.getAlternateObjects(la);
-			String[] alternates = new String[alternateProposals.length];
-
-			logger.debug("Converting {} alternate proposals to strings", alternateProposals.length);
-			for (int i = 0; i < alternates.length; i++) {
-				alternates[i] = alternateProposals[i] != null ? alternateProposals[i].toString() : "null";
-				logger.debug("Alternate {}: {}", i, alternates[i]);
-			}
-
-			logger.debug("Exiting {}", "getAlternateObjects");
-			return alternates;
-		} catch (Exception e) {
-			logger.error("Error getting alternate objects: {}", e.getMessage(), e);
-			throw e;
-		}
-	}
 }

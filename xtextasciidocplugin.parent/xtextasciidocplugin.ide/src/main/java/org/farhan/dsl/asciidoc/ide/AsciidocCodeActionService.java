@@ -91,9 +91,9 @@ public class AsciidocCodeActionService extends QuickFixCodeActionService {
         TestStep testStep = (TestStep) getEObjectFromDiagnostic(options, diagnostic);
         logger.debug("TestStep name {}", testStep.getName());
         LanguageAccessImpl la = AsciiDocGenerator.doGenerateFromTestStep(testStep, new ByteArrayOutputStream());
-        String content = la.getStepObjectContent();
+        String content = "";//la.getStepObjectContent();
         logger.debug("content {}", content);
-        String fileName = la.getStepObjectFileName();
+        String fileName = "";//la.getStepObjectFileName();
         logger.debug("fileName {}", fileName);
         
         // Create file operation

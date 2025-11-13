@@ -13,7 +13,7 @@ import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
 import org.eclipse.xtext.resource.SaveOptions;
 import org.farhan.dsl.asciidoc.LanguageAccessImpl;
-import org.farhan.dsl.common.*;
+//import org.farhan.dsl.common.*;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
@@ -74,8 +74,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		try {
 			logger.info("Calling LanguageHelper.generate with step: {}", step.getName());
 			LanguageAccessImpl la = new LanguageAccessImpl(step, os);
-			LanguageHelper.generate(la,
-					SaveOptions.newBuilder().format().getOptions().toOptionsMap());
+			//LanguageHelper.generate(la,					SaveOptions.newBuilder().format().getOptions().toOptionsMap());
 			logger.debug("Exiting {}", "doGenerateFromTestStep");
 			return la;
 		} catch (Exception e) {

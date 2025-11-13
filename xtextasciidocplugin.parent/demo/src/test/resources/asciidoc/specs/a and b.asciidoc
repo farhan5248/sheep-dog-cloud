@@ -4,5 +4,12 @@
 
 * Given: The blah application, Objectf page is validef
 
-* And: The blah2 application, Object page is invalid
+* Given: The blah application, Objectf page is created as follows
++
+|===
+| Grp | Irnfs
+| A   | 1001
+|===
 
+
+* And: The blah2 application, Object page is invalid

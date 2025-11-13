@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.resource.SaveOptions;
 import org.farhan.dsl.lang.IStatement;
 import org.farhan.dsl.lang.IStepDefinition;
@@ -114,9 +116,14 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	public String serialize() throws IOException {
+		// TODO isn't toString a better name?
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		eObject.eResource().save(os, SaveOptions.newBuilder().format().getOptions().toOptionsMap());
 		return os.toString();
 	}
+
+    public Resource getResource() {
+        return eObject.eResource();
+    }
 
 }

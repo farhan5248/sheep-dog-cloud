@@ -2,13 +2,13 @@
 
 == Test-Case: Story Two
 
-* Given: The blah application, Objectf page is validef
+* Given: The blah application, Object page is invalides
 
 * Given: The blah application, Objectf page is created as follows
 +
 |===
-| Grp | Ins
-| a   | b  
+| Grp | Inse
+| a   | b   
 |===
 
 * And: The blah2 application, Object page is invalid

@@ -23,23 +23,34 @@ public class TestProjectImpl implements ITestProject {
 
 	private static final Logger logger = LoggerFactory.getLogger(TestProjectImpl.class);
 
-	private IResourceRepository sr;
+	private SourceFileRepository sr;
 	private final String layer2dir;
 
 	public TestProjectImpl(IResourceRepository sr) {
-		this.sr = sr;
+		this.sr = (SourceFileRepository) sr;
 		layer2dir = "src/test/resources/asciidoc/stepdefs/";
+	}
+
+	public IResourceRepository getSourceRepository() {
+		return sr;
 	}
 
 	@Override
 	public IStepObject createStepObject(String qualifiedName) {
 		StepObject eObject = AsciiDocFactory.eINSTANCE.createStepObject();
-		Resource theResource = new ResourceSetImpl().createResource(URI.createFileURI(layer2dir + qualifiedName));
+		Resource theResource = new ResourceSetImpl().createResource(getObjectURI(qualifiedName));
 		theResource.getContents().add(eObject);
 		IStepObject stepObject = new StepObjectImpl(eObject);
 		stepObject.setQualifiedName(qualifiedName);
 		stepObject.setName((new File(qualifiedName)).getName().replaceFirst(getFileExtension() + "$", ""));
 		return stepObject;
+	}
+
+	private URI getObjectURI(String objectQualifiedName) {
+		String objectPath = sr.getProjectPath() + layer2dir.replace("/", File.separator)
+				+ objectQualifiedName.replace("/", File.separator);
+		URI uri = URI.createFileURI(objectPath);
+		return uri;
 	}
 
 	@Override
@@ -48,7 +59,7 @@ public class TestProjectImpl implements ITestProject {
 		if (sr.contains("", layer2dir + qualifiedName)) {
 			logger.debug("Source respository contains: " + layer2dir + qualifiedName);
 			try {
-				Resource resource = new ResourceSetImpl().createResource(URI.createFileURI(layer2dir + qualifiedName));
+				Resource resource = new ResourceSetImpl().createResource(getObjectURI(qualifiedName));
 				String text = sr.get("", layer2dir + qualifiedName);
 				if (text.isEmpty()) {
 					logger.error("Couldn't load StepObject for, file is empty: " + qualifiedName);
@@ -69,6 +80,10 @@ public class TestProjectImpl implements ITestProject {
 	}
 
 	public void putStepObject(IStepObject stepObject) throws Exception {
+		// TODO this project already has a reference to stepObject so only the name
+		// should be passed in. Also putStepObject is a bit of a misnomer,
+		// saveStepObject or serialize etc, whatever is the term used with EMF model
+		// file writes
 		// TODO serialize should be setContent, parse should be getContent, this works
 		// well for the JSON response
 		sr.put("", layer2dir + stepObject.getQualifiedName(), ((StepObjectImpl) stepObject).serialize());

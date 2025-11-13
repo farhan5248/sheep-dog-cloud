@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+
 import org.farhan.dsl.lang.IResourceRepository;
 
 public class SourceFileRepository implements IResourceRepository {
@@ -13,7 +13,12 @@ public class SourceFileRepository implements IResourceRepository {
 	private final String projectPath;
 
 	public SourceFileRepository(String uriPath) {
-		this.projectPath = uriPath.split("src/test/resources/asciidoc/specs/")[0].replace("/", File.separator);
+		this.projectPath = uriPath.split("src/test/resources/asciidoc/specs/")[0].replace("/",
+				File.separator);
+	}
+
+	public String getProjectPath() {
+		return projectPath;
 	}
 
 	@Override

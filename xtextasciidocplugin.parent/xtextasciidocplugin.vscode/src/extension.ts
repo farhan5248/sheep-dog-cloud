@@ -420,7 +420,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
         const commandName = 'asciidoc.server.generateCode';
         const startTime = Date.now();
         outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
-        
+
         const activeEditor = vscode.window.activeTextEditor;
         if (!activeEditor || activeEditor.document.languageId !== 'asciidoc') {
             const errorMsg = 'No active AsciiDoc document';
@@ -428,29 +428,34 @@ function registerCommands(context: vscode.ExtensionContext): void {
             vscode.window.showWarningMessage(errorMsg);
             return;
         }
-        
+
         if (!serverLauncher) {
             const errorMsg = 'AsciiDoc Language Server is not running';
             outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
             vscode.window.showWarningMessage(errorMsg);
             return;
         }
-        
+
         try {
+            // Debug logging
+            outputChannel?.appendLine(`Command ${commandName} serverLauncher exists: ${!!serverLauncher}`);
+            outputChannel?.appendLine(`Command ${commandName} serverLauncher health: ${JSON.stringify(serverLauncher.getHealthInfo())}`);
+
             const client = serverLauncher.getClient();
+            outputChannel?.appendLine(`Command ${commandName} getClient() returned: ${!!client}`);
+            outputChannel?.appendLine(`Command ${commandName} client state: ${client?.state}`);
+
             if (!client) {
                 throw new Error('Language client not available');
             }
             
             const documentUri = activeEditor.document.uri.toString();
-            outputChannel?.appendLine(`Command ${commandName} parameters: {documentUri: ${documentUri}, serverCommand: "asciidoc.generate"}`);
-            
-            await client.sendNotification('workspace/executeCommand', {
-                command: 'asciidoc.generate',
+            outputChannel?.appendLine(`Command ${commandName} parameters: {documentUri: ${documentUri}, serverCommand: "asciidoc.generate2"}`);
+
+            const result = await client.sendRequest('workspace/executeCommand', {
+                command: 'asciidoc.generate2',
                 arguments: [documentUri]
             });
-            
-            const result = 'Code generation command sent';
             
             const duration = Date.now() - startTime;
             outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms: ${result}`);

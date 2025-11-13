@@ -3,19 +3,20 @@
  */
 package org.farhan.dsl.asciidoc.generator;
 
-import java.io.OutputStream;
-
+import java.io.File;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
-import org.eclipse.xtext.resource.SaveOptions;
-import org.farhan.dsl.asciidoc.LanguageAccessImpl;
-//import org.farhan.dsl.common.*;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
+import org.farhan.dsl.asciidoc.impl.SourceFileRepository;
+import org.farhan.dsl.asciidoc.impl.StepObjectImpl;
+import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
+import org.farhan.dsl.asciidoc.impl.TestStepImpl;
+import org.farhan.dsl.lang.StepObjectBuilder;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 
 /**
@@ -32,7 +33,6 @@ public class AsciiDocGenerator extends AbstractGenerator {
 	public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
 		logger.debug("Entering doGenerate for resource: {}", resource != null ? resource.getURI() : "null");
 		// Automatic generation disabled - use command-based generation instead
-		// Generation logic moved to generateFromResource() method
 		// The reason is that I didn't want to generate code until the user was ready
 		// to do so.
 		logger.debug("Exiting {}", "doGenerate");
@@ -54,7 +54,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 					logger.debug("Processing scenario: {}", scenario.getName());
 					for (TestStep step : scenario.getTestStepList()) {
 						logger.debug("Processing step: {}", step.getName());
-						doGenerateFromTestStep(step, null);
+						generateFromTestStep(step, true);
 					}
 				}
 			} else {
@@ -67,16 +67,22 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		}
 	}
 
-	public static LanguageAccessImpl doGenerateFromTestStep(TestStep step, OutputStream os) {
-		// TODO make another method, one that returns a string vs one that writes to a
-		// file. The quickfix one shouldn't write to the file so undo the changes to save
-		logger.debug("Entering doGenerateFromTestStep for step: {}", step != null ? step.getName() : "null");
+	public static StepObjectImpl generateFromTestStep(TestStep step, boolean saveToFile) {
+		logger.debug("Entering generateFromTestStep for step: {}", step != null ? step.getName() : "null");
 		try {
-			logger.info("Calling LanguageHelper.generate with step: {}", step.getName());
-			LanguageAccessImpl la = new LanguageAccessImpl(step, os);
-			//LanguageHelper.generate(la,					SaveOptions.newBuilder().format().getOptions().toOptionsMap());
-			logger.debug("Exiting {}", "doGenerateFromTestStep");
-			return la;
+			TestProjectImpl testProject = new TestProjectImpl(
+					new SourceFileRepository(
+							step.eResource().getURI().toFileString().replace(File.separator, "/")));
+			TestStepImpl iTestStep = new TestStepImpl(step);
+			iTestStep.getParent().getParent().setParent(testProject);
+			StepObjectImpl stepObjectImpl = (StepObjectImpl) StepObjectBuilder
+					.generateStepDefinition(iTestStep, testProject).getParent();
+			stepObjectImpl.setParent(testProject);
+			if (saveToFile) {
+				testProject.putStepObject(stepObjectImpl);
+			}
+			logger.debug("Exiting {}", "generateFromTestStep");
+			return stepObjectImpl;
 		} catch (Exception e) {
 			logger.error("Generation failed for step '{}': {}", step != null ? step.getName() : "null", e.getMessage(),
 					e);

@@ -21,7 +21,7 @@ public class AsciiDocIdeModule extends AbstractAsciiDocIdeModule {
 	}
 	
 	public Class<? extends IExecutableCommandService> bindIExecutableCommandService() {
-		return CommandService.class;
+		return AsciiDocCommandService.class;
 	}
 	
 	public Class<? extends IQuickFixProvider> bindIQuickFixProvider() {
@@ -29,7 +29,7 @@ public class AsciiDocIdeModule extends AbstractAsciiDocIdeModule {
 	}
 	
 	public Class<? extends ICodeActionService2> bindICodeActionService2() {
-		return AsciidocCodeActionService.class;
+		return AsciiDocCodeActionService.class;
 	}
 	
 	public Class<? extends IdeContentProposalProvider> bindIdeContentProposalProvider() {

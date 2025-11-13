@@ -8,7 +8,6 @@ import org.eclipse.lsp4j.ExecuteCommandParams;
 import org.eclipse.xtext.ide.server.ILanguageServerAccess;
 import org.eclipse.xtext.ide.server.commands.IExecutableCommandService;
 import org.eclipse.xtext.util.CancelIndicator;
-import org.eclipse.xtext.validation.IResourceValidator;
 import org.farhan.dsl.asciidoc.generator.AsciiDocGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,19 +15,15 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonPrimitive;
-import com.google.inject.Inject;
 
-public class CommandService implements IExecutableCommandService {
+public class AsciiDocCommandService implements IExecutableCommandService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CommandService.class);
-
-	@Inject
-	private IResourceValidator resourceValidator;
+	private static final Logger logger = LoggerFactory.getLogger(AsciiDocCommandService.class);
 
 	@Override
 	public List<String> initialize() {
 		logger.debug("Entering initialize");
-		List<String> commands = Lists.newArrayList("asciidoc.generate");
+		List<String> commands = Lists.newArrayList("asciidoc.generate2");
 		logger.debug("Exiting initialize");
 		return commands;
 	}
@@ -40,7 +35,8 @@ public class CommandService implements IExecutableCommandService {
 		final long startTime = System.currentTimeMillis();
 
 		try {
-			if ("asciidoc.generate".equals(commandName)) {
+			if ("asciidoc.generate2".equals(commandName)) {
+				// TODO perhaps get all the files in the specs directory and generate for each?
 				JsonPrimitive uriArg = (JsonPrimitive) Iterables.getFirst(params.getArguments(), null);
 				final String uri = (uriArg != null) ? uriArg.getAsString() : null;
 
@@ -74,7 +70,7 @@ public class CommandService implements IExecutableCommandService {
 					logger.error("Command {} failed: {}", commandName, errorMsg);
 					return errorMsg;
 				}
-			} 
+			}
 
 			String errorMsg = "Bad Command: " + commandName;
 			logger.error("Command execution failed: {}", errorMsg);

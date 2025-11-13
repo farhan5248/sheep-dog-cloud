@@ -18,8 +18,6 @@ import java.io.StringWriter;
 import java.util.Map.Entry;
 
 import org.eclipse.xtext.Assignment;
-//import org.farhan.dsl.common.*;
-import org.farhan.dsl.asciidoc.LanguageAccessImpl;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.impl.SourceFileRepository;
 import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
@@ -98,7 +96,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 				// TODO this is an ugly hack to make the proposals work. The |=== and ----
 				// shouldn't be hard-coded here. Move them into the languageAccessImpl class
 				String replacement;
-				if (p.getValue().getReplacement().contentEquals(LanguageAccessImpl.STEP_PARAMETER_TEXT)) {
+				if (p.getValue().getReplacement().contentEquals("| Content")) {
 					replacement = "----\n" + "todo" + "\n----";
 					logger.debug("Creating text parameter proposal");
 				} else {

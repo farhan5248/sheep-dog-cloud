@@ -1,16 +1,19 @@
 package org.farhan.dsl.asciidoc.ide;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.lsp4j.CodeAction;
 import org.eclipse.lsp4j.CodeActionKind;
 import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.CreateFile;
+import org.eclipse.lsp4j.CreateFileOptions;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.TextDocumentEdit;
 import org.eclipse.lsp4j.TextEdit;
@@ -25,18 +28,18 @@ import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.XtextResource;
-import org.farhan.dsl.asciidoc.LanguageAccessImpl;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.generator.AsciiDocGenerator;
+import org.farhan.dsl.asciidoc.impl.StepObjectImpl;
 import org.farhan.dsl.asciidoc.validation.AsciiDocValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.Position;
 
-public class AsciidocCodeActionService extends QuickFixCodeActionService {
+public class AsciiDocCodeActionService extends QuickFixCodeActionService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AsciidocCodeActionService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AsciiDocCodeActionService.class);
 
     @Override
     public List<Either<Command, CodeAction>> getCodeActions(Options options) {
@@ -74,49 +77,56 @@ public class AsciidocCodeActionService extends QuickFixCodeActionService {
                 diagnostic.getCode().get().toString(), options.getURI());
         List<Either<Command, CodeAction>> codeActions = new ArrayList<>();
         if (AsciiDocValidator.MISSING_STEP_DEF.equals(diagnostic.getCode().get().toString())) {
-            codeActions.add(getCreateDefinitionAction(options, diagnostic));
+            try {
+                codeActions.add(getCreateDefinitionAction(options, diagnostic));
+            } catch (Exception e) {
+                logger.error("Error creating definition action", e);
+            }
         }
         logger.debug("Exiting {}", "getWorkspaceCodeActions");
         return codeActions;
     }
 
-    private Either<Command, CodeAction> getCreateDefinitionAction(Options options, Diagnostic diagnostic) {
+    private Either<Command, CodeAction> getCreateDefinitionAction(Options options, Diagnostic diagnostic)
+            throws Exception {
         logger.debug("Entering getCreateDefinitionAction with options {} and diagnostic {}", options.getURI(),
                 diagnostic.getCode().get().toString());
         CodeAction action = new CodeAction();
         action.setKind(CodeActionKind.QuickFix);
         action.setTitle("Create TestStep definition");
         action.setDiagnostics(Collections.singletonList(diagnostic));
-        
+
         TestStep testStep = (TestStep) getEObjectFromDiagnostic(options, diagnostic);
         logger.debug("TestStep name {}", testStep.getName());
-        LanguageAccessImpl la = AsciiDocGenerator.doGenerateFromTestStep(testStep, new ByteArrayOutputStream());
-        String content = "";//la.getStepObjectContent();
+        StepObjectImpl stepObjectImpl = AsciiDocGenerator.generateFromTestStep(testStep, false);
+        String content = stepObjectImpl.serialize();
         logger.debug("content {}", content);
-        String fileName = "";//la.getStepObjectFileName();
+        String fileName = stepObjectImpl.getResource().getURI().toString();
         logger.debug("fileName {}", fileName);
-        
+
         // Create file operation
         CreateFile createFile = new CreateFile();
         createFile.setUri(fileName);
-        
+        createFile.setOptions(new CreateFileOptions());
+        createFile.getOptions().setOverwrite(true);
+
         // Create text document edit to insert content
         VersionedTextDocumentIdentifier textDocumentId = new VersionedTextDocumentIdentifier();
         textDocumentId.setUri(fileName);
         textDocumentId.setVersion(null); // null for new files
-        
+
         TextEdit textEdit = new TextEdit();
         textEdit.setRange(new Range(new Position(0, 0), new Position(0, 0)));
         textEdit.setNewText(content);
-        
+
         TextDocumentEdit textDocumentEdit = new TextDocumentEdit();
         textDocumentEdit.setTextDocument(textDocumentId);
         textDocumentEdit.setEdits(List.of(textEdit));
-        
+
         // Create workspace edit with document changes
         WorkspaceEdit workspaceEdit = new WorkspaceEdit();
         workspaceEdit.setDocumentChanges(List.of(Either.forRight(createFile), Either.forLeft(textDocumentEdit)));
-        
+
         action.setEdit(workspaceEdit);
         logger.debug("Exiting {}", "getCreateDefinitionAction");
         return Either.forRight(action);

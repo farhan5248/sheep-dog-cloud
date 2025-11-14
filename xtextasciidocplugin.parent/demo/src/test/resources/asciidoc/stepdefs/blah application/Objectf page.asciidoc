@@ -1,22 +1,8 @@
 = Step-Object: Objectf page
 
-== Step-Definition: is validef
-
 == Step-Definition: is created as follows
 
 * Step-Parameters: 1
-+
-|===
-| Grp | Irnfs
-|===
-
-* Step-Parameters: 2
-+
-|===
-| Grp | Ins
-|===
-
-* Step-Parameters: 3
 +
 |===
 | Grp | Inse

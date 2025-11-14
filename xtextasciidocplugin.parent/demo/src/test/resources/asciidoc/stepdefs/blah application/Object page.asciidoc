@@ -1,10 +1,4 @@
 = Step-Object: Object page
 
-== Step-Definition: is invalid
-
-== Step-Definition: is invalide
-
 == Step-Definition: is invalides
-
-== Step-Definition: is valid
 

@@ -34,7 +34,7 @@ public class CucumberClass extends CucumberJava {
 	public void addStepDefinition(String name, ArrayList<String> paramList) throws Exception {
 		addConstructor(name);
 		MethodDeclaration aMethod = addMethod(
-				convertToCamelCase(TestStepUtility.getPredicate(name)).replace("'", ""));
+				convertToCamelCase(TestStepUtility.getStepDefinitionName(name)).replace("'", ""));
 		BlockStmt body = aMethod.getBody().get();
 		if (body.isEmpty()) {
 			if (aMethod.getAnnotations().isEmpty()) {
@@ -104,7 +104,7 @@ public class CucumberClass extends CucumberJava {
 	}
 
 	private String getSectionArg(String step) {
-		String section = convertToPascalCase(TestStepUtility.getDetails(step));
+		String section = convertToPascalCase(TestStepUtility.getPart(step));
 		if (!section.isEmpty()) {
 			section = ", \"" + section + "\"";
 		}

@@ -15,9 +15,9 @@ Feature: Format Asciidoc Files
 
   Scenario: Format an asciidoc file
 
-    The table formatting is off, this is intentional to check that the formatting works.
+    The table formatting is off this is intentional to check that the formatting works.
 
-    Given The spec-prj project, src/test/resources/asciidoc/specs/app/Process.asciidoc file is created as follows
+    Given The spec-prj project src/test/resources/asciidoc/specs/app/Process.asciidoc file is created as follows
           """
           = Test-Suite: Process
           
@@ -28,9 +28,9 @@ Feature: Format Asciidoc Files
           @tag2
           Desc 2
           
-          * Given: The blah application, Object page is valid
+          * Given: The blah application Object page is valid
           
-          * Then: The blah application, Object page is created as follows
+          * Then: The blah application Object page is created as follows
           +
           ----
             text1
@@ -43,9 +43,9 @@ Feature: Format Asciidoc Files
           @tag3
           Desc 3
           
-          * Given: The blah application, Object page is invalid
+          * Given: The blah application Object page is invalid
           
-          * When: The blah application, Object page is created as follows
+          * When: The blah application Object page is created as follows
           +
           |===
           | grp | ins
@@ -67,7 +67,7 @@ Feature: Format Asciidoc Files
           | 6
           |===
           """
-      And The spec-prj project, src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc file is created as follows
+      And The spec-prj project src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc file is created as follows
           """
           = Step-Object: Object page
           
@@ -89,9 +89,9 @@ Feature: Format Asciidoc Files
           | Content
           |===
           """
-     When The maven plugin, asciidoctor-to-uml goal is executed
-      And The maven plugin, uml-to-asciidoctor goal is executed
-     Then The spec-prj project, src/test/resources/asciidoc/specs/app/Process.asciidoc file will be created as follows
+     When The maven plugin asciidoctor-to-uml goal is executed
+      And The maven plugin uml-to-asciidoctor goal is executed
+     Then The spec-prj project src/test/resources/asciidoc/specs/app/Process.asciidoc file will be created as follows
           """
           = Test-Suite: Process
           
@@ -102,9 +102,9 @@ Feature: Format Asciidoc Files
           @tag2
           Desc 2
           
-          * Given: The blah application, Object page is valid
+          * Given: The blah application Object page is valid
           
-          * Then: The blah application, Object page is created as follows
+          * Then: The blah application Object page is created as follows
           +
           ----
             text1
@@ -117,9 +117,9 @@ Feature: Format Asciidoc Files
           @tag3
           Desc 3
           
-          * Given: The blah application, Object page is invalid
+          * Given: The blah application Object page is invalid
           
-          * When: The blah application, Object page is created as follows
+          * When: The blah application Object page is created as follows
           +
           |===
           | grp | ins  
@@ -141,7 +141,7 @@ Feature: Format Asciidoc Files
           | 6  
           |===
           """
-      And The spec-prj project, src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc file will be created as follows
+      And The spec-prj project src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc file will be created as follows
           """
           = Step-Object: Object page
           

@@ -11,27 +11,27 @@ Feature: Update Existing Code
 
   Background: Create a test suite and step object
 
-    Given The spec-prj project, src/test/resources/asciidoc/specs/Process.asciidoc file is created as follows
+    Given The spec-prj project src/test/resources/asciidoc/specs/Process.asciidoc file is created as follows
           """
           = Test-Suite: Process
           
           == Test-Case: Submit
           
-          * Given: The blah application, Object page is empty
+          * Given: The blah application Object page is empty
           """
-      And The spec-prj project, src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc file is created as follows
+      And The spec-prj project src/test/resources/asciidoc/stepdefs/blah application/Object page.asciidoc file is created as follows
           """
           = Step-Object: Object page
           
           == Step-Definition: is empty
           """
-      And The maven plugin, asciidoctor-to-uml goal is executed
+      And The maven plugin asciidoctor-to-uml goal is executed
 
   Scenario: Update existing step definitions with a new method
 
     The isEmpty method is added to the step definition class and the isInvalid one isn't removed.
 
-      And The code-prj project, src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java file is created as follows
+      And The code-prj project src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java file is created as follows
           """
           package org.farhan.stepdefs.blah;
           
@@ -41,7 +41,7 @@ Feature: Update Existing Code
           
           public class BlahObjectPageSteps {
           
-              @Given("^The blah application, Object page is invalid$")
+              @Given("^The blah application Object page is invalid$")
           
               public BlahObjectPageSteps() {
                   super("ObjectPage", "blah", "Object");
@@ -54,8 +54,8 @@ Feature: Update Existing Code
               }
           }
           """
-     When The maven plugin, uml-to-cucumber goal is executed
-     Then The code-prj project, src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java file will be created as follows
+     When The maven plugin uml-to-cucumber goal is executed
+     Then The code-prj project src-gen/test/java/org/farhan/stepdefs/blah/BlahObjectPageSteps.java file will be created as follows
           """
           package org.farhan.stepdefs.blah;
           
@@ -65,7 +65,7 @@ Feature: Update Existing Code
           
           public class BlahObjectPageSteps {
           
-              @Given("^The blah application, Object page is invalid$")
+              @Given("^The blah application Object page is invalid$")
               public BlahObjectPageSteps() {
                   super("ObjectPage", "blah", "Object");
               }
@@ -76,7 +76,7 @@ Feature: Update Existing Code
                   BlahFactory.get("ObjectPage").setInputOutputs("Invalid");
               }
           
-              @Given("^The blah application, Object page is empty$")
+              @Given("^The blah application Object page is empty$")
               public void isEmpty() {
                   object.setInputOutputs("Empty");
               }
@@ -87,7 +87,7 @@ Feature: Update Existing Code
 
     Same as above but the interface is updated with a new method.
 
-      And The code-prj project, src-gen/test/java/org/farhan/objects/blah/ObjectPage.java file is created as follows
+      And The code-prj project src-gen/test/java/org/farhan/objects/blah/ObjectPage.java file is created as follows
           """
           package org.farhan.objects.blah;
           
@@ -98,8 +98,8 @@ Feature: Update Existing Code
               public void setInvalid(HashMap<String, String> keyMap);
           }
           """
-     When The maven plugin, uml-to-cucumber goal is executed
-     Then The code-prj project, src-gen/test/java/org/farhan/objects/blah/ObjectPage.java file will be created as follows
+     When The maven plugin uml-to-cucumber goal is executed
+     Then The code-prj project src-gen/test/java/org/farhan/objects/blah/ObjectPage.java file will be created as follows
           """
           package org.farhan.objects.blah;
           

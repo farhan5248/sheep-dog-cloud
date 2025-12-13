@@ -47,7 +47,7 @@ public abstract class MBTMojo extends AbstractMojo {
 	@Parameter(property = "port", defaultValue = "80")
 	public int port;
 
-	@Parameter(property = "timeout", defaultValue = "120000")
+	@Parameter(property = "timeout", defaultValue = "300000")
 	public int timeout;
 
 	private String getHost() {

@@ -7,16 +7,16 @@ Feature: Format Cucumber Files
 
   Scenario: Format a feature file
 
-    The table formatting is off, this is intentional to check that the formatting works.
+    The table formatting is off this is intentional to check that the formatting works.
 
-    Given The code-prj project, src-gen/test/resources/cucumber/specs/Process.feature file is created as follows
+    Given The code-prj project src-gen/test/resources/cucumber/specs/Process.feature file is created as follows
           """
           @tag2 @tag3
           Feature: Process
           
             Background: Setup
           
-              Given The blah application, something/Object page is created as follows
+              Given The blah application something/Object page is created as follows
                     \"\"\"
                     Text 1
                     
@@ -28,13 +28,13 @@ Feature: Format Cucumber Files
           
               Basic EDI claim
           
-               When The blah application, something/Object page is empty
-               Then The blah application, something/Object page is empty
-                And The blah application, something/Object page is empty
+               When The blah application something/Object page is empty
+               Then The blah application something/Object page is empty
+                And The blah application something/Object page is empty
           
             Scenario Outline: Submit Several
           
-              Given The blah application, DataTable page is created as follows
+              Given The blah application DataTable page is created as follows
                     |   h1 |   h2 |
                     | <h3> | <h4> |
           
@@ -43,20 +43,20 @@ Feature: Format Cucumber Files
                     |  h3 |  h4 |
                     | v31 | v41 |
           """
-     When The maven plugin, cucumber-to-uml goal is executed with
+     When The maven plugin cucumber-to-uml goal is executed with
           | Tags |
           | tag1 |
-      And The maven plugin, uml-to-cucumber goal is executed with
+      And The maven plugin uml-to-cucumber goal is executed with
           | Tags |
           | tag1 |
-     Then The code-prj project, src-gen/test/resources/cucumber/specs/Process.feature file will be created as follows
+     Then The code-prj project src-gen/test/resources/cucumber/specs/Process.feature file will be created as follows
           """
           @tag2 @tag3
           Feature: Process
           
             Background: Setup
           
-              Given The blah application, something/Object page is created as follows
+              Given The blah application something/Object page is created as follows
                     \"\"\"
                     Text 1
                     
@@ -68,13 +68,13 @@ Feature: Format Cucumber Files
           
               Basic EDI claim
           
-               When The blah application, something/Object page is empty
-               Then The blah application, something/Object page is empty
-                And The blah application, something/Object page is empty
+               When The blah application something/Object page is empty
+               Then The blah application something/Object page is empty
+                And The blah application something/Object page is empty
           
             Scenario Outline: Submit Several
           
-              Given The blah application, DataTable page is created as follows
+              Given The blah application DataTable page is created as follows
                     | h1   | h2   |
                     | <h3> | <h4> |
           

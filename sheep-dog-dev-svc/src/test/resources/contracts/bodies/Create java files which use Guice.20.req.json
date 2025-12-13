@@ -8,7 +8,7 @@ Desc 1
 @tag2
 Desc 2
 
-* Given: The blah application, Object page is valid
+* Given: The blah application Object page is valid
 
 * Then: The Object page is created as follows
 +
@@ -23,7 +23,7 @@ Desc 2
 @tag3
 Desc 3
 
-* Given: The blah application, Object page is invalid
+* Given: The blah application Object page is invalid
 
 * When: The Object page is created as follows
 +

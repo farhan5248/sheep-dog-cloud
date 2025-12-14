@@ -12,7 +12,7 @@ Feature: Select Documentation By Tags
   Scenario: Create two models from different tags
 
     TODO Combine both asciidoc files into one asciidoc file. Keep the two different tags.
-    The test was good enough to code what I wanted but I can see how if I break the code the test will still pass
+    The test was good enough to code what I wanted but I can see how if I break the code, the test will still pass
 
     Given The spec-prj project src/test/resources/asciidoc/specs/Process.asciidoc file is created as follows
           """

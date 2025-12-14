@@ -7,7 +7,7 @@ Feature: Format Cucumber Files
 
   Scenario: Format a feature file
 
-    The table formatting is off this is intentional to check that the formatting works.
+    The table formatting is off, this is intentional to check that the formatting works.
 
     Given The code-prj project src-gen/test/resources/cucumber/specs/Process.feature file is created as follows
           """

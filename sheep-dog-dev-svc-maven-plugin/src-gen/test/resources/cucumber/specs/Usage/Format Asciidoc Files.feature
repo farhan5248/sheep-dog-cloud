@@ -15,7 +15,7 @@ Feature: Format Asciidoc Files
 
   Scenario: Format an asciidoc file
 
-    The table formatting is off this is intentional to check that the formatting works.
+    The table formatting is off, this is intentional to check that the formatting works.
 
     Given The spec-prj project src/test/resources/asciidoc/specs/app/Process.asciidoc file is created as follows
           """

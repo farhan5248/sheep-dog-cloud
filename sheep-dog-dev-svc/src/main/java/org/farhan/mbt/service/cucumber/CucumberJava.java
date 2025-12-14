@@ -74,7 +74,8 @@ public abstract class CucumberJava implements IConvertibleObject {
 	}
 
 	protected String getSetOrAssert(String stepName) throws Exception {
-		if (TestStepUtility.getStateType(stepName).endsWith("be")) {
+		// TODO make sure there are tests for this
+		if (TestStepUtility.getStateDesc(stepName).endsWith("be")) {
 			return "assert";
 		} else {
 			return "set";

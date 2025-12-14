@@ -4,7 +4,7 @@ Feature: Create Code From Documentation
   \@sheep-dog-dev
   \@round-trip
   This is the most common usage of the sheep-dog plugin, create test automation code from documentation.
-  The sheep-dog plugin will create feature files step definition glue code and Java interfaces from the documentation.
+  The sheep-dog plugin will create feature files, step definition glue code and Java interfaces from the documentation.
   The feature files will be created in the src-gen/test/resources/cucumber/specs directory.
   The step definition glue code will be created in the src-gen/test/java/org/farhan/stepdefs directory.
   The interfaces will be created in the src-gen/test/java/org/farhan/objects directory.

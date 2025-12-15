@@ -1,10 +1,4 @@
-        at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
-        at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
-        at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
-        at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
-        at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
-        at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
-        at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+Client log error
 
 [error] Retry attempt 38
 
@@ -119,3 +113,112 @@ org.springframework.web.client.HttpServerErrorException$InternalServerError: 500
         at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
 [error] Retry attempt 39
+
+Server log error
+
+2025-12-15 19:05:27.255 [http-nio-8080-exec-3] INFO  o.f.m.controller.CucumberController - Starting runConvertUMLToCucumberSpring
+2025-12-15 19:05:27.255 [http-nio-8080-exec-3] INFO  o.f.m.controller.CucumberController - tags:
+2025-12-15 19:05:27.255 [http-nio-8080-exec-3] INFO  o.f.m.controller.CucumberController - fileName:src-gen/test/resources/cucumber/specs/app/Process.feature
+2025-12-15 19:05:27.289 [http-nio-8080-exec-8] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestSuiteByName
+2025-12-15 19:05:27.327 [http-nio-8080-exec-8] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestSuiteByName
+2025-12-15 19:05:27.340 [http-nio-8080-exec-10] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestCase
+2025-12-15 19:05:27.427 [http-nio-8080-exec-10] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestCase
+2025-12-15 19:05:27.433 [http-nio-8080-exec-4] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestStepTestCase
+2025-12-15 19:05:27.479 [http-nio-8080-exec-4] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestStepTestCase
+2025-12-15 19:05:27.527 [http-nio-8080-exec-9] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestStepTestCase
+2025-12-15 19:05:27.536 [http-nio-8080-exec-9] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestStepTestCase
+2025-12-15 19:05:27.541 [http-nio-8080-exec-1] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestCase
+2025-12-15 19:05:27.583 [http-nio-8080-exec-1] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestCase
+2025-12-15 19:05:27.625 [http-nio-8080-exec-5] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestStepTestCase
+2025-12-15 19:05:27.636 [http-nio-8080-exec-5] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestStepTestCase
+2025-12-15 19:05:27.643 [http-nio-8080-exec-5] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestStepTestCase
+2025-12-15 19:05:27.680 [http-nio-8080-exec-5] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestStepTestCase
+2025-12-15 19:05:27.725 [http-nio-8080-exec-2] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestStepTestCase
+2025-12-15 19:05:27.734 [http-nio-8080-exec-2] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestStepTestCase
+2025-12-15 19:05:27.738 [http-nio-8080-exec-6] INFO  o.f.mbt.controller.UMLController - Starting getUMLTestStepTestCase
+2025-12-15 19:05:27.751 [http-nio-8080-exec-6] INFO  o.f.mbt.controller.UMLController - Ending getUMLTestStepTestCase
+2025-12-15 19:05:27.828 [http-nio-8080-exec-3] ERROR o.f.m.e.GlobalExceptionHandler - Unhandled exception occurred: Handler dispatch failed: java.lang.NoSuchMethodError: 'int org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion.getEndOffset()'
+jakarta.servlet.ServletException: Handler dispatch failed: java.lang.NoSuchMethodError: 'int org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion.getEndOffset()'
+        at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1103)
+        at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+        at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+        at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+        at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+        at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+        at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+        at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+        at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+        at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+        at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:114)
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+        at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+        at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+        at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+        at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+        at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+        at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+        at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+        at org.apache.catalina.valves.RemoteIpValve.invoke(RemoteIpValve.java:731)
+        at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+        at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+        at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+        at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+        at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+        at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+        at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+        at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.NoSuchMethodError: 'int org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion.getEndOffset()'
+        at org.eclipse.xtext.formatting2.regionaccess.internal.AbstractHiddenRegion.getOffset(AbstractHiddenRegion.java:125)
+        at org.eclipse.xtext.formatting2.regionaccess.internal.AbstractTextSegment.contains(AbstractTextSegment.java:48)
+        at org.eclipse.xtext.formatting2.internal.FormattableDocument.addReplacer(FormattableDocument.java:67)
+        at org.eclipse.xtext.formatting2.internal.FormattableDocument.set(FormattableDocument.java:322)
+        at org.eclipse.xtext.formatting2.internal.FormattableDocument.append(FormattableDocument.java:88)
+        at org.farhan.dsl.cucumber.formatting2.TagFormatter.formatKeyword(TagFormatter.java:19)
+        at org.farhan.dsl.cucumber.formatting2.TagFormatter.format(TagFormatter.java:39)
+        at org.farhan.dsl.cucumber.formatting2.FeatureFormatter.format(FeatureFormatter.java:43)
+        at org.farhan.dsl.cucumber.formatting2.CucumberFormatter.format(CucumberFormatter.java:26)
+        at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+        at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+        at org.eclipse.xtext.formatting2.AbstractJavaFormatter.formatUsingPolymorphicDispatcher(AbstractJavaFormatter.java:127)
+        at org.eclipse.xtext.formatting2.AbstractJavaFormatter.format(AbstractJavaFormatter.java:109)
+        at org.eclipse.xtext.formatting2.internal.FormattableDocument.format(FormattableDocument.java:189)
+        at org.eclipse.xtext.formatting2.AbstractFormatter2._format(AbstractFormatter2.java:209)
+        at org.eclipse.xtext.formatting2.AbstractJavaFormatter.formatUsingPolymorphicDispatcher(AbstractJavaFormatter.java:120)
+        at org.eclipse.xtext.formatting2.AbstractJavaFormatter.format(AbstractJavaFormatter.java:109)
+        at org.eclipse.xtext.formatting2.AbstractFormatter2.format(AbstractFormatter2.java:277)
+        at org.eclipse.xtext.serializer.impl.Serializer.serialize(Serializer.java:155)
+        at org.eclipse.xtext.serializer.impl.Serializer.serialize(Serializer.java:202)
+        at org.eclipse.xtext.resource.XtextResource.doSave(XtextResource.java:431)
+        at org.eclipse.emf.ecore.resource.impl.ResourceImpl.save(ResourceImpl.java:1475)
+        at org.farhan.mbt.service.cucumber.CucumberFeature.toString(CucumberFeature.java:433)
+        at org.farhan.mbt.service.cucumber.ConvertUMLToCucumber.convertFile(ConvertUMLToCucumber.java:69)
+        at org.farhan.mbt.service.CucumberService.convertObject(CucumberService.java:35)
+        at org.farhan.mbt.controller.CucumberController.runConvertUMLToCucumberSpring(CucumberController.java:148)
+        at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+        at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+        at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+        at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+        at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+        at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+        at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+        at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+        ... 44 common frames omitted

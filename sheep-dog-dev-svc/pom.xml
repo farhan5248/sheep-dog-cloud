@@ -196,7 +196,7 @@
 			<plugin>
 				<groupId>org.farhan</groupId>
 				<artifactId>sheep-dog-dev-svc-maven-plugin</artifactId>
-				<version>1.35</version>
+				<version>1.36</version>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

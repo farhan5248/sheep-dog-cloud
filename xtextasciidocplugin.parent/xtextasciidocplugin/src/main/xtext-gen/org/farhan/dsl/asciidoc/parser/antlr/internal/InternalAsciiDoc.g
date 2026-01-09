@@ -322,9 +322,9 @@ ruleStepParameters returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getStepParametersAccess().getStatementListStatementListParserRuleCall_4_0());
+					newCompositeNode(grammarAccess.getStepParametersAccess().getStatementListNestedStatementListParserRuleCall_4_0());
 				}
-				lv_statementList_4_0=ruleStatementList
+				lv_statementList_4_0=ruleNestedStatementList
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getStepParametersRule());
@@ -333,7 +333,7 @@ ruleStepParameters returns [EObject current=null]
 						$current,
 						"statementList",
 						lv_statementList_4_0,
-						"org.farhan.dsl.asciidoc.AsciiDoc.StatementList");
+						"org.farhan.dsl.asciidoc.AsciiDoc.NestedStatementList");
 					afterParserOrEnumRuleCall();
 				}
 			)
@@ -729,9 +729,9 @@ ruleTestData returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getTestDataAccess().getStatementListStatementListParserRuleCall_4_0());
+					newCompositeNode(grammarAccess.getTestDataAccess().getStatementListNestedStatementListParserRuleCall_4_0());
 				}
-				lv_statementList_4_0=ruleStatementList
+				lv_statementList_4_0=ruleNestedStatementList
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getTestDataRule());
@@ -740,7 +740,7 @@ ruleTestData returns [EObject current=null]
 						$current,
 						"statementList",
 						lv_statementList_4_0,
-						"org.farhan.dsl.asciidoc.AsciiDoc.StatementList");
+						"org.farhan.dsl.asciidoc.AsciiDoc.NestedStatementList");
 					afterParserOrEnumRuleCall();
 				}
 			)
@@ -848,33 +848,52 @@ ruleGiven returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getGivenAccess().getNameTitleParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getGivenAccess().getStepObjectNameStepObjectRefParserRuleCall_2_0());
 				}
-				lv_name_2_0=ruleTitle
+				lv_stepObjectName_2_0=ruleStepObjectRef
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getGivenRule());
 					}
 					set(
 						$current,
-						"name",
-						lv_name_2_0,
-						"org.farhan.dsl.asciidoc.AsciiDoc.Title");
+						"stepObjectName",
+						lv_stepObjectName_2_0,
+						"org.farhan.dsl.asciidoc.AsciiDoc.StepObjectRef");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
-		this_EOL_3=RULE_EOL
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getGivenAccess().getStepDefinitionNameStepDefinitionRefParserRuleCall_3_0());
+				}
+				lv_stepDefinitionName_3_0=ruleStepDefinitionRef
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getGivenRule());
+					}
+					set(
+						$current,
+						"stepDefinitionName",
+						lv_stepDefinitionName_3_0,
+						"org.farhan.dsl.asciidoc.AsciiDoc.StepDefinitionRef");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		this_EOL_4=RULE_EOL
 		{
-			newLeafNode(this_EOL_3, grammarAccess.getGivenAccess().getEOLTerminalRuleCall_3());
+			newLeafNode(this_EOL_4, grammarAccess.getGivenAccess().getEOLTerminalRuleCall_4());
 		}
 		(
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getGivenAccess().getTableTableParserRuleCall_4_0_0());
+						newCompositeNode(grammarAccess.getGivenAccess().getTableTableParserRuleCall_5_0_0());
 					}
-					lv_table_4_0=ruleTable
+					lv_table_5_0=ruleTable
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getGivenRule());
@@ -882,7 +901,7 @@ ruleGiven returns [EObject current=null]
 						set(
 							$current,
 							"table",
-							lv_table_4_0,
+							lv_table_5_0,
 							"org.farhan.dsl.asciidoc.AsciiDoc.Table");
 						afterParserOrEnumRuleCall();
 					}
@@ -892,9 +911,9 @@ ruleGiven returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getGivenAccess().getTextTextParserRuleCall_4_1_0());
+						newCompositeNode(grammarAccess.getGivenAccess().getTextTextParserRuleCall_5_1_0());
 					}
-					lv_text_5_0=ruleText
+					lv_text_6_0=ruleText
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getGivenRule());
@@ -902,7 +921,7 @@ ruleGiven returns [EObject current=null]
 						set(
 							$current,
 							"text",
-							lv_text_5_0,
+							lv_text_6_0,
 							"org.farhan.dsl.asciidoc.AsciiDoc.Text");
 						afterParserOrEnumRuleCall();
 					}
@@ -939,33 +958,52 @@ ruleWhen returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getWhenAccess().getNameTitleParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getWhenAccess().getStepObjectNameStepObjectRefParserRuleCall_2_0());
 				}
-				lv_name_2_0=ruleTitle
+				lv_stepObjectName_2_0=ruleStepObjectRef
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getWhenRule());
 					}
 					set(
 						$current,
-						"name",
-						lv_name_2_0,
-						"org.farhan.dsl.asciidoc.AsciiDoc.Title");
+						"stepObjectName",
+						lv_stepObjectName_2_0,
+						"org.farhan.dsl.asciidoc.AsciiDoc.StepObjectRef");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
-		this_EOL_3=RULE_EOL
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getWhenAccess().getStepDefinitionNameStepDefinitionRefParserRuleCall_3_0());
+				}
+				lv_stepDefinitionName_3_0=ruleStepDefinitionRef
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getWhenRule());
+					}
+					set(
+						$current,
+						"stepDefinitionName",
+						lv_stepDefinitionName_3_0,
+						"org.farhan.dsl.asciidoc.AsciiDoc.StepDefinitionRef");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		this_EOL_4=RULE_EOL
 		{
-			newLeafNode(this_EOL_3, grammarAccess.getWhenAccess().getEOLTerminalRuleCall_3());
+			newLeafNode(this_EOL_4, grammarAccess.getWhenAccess().getEOLTerminalRuleCall_4());
 		}
 		(
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getWhenAccess().getTableTableParserRuleCall_4_0_0());
+						newCompositeNode(grammarAccess.getWhenAccess().getTableTableParserRuleCall_5_0_0());
 					}
-					lv_table_4_0=ruleTable
+					lv_table_5_0=ruleTable
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getWhenRule());
@@ -973,7 +1011,7 @@ ruleWhen returns [EObject current=null]
 						set(
 							$current,
 							"table",
-							lv_table_4_0,
+							lv_table_5_0,
 							"org.farhan.dsl.asciidoc.AsciiDoc.Table");
 						afterParserOrEnumRuleCall();
 					}
@@ -983,9 +1021,9 @@ ruleWhen returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getWhenAccess().getTextTextParserRuleCall_4_1_0());
+						newCompositeNode(grammarAccess.getWhenAccess().getTextTextParserRuleCall_5_1_0());
 					}
-					lv_text_5_0=ruleText
+					lv_text_6_0=ruleText
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getWhenRule());
@@ -993,7 +1031,7 @@ ruleWhen returns [EObject current=null]
 						set(
 							$current,
 							"text",
-							lv_text_5_0,
+							lv_text_6_0,
 							"org.farhan.dsl.asciidoc.AsciiDoc.Text");
 						afterParserOrEnumRuleCall();
 					}
@@ -1030,33 +1068,52 @@ ruleThen returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getThenAccess().getNameTitleParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getThenAccess().getStepObjectNameStepObjectRefParserRuleCall_2_0());
 				}
-				lv_name_2_0=ruleTitle
+				lv_stepObjectName_2_0=ruleStepObjectRef
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getThenRule());
 					}
 					set(
 						$current,
-						"name",
-						lv_name_2_0,
-						"org.farhan.dsl.asciidoc.AsciiDoc.Title");
+						"stepObjectName",
+						lv_stepObjectName_2_0,
+						"org.farhan.dsl.asciidoc.AsciiDoc.StepObjectRef");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
-		this_EOL_3=RULE_EOL
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getThenAccess().getStepDefinitionNameStepDefinitionRefParserRuleCall_3_0());
+				}
+				lv_stepDefinitionName_3_0=ruleStepDefinitionRef
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getThenRule());
+					}
+					set(
+						$current,
+						"stepDefinitionName",
+						lv_stepDefinitionName_3_0,
+						"org.farhan.dsl.asciidoc.AsciiDoc.StepDefinitionRef");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		this_EOL_4=RULE_EOL
 		{
-			newLeafNode(this_EOL_3, grammarAccess.getThenAccess().getEOLTerminalRuleCall_3());
+			newLeafNode(this_EOL_4, grammarAccess.getThenAccess().getEOLTerminalRuleCall_4());
 		}
 		(
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getThenAccess().getTableTableParserRuleCall_4_0_0());
+						newCompositeNode(grammarAccess.getThenAccess().getTableTableParserRuleCall_5_0_0());
 					}
-					lv_table_4_0=ruleTable
+					lv_table_5_0=ruleTable
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getThenRule());
@@ -1064,7 +1121,7 @@ ruleThen returns [EObject current=null]
 						set(
 							$current,
 							"table",
-							lv_table_4_0,
+							lv_table_5_0,
 							"org.farhan.dsl.asciidoc.AsciiDoc.Table");
 						afterParserOrEnumRuleCall();
 					}
@@ -1074,9 +1131,9 @@ ruleThen returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getThenAccess().getTextTextParserRuleCall_4_1_0());
+						newCompositeNode(grammarAccess.getThenAccess().getTextTextParserRuleCall_5_1_0());
 					}
-					lv_text_5_0=ruleText
+					lv_text_6_0=ruleText
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getThenRule());
@@ -1084,7 +1141,7 @@ ruleThen returns [EObject current=null]
 						set(
 							$current,
 							"text",
-							lv_text_5_0,
+							lv_text_6_0,
 							"org.farhan.dsl.asciidoc.AsciiDoc.Text");
 						afterParserOrEnumRuleCall();
 					}
@@ -1121,33 +1178,52 @@ ruleAnd returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getAndAccess().getNameTitleParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getAndAccess().getStepObjectNameStepObjectRefParserRuleCall_2_0());
 				}
-				lv_name_2_0=ruleTitle
+				lv_stepObjectName_2_0=ruleStepObjectRef
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getAndRule());
 					}
 					set(
 						$current,
-						"name",
-						lv_name_2_0,
-						"org.farhan.dsl.asciidoc.AsciiDoc.Title");
+						"stepObjectName",
+						lv_stepObjectName_2_0,
+						"org.farhan.dsl.asciidoc.AsciiDoc.StepObjectRef");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
-		this_EOL_3=RULE_EOL
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getAndAccess().getStepDefinitionNameStepDefinitionRefParserRuleCall_3_0());
+				}
+				lv_stepDefinitionName_3_0=ruleStepDefinitionRef
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getAndRule());
+					}
+					set(
+						$current,
+						"stepDefinitionName",
+						lv_stepDefinitionName_3_0,
+						"org.farhan.dsl.asciidoc.AsciiDoc.StepDefinitionRef");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		this_EOL_4=RULE_EOL
 		{
-			newLeafNode(this_EOL_3, grammarAccess.getAndAccess().getEOLTerminalRuleCall_3());
+			newLeafNode(this_EOL_4, grammarAccess.getAndAccess().getEOLTerminalRuleCall_4());
 		}
 		(
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getAndAccess().getTableTableParserRuleCall_4_0_0());
+						newCompositeNode(grammarAccess.getAndAccess().getTableTableParserRuleCall_5_0_0());
 					}
-					lv_table_4_0=ruleTable
+					lv_table_5_0=ruleTable
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getAndRule());
@@ -1155,7 +1231,7 @@ ruleAnd returns [EObject current=null]
 						set(
 							$current,
 							"table",
-							lv_table_4_0,
+							lv_table_5_0,
 							"org.farhan.dsl.asciidoc.AsciiDoc.Table");
 						afterParserOrEnumRuleCall();
 					}
@@ -1165,9 +1241,9 @@ ruleAnd returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getAndAccess().getTextTextParserRuleCall_4_1_0());
+						newCompositeNode(grammarAccess.getAndAccess().getTextTextParserRuleCall_5_1_0());
 					}
-					lv_text_5_0=ruleText
+					lv_text_6_0=ruleText
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getAndRule());
@@ -1175,7 +1251,7 @@ ruleAnd returns [EObject current=null]
 						set(
 							$current,
 							"text",
-							lv_text_5_0,
+							lv_text_6_0,
 							"org.farhan.dsl.asciidoc.AsciiDoc.Text");
 						afterParserOrEnumRuleCall();
 					}
@@ -1234,15 +1310,15 @@ ruleText returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleStatementList
-entryRuleStatementList returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getStatementListRule()); }
-	iv_ruleStatementList=ruleStatementList
-	{ $current=$iv_ruleStatementList.current; }
+// Entry rule entryRuleNestedStatementList
+entryRuleNestedStatementList returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getNestedStatementListRule()); }
+	iv_ruleNestedStatementList=ruleNestedStatementList
+	{ $current=$iv_ruleNestedStatementList.current; }
 	EOF;
 
-// Rule StatementList
-ruleStatementList returns [EObject current=null]
+// Rule NestedStatementList
+ruleNestedStatementList returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -1252,21 +1328,21 @@ ruleStatementList returns [EObject current=null]
 	(
 		otherlv_0='+'
 		{
-			newLeafNode(otherlv_0, grammarAccess.getStatementListAccess().getPlusSignKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getNestedStatementListAccess().getPlusSignKeyword_0());
 		}
 		this_EOL_1=RULE_EOL
 		{
-			newLeafNode(this_EOL_1, grammarAccess.getStatementListAccess().getEOLTerminalRuleCall_1());
+			newLeafNode(this_EOL_1, grammarAccess.getNestedStatementListAccess().getEOLTerminalRuleCall_1());
 		}
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getStatementListAccess().getStatementListStatementParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getNestedStatementListAccess().getStatementListStatementParserRuleCall_2_0());
 				}
 				lv_statementList_2_0=ruleStatement
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getStatementListRule());
+						$current = createModelElementForParent(grammarAccess.getNestedStatementListRule());
 					}
 					add(
 						$current,
@@ -1494,7 +1570,114 @@ ruleTitle returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 	)+
 ;
 
-RULE_WORD : ~((' '|'\t'|'\r'|'\n'|'['|']'|'|'|'#')) ~((' '|'\t'|'\r'|'\n'|'['|']'))*;
+// Entry rule entryRuleStepObjectRef
+entryRuleStepObjectRef returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getStepObjectRefRule()); }
+	iv_ruleStepObjectRef=ruleStepObjectRef
+	{ $current=$iv_ruleStepObjectRef.current.getText(); }
+	EOF;
+
+// Rule StepObjectRef
+ruleStepObjectRef returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			this_WORD_0=RULE_WORD
+			{
+				$current.merge(this_WORD_0);
+			}
+			{
+				newLeafNode(this_WORD_0, grammarAccess.getStepObjectRefAccess().getWORDTerminalRuleCall_0());
+			}
+		)+
+		(
+			kw='file'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getFileKeyword_1_0());
+			}
+			    |
+			kw='page'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getPageKeyword_1_1());
+			}
+			    |
+			kw='response'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getResponseKeyword_1_2());
+			}
+			    |
+			kw='dialog'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getDialogKeyword_1_3());
+			}
+			    |
+			kw='directory'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getDirectoryKeyword_1_4());
+			}
+			    |
+			kw='request'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getRequestKeyword_1_5());
+			}
+			    |
+			kw='goal'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getGoalKeyword_1_6());
+			}
+			    |
+			kw='job'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getJobKeyword_1_7());
+			}
+			    |
+			kw='action'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getStepObjectRefAccess().getActionKeyword_1_8());
+			}
+		)
+	)
+;
+
+// Entry rule entryRuleStepDefinitionRef
+entryRuleStepDefinitionRef returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getStepDefinitionRefRule()); }
+	iv_ruleStepDefinitionRef=ruleStepDefinitionRef
+	{ $current=$iv_ruleStepDefinitionRef.current.getText(); }
+	EOF;
+
+// Rule StepDefinitionRef
+ruleStepDefinitionRef returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		this_WORD_0=RULE_WORD
+		{
+			$current.merge(this_WORD_0);
+		}
+		{
+			newLeafNode(this_WORD_0, grammarAccess.getStepDefinitionRefAccess().getWORDTerminalRuleCall());
+		}
+	)+
+;
 
 RULE_WS : (' '|'\t'|'\r')+;
 
@@ -1503,3 +1686,5 @@ RULE_SL_COMMENT : '#' ~('\n')* RULE_EOL;
 RULE_EOL : '\n'+;
 
 RULE_RAWTEXT : '----' '\n' .+ '\n' '----';
+
+RULE_WORD : ~((' '|'\t'|'\r'|'\n'))+;

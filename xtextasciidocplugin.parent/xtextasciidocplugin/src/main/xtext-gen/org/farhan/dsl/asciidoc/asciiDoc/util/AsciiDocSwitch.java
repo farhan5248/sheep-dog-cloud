@@ -186,10 +186,10 @@ public class AsciiDocSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case AsciiDocPackage.STATEMENT_LIST:
+      case AsciiDocPackage.NESTED_STATEMENT_LIST:
       {
-        StatementList statementList = (StatementList)theEObject;
-        T result = caseStatementList(statementList);
+        NestedStatementList nestedStatementList = (NestedStatementList)theEObject;
+        T result = caseNestedStatementList(nestedStatementList);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -466,17 +466,17 @@ public class AsciiDocSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Statement List</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Nested Statement List</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Statement List</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Nested Statement List</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseStatementList(StatementList object)
+  public T caseNestedStatementList(NestedStatementList object)
   {
     return null;
   }

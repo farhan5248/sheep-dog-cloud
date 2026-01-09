@@ -80,7 +80,7 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
       case AsciiDocPackage.THEN: return createThen();
       case AsciiDocPackage.AND: return createAnd();
       case AsciiDocPackage.TEXT: return createText();
-      case AsciiDocPackage.STATEMENT_LIST: return createStatementList();
+      case AsciiDocPackage.NESTED_STATEMENT_LIST: return createNestedStatementList();
       case AsciiDocPackage.TABLE: return createTable();
       case AsciiDocPackage.ROW: return createRow();
       case AsciiDocPackage.CELL: return createCell();
@@ -276,10 +276,10 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
    * @generated
    */
   @Override
-  public StatementList createStatementList()
+  public NestedStatementList createNestedStatementList()
   {
-    StatementListImpl statementList = new StatementListImpl();
-    return statementList;
+    NestedStatementListImpl nestedStatementList = new NestedStatementListImpl();
+    return nestedStatementList;
   }
 
   /**

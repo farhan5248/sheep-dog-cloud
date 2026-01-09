@@ -151,9 +151,9 @@ public class AsciiDocAdapterFactory extends AdapterFactoryImpl
         return createTextAdapter();
       }
       @Override
-      public Adapter caseStatementList(StatementList object)
+      public Adapter caseNestedStatementList(NestedStatementList object)
       {
-        return createStatementListAdapter();
+        return createNestedStatementListAdapter();
       }
       @Override
       public Adapter caseTable(Table object)
@@ -423,16 +423,16 @@ public class AsciiDocAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.StatementList <em>Statement List</em>}'.
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList <em>Nested Statement List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.StatementList
+   * @see org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList
    * @generated
    */
-  public Adapter createStatementListAdapter()
+  public Adapter createNestedStatementListAdapter()
   {
     return null;
   }

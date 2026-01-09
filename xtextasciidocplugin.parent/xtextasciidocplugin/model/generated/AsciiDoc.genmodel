@@ -41,7 +41,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestData/table"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestStep">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//TestStep/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//TestStep/stepObjectName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//TestStep/stepDefinitionName"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestStep/table"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestStep/text"/>
     </genClasses>
@@ -52,8 +53,8 @@
     <genClasses ecoreClass="AsciiDoc.ecore#//Text">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Text/name"/>
     </genClasses>
-    <genClasses ecoreClass="AsciiDoc.ecore#//StatementList">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StatementList/statementList"/>
+    <genClasses ecoreClass="AsciiDoc.ecore#//NestedStatementList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//NestedStatementList/statementList"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//Table">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//Table/rowList"/>

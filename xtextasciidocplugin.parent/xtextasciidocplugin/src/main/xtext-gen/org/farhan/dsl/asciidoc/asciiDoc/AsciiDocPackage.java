@@ -482,13 +482,22 @@ public interface AsciiDocPackage extends EPackage
   int TEST_STEP = 9;
 
   /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * The feature id for the '<em><b>Step Object Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TEST_STEP__NAME = 0;
+  int TEST_STEP__STEP_OBJECT_NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Step Definition Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEST_STEP__STEP_DEFINITION_NAME = 1;
 
   /**
    * The feature id for the '<em><b>Table</b></em>' containment reference.
@@ -497,7 +506,7 @@ public interface AsciiDocPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TEST_STEP__TABLE = 1;
+  int TEST_STEP__TABLE = 2;
 
   /**
    * The feature id for the '<em><b>Text</b></em>' containment reference.
@@ -506,7 +515,7 @@ public interface AsciiDocPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TEST_STEP__TEXT = 2;
+  int TEST_STEP__TEXT = 3;
 
   /**
    * The number of structural features of the '<em>Test Step</em>' class.
@@ -515,7 +524,7 @@ public interface AsciiDocPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TEST_STEP_FEATURE_COUNT = 3;
+  int TEST_STEP_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.GivenImpl <em>Given</em>}' class.
@@ -528,13 +537,22 @@ public interface AsciiDocPackage extends EPackage
   int GIVEN = 10;
 
   /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * The feature id for the '<em><b>Step Object Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GIVEN__NAME = TEST_STEP__NAME;
+  int GIVEN__STEP_OBJECT_NAME = TEST_STEP__STEP_OBJECT_NAME;
+
+  /**
+   * The feature id for the '<em><b>Step Definition Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIVEN__STEP_DEFINITION_NAME = TEST_STEP__STEP_DEFINITION_NAME;
 
   /**
    * The feature id for the '<em><b>Table</b></em>' containment reference.
@@ -574,13 +592,22 @@ public interface AsciiDocPackage extends EPackage
   int WHEN = 11;
 
   /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * The feature id for the '<em><b>Step Object Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int WHEN__NAME = TEST_STEP__NAME;
+  int WHEN__STEP_OBJECT_NAME = TEST_STEP__STEP_OBJECT_NAME;
+
+  /**
+   * The feature id for the '<em><b>Step Definition Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHEN__STEP_DEFINITION_NAME = TEST_STEP__STEP_DEFINITION_NAME;
 
   /**
    * The feature id for the '<em><b>Table</b></em>' containment reference.
@@ -620,13 +647,22 @@ public interface AsciiDocPackage extends EPackage
   int THEN = 12;
 
   /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * The feature id for the '<em><b>Step Object Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int THEN__NAME = TEST_STEP__NAME;
+  int THEN__STEP_OBJECT_NAME = TEST_STEP__STEP_OBJECT_NAME;
+
+  /**
+   * The feature id for the '<em><b>Step Definition Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int THEN__STEP_DEFINITION_NAME = TEST_STEP__STEP_DEFINITION_NAME;
 
   /**
    * The feature id for the '<em><b>Table</b></em>' containment reference.
@@ -666,13 +702,22 @@ public interface AsciiDocPackage extends EPackage
   int AND = 13;
 
   /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * The feature id for the '<em><b>Step Object Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int AND__NAME = TEST_STEP__NAME;
+  int AND__STEP_OBJECT_NAME = TEST_STEP__STEP_OBJECT_NAME;
+
+  /**
+   * The feature id for the '<em><b>Step Definition Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int AND__STEP_DEFINITION_NAME = TEST_STEP__STEP_DEFINITION_NAME;
 
   /**
    * The feature id for the '<em><b>Table</b></em>' containment reference.
@@ -730,14 +775,14 @@ public interface AsciiDocPackage extends EPackage
   int TEXT_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl <em>Statement List</em>}' class.
+   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.NestedStatementListImpl <em>Nested Statement List</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl
-   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStatementList()
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.NestedStatementListImpl
+   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getNestedStatementList()
    * @generated
    */
-  int STATEMENT_LIST = 15;
+  int NESTED_STATEMENT_LIST = 15;
 
   /**
    * The feature id for the '<em><b>Statement List</b></em>' containment reference list.
@@ -746,16 +791,16 @@ public interface AsciiDocPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STATEMENT_LIST__STATEMENT_LIST = 0;
+  int NESTED_STATEMENT_LIST__STATEMENT_LIST = 0;
 
   /**
-   * The number of structural features of the '<em>Statement List</em>' class.
+   * The number of structural features of the '<em>Nested Statement List</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT_LIST_FEATURE_COUNT = 1;
+  int NESTED_STATEMENT_LIST_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TableImpl <em>Table</em>}' class.
@@ -1158,15 +1203,26 @@ public interface AsciiDocPackage extends EPackage
   EClass getTestStep();
 
   /**
-   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getName <em>Name</em>}'.
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getStepObjectName <em>Step Object Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStep#getName()
+   * @return the meta object for the attribute '<em>Step Object Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStep#getStepObjectName()
    * @see #getTestStep()
    * @generated
    */
-  EAttribute getTestStep_Name();
+  EAttribute getTestStep_StepObjectName();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getStepDefinitionName <em>Step Definition Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Step Definition Name</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestStep#getStepDefinitionName()
+   * @see #getTestStep()
+   * @generated
+   */
+  EAttribute getTestStep_StepDefinitionName();
 
   /**
    * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getTable <em>Table</em>}'.
@@ -1252,25 +1308,25 @@ public interface AsciiDocPackage extends EPackage
   EAttribute getText_Name();
 
   /**
-   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.StatementList <em>Statement List</em>}'.
+   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList <em>Nested Statement List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Statement List</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.StatementList
+   * @return the meta object for class '<em>Nested Statement List</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList
    * @generated
    */
-  EClass getStatementList();
+  EClass getNestedStatementList();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.StatementList#getStatementList <em>Statement List</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList#getStatementList <em>Statement List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Statement List</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.StatementList#getStatementList()
-   * @see #getStatementList()
+   * @see org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList#getStatementList()
+   * @see #getNestedStatementList()
    * @generated
    */
-  EReference getStatementList_StatementList();
+  EReference getNestedStatementList_StatementList();
 
   /**
    * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Table <em>Table</em>}'.
@@ -1616,12 +1672,20 @@ public interface AsciiDocPackage extends EPackage
     EClass TEST_STEP = eINSTANCE.getTestStep();
 
     /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Step Object Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TEST_STEP__NAME = eINSTANCE.getTestStep_Name();
+    EAttribute TEST_STEP__STEP_OBJECT_NAME = eINSTANCE.getTestStep_StepObjectName();
+
+    /**
+     * The meta object literal for the '<em><b>Step Definition Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TEST_STEP__STEP_DEFINITION_NAME = eINSTANCE.getTestStep_StepDefinitionName();
 
     /**
      * The meta object literal for the '<em><b>Table</b></em>' containment reference feature.
@@ -1698,14 +1762,14 @@ public interface AsciiDocPackage extends EPackage
     EAttribute TEXT__NAME = eINSTANCE.getText_Name();
 
     /**
-     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl <em>Statement List</em>}' class.
+     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.NestedStatementListImpl <em>Nested Statement List</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl
-     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getStatementList()
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.NestedStatementListImpl
+     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getNestedStatementList()
      * @generated
      */
-    EClass STATEMENT_LIST = eINSTANCE.getStatementList();
+    EClass NESTED_STATEMENT_LIST = eINSTANCE.getNestedStatementList();
 
     /**
      * The meta object literal for the '<em><b>Statement List</b></em>' containment reference list feature.
@@ -1713,7 +1777,7 @@ public interface AsciiDocPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference STATEMENT_LIST__STATEMENT_LIST = eINSTANCE.getStatementList_StatementList();
+    EReference NESTED_STATEMENT_LIST__STATEMENT_LIST = eINSTANCE.getNestedStatementList_StatementList();
 
     /**
      * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TableImpl <em>Table</em>}' class.

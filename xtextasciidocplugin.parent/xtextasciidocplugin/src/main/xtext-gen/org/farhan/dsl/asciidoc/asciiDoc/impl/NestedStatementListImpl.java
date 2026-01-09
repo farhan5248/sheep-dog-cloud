@@ -18,23 +18,23 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
+import org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList;
 import org.farhan.dsl.asciidoc.asciiDoc.Statement;
-import org.farhan.dsl.asciidoc.asciiDoc.StatementList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Statement List</b></em>'.
+ * An implementation of the model object '<em><b>Nested Statement List</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StatementListImpl#getStatementList <em>Statement List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.NestedStatementListImpl#getStatementList <em>Statement List</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class StatementListImpl extends MinimalEObjectImpl.Container implements StatementList
+public class NestedStatementListImpl extends MinimalEObjectImpl.Container implements NestedStatementList
 {
   /**
    * The cached value of the '{@link #getStatementList() <em>Statement List</em>}' containment reference list.
@@ -51,7 +51,7 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
    * <!-- end-user-doc -->
    * @generated
    */
-  protected StatementListImpl()
+  protected NestedStatementListImpl()
   {
     super();
   }
@@ -64,7 +64,7 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
   @Override
   protected EClass eStaticClass()
   {
-    return AsciiDocPackage.Literals.STATEMENT_LIST;
+    return AsciiDocPackage.Literals.NESTED_STATEMENT_LIST;
   }
 
   /**
@@ -77,7 +77,7 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
   {
     if (statementList == null)
     {
-      statementList = new EObjectContainmentEList<Statement>(Statement.class, this, AsciiDocPackage.STATEMENT_LIST__STATEMENT_LIST);
+      statementList = new EObjectContainmentEList<Statement>(Statement.class, this, AsciiDocPackage.NESTED_STATEMENT_LIST__STATEMENT_LIST);
     }
     return statementList;
   }
@@ -92,7 +92,7 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
   {
     switch (featureID)
     {
-      case AsciiDocPackage.STATEMENT_LIST__STATEMENT_LIST:
+      case AsciiDocPackage.NESTED_STATEMENT_LIST__STATEMENT_LIST:
         return ((InternalEList<?>)getStatementList()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -108,7 +108,7 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
   {
     switch (featureID)
     {
-      case AsciiDocPackage.STATEMENT_LIST__STATEMENT_LIST:
+      case AsciiDocPackage.NESTED_STATEMENT_LIST__STATEMENT_LIST:
         return getStatementList();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -125,7 +125,7 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
   {
     switch (featureID)
     {
-      case AsciiDocPackage.STATEMENT_LIST__STATEMENT_LIST:
+      case AsciiDocPackage.NESTED_STATEMENT_LIST__STATEMENT_LIST:
         getStatementList().clear();
         getStatementList().addAll((Collection<? extends Statement>)newValue);
         return;
@@ -143,7 +143,7 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
   {
     switch (featureID)
     {
-      case AsciiDocPackage.STATEMENT_LIST__STATEMENT_LIST:
+      case AsciiDocPackage.NESTED_STATEMENT_LIST__STATEMENT_LIST:
         getStatementList().clear();
         return;
     }
@@ -160,10 +160,10 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
   {
     switch (featureID)
     {
-      case AsciiDocPackage.STATEMENT_LIST__STATEMENT_LIST:
+      case AsciiDocPackage.NESTED_STATEMENT_LIST__STATEMENT_LIST:
         return statementList != null && !statementList.isEmpty();
     }
     return super.eIsSet(featureID);
   }
 
-} //StatementListImpl
+} //NestedStatementListImpl

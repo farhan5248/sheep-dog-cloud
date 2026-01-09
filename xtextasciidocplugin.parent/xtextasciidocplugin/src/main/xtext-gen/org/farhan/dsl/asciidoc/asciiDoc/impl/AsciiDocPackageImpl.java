@@ -16,9 +16,9 @@ import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
 import org.farhan.dsl.asciidoc.asciiDoc.Cell;
 import org.farhan.dsl.asciidoc.asciiDoc.Given;
 import org.farhan.dsl.asciidoc.asciiDoc.Model;
+import org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList;
 import org.farhan.dsl.asciidoc.asciiDoc.Row;
 import org.farhan.dsl.asciidoc.asciiDoc.Statement;
-import org.farhan.dsl.asciidoc.asciiDoc.StatementList;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
@@ -151,7 +151,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass statementListEClass = null;
+  private EClass nestedStatementListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -546,7 +546,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
-  public EAttribute getTestStep_Name()
+  public EAttribute getTestStep_StepObjectName()
   {
     return (EAttribute)testStepEClass.getEStructuralFeatures().get(0);
   }
@@ -557,9 +557,20 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
+  public EAttribute getTestStep_StepDefinitionName()
+  {
+    return (EAttribute)testStepEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getTestStep_Table()
   {
-    return (EReference)testStepEClass.getEStructuralFeatures().get(1);
+    return (EReference)testStepEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -570,7 +581,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
   @Override
   public EReference getTestStep_Text()
   {
-    return (EReference)testStepEClass.getEStructuralFeatures().get(2);
+    return (EReference)testStepEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -645,9 +656,9 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
-  public EClass getStatementList()
+  public EClass getNestedStatementList()
   {
-    return statementListEClass;
+    return nestedStatementListEClass;
   }
 
   /**
@@ -656,9 +667,9 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
-  public EReference getStatementList_StatementList()
+  public EReference getNestedStatementList_StatementList()
   {
-    return (EReference)statementListEClass.getEStructuralFeatures().get(0);
+    return (EReference)nestedStatementListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -816,7 +827,8 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
     createEReference(testDataEClass, TEST_DATA__TABLE);
 
     testStepEClass = createEClass(TEST_STEP);
-    createEAttribute(testStepEClass, TEST_STEP__NAME);
+    createEAttribute(testStepEClass, TEST_STEP__STEP_OBJECT_NAME);
+    createEAttribute(testStepEClass, TEST_STEP__STEP_DEFINITION_NAME);
     createEReference(testStepEClass, TEST_STEP__TABLE);
     createEReference(testStepEClass, TEST_STEP__TEXT);
 
@@ -831,8 +843,8 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
     textEClass = createEClass(TEXT);
     createEAttribute(textEClass, TEXT__NAME);
 
-    statementListEClass = createEClass(STATEMENT_LIST);
-    createEReference(statementListEClass, STATEMENT_LIST__STATEMENT_LIST);
+    nestedStatementListEClass = createEClass(NESTED_STATEMENT_LIST);
+    createEReference(nestedStatementListEClass, NESTED_STATEMENT_LIST__STATEMENT_LIST);
 
     tableEClass = createEClass(TABLE);
     createEReference(tableEClass, TABLE__ROW_LIST);
@@ -900,7 +912,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
 
     initEClass(stepParametersEClass, StepParameters.class, "StepParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getStepParameters_Name(), ecorePackage.getEString(), "name", null, 0, 1, StepParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getStepParameters_StatementList(), this.getStatementList(), null, "statementList", null, 0, 1, StepParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getStepParameters_StatementList(), this.getNestedStatementList(), null, "statementList", null, 0, 1, StepParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStepParameters_Table(), this.getTable(), null, "table", null, 0, 1, StepParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(testSuiteEClass, TestSuite.class, "TestSuite", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -918,11 +930,12 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
 
     initEClass(testDataEClass, TestData.class, "TestData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTestData_Name(), ecorePackage.getEString(), "name", null, 0, 1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTestData_StatementList(), this.getStatementList(), null, "statementList", null, 0, 1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTestData_StatementList(), this.getNestedStatementList(), null, "statementList", null, 0, 1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTestData_Table(), this.getTable(), null, "table", null, 0, 1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(testStepEClass, TestStep.class, "TestStep", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTestStep_Name(), ecorePackage.getEString(), "name", null, 0, 1, TestStep.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTestStep_StepObjectName(), ecorePackage.getEString(), "stepObjectName", null, 0, 1, TestStep.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTestStep_StepDefinitionName(), ecorePackage.getEString(), "stepDefinitionName", null, 0, 1, TestStep.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTestStep_Table(), this.getTable(), null, "table", null, 0, 1, TestStep.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTestStep_Text(), this.getText(), null, "text", null, 0, 1, TestStep.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -937,8 +950,8 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
     initEClass(textEClass, Text.class, "Text", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getText_Name(), ecorePackage.getEString(), "name", null, 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(statementListEClass, StatementList.class, "StatementList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getStatementList_StatementList(), this.getStatement(), null, "statementList", null, 0, -1, StatementList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(nestedStatementListEClass, NestedStatementList.class, "NestedStatementList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getNestedStatementList_StatementList(), this.getStatement(), null, "statementList", null, 0, -1, NestedStatementList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(tableEClass, Table.class, "Table", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTable_RowList(), this.getRow(), null, "rowList", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

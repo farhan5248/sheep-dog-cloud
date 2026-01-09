@@ -159,13 +159,13 @@ public interface AsciiDocFactory extends EFactory
   Text createText();
 
   /**
-   * Returns a new object of class '<em>Statement List</em>'.
+   * Returns a new object of class '<em>Nested Statement List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Statement List</em>'.
+   * @return a new object of class '<em>Nested Statement List</em>'.
    * @generated
    */
-  StatementList createStatementList();
+  NestedStatementList createNestedStatementList();
 
   /**
    * Returns a new object of class '<em>Table</em>'.

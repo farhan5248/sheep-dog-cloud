@@ -9,21 +9,21 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Statement List</b></em>'.
+ * A representation of the model object '<em><b>Nested Statement List</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.StatementList#getStatementList <em>Statement List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList#getStatementList <em>Statement List</em>}</li>
  * </ul>
  *
- * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getStatementList()
+ * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getNestedStatementList()
  * @model
  * @generated
  */
-public interface StatementList extends EObject
+public interface NestedStatementList extends EObject
 {
   /**
    * Returns the value of the '<em><b>Statement List</b></em>' containment reference list.
@@ -31,10 +31,10 @@ public interface StatementList extends EObject
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Statement List</em>' containment reference list.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getStatementList_StatementList()
+   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getNestedStatementList_StatementList()
    * @model containment="true"
    * @generated
    */
   EList<Statement> getStatementList();
 
-} // StatementList
+} // NestedStatementList

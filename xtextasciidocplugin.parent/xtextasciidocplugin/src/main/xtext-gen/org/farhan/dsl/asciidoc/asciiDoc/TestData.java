@@ -52,12 +52,12 @@ public interface TestData extends EObject
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Statement List</em>' containment reference.
-   * @see #setStatementList(StatementList)
+   * @see #setStatementList(NestedStatementList)
    * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getTestData_StatementList()
    * @model containment="true"
    * @generated
    */
-  StatementList getStatementList();
+  NestedStatementList getStatementList();
 
   /**
    * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getStatementList <em>Statement List</em>}' containment reference.
@@ -67,7 +67,7 @@ public interface TestData extends EObject
    * @see #getStatementList()
    * @generated
    */
-  void setStatementList(StatementList value);
+  void setStatementList(NestedStatementList value);
 
   /**
    * Returns the value of the '<em><b>Table</b></em>' containment reference.

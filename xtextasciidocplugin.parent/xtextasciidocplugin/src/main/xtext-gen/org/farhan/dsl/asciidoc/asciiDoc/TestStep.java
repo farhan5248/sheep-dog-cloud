@@ -14,7 +14,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getName <em>Name</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getStepObjectName <em>Step Object Name</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getStepDefinitionName <em>Step Definition Name</em>}</li>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getTable <em>Table</em>}</li>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getText <em>Text</em>}</li>
  * </ul>
@@ -26,26 +27,48 @@ import org.eclipse.emf.ecore.EObject;
 public interface TestStep extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Name</b></em>' attribute.
+   * Returns the value of the '<em><b>Step Object Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getTestStep_Name()
+   * @return the value of the '<em>Step Object Name</em>' attribute.
+   * @see #setStepObjectName(String)
+   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getTestStep_StepObjectName()
    * @model
    * @generated
    */
-  String getName();
+  String getStepObjectName();
 
   /**
-   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getName <em>Name</em>}' attribute.
+   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getStepObjectName <em>Step Object Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
+   * @param value the new value of the '<em>Step Object Name</em>' attribute.
+   * @see #getStepObjectName()
    * @generated
    */
-  void setName(String value);
+  void setStepObjectName(String value);
+
+  /**
+   * Returns the value of the '<em><b>Step Definition Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Step Definition Name</em>' attribute.
+   * @see #setStepDefinitionName(String)
+   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getTestStep_StepDefinitionName()
+   * @model
+   * @generated
+   */
+  String getStepDefinitionName();
+
+  /**
+   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStep#getStepDefinitionName <em>Step Definition Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Step Definition Name</em>' attribute.
+   * @see #getStepDefinitionName()
+   * @generated
+   */
+  void setStepDefinitionName(String value);
 
   /**
    * Returns the value of the '<em><b>Table</b></em>' containment reference.

@@ -2,12 +2,12 @@ package org.farhan.dsl.asciidoc.parser.antlr;
 
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.TokenSource;
-import org.farhan.dsl.asciidoc.parser.antlr.internal.MyAsciiDocLexer;
+import org.farhan.dsl.asciidoc.parser.antlr.internal.AsciiDocLexer;
 
-public class MyAsciiDocParser extends AsciiDocParser {
+public class CustomAsciiDocParser extends AsciiDocParser {
 
 	@Override
 	protected TokenSource createLexer(CharStream stream) {
-		return new MyAsciiDocLexer(stream);
+		return new AsciiDocLexer(stream);
 	}
 }

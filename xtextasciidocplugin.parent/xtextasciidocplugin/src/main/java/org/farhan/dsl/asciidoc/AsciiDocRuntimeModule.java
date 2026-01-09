@@ -8,9 +8,9 @@ import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.parser.antlr.Lexer;
 import org.eclipse.xtext.parser.antlr.LexerBindings;
 import org.eclipse.xtext.parser.antlr.LexerProvider;
-import org.farhan.dsl.asciidoc.parser.antlr.MyAsciiDocParser;
+import org.farhan.dsl.asciidoc.parser.antlr.CustomAsciiDocParser;
 import org.farhan.dsl.asciidoc.parser.antlr.internal.InternalAsciiDocLexer;
-import org.farhan.dsl.asciidoc.parser.antlr.internal.MyAsciiDocLexer;
+import org.farhan.dsl.asciidoc.parser.antlr.internal.AsciiDocLexer;
 import org.farhan.dsl.asciidoc.generator.AsciiDocOutputConfigurationProvider;
 
 import com.google.inject.Binder;
@@ -34,21 +34,21 @@ public class AsciiDocRuntimeModule extends AbstractAsciiDocRuntimeModule {
 	
 	@Override
 	public Class<? extends IParser> bindIParser() {
-		return MyAsciiDocParser.class;
+		return CustomAsciiDocParser.class;
 	}
 
 	@Override
 	public Class<? extends Lexer> bindLexer() {
-		return MyAsciiDocLexer.class;
+		return AsciiDocLexer.class;
 	}
 
 	@Override
 	public Provider<? extends InternalAsciiDocLexer> provideInternalAsciiDocLexer() {
-		return LexerProvider.create(MyAsciiDocLexer.class);
+		return LexerProvider.create(AsciiDocLexer.class);
 	}
 
 	@Override
 	public void configureRuntimeLexer(Binder binder) {
-		binder.bind(Lexer.class).annotatedWith(Names.named(LexerBindings.RUNTIME)).to(MyAsciiDocLexer.class);
+		binder.bind(Lexer.class).annotatedWith(Names.named(LexerBindings.RUNTIME)).to(AsciiDocLexer.class);
 	}
 }

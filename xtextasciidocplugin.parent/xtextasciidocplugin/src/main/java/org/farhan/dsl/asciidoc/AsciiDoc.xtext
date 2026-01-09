@@ -19,7 +19,7 @@ StepDefinition:
 
 StepParameters:
 	'*' 'Step-Parameters:' name=Title EOL
-	statementList=StatementList?
+	statementList=NestedStatementList?
 	table=Table;
 
 TestSuite:
@@ -43,33 +43,33 @@ TestCase:
 
 TestData:
 	'*' 'Test-Data:' name=Title EOL
-	statementList=StatementList?
+	statementList=NestedStatementList?
 	table=Table;
 
 TestStep:
 	Given | When | Then | And;
 
 Given:
-	'*' 'Given:' name=Title EOL
+	'*' 'Given:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
 	(table=Table | text=Text)?;
 
 When:
-	'*' 'When:' name=Title EOL
+	'*' 'When:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
 	(table=Table | text=Text)?;
 
 Then:
-	'*' 'Then:' name=Title EOL
+	'*' 'Then:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
 	(table=Table | text=Text)?;
 
 And:
-	'*' 'And:' name=Title EOL
+	'*' 'And:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
 	(table=Table | text=Text)?;
 
 Text:
 	'+' EOL
 	name=RAWTEXT EOL;
 
-StatementList:
+NestedStatementList:
 	'+' EOL
 	statementList+=Statement+;
 
@@ -85,17 +85,29 @@ Row:
 Cell:
 	'|' name=Title;
 
+// TODO There need to be better names than Text, Statement, Title, WORD etc ...
 Statement:
 	name=Title EOL;
 
-// TODO maybe I don't need Title and can ignore the warnings about it being used in a loop
 Title:
 	WORD+;
 
-// TODO look at fragments to handle escape characters etc instead of this and to handle re-using ' ' | '\t' | '\r' | '\n'
-terminal WORD:
-	!(' ' | '\t' | '\r' | '\n' | '[' | ']' | '|' | '#')
-	!(' ' | '\t' | '\r' | '\n' | '[' | ']')*;
+// TODO the regular expression here is a partial duplication of what's in sheep-dog-test
+// It should only be defined here but that is more work than I want to do right now
+// When testing sheep-dog-test, it doesn't need a regex.
+// It's enough that the Impl classes return what parts it needs.
+// If all the parts accessible from the utility are defined here, 
+// then the TestStepImpl class + its utility can extract that information
+// Also any tests in sheep-dog-test must be implemented in the xtext project
+// to make sure the Impl classes have implemented this correctly
+// For now I'm putting the whole regex to make it possible to distinguish between STEP_OBJECT and STEP_DEFINITION
+// without breaking it up into its parts
+// TODO do I need to define single spaces?
+StepObjectRef:
+	WORD+ ('file' | 'page' | 'response' | 'dialog' | 'directory' | 'request' | 'goal' | 'job' | 'action');
+
+StepDefinitionRef:
+	WORD+;
 
 terminal WS:
 	(' ' | '\t' | '\r')+;
@@ -108,3 +120,6 @@ terminal EOL:
 
 terminal RAWTEXT:
 	'----' '\n' (.)+ '\n' '----';
+
+terminal WORD:
+	!(' ' | '\t' | '\r' | '\n')+;

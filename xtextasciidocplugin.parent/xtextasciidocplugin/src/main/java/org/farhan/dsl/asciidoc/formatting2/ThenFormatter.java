@@ -30,12 +30,17 @@ public class ThenFormatter extends TestStepFormatter {
 
 	@Override
 	protected RuleCall getEOLRuleCall(AbstractParserRuleElementFinder a) {
-		return ((ThenElements) a).getEOLTerminalRuleCall_3();
+		return ((ThenElements) a).getEOLTerminalRuleCall_4();
 	}
 
 	@Override
-	protected RuleCall getPhraseRuleCall(AbstractParserRuleElementFinder a) {
-		return ((ThenElements) a).getNameTitleParserRuleCall_2_0();
+	protected RuleCall getObjectStepObjectRefParserRuleCall(AbstractParserRuleElementFinder a) {
+		return ((ThenElements) a).getStepObjectNameStepObjectRefParserRuleCall_2_0();
+	}
+
+	@Override
+	protected RuleCall getStepDefinitionNameStepDefinitionRefParserRuleCall(AbstractParserRuleElementFinder a) {
+		return ((ThenElements) a).getStepDefinitionNameStepDefinitionRefParserRuleCall_3_0();
 	}
 
 }

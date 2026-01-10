@@ -38,6 +38,13 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		logger.debug("Exiting {}", "doGenerate");
 	}
 
+	private static String getName(TestStep eObject) {
+		String name = "";
+		name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
+		name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
+		return name;
+	}
+
 	public static void generateFromResource(final Resource resource) {
 		logger.info("Entering generateFromResource for resource: {}", resource != null ? resource.getURI() : "null");
 		try {
@@ -53,7 +60,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 				for (TestStepContainer scenario : theTestSuite.getTestStepContainerList()) {
 					logger.debug("Processing scenario: {}", scenario.getName());
 					for (TestStep step : scenario.getTestStepList()) {
-						logger.debug("Processing step: {}", step.getName());
+						logger.debug("Processing step: {}", getName(step));
 						generateFromTestStep(step, true);
 					}
 				}
@@ -68,7 +75,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 	}
 
 	public static StepObjectImpl generateFromTestStep(TestStep step, boolean saveToFile) {
-		logger.debug("Entering generateFromTestStep for step: {}", step != null ? step.getName() : "null");
+		logger.debug("Entering generateFromTestStep for step: {}", step != null ? getName(step) : "null");
 		try {
 			TestProjectImpl testProject = new TestProjectImpl(
 					new SourceFileRepository(
@@ -84,7 +91,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 			logger.debug("Exiting {}", "generateFromTestStep");
 			return stepObjectImpl;
 		} catch (Exception e) {
-			logger.error("Generation failed for step '{}': {}", step != null ? step.getName() : "null", e.getMessage(),
+			logger.error("Generation failed for step '{}': {}", step != null ? getName(step) : "null", e.getMessage(),
 					e);
 		}
 		return null;

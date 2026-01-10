@@ -87,6 +87,13 @@ public class AsciiDocCodeActionService extends QuickFixCodeActionService {
         return codeActions;
     }
 
+    private String getName(TestStep eObject) {
+        String name = "";
+        name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
+        name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
+        return name;
+    }
+
     private Either<Command, CodeAction> getCreateDefinitionAction(Options options, Diagnostic diagnostic)
             throws Exception {
         logger.debug("Entering getCreateDefinitionAction with options {} and diagnostic {}", options.getURI(),
@@ -97,7 +104,7 @@ public class AsciiDocCodeActionService extends QuickFixCodeActionService {
         action.setDiagnostics(Collections.singletonList(diagnostic));
 
         TestStep testStep = (TestStep) getEObjectFromDiagnostic(options, diagnostic);
-        logger.debug("TestStep name {}", testStep.getName());
+        logger.debug("TestStep name {}", getName(testStep));
         StepObjectImpl stepObjectImpl = AsciiDocGenerator.generateFromTestStep(testStep, false);
         String content = stepObjectImpl.serialize();
         logger.debug("content {}", content);

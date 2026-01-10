@@ -23,13 +23,10 @@ public class TestStepImpl implements ITestStep {
 
 	@Override
 	public String getName() {
-		// TODO apply this to the sheepdog plugin as well
-		if (eObject.getName() == null) {
-			return "";
-		} else {
-			return eObject.getName();
-		}
-
+		String name = "";
+		name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
+		name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
+		return name;
 	}
 
 	@Override

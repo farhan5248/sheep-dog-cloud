@@ -203,14 +203,10 @@ public class ConvertUMLToCucumber extends Converter {
 
 	protected void convertTestStep(Step step, UMLTestStep srcStep) throws Exception {
 		log.debug("test step: " + srcStep.getName());
+		// TODO make it consistent, has StepText or getDocString
 		if (srcStep.getStepText() != null) {
-			DocString docString = tgtObjTestSuite.addDocString(step);
-			// TODO remove the need for splitting by line
-			for (String l : srcStep.getStepText().split("\n")) {
-				tgtObjTestSuite.addLine(docString, l);
-			}
+			tgtObjTestSuite.setDocString(step, srcStep.getStepText());
 		} else if (srcStep.getStepTable() != null) {
-			// TODO make names like get step table/data vs test data consistent
 			StepTable stepTable = tgtObjTestSuite.addStepTable(step);
 			for (ArrayList<String> srcRow : srcStep.getStepTable()) {
 				Row row = tgtObjTestSuite.addStepTableRow(stepTable);

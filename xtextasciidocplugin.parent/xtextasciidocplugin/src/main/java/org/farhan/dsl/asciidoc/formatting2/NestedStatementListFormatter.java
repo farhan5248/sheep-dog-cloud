@@ -2,20 +2,20 @@ package org.farhan.dsl.asciidoc.formatting2;
 
 import org.eclipse.xtext.formatting2.IFormattableDocument;
 import org.farhan.dsl.asciidoc.services.AsciiDocGrammarAccess;
-import org.farhan.dsl.asciidoc.services.AsciiDocGrammarAccess.StatementListElements;
+import org.farhan.dsl.asciidoc.services.AsciiDocGrammarAccess.NestedStatementListElements;
 import org.farhan.dsl.asciidoc.asciiDoc.Statement;
-import org.farhan.dsl.asciidoc.asciiDoc.StatementList;
+import org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList;
 
-public class StatementListFormatter extends Formatter {
+public class NestedStatementListFormatter extends Formatter {
 
-	private StatementList theStatementList;
+	private NestedStatementList theStatementList;
 
-	public StatementListFormatter(StatementList theStatementList) {
+	public NestedStatementListFormatter(NestedStatementList theStatementList) {
 		this.theStatementList = theStatementList;
 	}
 
 	public void format(IFormattableDocument doc, AsciiDocGrammarAccess ga, AsciiDocFormatter df) {
-		StatementListElements a = ga.getStatementListAccess();
+		NestedStatementListElements a = ga.getNestedStatementListAccess();
 		formatKeywordNoSpace(df.getRegion(theStatementList, a.getPlusSignKeyword_0()), doc);
 		formatEOL1RuleCall(df.getRegion(theStatementList, a.getEOLTerminalRuleCall_1()), doc);
 

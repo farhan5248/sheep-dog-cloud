@@ -27,7 +27,7 @@ public class StepParametersFormatter extends Formatter {
 		}
 
 		if (theStepParameters.getStatementList() != null) {
-			StatementListFormatter formatter = new StatementListFormatter(theStepParameters.getStatementList());
+			NestedStatementListFormatter formatter = new NestedStatementListFormatter(theStepParameters.getStatementList());
 			formatter.format(doc, ga, df);
 		}
 

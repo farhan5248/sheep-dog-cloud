@@ -106,34 +106,41 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 		logger.debug("Exiting {}", "checkScenario");
 	}
 
+	private String getName(TestStep eObject) {
+		String name = "";
+		name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
+		name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
+		return name;
+	}
+
 	@Check(CheckType.FAST)
 	public void checkStepName(TestStep step) {
-		logger.debug("Entering checkStepName for step: {}", step != null ? step.getName() : "null");
+		logger.debug("Entering checkStepName for step: {}", step != null ? getName(step) : "null");
 		try {
 			if (step == null) {
 				logger.warn("TestStep is null, cannot perform validation");
 				return;
 			}
 
-			logger.debug("Creating LanguageAccessImpl for step: {}", step.getName());
+			logger.debug("Creating LanguageAccessImpl for step: {}", getName(step));
 
-			if (step.getName() != null) {
-				logger.debug("Validating step name errors for: {}", step.getName());
+			if (getName(step) != null) {
+				logger.debug("Validating step name errors for: {}", getName(step));
 				ITestStep iTestStep = new TestStepImpl(step);
 				String problems = TestStepIssueDetector.validateSyntax(iTestStep);
 				if (!problems.isEmpty()) {
-					logger.debug("Found error problems for step '{}': {}", step.getName(), problems);
-					error(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
+					logger.debug("Found error problems for step '{}': {}", getName(step), problems);
+					error(problems, AsciiDocPackage.Literals.TEST_STEP__STEP_OBJECT_NAME, INVALID_NAME);
 				}
 
-				logger.debug("Validating step name warnings for: {}", step.getName());
+				logger.debug("Validating step name warnings for: {}", getName(step));
 				ITestProject testProject = new TestProjectImpl(
 						new SourceFileRepository(
 								step.eResource().getURI().toFileString().replace(File.separator, "/")));
 				iTestStep.getParent().getParent().setParent(testProject);
 				problems = TestStepIssueDetector.validateSemantics(iTestStep, testProject);
 				if (!problems.isEmpty()) {
-					logger.debug("Found warning problems for step '{}': {}", step.getName(), problems);
+					logger.debug("Found warning problems for step '{}': {}", getName(step), problems);
 
 					Object[] alternateProposals = TestStepIssueResolver.proposeStepObject(iTestStep, testProject);
 					String[] alternates = new String[alternateProposals.length];
@@ -141,7 +148,7 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 						alternates[i] = alternateProposals[i].toString();
 					}
 
-					warning(problems, AsciiDocPackage.Literals.TEST_STEP__NAME, MISSING_STEP_DEF,
+					warning(problems, AsciiDocPackage.Literals.TEST_STEP__STEP_OBJECT_NAME, MISSING_STEP_DEF,
 							alternates);
 				}
 			} else {
@@ -151,11 +158,11 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 		} catch (Exception e) {
 			// TODO why is stackTrace not used?
 			logger.error("Error validating TestStep '{}': {}",
-					step != null ? step.getName() : "null", e.getMessage(), e);
+					step != null ? getName(step) : "null", e.getMessage(), e);
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
 			String stackTrace = sw.toString();
-			error("Validation error: " + e.getMessage(), AsciiDocPackage.Literals.TEST_STEP__NAME, INVALID_NAME);
+			error("Validation error: " + e.getMessage(), AsciiDocPackage.Literals.TEST_STEP__STEP_OBJECT_NAME, INVALID_NAME);
 		}
 	}
 

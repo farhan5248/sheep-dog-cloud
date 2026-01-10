@@ -32,6 +32,13 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 
 	private static final Logger logger = LoggerFactory.getLogger(AsciiDocIdeContentProposalProvider.class);
 
+	private String getName(TestStep eObject) {
+		String name = "";
+		name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
+		name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
+		return name;
+	}
+
 	@Override
 	protected void _createProposals(Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
@@ -44,7 +51,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			}
 
 			if (context.getCurrentModel() != null && context.getCurrentModel() instanceof TestStep) {
-				logger.debug("Current model is TestStep: {}", ((TestStep) context.getCurrentModel()).getName());
+				logger.debug("Current model is TestStep: {}", getName((TestStep) context.getCurrentModel()));
 				completeName((TestStep) context.getCurrentModel(), assignment, context, acceptor);
 			} else {
 				logger.debug("Current model is not TestStep or is null: {}",
@@ -61,14 +68,14 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 
 	private void completeName(TestStep step, Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
-		logger.debug("Entering completeName for step: {}", step != null ? step.getName() : "null");
+		logger.debug("Entering completeName for step: {}", step != null ? getName(step) : "null");
 		try {
 			if (step == null) {
 				logger.warn("TestStep is null, cannot provide completion proposals");
 				return;
 			}
 
-			logger.debug("Creating TestStep name proposals for: {}", step.getName());
+			logger.debug("Creating TestStep name proposals for: {}", getName(step));
 			int proposalCount = 0;
 
 			ITestProject testProject = new TestProjectImpl(
@@ -89,7 +96,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 
 			logger.debug("Created {} TestStep name proposals", proposalCount);
 
-			logger.debug("Creating step parameter proposals for: {}", step.getName());
+			logger.debug("Creating step parameter proposals for: {}", getName(step));
 			int paramProposalCount = 0;
 			for (Entry<String, TestStepIssueProposal> p : TestStepIssueResolver
 					.proposeStepParameters(iTestStep, testProject).entrySet()) {
@@ -118,7 +125,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 
 		} catch (Exception e) {
 			logger.error("Error creating completion proposals for step '{}': {}",
-					step != null ? step.getName() : "null", e.getMessage(), e);
+					step != null ? getName(step) : "null", e.getMessage(), e);
 
 			try {
 				StringWriter sw = new StringWriter();

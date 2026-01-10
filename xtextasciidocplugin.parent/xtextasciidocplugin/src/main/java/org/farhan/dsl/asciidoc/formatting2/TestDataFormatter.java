@@ -26,7 +26,7 @@ public class TestDataFormatter extends Formatter {
 		}
 
 		if (theTestData.getStatementList() != null) {
-			StatementListFormatter formatter = new StatementListFormatter(theTestData.getStatementList());
+			NestedStatementListFormatter formatter = new NestedStatementListFormatter(theTestData.getStatementList());
 			formatter.format(doc, ga, df);
 		}
 

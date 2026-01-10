@@ -23,13 +23,16 @@ public abstract class TestStepFormatter extends Formatter {
 
 	protected abstract RuleCall getEOLRuleCall(AbstractParserRuleElementFinder a);
 
-	protected abstract RuleCall getPhraseRuleCall(AbstractParserRuleElementFinder a);
+	protected abstract RuleCall getObjectStepObjectRefParserRuleCall(AbstractParserRuleElementFinder a);
+
+	protected abstract RuleCall getStepDefinitionNameStepDefinitionRefParserRuleCall(AbstractParserRuleElementFinder a);
 
 	public void format(IFormattableDocument doc, AsciiDocGrammarAccess ga, AsciiDocFormatter df) {
 		AbstractParserRuleElementFinder a = getAccess(ga);
 		formatKeywordTrailingSpace(df.getRegion(theStep, getEqualsKeyword(a)), doc);
 		formatKeywordTrailingSpace(df.getRegion(theStep, getKeyword(a)), doc);
-		formatTitle(df.getRegion(theStep, getPhraseRuleCall(a)), doc);
+		formatTitleTrailingSpace(df.getRegion(theStep, getObjectStepObjectRefParserRuleCall(a)), doc);
+		formatTitle(df.getRegion(theStep, getStepDefinitionNameStepDefinitionRefParserRuleCall(a)), doc);
 		if (theStep.getTable() != null || theStep.getText() != null) {
 			formatEOL1RuleCall(df.getRegion(theStep, getEOLRuleCall(a)), doc);
 		} else {

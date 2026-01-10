@@ -30,7 +30,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LanguageAccessImpl  {
+public class LanguageAccessImpl {
 
 	private static final Logger logger = LoggerFactory.getLogger(LanguageAccessImpl.class);
 	public final static String STEP_PARAMETER_TEXT = "| Content";
@@ -67,7 +67,6 @@ public class LanguageAccessImpl  {
 		}
 		return cellsAsString;
 	}
-
 
 	public Object createStepDefinition(Object stepObject, String predicate) {
 		StepDefinition stepDefinition;
@@ -114,10 +113,9 @@ public class LanguageAccessImpl  {
 
 	private Object createStepObject() {
 		StepObject stepObject = AsciiDocFactory.eINSTANCE.createStepObject();
-		//stepObject.setName(TestStepNameHelper.getObject(getStepName()));
+		// stepObject.setName(TestStepNameHelper.getObject(getStepName()));
 		return stepObject;
 	}
-
 
 	public Object createStepObject(String objectQualifiedName) throws Exception {
 		Object stepObject = getStepObject(objectQualifiedName);
@@ -130,18 +128,23 @@ public class LanguageAccessImpl  {
 		}
 	}
 
+	private String getName(TestStep eObject) {
+		String name = "";
+		name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
+		name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
+		return name;
+	}
 
 	public ArrayList<Object> getAllSteps() {
 		TestStepContainer as = (TestStepContainer) step.eContainer();
 		ArrayList<Object> stepNames = new ArrayList<Object>();
 		for (TestStep s : as.getTestStepList()) {
-			if (s.getName() != null) {
+			if (getName(s) != null) {
 				stepNames.add(s);
 			}
 		}
 		return stepNames;
 	}
-
 
 	public ArrayList<Object> getBackgroundSteps() {
 		ArrayList<Object> steps = new ArrayList<Object>();
@@ -154,11 +157,9 @@ public class LanguageAccessImpl  {
 		return steps;
 	}
 
-
 	public String getFileExtension() {
 		return ".asciidoc";
 	}
-
 
 	public ArrayList<String> getFiles() throws Exception {
 
@@ -169,7 +170,6 @@ public class LanguageAccessImpl  {
 		}
 		return components;
 	}
-
 
 	public ArrayList<String> getFilesRecursively(String component) throws Exception {
 		ArrayList<String> components = new ArrayList<String>();
@@ -216,7 +216,7 @@ public class LanguageAccessImpl  {
 			if (s.equals(step)) {
 				break;
 			} else {
-				if (s.getName() != null) {
+				if (getName(s) != null) {
 					steps.add(s);
 				}
 			}
@@ -247,7 +247,6 @@ public class LanguageAccessImpl  {
 		return step;
 	}
 
-
 	public String getStepDefinitionDescription(Object stepDefinition) {
 
 		String description = "";
@@ -264,12 +263,10 @@ public class LanguageAccessImpl  {
 		return ((StepDefinition) stepDefinition).getName();
 	}
 
-
 	public List<?> getStepDefinitionParameters(Object stepDefinition) {
 		StepDefinition so = (StepDefinition) stepDefinition;
 		return so.getStepParameterList();
 	}
-
 
 	public String getStepDefinitionParametersDocumentation(Object parameters) {
 		StepParameters e = (StepParameters) parameters;
@@ -281,7 +278,6 @@ public class LanguageAccessImpl  {
 		return description;
 	}
 
-
 	public String getStepDefinitionParametersString(Object parameters) {
 		StepParameters e = (StepParameters) parameters;
 		return cellsToString(e.getTable().getRowList().get(0).getCellList(), true);
@@ -292,14 +288,12 @@ public class LanguageAccessImpl  {
 	}
 
 	public String getStepName() {
-		return step.getName() != null ? step.getName() : "";
+		return getName(step) != null ? getName(step) : "";
 	}
-
 
 	public String getStepName(Object step) {
-		return ((TestStep) step).getName();
+		return getName((TestStep) step);
 	}
-
 
 	public Object getStepObject(String objectQualifiedName) throws Exception {
 		Resource resource = new ResourceSetImpl().createResource(getObjectURI(objectQualifiedName));
@@ -311,7 +305,6 @@ public class LanguageAccessImpl  {
 		}
 	}
 
-
 	public String getStepObjectDescription(String objectQualifiedName) throws Exception {
 		StepObject stepObject = (StepObject) getStepObject(objectQualifiedName);
 		String description = "";
@@ -322,7 +315,6 @@ public class LanguageAccessImpl  {
 		}
 		return description;
 	}
-
 
 	public String getStepParametersString() {
 		List<Cell> header = getHeader();
@@ -351,7 +343,6 @@ public class LanguageAccessImpl  {
 		}
 		return false;
 	}
-
 
 	public void saveObject(Object theObject, Map<Object, Object> options) throws Exception {
 		Resource resource = ((EObject) theObject).eResource();

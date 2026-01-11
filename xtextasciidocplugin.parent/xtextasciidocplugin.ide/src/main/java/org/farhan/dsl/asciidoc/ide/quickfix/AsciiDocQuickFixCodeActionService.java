@@ -1,12 +1,9 @@
-package org.farhan.dsl.asciidoc.ide;
+package org.farhan.dsl.asciidoc.ide.quickfix;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.lsp4j.CodeAction;
@@ -37,9 +34,9 @@ import org.slf4j.LoggerFactory;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.Position;
 
-public class AsciiDocCodeActionService extends QuickFixCodeActionService {
+public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AsciiDocCodeActionService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AsciiDocQuickFixCodeActionService.class);
 
     @Override
     public List<Either<Command, CodeAction>> getCodeActions(Options options) {

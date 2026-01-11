@@ -6,10 +6,11 @@ package org.farhan.dsl.asciidoc.ide;
 import org.eclipse.xtext.ide.editor.contentassist.IdeContentProposalProvider;
 import org.eclipse.xtext.ide.editor.quickfix.IQuickFixProvider;
 import org.eclipse.xtext.ide.server.codeActions.ICodeActionService2;
-import org.eclipse.xtext.ide.server.codeActions.QuickFixCodeActionService;
 import org.eclipse.xtext.ide.server.commands.IExecutableCommandService;
 import org.eclipse.xtext.ide.server.hover.HoverService;
 import org.farhan.dsl.asciidoc.ide.contentassist.AsciiDocIdeContentProposalProvider;
+import org.farhan.dsl.asciidoc.ide.quickfix.AsciiDocIdeQuickfixProvider;
+import org.farhan.dsl.asciidoc.ide.quickfix.AsciiDocQuickFixCodeActionService;
 
 /**
  * Use this class to register ide components.
@@ -29,7 +30,7 @@ public class AsciiDocIdeModule extends AbstractAsciiDocIdeModule {
 	}
 	
 	public Class<? extends ICodeActionService2> bindICodeActionService2() {
-		return AsciiDocCodeActionService.class;
+		return AsciiDocQuickFixCodeActionService.class;
 	}
 	
 	public Class<? extends IdeContentProposalProvider> bindIdeContentProposalProvider() {

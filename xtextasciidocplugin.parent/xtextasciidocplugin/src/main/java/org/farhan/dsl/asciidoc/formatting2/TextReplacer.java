@@ -5,7 +5,6 @@ import org.eclipse.xtext.formatting2.ITextReplacerContext;
 import org.eclipse.xtext.formatting2.internal.AbstractTextReplacer;
 import org.eclipse.xtext.formatting2.regionaccess.ITextSegment;
 
-@SuppressWarnings("restriction")
 public class TextReplacer extends AbstractTextReplacer {
 
 	private String replacement;

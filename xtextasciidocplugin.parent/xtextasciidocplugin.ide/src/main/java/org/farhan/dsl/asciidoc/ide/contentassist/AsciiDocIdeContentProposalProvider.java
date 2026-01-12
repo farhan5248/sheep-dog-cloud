@@ -7,20 +7,15 @@ import org.eclipse.xtext.ide.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ide.editor.contentassist.ContentAssistEntry;
 import org.eclipse.xtext.ide.editor.contentassist.IIdeContentProposalAcceptor;
 import org.eclipse.xtext.ide.editor.contentassist.IdeContentProposalProvider;
+import org.farhan.dsl.issues.*;
 import org.farhan.dsl.lang.ITestProject;
-import org.farhan.dsl.lang.ITestStep;
-import org.farhan.dsl.lang.TestStepIssueProposal;
-import org.farhan.dsl.lang.TestStepIssueResolver;
+import org.farhan.dsl.lang.SheepDogFactory;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Map.Entry;
 
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.Assignment;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
-import org.farhan.dsl.asciidoc.impl.VsCodeFileRepository;
-import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
 import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 
 /**
@@ -31,13 +26,6 @@ import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvider {
 
 	private static final Logger logger = LoggerFactory.getLogger(AsciiDocIdeContentProposalProvider.class);
-
-	private String getName(TestStep eObject) {
-		String name = "";
-		name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
-		name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
-		return name;
-	}
 
 	@Override
 	protected void _createProposals(Assignment assignment, ContentAssistContext context,
@@ -51,94 +39,97 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			}
 
 			if (context.getCurrentModel() != null && context.getCurrentModel() instanceof TestStep) {
-				logger.debug("Current model is TestStep: {}", getName((TestStep) context.getCurrentModel()));
-				completeName((TestStep) context.getCurrentModel(), assignment, context, acceptor);
-			} else {
-				logger.debug("Current model is not TestStep or is null: {}",
-						context.getCurrentModel() != null ? context.getCurrentModel().getClass() : "null");
+				TestStep step = (TestStep) context.getCurrentModel();
+				String feature = assignment != null ? assignment.getFeature() : "";
+
+				if ("stepObjectName".equals(feature)) {
+					completeStepObject(step, assignment, context, acceptor);
+				} else if ("stepDefinitionName".equals(feature)) {
+					completeStepDefinitionName(step, assignment, context, acceptor);
+				} else if ("cellList".equals(feature)) {
+					completeCellList(step, assignment, context, acceptor);
+				}
 			}
 
 			super._createProposals(assignment, context, acceptor);
-			logger.debug("Exiting {}", "_createProposals");
+			logger.debug("Exiting _createProposals");
 		} catch (Exception e) {
 			logger.error("Error creating proposals for assignment '{}': {}",
 					assignment != null ? assignment.getFeature() : "null", e.getMessage(), e);
 		}
 	}
 
-	private void completeName(TestStep step, Assignment assignment, ContentAssistContext context,
+	private void completeStepObject(TestStep step, Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
-		logger.debug("Entering completeName for step: {}", step != null ? getName(step) : "null");
+		TestStepImpl testStep = new TestStepImpl(step);
+		logger.debug("Entering completeStepObject for element: {}", testStep.getName());
 		try {
-			if (step == null) {
-				logger.warn("TestStep is null, cannot provide completion proposals");
-				return;
-			}
-
-			logger.debug("Creating TestStep name proposals for: {}", getName(step));
-			int proposalCount = 0;
-
-			ITestProject testProject = new TestProjectImpl(
-					new VsCodeFileRepository(step.eResource().getURI().toFileString().replace(File.separator, "/")));
-			ITestStep iTestStep = new TestStepImpl(step);
-			iTestStep.getParent().getParent().setParent(testProject);
-			for (Entry<String, TestStepIssueProposal> p : TestStepIssueResolver.proposeName(iTestStep, testProject)
-					.entrySet()) {
-				ContentAssistEntry proposal = getProposalCreator().createSnippet(p.getValue().getReplacement(),
-						p.getValue().getDisplay(), context);
+			initProject(step.eResource());
+			for (SheepDogIssueProposal p : TestStepIssueResolver.suggestStepObjectNameWorkspace(testStep)) {
+				ContentAssistEntry proposal = getProposalCreator().createSnippet(
+						p.getValue(), p.getId(), context);
 				if (proposal != null) {
-					proposal.setDocumentation(p.getValue().getDocumentation());
+					proposal.setDocumentation(p.getDescription());
 					acceptor.accept(proposal, 0);
-					proposalCount++;
-					logger.debug("Added TestStep name proposal: {}", p.getValue().getDisplay());
 				}
 			}
-
-			logger.debug("Created {} TestStep name proposals", proposalCount);
-
-			logger.debug("Creating step parameter proposals for: {}", getName(step));
-			int paramProposalCount = 0;
-			for (Entry<String, TestStepIssueProposal> p : TestStepIssueResolver
-					.proposeStepParameters(iTestStep, testProject).entrySet()) {
-				// TODO this is an ugly hack to make the proposals work. The |=== and ----
-				// shouldn't be hard-coded here. Move them into the languageAccessImpl class
-				String replacement;
-				if (p.getValue().getReplacement().contentEquals("| Content")) {
-					replacement = "----\n" + "todo" + "\n----";
-					logger.debug("Creating text parameter proposal");
-				} else {
-					replacement = "|===\n" + p.getValue().getReplacement() + "\n|===";
-					logger.debug("Creating table parameter proposal with replacement: {}",
-							p.getValue().getReplacement());
-				}
-
-				ContentAssistEntry proposal = getProposalCreator().createSnippet(replacement, p.getValue().getDisplay(),
-						context);
-				if (proposal != null) {
-					proposal.setDocumentation(p.getValue().getDocumentation());
-					acceptor.accept(proposal, 0);
-					paramProposalCount++;
-					logger.debug("Added parameter proposal: {}", p.getValue().getDisplay());
-				}
-			}
-			logger.debug("Created {} parameter proposals", paramProposalCount);
-
 		} catch (Exception e) {
-			logger.error("Error creating completion proposals for step '{}': {}",
-					step != null ? getName(step) : "null", e.getMessage(), e);
+			logger.error("Failed in content assist for {}: {}", testStep.getName(), e.getMessage(), e);
+		}
+		logger.debug("Exiting completeStepObject");
+	}
 
-			try {
-				StringWriter sw = new StringWriter();
-				e.printStackTrace(new PrintWriter(sw));
-				ContentAssistEntry errorProposal = getProposalCreator().createSnippet(sw.toString(),
-						"There was an error", context);
-				if (errorProposal != null) {
-					acceptor.accept(errorProposal, 0);
+	private void completeStepDefinitionName(TestStep step, Assignment assignment, ContentAssistContext context,
+			IIdeContentProposalAcceptor acceptor) {
+		TestStepImpl testStep = new TestStepImpl(step);
+		logger.debug("Entering completeStepDefinitionName for element: {}", testStep.getName());
+		try {
+			initProject(step.eResource());
+			for (SheepDogIssueProposal p : TestStepIssueResolver.suggestStepDefinitionNameWorkspace(testStep)) {
+				ContentAssistEntry proposal = getProposalCreator().createSnippet(
+						p.getValue(), p.getId(), context);
+				if (proposal != null) {
+					proposal.setDocumentation(p.getDescription());
+					acceptor.accept(proposal, 0);
 				}
-			} catch (Exception innerE) {
-				logger.error("Failed to create error proposal: {}", innerE.getMessage(), innerE);
+			}
+		} catch (Exception e) {
+			logger.error("Failed in content assist for {}: {}", testStep.getName(), e.getMessage(), e);
+		}
+		logger.debug("Exiting completeStepDefinitionName");
+	}
+
+	private void completeCellList(TestStep step, Assignment assignment, ContentAssistContext context,
+			IIdeContentProposalAcceptor acceptor) {
+		logger.debug("Entering completeCellList for element: {}", step.toString());
+		try {
+			initProject(step.eResource());
+			for (SheepDogIssueProposal p : RowIssueResolver.suggestCellListWorkspace(new TestStepImpl(step))) {
+				ContentAssistEntry proposal = getProposalCreator().createSnippet(
+						p.getValue(), p.getId(), context);
+				if (proposal != null) {
+					proposal.setDocumentation(p.getDescription());
+					acceptor.accept(proposal, 0);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Failed in content assist for {}: {}", step.toString(), e.getMessage(), e);
+		}
+		logger.debug("Exiting completeCellList");
+	}
+
+	private void initProject(Resource resource) {
+		ITestProject parent = SheepDogFactory.instance.createTestProject();
+		if (parent.getName() == null) {
+			String resourcePath = resource.getURI().toFileString().replace(File.separator, "/");
+			File resourceFile = new File(resourcePath).getParentFile();
+			while (resourceFile != null && !new File(resourceFile, "pom.xml").exists()
+					&& !new File(resourceFile, "build.gradle").exists()) {
+				resourceFile = resourceFile.getParentFile();
+			}
+			if (resourceFile != null) {
+				parent.setName(resourceFile.getAbsolutePath());
 			}
 		}
-		logger.debug("Exiting {}", "completeName");
 	}
 }

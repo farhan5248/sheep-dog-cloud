@@ -8,10 +8,13 @@ import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.parser.antlr.Lexer;
 import org.eclipse.xtext.parser.antlr.LexerBindings;
 import org.eclipse.xtext.parser.antlr.LexerProvider;
+import org.farhan.dsl.lang.SheepDogFactory;
 import org.farhan.dsl.asciidoc.parser.antlr.CustomAsciiDocParser;
 import org.farhan.dsl.asciidoc.parser.antlr.internal.InternalAsciiDocLexer;
 import org.farhan.dsl.asciidoc.parser.antlr.internal.AsciiDocLexer;
 import org.farhan.dsl.asciidoc.generator.AsciiDocOutputConfigurationProvider;
+import org.farhan.dsl.asciidoc.impl.AsciiDocFactoryImpl;
+import org.farhan.dsl.asciidoc.impl.VsCodeFileRepository;
 
 import com.google.inject.Binder;
 import com.google.inject.Provider;
@@ -24,14 +27,14 @@ import com.google.inject.name.Names;
  */
 public class AsciiDocRuntimeModule extends AbstractAsciiDocRuntimeModule {
 
-	
 	@Override
 	public void configure(Binder binder) {
 		super.configure(binder);
 		binder.bind(IOutputConfigurationProvider.class).to(AsciiDocOutputConfigurationProvider.class)
 				.in(Singleton.class);
+		SheepDogFactory.instance = new AsciiDocFactoryImpl(new VsCodeFileRepository());
 	}
-	
+
 	@Override
 	public Class<? extends IParser> bindIParser() {
 		return CustomAsciiDocParser.class;

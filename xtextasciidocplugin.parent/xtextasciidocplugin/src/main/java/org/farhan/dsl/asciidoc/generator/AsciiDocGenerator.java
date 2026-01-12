@@ -12,11 +12,10 @@ import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
-import org.farhan.dsl.asciidoc.impl.VsCodeFileRepository;
-import org.farhan.dsl.asciidoc.impl.StepObjectImpl;
-import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
 import org.farhan.dsl.asciidoc.impl.TestStepImpl;
-import org.farhan.dsl.lang.StepObjectBuilder;
+import org.farhan.dsl.lang.ITestProject;
+import org.farhan.dsl.lang.SheepDogBuilder;
+import org.farhan.dsl.lang.SheepDogFactory;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 
 /**
@@ -32,17 +31,10 @@ public class AsciiDocGenerator extends AbstractGenerator {
 	@Override
 	public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
 		logger.debug("Entering doGenerate for resource: {}", resource != null ? resource.getURI() : "null");
-		// Automatic generation disabled - use command-based generation instead
-		// The reason is that I didn't want to generate code until the user was ready
-		// to do so.
+		// Automatic generation disabled - use AsciiDocGeneratorCommandService
+		// command-based generation instead so that code generation can be triggered
+		// on-demand.
 		logger.debug("Exiting {}", "doGenerate");
-	}
-
-	private static String getName(TestStep eObject) {
-		String name = "";
-		name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
-		name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
-		return name;
 	}
 
 	public static void generateFromResource(final Resource resource) {
@@ -54,14 +46,16 @@ public class AsciiDocGenerator extends AbstractGenerator {
 			}
 
 			if (resource.getContents().get(0) instanceof TestSuite) {
+				initProject(resource);
 				TestSuite theTestSuite = (TestSuite) resource.getContents().get(0);
 				logger.debug("Processing TestSuite: {}", theTestSuite.getName());
 
 				for (TestStepContainer scenario : theTestSuite.getTestStepContainerList()) {
 					logger.debug("Processing scenario: {}", scenario.getName());
 					for (TestStep step : scenario.getTestStepList()) {
-						logger.debug("Processing step: {}", getName(step));
-						generateFromTestStep(step, true);
+						TestStepImpl stepImpl = new TestStepImpl(step);
+						logger.debug("Processing step: {}", stepImpl.getName());
+						SheepDogBuilder.createTestStepReferencedElements(stepImpl);
 					}
 				}
 			} else {
@@ -74,27 +68,19 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		}
 	}
 
-	public static StepObjectImpl generateFromTestStep(TestStep step, boolean saveToFile) {
-		logger.debug("Entering generateFromTestStep for step: {}", step != null ? getName(step) : "null");
-		try {
-			TestProjectImpl testProject = new TestProjectImpl(
-					new VsCodeFileRepository(
-							step.eResource().getURI().toFileString().replace(File.separator, "/")));
-			TestStepImpl iTestStep = new TestStepImpl(step);
-			iTestStep.getParent().getParent().setParent(testProject);
-			StepObjectImpl stepObjectImpl = (StepObjectImpl) StepObjectBuilder
-					.generateStepDefinition(iTestStep, testProject).getParent();
-			stepObjectImpl.setParent(testProject);
-			if (saveToFile) {
-				testProject.putStepObject(stepObjectImpl);
+	private static void initProject(Resource resource) {
+		ITestProject parent = SheepDogFactory.instance.createTestProject();
+		if (parent.getName() == null) {
+			String resourcePath = resource.getURI().toFileString().replace(File.separator, "/");
+			File resourceFile = new File(resourcePath).getParentFile();
+			while (resourceFile != null && !new File(resourceFile, "pom.xml").exists()
+					&& !new File(resourceFile, "build.gradle").exists()) {
+				resourceFile = resourceFile.getParentFile();
 			}
-			logger.debug("Exiting {}", "generateFromTestStep");
-			return stepObjectImpl;
-		} catch (Exception e) {
-			logger.error("Generation failed for step '{}': {}", step != null ? getName(step) : "null", e.getMessage(),
-					e);
+			if (resourceFile != null) {
+				parent.setName(resourceFile.getAbsolutePath());
+			}
 		}
-		return null;
 	}
 
 }

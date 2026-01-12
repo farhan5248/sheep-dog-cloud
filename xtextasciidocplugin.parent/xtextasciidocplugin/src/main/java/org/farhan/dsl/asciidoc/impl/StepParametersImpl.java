@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import org.farhan.dsl.lang.IStatement;
 import org.farhan.dsl.lang.IStepDefinition;
 import org.farhan.dsl.lang.IStepParameters;
-import org.farhan.dsl.asciidoc.asciiDoc.Cell;
-import org.farhan.dsl.asciidoc.asciiDoc.Row;
+import org.farhan.dsl.lang.ITable;
 import org.farhan.dsl.asciidoc.asciiDoc.Statement;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
-import org.farhan.dsl.asciidoc.asciiDoc.Table;
+import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 
 public class StepParametersImpl implements IStepParameters {
-	private IStepDefinition parent;
-	private StepParameters eObject;
+	private StepDefinitionImpl parent;
+	StepParameters eObject;
 
 	public StepParametersImpl(StepParameters stepParameters) {
 		eObject = stepParameters;
@@ -26,13 +25,15 @@ public class StepParametersImpl implements IStepParameters {
 
 	@Override
 	public IStepDefinition getParent() {
+		if (parent == null) {
+			parent = new StepDefinitionImpl((StepDefinition) eObject.eContainer());
+		}
 		return parent;
 	}
 
 	@Override
 	public ArrayList<IStatement> getStatementList() {
 		ArrayList<IStatement> statementList = new ArrayList<IStatement>();
-		// TODO why does this need 2 nested statement list calls?
 		if (eObject.getStatementList() != null) {
 			for (Statement s : eObject.getStatementList().getStatementList()) {
 				statementList.add(new StatementImpl(s));
@@ -42,19 +43,8 @@ public class StepParametersImpl implements IStepParameters {
 	}
 
 	@Override
-	public ArrayList<ArrayList<String>> getTable() {
-		ArrayList<ArrayList<String>> newTable = new ArrayList<ArrayList<String>>();
-		Table table = eObject.getTable();
-		if (table != null) {
-			for (Row r : table.getRowList()) {
-				ArrayList<String> newRow = new ArrayList<String>();
-				newTable.add(newRow);
-				for (Cell c : r.getCellList()) {
-					newRow.add(c.getName());
-				}
-			}
-		}
-		return newTable;
+	public ITable getTable() {
+		return new TableImpl(eObject.getTable());
 	}
 
 	@Override
@@ -63,20 +53,29 @@ public class StepParametersImpl implements IStepParameters {
 	}
 
 	@Override
-	public void setParent(IStepDefinition value) {
-		parent = value;
+	public void setTable(ITable value) {
+		throw new UnsupportedOperationException("setTable(ITable value) is not implemented");
 	}
 
 	@Override
-	public void setStatementList(ArrayList<IStatement> value) {
-		// TODO should setters like these be used instead of directly accessing the
-		// eObject setters?
-		// Not needed in this project
+	public String getNameLong() {
+		throw new UnsupportedOperationException("getNameLong() is not implemented");
 	}
 
 	@Override
-	public void setTable(ArrayList<ArrayList<String>> value) {
-		// Not needed in this project
+	public IStatement getStatement(int index) {
+		throw new UnsupportedOperationException("getStatement(int index) is not implemented");
+	}
+
+	@Override
+	public IStatement getStatement(String name) {
+		throw new UnsupportedOperationException("getStatement(String name) is not implemented");
+	}
+
+	@Override
+	public boolean addStatement(IStatement value) {
+		eObject.getStatementList().getStatementList().add(((StatementImpl) value).eObject);
+		return true;
 	}
 
 }

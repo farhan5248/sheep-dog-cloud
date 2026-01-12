@@ -1,14 +1,13 @@
 package org.farhan.dsl.asciidoc.impl;
 
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.farhan.dsl.lang.IStatement;
 import org.farhan.dsl.lang.ITestCase;
 import org.farhan.dsl.lang.ITestProject;
 import org.farhan.dsl.lang.ITestSetup;
 import org.farhan.dsl.lang.ITestStepContainer;
 import org.farhan.dsl.lang.ITestSuite;
+import org.farhan.dsl.lang.SheepDogFactory;
 import org.farhan.dsl.asciidoc.asciiDoc.TestCase;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSetup;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
@@ -16,25 +15,34 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
 
 public class TestSuiteImpl implements ITestSuite {
 
-	private static final Logger logger = LoggerFactory.getLogger(TestSuiteImpl.class);
-
 	private ITestProject parent;
-	private TestSuite eObject;
+	TestSuite eObject;
 
 	public TestSuiteImpl(TestSuite testSuite) {
 		this.eObject = testSuite;
 	}
 
 	@Override
-	public ITestCase createTestCase(String value) {
-		// Not needed in this project
-		return null;
+	public boolean addStatement(IStatement value) {
+		eObject.getStatementList().add(((StatementImpl) value).eObject);
+		return true;
 	}
 
 	@Override
-	public ITestStepContainer createTestSetup(String name) {
-		// Not needed in this project
-		return null;
+	public boolean addTestCase(ITestCase value) {
+		eObject.getTestStepContainerList().add(((TestCaseImpl) value).eObject);
+		return true;
+	}
+
+	@Override
+	public boolean addTestSetup(ITestSetup value) {
+		eObject.getTestStepContainerList().add(0, ((TestSetupImpl) value).eObject);
+		return true;
+	}
+
+	@Override
+	public String getContent() {
+		throw new UnsupportedOperationException("getContent() is not implemented");
 	}
 
 	@Override
@@ -43,32 +51,36 @@ public class TestSuiteImpl implements ITestSuite {
 	}
 
 	@Override
+	public String getNameLong() {
+		throw new UnsupportedOperationException("getNameLong() is not implemented");
+	}
+
+	@Override
 	public ITestProject getParent() {
+		if (parent == null) {
+			parent = SheepDogFactory.instance.createTestProject();
+		}
 		return parent;
 	}
 
 	@Override
-	public String getQualifiedName() {
-		// Not needed in this project
-		return null;
+	public IStatement getStatement(int index) {
+		throw new UnsupportedOperationException("getStatement(int index) is not implemented");
+	}
+
+	@Override
+	public IStatement getStatement(String name) {
+		throw new UnsupportedOperationException("getStatement(String name) is not implemented");
 	}
 
 	@Override
 	public ArrayList<IStatement> getStatementList() {
-		// Not needed in this project
-		return null;
+		throw new UnsupportedOperationException("ArrayList<IStatement> getStatementList() is not implemented");
 	}
 
 	@Override
-	public ArrayList<String> getTags() {
-		// Not needed in this project
-		return null;
-	}
-
-	@Override
-	public ITestSetup getTestSetup() {
-		// Not needed in this project
-		return null;
+	public ITestStepContainer getTestStepContainer(int index) {
+		return new TestStepContainerImpl(eObject.getTestStepContainerList().get(index));
 	}
 
 	@Override
@@ -78,13 +90,11 @@ public class TestSuiteImpl implements ITestSuite {
 			if (t instanceof TestCase) {
 				if (t.getName().contentEquals(name)) {
 					TestCaseImpl testCase = new TestCaseImpl((TestCase) t);
-					testCase.setParent(this);
 					return testCase;
 				}
 			} else {
 				if (t.getName().contentEquals(name)) {
 					TestSetupImpl testCase = new TestSetupImpl((TestSetup) t);
-					testCase.setParent(this);
 					return testCase;
 				}
 			}
@@ -94,8 +104,13 @@ public class TestSuiteImpl implements ITestSuite {
 
 	@Override
 	public ArrayList<ITestStepContainer> getTestStepContainerList() {
-		// Not needed in this project
-		return null;
+		throw new UnsupportedOperationException(
+				"ArrayList<ITestStepContainer> getTestStepContainerList() is not implemented");
+	}
+
+	@Override
+	public void setContent(String text) {
+		throw new UnsupportedOperationException("setContent(String text) is not implemented");
 	}
 
 	@Override
@@ -104,33 +119,12 @@ public class TestSuiteImpl implements ITestSuite {
 	}
 
 	@Override
-	public void setParent(ITestProject value) {
-		this.parent = value;
+	public void setNameLong(String value) {
+		throw new UnsupportedOperationException("setNameLong(String value) is not implemented");
 	}
 
-	@Override
-	public void setQualifiedName(String value) {
-		// Not needed in this project
-	}
-
-	@Override
-	public void setStatementList(ArrayList<IStatement> value) {
-		// Not needed in this project
-	}
-
-	@Override
-	public void setTags(ArrayList<String> value) {
-		// Not needed in this project
-	}
-
-	@Override
-	public void setTestSetup(ITestSetup value) {
-		// Not needed in this project
-	}
-
-	@Override
-	public void setTestStepContainerList(ArrayList<ITestStepContainer> value) {
-		// Not needed in this project
+	public void setParent(ITestProject parent) {
+		this.parent = parent;
 	}
 
 }

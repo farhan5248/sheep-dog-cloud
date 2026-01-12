@@ -1,19 +1,22 @@
 package org.farhan.dsl.asciidoc.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.xtext.resource.SaveOptions;
 import org.farhan.dsl.lang.IStatement;
 import org.farhan.dsl.lang.IStepDefinition;
 import org.farhan.dsl.lang.IStepObject;
 import org.farhan.dsl.lang.ITestProject;
-import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory;
+import org.farhan.dsl.lang.SheepDogFactory;
 import org.farhan.dsl.asciidoc.asciiDoc.Statement;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
@@ -21,31 +24,11 @@ import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 public class StepObjectImpl implements IStepObject {
 
 	private ITestProject parent;
-	private StepObject eObject;
+	StepObject eObject;
 	private String qualifiedName;
 
 	public StepObjectImpl(StepObject eObject) {
 		this.eObject = eObject;
-	}
-
-	@Override
-	public IStepDefinition createStepDefinition(String predicate) {
-		EList<StepDefinition> list = eObject.getStepDefinitionList();
-		list.add(AsciiDocFactory.eINSTANCE.createStepDefinition());
-
-		IStepDefinition stepDefinition = new StepDefinitionImpl(list.getLast());
-		stepDefinition.setParent(this);
-		stepDefinition.setName(predicate);
-
-		TreeMap<String, StepDefinition> sorted = new TreeMap<String, StepDefinition>();
-		for (int i = list.size(); i > 0; i--) {
-			sorted.put(list.get(i - 1).getName().toLowerCase(), list.removeLast());
-		}
-		for (String name : sorted.keySet()) {
-			list.add(sorted.get(name));
-		}
-
-		return stepDefinition;
 	}
 
 	@Override
@@ -55,11 +38,14 @@ public class StepObjectImpl implements IStepObject {
 
 	@Override
 	public ITestProject getParent() {
+		if (parent == null) {
+			parent = SheepDogFactory.instance.createTestProject();
+		}
 		return parent;
 	}
 
 	@Override
-	public String getQualifiedName() {
+	public String getNameLong() {
 		return qualifiedName;
 	}
 
@@ -73,11 +59,10 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	@Override
-	public IStepDefinition getStepDefinition(String predicate) {
+	public IStepDefinition getStepDefinition(String stepDefinitionName) {
 		for (StepDefinition sd : eObject.getStepDefinitionList()) {
-			if (sd.getName().contentEquals(predicate)) {
+			if (sd.getName().contentEquals(stepDefinitionName)) {
 				StepDefinitionImpl stepDefinition = new StepDefinitionImpl((StepDefinition) sd);
-				stepDefinition.setParent(this);
 				return stepDefinition;
 			}
 		}
@@ -89,7 +74,6 @@ public class StepObjectImpl implements IStepObject {
 		ArrayList<IStepDefinition> list = new ArrayList<IStepDefinition>();
 		for (StepDefinition t : eObject.getStepDefinitionList()) {
 			StepDefinitionImpl stepDefinition = new StepDefinitionImpl((StepDefinition) t);
-			stepDefinition.setParent(this);
 			list.add(stepDefinition);
 		}
 		return list;
@@ -101,29 +85,63 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	@Override
-	public void setParent(ITestProject value) {
-		parent = value;
-	}
-
-	@Override
-	public void setQualifiedName(String value) {
+	public void setNameLong(String value) {
 		this.qualifiedName = value;
 	}
 
 	@Override
-	public void setStepDefinitionList(ArrayList<IStepDefinition> value) {
-		// Not needed in this project
+	public IStatement getStatement(int index) {
+		throw new UnsupportedOperationException("getStatement(int index) is not implemented");
 	}
 
-	public String serialize() throws IOException {
-		// TODO isn't toString a better name?
+	@Override
+	public IStatement getStatement(String name) {
+		throw new UnsupportedOperationException("getStatement(String name) is not implemented");
+	}
+
+	@Override
+	public IStepDefinition getStepDefinition(int index) {
+		throw new UnsupportedOperationException("getStepDefinition(int index) is not implemented");
+	}
+
+	@Override
+	public String getContent() throws Exception {
+		Resource theResource = new ResourceSetImpl().createResource(URI.createFileURI("tmpFile.asciidoc"));
+		theResource.getContents().add(eObject);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		eObject.eResource().save(os, SaveOptions.newBuilder().format().getOptions().toOptionsMap());
+		theResource.save(os, SaveOptions.newBuilder().format().getOptions().toOptionsMap());
 		return os.toString();
 	}
 
-    public Resource getResource() {
-        return eObject.eResource();
-    }
+	@Override
+	public void setContent(String text) throws Exception {
+		if (!text.isEmpty()) {
+			Resource theResource = new ResourceSetImpl().createResource(URI.createFileURI("tmpFile.asciidoc"));
+			theResource.load(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)), Collections.EMPTY_MAP);
+			eObject = (StepObject) theResource.getContents().get(0);
+		}
+	}
+
+	@Override
+	public boolean addStatement(IStatement value) {
+		eObject.getStatementList().add(((StatementImpl) value).eObject);
+		return true;
+	}
+
+	@Override
+	public boolean addStepDefinition(IStepDefinition value) {
+		EList<StepDefinition> unsortedList = eObject.getStepDefinitionList();
+		TreeMap<String, StepDefinition> sortedMap = new TreeMap<String, StepDefinition>();
+		StepDefinition aStepDefinition = ((StepDefinitionImpl) value).eObject;
+		sortedMap.put(aStepDefinition.getName(), aStepDefinition);
+		for (StepDefinition sd : unsortedList) {
+			sortedMap.put(sd.getName(), sd);
+		}
+		unsortedList.clear();
+		for (String key : sortedMap.keySet()) {
+			unsortedList.add(sortedMap.get(key));
+		}
+		return true;
+	}
 
 }

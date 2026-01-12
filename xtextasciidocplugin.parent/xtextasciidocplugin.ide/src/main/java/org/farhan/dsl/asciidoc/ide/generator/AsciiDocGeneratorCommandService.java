@@ -1,4 +1,4 @@
-package org.farhan.dsl.asciidoc.ide;
+package org.farhan.dsl.asciidoc.ide.generator;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -16,9 +16,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonPrimitive;
 
-public class AsciiDocCommandService implements IExecutableCommandService {
+public class AsciiDocGeneratorCommandService implements IExecutableCommandService {
 
-	private static final Logger logger = LoggerFactory.getLogger(AsciiDocCommandService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AsciiDocGeneratorCommandService.class);
 
 	@Override
 	public List<String> initialize() {

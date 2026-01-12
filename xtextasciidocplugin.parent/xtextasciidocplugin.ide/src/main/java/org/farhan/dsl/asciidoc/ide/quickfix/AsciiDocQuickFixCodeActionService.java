@@ -12,6 +12,8 @@ import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.CreateFile;
 import org.eclipse.lsp4j.CreateFileOptions;
 import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentEdit;
 import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
@@ -25,146 +27,199 @@ import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.XtextResource;
+import org.farhan.dsl.asciidoc.asciiDoc.Cell;
+import org.farhan.dsl.asciidoc.asciiDoc.Row;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
-import org.farhan.dsl.asciidoc.generator.AsciiDocGenerator;
-import org.farhan.dsl.asciidoc.impl.StepObjectImpl;
+import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
+import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
+import org.farhan.dsl.asciidoc.asciiDoc.Text;
+import org.farhan.dsl.asciidoc.impl.CellImpl;
+import org.farhan.dsl.asciidoc.impl.TestStepContainerImpl;
+import org.farhan.dsl.asciidoc.impl.TestStepImpl;
+import org.farhan.dsl.asciidoc.impl.TestSuiteImpl;
 import org.farhan.dsl.asciidoc.validation.AsciiDocValidator;
+import org.farhan.dsl.issues.CellIssueResolver;
+import org.farhan.dsl.issues.RowIssueResolver;
+import org.farhan.dsl.issues.SheepDogIssueProposal;
+import org.farhan.dsl.issues.TestStepContainerIssueResolver;
+import org.farhan.dsl.issues.TestStepIssueResolver;
+import org.farhan.dsl.issues.TestSuiteIssueResolver;
+import org.farhan.dsl.issues.TextIssueResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.Position;
 
 public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AsciiDocQuickFixCodeActionService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AsciiDocQuickFixCodeActionService.class);
 
-    @Override
-    public List<Either<Command, CodeAction>> getCodeActions(Options options) {
-        logger.debug("Entering getCodeActions with options {}", options.getURI());
+	@Override
+	public List<Either<Command, CodeAction>> getCodeActions(Options options) {
+		logger.debug("Entering getCodeActions with options {}", options.getURI());
 
-        List<Either<Command, CodeAction>> codeActions = new ArrayList<>();
-        codeActions.addAll(super.getCodeActions(options));
-        for (Diagnostic diagnostic : options.getCodeActionParams().getContext().getDiagnostics()) {
-            logger.debug("Examining diagnostic {} ",
-                    diagnostic.getCode().get().toString());
-            if (handlesWorkspaceDiagnostic(diagnostic)) {
-                logger.debug("Handling diagnostic {} ",
-                        diagnostic.getCode().get().toString());
-                codeActions.addAll(options.getLanguageServerAccess()
-                        .doSyncRead(options.getURI(), (ILanguageServerAccess.Context context) -> {
-                            options.setDocument(context.getDocument());
-                            options.setResource(context.getResource());
-                            return getWorkspaceCodeActions(options, diagnostic);
-                        }));
-            }
-        }
-        logger.debug("Exiting getCodeActions");
-        return codeActions;
-    }
+		List<Either<Command, CodeAction>> codeActions = new ArrayList<>();
+		for (Diagnostic diagnostic : options.getCodeActionParams().getContext().getDiagnostics()) {
+			logger.debug("Examining diagnostic {} ", diagnostic.getCode().get().toString());
+			if (canHandleDiagnostic(diagnostic)) {
+				logger.debug("Handling diagnostic {} ", diagnostic.getCode().get().toString());
+				codeActions.addAll(options.getLanguageServerAccess()
+						.doSyncRead(options.getURI(), (ILanguageServerAccess.Context context) -> {
+							options.setDocument(context.getDocument());
+							options.setResource(context.getResource());
+							return getCodeActionsForDiagnostic(options, diagnostic);
+						}));
+			}
+		}
+		logger.debug("Exiting getCodeActions");
+		return codeActions;
+	}
 
-    private boolean handlesWorkspaceDiagnostic(Diagnostic diagnostic) {
-        if (AsciiDocValidator.MISSING_STEP_DEF.equals(diagnostic.getCode().get().toString())) {
-            return true;
-        }
-        return false;
-    }
+	private boolean canHandleDiagnostic(Diagnostic diagnostic) {
+		String code = diagnostic.getCode().get().toString();
+		return AsciiDocValidator.CELL_NAME_ONLY.equals(code)
+				|| AsciiDocValidator.TEST_STEP_CONTAINER_NAME_ONLY.equals(code)
+				|| AsciiDocValidator.TEST_SUITE_NAME_ONLY.equals(code)
+				|| AsciiDocValidator.ROW_CELL_LIST_WORKSPACE.equals(code)
+				|| AsciiDocValidator.TEST_STEP_STEP_OBJECT_NAME_WORKSPACE.equals(code)
+				|| AsciiDocValidator.TEST_STEP_STEP_DEFINITION_NAME_WORKSPACE.equals(code)
+				|| AsciiDocValidator.TEXT_NAME_WORKSPACE.equals(code);
+	}
 
-    private List<Either<Command, CodeAction>> getWorkspaceCodeActions(Options options, Diagnostic diagnostic) {
-        logger.debug("Entering getWorkspaceCodeActions with diagnostic {} and options {} ",
-                diagnostic.getCode().get().toString(), options.getURI());
-        List<Either<Command, CodeAction>> codeActions = new ArrayList<>();
-        if (AsciiDocValidator.MISSING_STEP_DEF.equals(diagnostic.getCode().get().toString())) {
-            try {
-                codeActions.add(getCreateDefinitionAction(options, diagnostic));
-            } catch (Exception e) {
-                logger.error("Error creating definition action", e);
-            }
-        }
-        logger.debug("Exiting {}", "getWorkspaceCodeActions");
-        return codeActions;
-    }
+	private List<Either<Command, CodeAction>> getCodeActionsForDiagnostic(Options options, Diagnostic diagnostic) {
+		logger.debug("Entering getCodeActionsForDiagnostic with diagnostic {} and options {} ",
+				diagnostic.getCode().get().toString(), options.getURI());
+		String code = diagnostic.getCode().get().toString();
+		ArrayList<SheepDogIssueProposal> proposals = new ArrayList<>();
 
-    private String getName(TestStep eObject) {
-        String name = "";
-        name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
-        name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
-        return name;
-    }
+		try {
+			EObject eObject = getEObjectFromDiagnostic(options, diagnostic);
+			// Same-file fixes (non-WORKSPACE)
+			if (AsciiDocValidator.CELL_NAME_ONLY.equals(code)) {
+				Cell cell = (Cell) eObject;
+				proposals = CellIssueResolver.correctNameOnly(new CellImpl(cell));
+			} else if (AsciiDocValidator.TEST_STEP_CONTAINER_NAME_ONLY.equals(code)) {
+				TestStepContainer container = (TestStepContainer) eObject;
+				proposals = TestStepContainerIssueResolver.correctNameOnly(new TestStepContainerImpl(container));
+			} else if (AsciiDocValidator.TEST_SUITE_NAME_ONLY.equals(code)) {
+				TestSuite suite = (TestSuite) eObject;
+				proposals = TestSuiteIssueResolver.correctNameOnly(new TestSuiteImpl(suite));
+			}
+			// Workspace fixes (WORKSPACE suffix)
+			else if (AsciiDocValidator.ROW_CELL_LIST_WORKSPACE.equals(code)) {
+				Row row = (Row) eObject;
+				proposals = RowIssueResolver
+						.correctCellListWorkspace(new TestStepImpl((TestStep) row.eContainer().eContainer()));
+			} else if (AsciiDocValidator.TEST_STEP_STEP_OBJECT_NAME_WORKSPACE.equals(code)) {
+				TestStep step = (TestStep) eObject;
+				proposals = TestStepIssueResolver.correctStepObjectNameWorkspace(new TestStepImpl(step));
+			} else if (AsciiDocValidator.TEST_STEP_STEP_DEFINITION_NAME_WORKSPACE.equals(code)) {
+				TestStep step = (TestStep) eObject;
+				proposals = TestStepIssueResolver.correctStepDefinitionNameWorkspace(new TestStepImpl(step));
+			} else if (AsciiDocValidator.TEXT_NAME_WORKSPACE.equals(code)) {
+				Text text = (Text) eObject;
+				proposals = TextIssueResolver.correctNameWorkspace(new TestStepImpl((TestStep) text.eContainer()));
+			}
+		} catch (Exception e) {
+			logger.error("Error getting proposals for code action", e);
+		}
+		logger.debug("Exiting getCodeActionsForDiagnostic");
+		return createCodeActions(options, diagnostic, proposals);
+	}
 
-    private Either<Command, CodeAction> getCreateDefinitionAction(Options options, Diagnostic diagnostic)
-            throws Exception {
-        logger.debug("Entering getCreateDefinitionAction with options {} and diagnostic {}", options.getURI(),
-                diagnostic.getCode().get().toString());
-        CodeAction action = new CodeAction();
-        action.setKind(CodeActionKind.QuickFix);
-        action.setTitle("Create TestStep definition");
-        action.setDiagnostics(Collections.singletonList(diagnostic));
+	private List<Either<Command, CodeAction>> createCodeActions(Options options, Diagnostic diagnostic,
+			ArrayList<SheepDogIssueProposal> proposals) {
+		logger.debug("Entering createCodeActions with {} proposals", proposals.size());
+		List<Either<Command, CodeAction>> codeActions = new ArrayList<>();
 
-        TestStep testStep = (TestStep) getEObjectFromDiagnostic(options, diagnostic);
-        logger.debug("TestStep name {}", getName(testStep));
-        StepObjectImpl stepObjectImpl = AsciiDocGenerator.generateFromTestStep(testStep, false);
-        String content = stepObjectImpl.serialize();
-        logger.debug("content {}", content);
-        String fileName = stepObjectImpl.getResource().getURI().toString();
-        logger.debug("fileName {}", fileName);
+		for (SheepDogIssueProposal p : proposals) {
+			try {
+				CodeAction action = new CodeAction();
+				action.setKind(CodeActionKind.QuickFix);
+				action.setTitle(p.getId());
+				action.setDiagnostics(Collections.singletonList(diagnostic));
 
-        // Create file operation
-        CreateFile createFile = new CreateFile();
-        createFile.setUri(fileName);
-        createFile.setOptions(new CreateFileOptions());
-        createFile.getOptions().setOverwrite(true);
+				WorkspaceEdit workspaceEdit = new WorkspaceEdit();
 
-        // Create text document edit to insert content
-        VersionedTextDocumentIdentifier textDocumentId = new VersionedTextDocumentIdentifier();
-        textDocumentId.setUri(fileName);
-        textDocumentId.setVersion(null); // null for new files
+				if (p.getQualifiedName().isEmpty()) {
+					// Same-file edit: use diagnostic range and options URI
+					VersionedTextDocumentIdentifier textDocId = new VersionedTextDocumentIdentifier();
+					textDocId.setUri(options.getURI());
+					textDocId.setVersion(null);
 
-        TextEdit textEdit = new TextEdit();
-        textEdit.setRange(new Range(new Position(0, 0), new Position(0, 0)));
-        textEdit.setNewText(content);
+					TextDocumentEdit textDocEdit = getTextDocumentEdit(
+							diagnostic.getRange(), p, textDocId);
 
-        TextDocumentEdit textDocumentEdit = new TextDocumentEdit();
-        textDocumentEdit.setTextDocument(textDocumentId);
-        textDocumentEdit.setEdits(List.of(textEdit));
+					workspaceEdit.setDocumentChanges(List.of(Either.forLeft(textDocEdit)));
+				} else {
+					// Workspace edit: create new file
+					CreateFile createFile = getResourceOperation(p);
+					VersionedTextDocumentIdentifier textDocId = new VersionedTextDocumentIdentifier();
+					textDocId.setUri(createFile.getUri());
+					textDocId.setVersion(null);
 
-        // Create workspace edit with document changes
-        WorkspaceEdit workspaceEdit = new WorkspaceEdit();
-        workspaceEdit.setDocumentChanges(List.of(Either.forRight(createFile), Either.forLeft(textDocumentEdit)));
+					TextDocumentEdit textDocEdit = getTextDocumentEdit(
+							new Range(new Position(0, 0), new Position(0, 0)), p, textDocId);
 
-        action.setEdit(workspaceEdit);
-        logger.debug("Exiting {}", "getCreateDefinitionAction");
-        return Either.forRight(action);
-    }
+					workspaceEdit.setDocumentChanges(List.of(Either.forRight(createFile), Either.forLeft(textDocEdit)));
+				}
 
-    private EObject getEObjectFromDiagnostic(Options options, Diagnostic diagnostic) {
-        Resource resource = options.getResource();
-        if (resource == null || !(resource instanceof XtextResource)) {
-            return null;
-        }
+				action.setEdit(workspaceEdit);
+				codeActions.add(Either.forRight(action));
+			} catch (Exception e) {
+				logger.error("Error creating code action for " + p.getId(), e);
+			}
+		}
+		logger.debug("Exiting createCodeActions with {} code actions", codeActions.size());
+		return codeActions;
+	}
 
-        XtextResource xtextResource = (XtextResource) resource;
-        IParseResult parseResult = xtextResource.getParseResult();
-        if (parseResult == null) {
-            return null;
-        }
+	private CreateFile getResourceOperation(SheepDogIssueProposal p) {
+		CreateFile createFile = new CreateFile();
+		createFile.setUri(p.getQualifiedName());
+		createFile.setOptions(new CreateFileOptions());
+		createFile.getOptions().setOverwrite(true);
+		return createFile;
+	}
 
-        // Use the Document from options to convert position to offset
-        Document document = options.getDocument();
-        try {
-            int offset = document.getOffSet(diagnostic.getRange().getStart());
+	private TextDocumentEdit getTextDocumentEdit(Range range, SheepDogIssueProposal p,
+			VersionedTextDocumentIdentifier textDocId) {
+		TextEdit textEdit = new TextEdit();
+		textEdit.setRange(range);
+		textEdit.setNewText(p.getValue());
+		TextDocumentEdit textDocEdit = new TextDocumentEdit();
+		textDocEdit.setTextDocument(textDocId);
+		textDocEdit.setEdits(List.of(textEdit));
+		return textDocEdit;
+	}
 
-            // Find EObject at offset using NodeModelUtils
-            ICompositeNode rootNode = parseResult.getRootNode();
-            ILeafNode leafNode = NodeModelUtils.findLeafNodeAtOffset(rootNode, offset);
+	private EObject getEObjectFromDiagnostic(Options options, Diagnostic diagnostic) {
+		Resource resource = options.getResource();
+		if (resource == null || !(resource instanceof XtextResource)) {
+			return null;
+		}
 
-            if (leafNode != null) {
-                return NodeModelUtils.findActualSemanticObjectFor(leafNode);
-            }
-        } catch (Exception e) {
-            logger.error("Error getting offset from document", e);
-        }
+		XtextResource xtextResource = (XtextResource) resource;
+		IParseResult parseResult = xtextResource.getParseResult();
+		if (parseResult == null) {
+			return null;
+		}
 
-        return null;
-    }
+		// Use the Document from options to convert position to offset
+		Document document = options.getDocument();
+		try {
+			int offset = document.getOffSet(diagnostic.getRange().getStart());
+
+			// Find EObject at offset using NodeModelUtils
+			ICompositeNode rootNode = parseResult.getRootNode();
+			ILeafNode leafNode = NodeModelUtils.findLeafNodeAtOffset(rootNode, offset);
+
+			if (leafNode != null) {
+				return NodeModelUtils.findActualSemanticObjectFor(leafNode);
+			}
+		} catch (Exception e) {
+			logger.error("Error getting offset from document", e);
+		}
+
+		return null;
+	}
 
 }

@@ -4,24 +4,32 @@
 package org.farhan.dsl.asciidoc.validation;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.Cell;
+import org.farhan.dsl.asciidoc.asciiDoc.Row;
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
-import org.farhan.dsl.asciidoc.impl.VsCodeFileRepository;
-import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
-import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.Table;
-import org.farhan.dsl.lang.*;
+import org.farhan.dsl.asciidoc.asciiDoc.Text;
+import org.farhan.dsl.asciidoc.impl.CellImpl;
+import org.farhan.dsl.asciidoc.impl.RowImpl;
+import org.farhan.dsl.asciidoc.impl.TestStepContainerImpl;
+import org.farhan.dsl.asciidoc.impl.TestStepImpl;
+import org.farhan.dsl.asciidoc.impl.TestSuiteImpl;
+import org.farhan.dsl.asciidoc.impl.TextImpl;
+import org.farhan.dsl.issues.*;
+import org.farhan.dsl.lang.ITestProject;
+import org.farhan.dsl.lang.SheepDogFactory;
 
 /**
  * This class contains custom validation rules.
@@ -32,180 +40,184 @@ import org.farhan.dsl.lang.*;
 public class AsciiDocValidator extends AbstractAsciiDocValidator {
 
 	private static final Logger logger = LoggerFactory.getLogger(AsciiDocValidator.class);
-
-	public static final String INVALID_NAME = "invalidName";
-	public static final String INVALID_HEADER = "invalidHeader";
-	public static final String INVALID_STEP_TYPE = "invalidStepType";
-	public static final String MISSING_STEP_DEF = "missingStepDefinition";
-	public static final String MISSING_COMPONENT = "missingInitialComponent";
-	public static final String INVALID_PATH = "invalidpath";
-
-	@Check(CheckType.EXPENSIVE)
-	public void checkFeature(TestSuite feature) {
-		logger.debug("Entering checkFeature for TestSuite: {}", feature != null ? feature.getName() : "null");
-		try {
-			if (feature == null) {
-				logger.warn("TestSuite is null, cannot perform validation");
-				return;
-			}
-
-			if (feature.getName() == null || feature.getName().isEmpty()) {
-				logger.warn("TestSuite name is null or empty");
-				return;
-			}
-
-			logger.debug("Validating TestSuite name format for: {}", feature.getName());
-			// TODO validate that feature file name and feature name are the same.
-			if (!Character.isUpperCase(feature.getName().charAt(0))) {
-				logger.debug("TestSuite name does not start with capital: {}", feature.getName());
-				warning("TestSuite name should start with a capital", AsciiDocPackage.Literals.MODEL__NAME,
-						INVALID_NAME);
-			}
-
-			logger.debug("Validating TestSuite path location");
-			String path = feature.eResource().getURI().path();
-			logger.debug("TestSuite resource path: {}", path);
-			if (!path.contains("src/test/resources/asciidoc/specs/")) {
-				logger.warn("TestSuite not in correct directory structure: {}", path);
-				error("The resource " + path + " isn't in a src/test/resources/asciidoc/specs directory.",
-						AsciiDocPackage.Literals.MODEL__NAME, INVALID_PATH);
-			}
-
-		} catch (Exception e) {
-			logger.error("Error validating TestSuite '{}': {}",
-					feature != null ? feature.getName() : "null", e.getMessage(), e);
-		}
-		logger.debug("Exiting {}", "checkFeature");
-	}
-
-	@Check(CheckType.NORMAL)
-	public void checkScenario(TestStepContainer abstractScenario) {
-		logger.debug("Entering checkScenario for container: {}",
-				abstractScenario != null ? abstractScenario.getName() : "null");
-		try {
-			if (abstractScenario == null) {
-				logger.warn("TestStepContainer is null, cannot perform validation");
-				return;
-			}
-
-			if (abstractScenario.getName() == null || abstractScenario.getName().isEmpty()) {
-				logger.warn("TestStepContainer name is null or empty");
-				return;
-			}
-
-			logger.debug("Validating scenario name format for: {}", abstractScenario.getName());
-			if (!Character.isUpperCase(abstractScenario.getName().charAt(0))) {
-				logger.debug("Scenario name does not start with capital: {}", abstractScenario.getName());
-				warning("Scenario name should start with a capital", AsciiDocPackage.Literals.TEST_STEP_CONTAINER__NAME,
-						INVALID_NAME);
-			}
-		} catch (Exception e) {
-			logger.error("Error validating TestStepContainer '{}': {}",
-					abstractScenario != null ? abstractScenario.getName() : "null", e.getMessage(), e);
-		}
-		logger.debug("Exiting {}", "checkScenario");
-	}
-
-	private String getName(TestStep eObject) {
-		String name = "";
-		name += eObject.getStepObjectName() != null ? eObject.getStepObjectName().trim() : "";
-		name += eObject.getStepDefinitionName() != null ? " " + eObject.getStepDefinitionName().trim() : "";
-		return name;
-	}
+	public static final String CELL_NAME_ONLY = "CELL_NAME_ONLY";
+	public static final String TEST_STEP_CONTAINER_NAME_ONLY = "TEST_STEP_CONTAINER_NAME_ONLY";
+	public static final String TEST_STEP_CONTAINER_TEST_STEP_FILE_LIST_FILE = "TEST_STEP_CONTAINER_TEST_STEP_FILE_LIST_FILE";
+	public static final String TEST_SUITE_NAME_ONLY = "TEST_SUITE_NAME_ONLY";
+	public static final String TEST_STEP_STEP_OBJECT_NAME_WORKSPACE = "TEST_STEP_STEP_OBJECT_NAME_WORKSPACE";
+	public static final String TEST_STEP_STEP_DEFINITION_NAME_WORKSPACE = "TEST_STEP_STEP_DEFINITION_NAME_WORKSPACE";
+	public static final String ROW_CELL_LIST_WORKSPACE = "ROW_CELL_LIST_WORKSPACE";
+	public static final String TEST_STEP_STEP_OBJECT_NAME_ONLY = "TEST_STEP_STEP_OBJECT_NAME_ONLY";
+	public static final String TEST_STEP_STEP_DEFINITION_NAME_ONLY = "TEST_STEP_STEP_DEFINITION_NAME_ONLY";
+	public static final String TEXT_NAME_WORKSPACE = "TEXT_NAME_WORKSPACE";
 
 	@Check(CheckType.FAST)
-	public void checkStepName(TestStep step) {
-		logger.debug("Entering checkStepName for step: {}", step != null ? getName(step) : "null");
+	public void checkCellNameOnly(Cell cell) {
+		logger.debug("Entering checkCellNameOnly for element: " + (cell != null ? cell.getName() : "null"));
+		initProject(cell.eResource());
 		try {
-			if (step == null) {
-				logger.warn("TestStep is null, cannot perform validation");
-				return;
-			}
-
-			logger.debug("Creating LanguageAccessImpl for step: {}", getName(step));
-
-			if (getName(step) != null) {
-				logger.debug("Validating step name errors for: {}", getName(step));
-				ITestStep iTestStep = new TestStepImpl(step);
-				String problems = TestStepIssueDetector.validateSyntax(iTestStep);
-				if (!problems.isEmpty()) {
-					logger.debug("Found error problems for step '{}': {}", getName(step), problems);
-					error(problems, AsciiDocPackage.Literals.TEST_STEP__STEP_OBJECT_NAME, INVALID_NAME);
-				}
-
-				logger.debug("Validating step name warnings for: {}", getName(step));
-				ITestProject testProject = new TestProjectImpl(
-						new VsCodeFileRepository(
-								step.eResource().getURI().toFileString().replace(File.separator, "/")));
-				iTestStep.getParent().getParent().setParent(testProject);
-				problems = TestStepIssueDetector.validateSemantics(iTestStep, testProject);
-				if (!problems.isEmpty()) {
-					logger.debug("Found warning problems for step '{}': {}", getName(step), problems);
-
-					Object[] alternateProposals = TestStepIssueResolver.proposeStepObject(iTestStep, testProject);
-					String[] alternates = new String[alternateProposals.length];
-					for (int i = 0; i < alternates.length; i++) {
-						alternates[i] = alternateProposals[i].toString();
-					}
-
-					warning(problems, AsciiDocPackage.Literals.TEST_STEP__STEP_OBJECT_NAME, MISSING_STEP_DEF,
-							alternates);
-				}
-			} else {
-				logger.warn("TestStep name is null for step object");
-			}
-			logger.debug("Exiting {}", "checkStepName");
-		} catch (Exception e) {
-			// TODO why is stackTrace not used?
-			logger.error("Error validating TestStep '{}': {}",
-					step != null ? getName(step) : "null", e.getMessage(), e);
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String stackTrace = sw.toString();
-			error("Validation error: " + e.getMessage(), AsciiDocPackage.Literals.TEST_STEP__STEP_OBJECT_NAME, INVALID_NAME);
-		}
-	}
-
-	@Check(CheckType.FAST)
-	public void checkStepTableName(Table stepTable) {
-		logger.debug("Entering checkStepTableName for table");
-		try {
-			if (stepTable == null) {
-				logger.warn("Table is null, cannot perform validation");
-				return;
-			}
-
-			// TODO Add table column row validation, each row should have the max number of
-			// columns
 			// TODO make tests for this
-			logger.debug("Validating table headers");
-			if (stepTable.getRowList() != null) {
-				logger.debug("Table has {} rows", stepTable.getRowList().size());
-				if (stepTable.getRowList().size() > 0) {
-					logger.debug("Processing first row headers");
-					for (Cell header : stepTable.getRowList().get(0).getCellList()) {
-						if (header == null || header.getName() == null || header.getName().isEmpty()) {
-							logger.warn("Header cell is null or has no name");
-							continue;
-						}
-
-						logger.debug("Validating header: {}", header.getName());
-						if (!Character.isUpperCase(header.getName().charAt(0))) {
-							logger.debug("Header '{}' does not start with capital", header.getName());
-							warning("Table header names should start with a capital: " + header.getName(),
-									AsciiDocPackage.Literals.TABLE__ROW_LIST, INVALID_HEADER, header.getName());
-						}
-					}
-				} else {
-					logger.debug("Table has no rows");
+			if (cell != null) {
+				String problems = CellIssueDetector.validateNameOnly(new CellImpl(cell));
+				if (!problems.isEmpty()) {
+					warning(problems, AsciiDocPackage.Literals.CELL__NAME, CELL_NAME_ONLY);
 				}
-			} else {
-				logger.debug("Table has no row list");
 			}
-			logger.debug("Exiting {}", "checkStepTableName");
 		} catch (Exception e) {
-			logger.error("Error validating table headers: {}", e.getMessage(), e);
+			logger.error("Failed in checkCellNameOnly for : " + e.getMessage(), e);
+
 		}
+		logger.debug("Exiting checkCellNameOnly");
 	}
 
+	@Check(CheckType.FAST)
+	public void checkRowCellListWorkspace(Row row) {
+		logger.debug("Entering checkRowCellListWorkspace for element: " + (row != null ? row.toString() : "null"));
+		try {
+			initProject(row.eResource());
+			if (row != null && row.eContainer() != null) {
+				Table table = (Table) row.eContainer();
+				if (table.eContainer() instanceof TestStep) {
+					if (!table.getRowList().isEmpty() && table.getRowList().getFirst() == row) {
+						String problems = RowIssueDetector.validateCellListWorkspace(new RowImpl(row));
+						if (!problems.isEmpty()) {
+							warning(problems, AsciiDocPackage.Literals.ROW__CELL_LIST, ROW_CELL_LIST_WORKSPACE);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Failed in checkRowCellListWorkspace for : " + e.getMessage(), e);
+
+		}
+		logger.debug("Exiting checkRowCellListWorkspace");
+	}
+
+	@Check(CheckType.FAST)
+	public void checkTestStepContainerNameOnly(TestStepContainer theTestStepContainer) {
+		logger.debug("Entering checkTestStepContainerNameOnly for element: " + theTestStepContainer.getName());
+		try {
+			initProject(theTestStepContainer.eResource());
+			String problems = TestStepContainerIssueDetector
+					.validateNameOnly(new TestStepContainerImpl(theTestStepContainer));
+			if (!problems.isEmpty()) {
+				warning(problems, AsciiDocPackage.Literals.TEST_STEP_CONTAINER__NAME, TEST_STEP_CONTAINER_NAME_ONLY);
+			}
+		} catch (Exception e) {
+			logger.error("Failed in checkTestStepContainerNameOnly for : " + e.getMessage(), e);
+
+		}
+		logger.debug("Exiting checkTestStepContainerNameOnly");
+	}
+
+	@Check(CheckType.FAST)
+	public void checkTestStepContainerTestStepFileListFile(TestStepContainer theTestStepContainer) {
+		logger.debug(
+				"Entering checkTestStepContainerTestStepFileListFile for element: " + theTestStepContainer.getName());
+		try {
+			initProject(theTestStepContainer.eResource());
+			String problems = TestStepContainerIssueDetector
+					.validateTestStepListFile(new TestStepContainerImpl(theTestStepContainer));
+			if (!problems.isEmpty()) {
+				warning(problems, AsciiDocPackage.Literals.TEST_STEP_CONTAINER__TEST_STEP_LIST,
+						TEST_STEP_CONTAINER_TEST_STEP_FILE_LIST_FILE);
+			}
+		} catch (Exception e) {
+			logger.error("Failed in checkTestStepContainerTestStepFileListFile for : " + e.getMessage(), e);
+
+		}
+		logger.debug("Exiting checkTestStepContainerTestStepFileListFile");
+	}
+
+	@Check(CheckType.FAST)
+	public void checkTestStepNameOnly(TestStep step) {
+		TestStepImpl testStep = new TestStepImpl(step);
+		logger.debug("Entering checkTestStepNameOnly for element: " + testStep.getName());
+		try {
+			initProject(step.eResource());
+			String problems = TestStepIssueDetector.validateStepObjectNameOnly(testStep);
+			if (!problems.isEmpty()) {
+				error(problems, AsciiDocPackage.Literals.TEST_STEP__STEP_OBJECT_NAME, TEST_STEP_STEP_OBJECT_NAME_ONLY);
+			} else {
+				problems = TestStepIssueDetector.validateStepDefinitionNameOnly(testStep);
+				if (!problems.isEmpty()) {
+					error(problems, AsciiDocPackage.Literals.TEST_STEP__STEP_DEFINITION_NAME,
+							TEST_STEP_STEP_DEFINITION_NAME_ONLY);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Failed in checkTestStepNameOnly for : " + e.getMessage(), e);
+
+		}
+		logger.debug("Exiting checkTestStepNameOnly");
+	}
+
+	@Check(CheckType.FAST)
+	public void checkTestStepNameWorkspace(TestStep step) {
+		TestStepImpl testStep = new TestStepImpl(step);
+		logger.debug("Entering checkTestStepNameWorkspace for element: " + testStep.getName());
+		try {
+			initProject(step.eResource());
+			String problems = TestStepIssueDetector.validateStepObjectNameWorkspace(testStep);
+			if (!problems.isEmpty()) {
+				warning(problems, AsciiDocPackage.Literals.TEST_STEP__STEP_OBJECT_NAME,
+						TEST_STEP_STEP_OBJECT_NAME_WORKSPACE);
+			} else {
+				problems = TestStepIssueDetector.validateStepDefinitionNameWorkspace(testStep);
+				if (!problems.isEmpty()) {
+					warning(problems, AsciiDocPackage.Literals.TEST_STEP__STEP_DEFINITION_NAME,
+							TEST_STEP_STEP_DEFINITION_NAME_WORKSPACE);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Failed in checkTestStepNameWorkspace for : " + e.getMessage(), e);
+
+		}
+		logger.debug("Exiting checkTestStepNameWorkspace");
+	}
+
+	@Check(CheckType.FAST)
+	public void checkTestSuiteNameOnly(TestSuite theTestSuite) {
+		logger.debug("Entering checkTestSuiteNameOnly for element: " + theTestSuite.getName());
+		initProject(theTestSuite.eResource());
+		try {
+			// TODO validate that feature file name and feature name are the same.
+			TestSuiteImpl testSuiteImpl = new TestSuiteImpl(theTestSuite);
+			String problems = TestSuiteIssueDetector.validateNameOnly(testSuiteImpl);
+			if (!problems.isEmpty()) {
+				warning(problems, AsciiDocPackage.Literals.MODEL__NAME, TEST_SUITE_NAME_ONLY);
+			}
+		} catch (Exception e) {
+			logger.error("Failed in checkTestSuiteNameOnly for : " + e.getMessage(), e);
+
+		}
+		logger.debug("Exiting checkTestSuiteNameOnly");
+	}
+
+	@Check(CheckType.FAST)
+	public void checkTextNameWorkspace(Text text) {
+		logger.debug("Entering checkTextNameWorkspace for element: " + (text != null ? text.getName() : "null"));
+		initProject(text.eResource());
+		if (text != null) {
+			try {
+				String problems = TextIssueDetector.validateNameWorkspace(new TextImpl(text));
+				if (!problems.isEmpty()) {
+					warning(problems, AsciiDocPackage.Literals.TEXT__NAME, TEXT_NAME_WORKSPACE);
+				}
+			} catch (Exception e) {
+				logger.error("Failed in checkTextNameWorkspace for : " + e.getMessage(), e);
+			}
+		}
+		logger.debug("Exiting checkTextNameWorkspace");
+	}
+
+	private void initProject(Resource resource) {
+		ITestProject parent = SheepDogFactory.instance.createTestProject();
+		if (parent.getName() == null) {
+			IFile resourceIFile = ResourcesPlugin.getWorkspace().getRoot()
+					.getFile(new Path(resource.getURI().toPlatformString(true)));
+			File resourceFile = new File(resourceIFile.getProject().getLocationURI());
+			parent.setName(resourceFile.getAbsolutePath());
+		}
+	}
 }

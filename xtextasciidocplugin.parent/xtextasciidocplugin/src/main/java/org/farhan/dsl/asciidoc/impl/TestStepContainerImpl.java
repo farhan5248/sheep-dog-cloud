@@ -13,17 +13,11 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
 
 public class TestStepContainerImpl implements ITestStepContainer {
 
-	protected TestStepContainer eObject;
-	ITestSuite parent;
+	TestStepContainer eObject;
+	private TestSuiteImpl parent;
 
 	public TestStepContainerImpl(TestStepContainer testCase) {
 		this.eObject = testCase;
-	}
-
-	@Override
-	public ITestStep createTestStep(String value) {
-		// Not needed in this project
-		return null;
 	}
 
 	@Override
@@ -53,7 +47,6 @@ public class TestStepContainerImpl implements ITestStepContainer {
 		ArrayList<ITestStep> testStepList = new ArrayList<ITestStep>();
 		for (TestStep s : eObject.getTestStepList()) {
 			TestStepImpl testStep = new TestStepImpl(s);
-			testStep.setParent(this);
 			testStepList.add(testStep);
 		}
 		return testStepList;
@@ -61,22 +54,44 @@ public class TestStepContainerImpl implements ITestStepContainer {
 
 	@Override
 	public void setName(String value) {
-		// Not needed in this project
+		throw new UnsupportedOperationException("setName(String value) is not implemented");
 	}
 
 	@Override
-	public void setParent(ITestSuite value) {
-		this.parent = value;
+	public String getNameLong() {
+		throw new UnsupportedOperationException("getNameLong() is not implemented");
 	}
 
 	@Override
-	public void setStatementList(ArrayList<IStatement> value) {
-		// Not needed in this project
+	public IStatement getStatement(int index) {
+		throw new UnsupportedOperationException("getStatement(int index) is not implemented");
 	}
 
 	@Override
-	public void setTestStepList(ArrayList<ITestStep> value) {
-		// Not needed in this project
+	public IStatement getStatement(String name) {
+		throw new UnsupportedOperationException("getStatement(String name) is not implemented");
+	}
+
+	@Override
+	public ITestStep getTestStep(int index) {
+		throw new UnsupportedOperationException("getTestStep(int index) is not implemented");
+	}
+
+	@Override
+	public ITestStep getTestStep(String name) {
+		throw new UnsupportedOperationException("getTestStep(String name) is not implemented");
+	}
+
+	@Override
+	public boolean addStatement(IStatement value) {
+		eObject.getStatementList().add(((StatementImpl) value).eObject);
+		return true;
+	}
+
+	@Override
+	public boolean addTestStep(ITestStep value) {
+		eObject.getTestStepList().add(((TestStepImpl) value).eObject);
+		return true;
 	}
 
 }

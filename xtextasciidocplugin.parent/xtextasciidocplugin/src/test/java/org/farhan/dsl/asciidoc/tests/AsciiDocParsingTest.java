@@ -4,14 +4,10 @@
 package org.farhan.dsl.asciidoc.tests;
 
 import com.google.inject.Inject;
-import java.util.List;
-import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.xtext.testing.InjectWith;
 import org.eclipse.xtext.testing.XtextRunner;
 import org.eclipse.xtext.testing.util.ParseHelper;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.farhan.dsl.asciidoc.asciiDoc.Model;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

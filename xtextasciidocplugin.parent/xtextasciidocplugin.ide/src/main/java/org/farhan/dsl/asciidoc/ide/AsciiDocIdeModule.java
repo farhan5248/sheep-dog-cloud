@@ -4,35 +4,30 @@
 package org.farhan.dsl.asciidoc.ide;
 
 import org.eclipse.xtext.ide.editor.contentassist.IdeContentProposalProvider;
-import org.eclipse.xtext.ide.editor.quickfix.IQuickFixProvider;
 import org.eclipse.xtext.ide.server.codeActions.ICodeActionService2;
 import org.eclipse.xtext.ide.server.commands.IExecutableCommandService;
 import org.eclipse.xtext.ide.server.hover.HoverService;
 import org.farhan.dsl.asciidoc.ide.contentassist.AsciiDocIdeContentProposalProvider;
-import org.farhan.dsl.asciidoc.ide.quickfix.AsciiDocIdeQuickfixProvider;
+import org.farhan.dsl.asciidoc.ide.generator.AsciiDocGeneratorCommandService;
 import org.farhan.dsl.asciidoc.ide.quickfix.AsciiDocQuickFixCodeActionService;
 
 /**
  * Use this class to register ide components.
  */
 public class AsciiDocIdeModule extends AbstractAsciiDocIdeModule {
-	
+
 	public Class<? extends HoverService> bindHoverService() {
 		return EclipseLikeHoverService.class;
 	}
-	
+
 	public Class<? extends IExecutableCommandService> bindIExecutableCommandService() {
-		return AsciiDocCommandService.class;
+		return AsciiDocGeneratorCommandService.class;
 	}
-	
-	public Class<? extends IQuickFixProvider> bindIQuickFixProvider() {
-		return AsciiDocIdeQuickfixProvider.class;
-	}
-	
+
 	public Class<? extends ICodeActionService2> bindICodeActionService2() {
 		return AsciiDocQuickFixCodeActionService.class;
 	}
-	
+
 	public Class<? extends IdeContentProposalProvider> bindIdeContentProposalProvider() {
 		return AsciiDocIdeContentProposalProvider.class;
 	}

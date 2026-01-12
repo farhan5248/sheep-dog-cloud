@@ -41,3 +41,12 @@
 
 **Examples:**
 - constants.ts
+
+### {Language}Logger
+
+- Centralized logging helper for VS Code extension
+- Follows the {Language}Logger naming pattern
+- Creates loggers with consistent format: timestamp, log level, extension name, module name
+
+**Examples:**
+- asciiDocLogger.ts

@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 import org.farhan.dsl.lang.IResourceRepository;
 
-public class SourceFileRepository implements IResourceRepository {
+public class VsCodeFileRepository implements IResourceRepository {
 
 	private final String projectPath;
 
-	public SourceFileRepository(String uriPath) {
+	public VsCodeFileRepository(String uriPath) {
 		this.projectPath = uriPath.split("src/test/resources/asciidoc/specs/")[0].replace("/",
 				File.separator);
 	}

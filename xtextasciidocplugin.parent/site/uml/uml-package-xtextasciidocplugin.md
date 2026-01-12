@@ -24,7 +24,7 @@
 - TestStepContainerImpl
 - TestStepImpl
 - TestSuiteImpl
-- SheepDogFactoryImpl
+- AsciiDocFactoryImpl
 
 ### {IDE}FileRepository
 

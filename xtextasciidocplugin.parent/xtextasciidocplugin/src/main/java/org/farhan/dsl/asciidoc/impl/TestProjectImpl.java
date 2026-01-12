@@ -23,11 +23,11 @@ public class TestProjectImpl implements ITestProject {
 
 	private static final Logger logger = LoggerFactory.getLogger(TestProjectImpl.class);
 
-	private SourceFileRepository sr;
+	private VsCodeFileRepository sr;
 	private final String layer2dir;
 
 	public TestProjectImpl(IResourceRepository sr) {
-		this.sr = (SourceFileRepository) sr;
+		this.sr = (VsCodeFileRepository) sr;
 		layer2dir = "src/test/resources/asciidoc/stepdefs/";
 	}
 

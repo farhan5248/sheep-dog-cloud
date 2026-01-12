@@ -12,7 +12,7 @@ import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
-import org.farhan.dsl.asciidoc.impl.SourceFileRepository;
+import org.farhan.dsl.asciidoc.impl.VsCodeFileRepository;
 import org.farhan.dsl.asciidoc.impl.StepObjectImpl;
 import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
 import org.farhan.dsl.asciidoc.impl.TestStepImpl;
@@ -78,7 +78,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		logger.debug("Entering generateFromTestStep for step: {}", step != null ? getName(step) : "null");
 		try {
 			TestProjectImpl testProject = new TestProjectImpl(
-					new SourceFileRepository(
+					new VsCodeFileRepository(
 							step.eResource().getURI().toFileString().replace(File.separator, "/")));
 			TestStepImpl iTestStep = new TestStepImpl(step);
 			iTestStep.getParent().getParent().setParent(testProject);

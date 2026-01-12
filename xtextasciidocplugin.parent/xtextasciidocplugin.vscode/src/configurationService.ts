@@ -7,6 +7,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as constants from './constants';
+import { createLogger, Logger } from './asciiDocLogger';
 
 /**
  * Configuration interface representing all extension settings
@@ -119,10 +120,12 @@ export class ConfigurationService {
     private disposables: vscode.Disposable[] = [];
     private changeHandlers: ((event: ConfigurationChangeEvent) => void)[] = [];
     private currentConfig: AsciidocConfiguration;
-    private outputChannel: vscode.OutputChannel | undefined;
+    private logger: Logger | undefined;
 
     constructor(outputChannel?: vscode.OutputChannel) {
-        this.outputChannel = outputChannel;
+        if (outputChannel) {
+            this.logger = createLogger(outputChannel, 'ConfigurationService');
+        }
         this.currentConfig = this.loadConfiguration();
         this.setupConfigurationWatcher();
     }
@@ -331,10 +334,10 @@ export class ConfigurationService {
             const configContent = fs.readFileSync(configPath, 'utf8');
             const parsedConfig = JSON.parse(configContent);
             
-            this.outputChannel?.appendLine(`Loaded workspace configuration from: ${configPath}`);
+            this.logger?.debug(`Loaded workspace configuration from: ${configPath}`);
             return parsedConfig;
         } catch (error) {
-            this.outputChannel?.appendLine(`Failed to load configuration from ${configPath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            this.logger?.error(`Failed in loadConfigurationFile from ${configPath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
             return null;
         }
     }
@@ -421,16 +424,14 @@ export class ConfigurationService {
             requiresRestart: this.requiresRestart(changedKeys)
         };
 
-        this.outputChannel?.appendLine(`Configuration changed. Affected keys: ${changedKeys.join(', ')}`);
-        this.outputChannel?.appendLine(`Affects language server: ${changeEvent.affectsLanguageServer}`);
-        this.outputChannel?.appendLine(`Requires restart: ${changeEvent.requiresRestart}`);
+        this.logger?.debug(`Configuration changed. Affected keys: ${changedKeys.join(', ')}, affectsLanguageServer: ${changeEvent.affectsLanguageServer}, requiresRestart: ${changeEvent.requiresRestart}`);
 
         // Notify all handlers
         this.changeHandlers.forEach(handler => {
             try {
                 handler(changeEvent);
             } catch (error) {
-                this.outputChannel?.appendLine(`Error in configuration change handler: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                this.logger?.error(`Failed in configuration change handler: ${error instanceof Error ? error.message : 'Unknown error'}`);
             }
         });
     }

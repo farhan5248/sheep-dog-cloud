@@ -16,7 +16,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.Cell;
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
-import org.farhan.dsl.asciidoc.impl.SourceFileRepository;
+import org.farhan.dsl.asciidoc.impl.VsCodeFileRepository;
 import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
 import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
@@ -135,7 +135,7 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 
 				logger.debug("Validating step name warnings for: {}", getName(step));
 				ITestProject testProject = new TestProjectImpl(
-						new SourceFileRepository(
+						new VsCodeFileRepository(
 								step.eResource().getURI().toFileString().replace(File.separator, "/")));
 				iTestStep.getParent().getParent().setParent(testProject);
 				problems = TestStepIssueDetector.validateSemantics(iTestStep, testProject);

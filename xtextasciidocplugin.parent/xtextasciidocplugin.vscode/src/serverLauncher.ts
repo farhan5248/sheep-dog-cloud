@@ -12,6 +12,7 @@ import { LanguageClient, LanguageClientOptions, ServerOptions, State } from 'vsc
 import * as constants from './constants';
 import { AsciidocConfiguration } from './configurationService';
 import { CommunicationService } from './communicationService';
+import { createLogger, Logger } from './asciiDocLogger';
 
 export enum ServerLaunchMode {
     JAR_BASED = 'jar',
@@ -55,7 +56,7 @@ export class ServerLauncher {
     private serverProcess: cp.ChildProcess | undefined;
     private healthCheckTimer: NodeJS.Timeout | undefined;
     private healthInfo: ServerHealthInfo;
-    private outputChannel: vscode.OutputChannel;
+    private logger: Logger;
     private statusBarItem: vscode.StatusBarItem | undefined;
     private readonly extensionContext: vscode.ExtensionContext;
     private readonly configuration: AsciidocConfiguration;
@@ -69,12 +70,12 @@ export class ServerLauncher {
     ) {
         this.extensionContext = extensionContext;
         this.configuration = configuration;
-        this.outputChannel = outputChannel;
+        this.logger = createLogger(outputChannel, 'ServerLauncher');
         this.statusBarItem = statusBarItem;
         this.healthInfo = {
             status: ServerStatus.STOPPED
         };
-        
+
         // Initialize communication service with enhanced features
         this.communicationService = new CommunicationService(outputChannel, configuration);
     }
@@ -83,15 +84,12 @@ export class ServerLauncher {
      * Start the language server with intelligent launch mode detection and robust error handling
      */
     public async startServer(clientOptions: LanguageClientOptions): Promise<void> {
-        const commandName = 'startServer';
-        const startTime = Date.now();
-        
         try {
-            this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {timeout: ${this.configuration.languageServer.timeout}, maxRetries: ${this.configuration.languageServer.maxRetries}}`);
+            this.logger.debug(`Entering startServer for timeout: ${this.configuration.languageServer.timeout}`);
             this.updateHealthInfo({ status: ServerStatus.STARTING, startTime: new Date() });
-            
+
             const launchOptions = this.createLaunchOptions();
-            this.outputChannel.appendLine(`Command ${commandName} launch options: {mode: ${launchOptions.mode}, timeout: ${launchOptions.timeout}, javaExecutable: ${launchOptions.javaExecutable}}`);
+            this.logger.debug(`startServer launch options: {mode: ${launchOptions.mode}, timeout: ${launchOptions.timeout}, javaExecutable: ${launchOptions.javaExecutable}}`);
             
             const serverOptions = await this.createServerOptions(launchOptions);
             
@@ -119,14 +117,12 @@ export class ServerLauncher {
             
             this.updateHealthInfo({ status: ServerStatus.RUNNING });
             this.updateStatusBar();
-            
-            const duration = Date.now() - startTime;
-            this.outputChannel.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
-            
+
+            this.logger.debug(`Exiting startServer`);
+
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            this.outputChannel.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            this.logger.error(`Failed in startServer: ${errorMessage}`);
             this.updateHealthInfo({ status: ServerStatus.ERROR, errorMessage });
             this.updateStatusBar();
             throw error;
@@ -137,20 +133,17 @@ export class ServerLauncher {
      * Stop the language server gracefully
      */
     public async stopServer(): Promise<void> {
-        const commandName = 'stopServer';
-        const startTime = Date.now();
-        
         try {
-            this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {hasClient: ${!!this.client}, hasProcess: ${!!this.serverProcess}}`);
+            this.logger.debug(`Entering stopServer`);
             this.updateHealthInfo({ status: ServerStatus.STOPPING });
             this.updateStatusBar();
-            
+
             // Stop health monitoring
             this.stopHealthMonitoring();
-            
+
             // Stop language client
             if (this.client) {
-                this.outputChannel.appendLine(`Command ${commandName} stopping language client...`);
+                this.logger.debug(`stopServer stopping language client...`);
                 await this.client.stop();
                 this.client.dispose();
                 this.client = undefined;
@@ -158,7 +151,7 @@ export class ServerLauncher {
             
             // Terminate server process if it exists
             if (this.serverProcess && !this.serverProcess.killed) {
-                this.outputChannel.appendLine(`Command ${commandName} terminating server process (PID: ${this.serverProcess.pid})...`);
+                this.logger.debug(`stopServer terminating server process (PID: ${this.serverProcess.pid})...`);
                 
                 if (os.platform() === 'win32') {
                     // Windows: use taskkill for graceful shutdown
@@ -178,14 +171,12 @@ export class ServerLauncher {
             
             this.updateHealthInfo({ status: ServerStatus.STOPPED });
             this.updateStatusBar();
-            
-            const duration = Date.now() - startTime;
-            this.outputChannel.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
-            
+
+            this.logger.debug(`Exiting stopServer`);
+
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            this.outputChannel.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            this.logger.error(`Failed in stopServer: ${errorMessage}`);
             this.updateHealthInfo({ status: ServerStatus.ERROR, errorMessage });
             this.updateStatusBar();
         }
@@ -195,29 +186,21 @@ export class ServerLauncher {
      * Restart the language server
      */
     public async restartServer(clientOptions: LanguageClientOptions): Promise<void> {
-        const commandName = 'restartServer';
-        const startTime = Date.now();
-        
         try {
-            this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {clientOptions: ${JSON.stringify({
-                documentSelector: clientOptions.documentSelector?.[0] || null,
-                hasOutputChannel: !!clientOptions.outputChannel
-            })}}`);
-            
+            this.logger.debug(`Entering restartServer`);
+
             await this.stopServer();
-            
+
             // Wait a moment before restarting
-            this.outputChannel.appendLine(`Command ${commandName} waiting 2000ms before restart...`);
+            this.logger.debug(`Waiting 2000ms before restart...`);
             await new Promise(resolve => setTimeout(resolve, 2000));
-            
+
             await this.startServer(clientOptions);
-            
-            const duration = Date.now() - startTime;
-            this.outputChannel.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+
+            this.logger.debug(`Exiting restartServer`);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            this.outputChannel.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            this.logger.error(`Failed in restartServer: ${errorMessage}`);
             throw error;
         }
     }
@@ -279,13 +262,13 @@ export class ServerLauncher {
         
         // Prefer JAR-based launch if available (more reliable and faster)
         if (jarPath && fs.existsSync(jarPath)) {
-            this.outputChannel.appendLine(`ServerLauncher: Using JAR-based launch mode: ${jarPath}`);
+            this.logger.debug(`Using JAR-based launch mode: ${jarPath}`);
             return ServerLaunchMode.JAR_BASED;
         }
-        
+
         // Fall back to script-based launch
         if (scriptPath && fs.existsSync(scriptPath)) {
-            this.outputChannel.appendLine(`ServerLauncher: Using script-based launch mode: ${scriptPath}`);
+            this.logger.debug(`Using script-based launch mode: ${scriptPath}`);
             return ServerLaunchMode.SCRIPT_BASED;
         }
         
@@ -428,7 +411,7 @@ export class ServerLauncher {
                 }
             }
         } catch (error) {
-            this.outputChannel.appendLine(`ServerLauncher: Warning - Could not collect JAR files: ${error}`);
+            this.logger.debug(`Warning - Could not collect JAR files: ${error}`);
         }
         
         return jars;
@@ -510,7 +493,7 @@ export class ServerLauncher {
 
         while (retryCount <= maxRetries) {
             try {
-                this.outputChannel.appendLine(`ServerLauncher: Starting server (attempt ${retryCount + 1}/${maxRetries + 1})`);
+                this.logger.debug(`Starting server (attempt ${retryCount + 1}/${maxRetries + 1})`);
                 
                 // Start with timeout
                 const startPromise = this.client.start();
@@ -527,11 +510,11 @@ export class ServerLauncher {
             } catch (error) {
                 retryCount++;
                 const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                this.outputChannel.appendLine(`ServerLauncher: Start attempt ${retryCount} failed: ${errorMessage}`);
-                
+                this.logger.error(`Failed in startWithRetryAndTimeout attempt ${retryCount}: ${errorMessage}`);
+
                 if (retryCount <= maxRetries) {
                     const delayMs = Math.min(1000 * Math.pow(2, retryCount - 1), 10000); // Exponential backoff, max 10s
-                    this.outputChannel.appendLine(`ServerLauncher: Retrying in ${delayMs}ms...`);
+                    this.logger.debug(`Retrying in ${delayMs}ms...`);
                     await new Promise(resolve => setTimeout(resolve, delayMs));
                 } else {
                     throw error; // Re-throw after all retries exhausted
@@ -568,8 +551,8 @@ export class ServerLauncher {
         this.healthCheckTimer = setInterval(() => {
             this.performHealthCheck();
         }, interval);
-        
-        this.outputChannel.appendLine(`ServerLauncher: Health monitoring started (interval: ${interval}ms)`);
+
+        this.logger.debug(`Health monitoring started (interval: ${interval}ms)`);
     }
 
     /**
@@ -609,12 +592,12 @@ export class ServerLauncher {
             
             // Log health status periodically
             if (!isHealthy) {
-                this.outputChannel.appendLine(`ServerLauncher: Health check failed - server not running`);
+                this.logger.error(`Failed in performHealthCheck - server not running`);
             }
-            
+
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            this.outputChannel.appendLine(`ServerLauncher: Health check error: ${errorMessage}`);
+            this.logger.error(`Failed in performHealthCheck: ${errorMessage}`);
             this.updateHealthInfo({ status: ServerStatus.ERROR, errorMessage });
         }
     }

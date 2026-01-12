@@ -19,7 +19,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.xtext.Assignment;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
-import org.farhan.dsl.asciidoc.impl.SourceFileRepository;
+import org.farhan.dsl.asciidoc.impl.VsCodeFileRepository;
 import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
 import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 
@@ -79,7 +79,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			int proposalCount = 0;
 
 			ITestProject testProject = new TestProjectImpl(
-					new SourceFileRepository(step.eResource().getURI().toFileString().replace(File.separator, "/")));
+					new VsCodeFileRepository(step.eResource().getURI().toFileString().replace(File.separator, "/")));
 			ITestStep iTestStep = new TestStepImpl(step);
 			iTestStep.getParent().getParent().setParent(testProject);
 			for (Entry<String, TestStepIssueProposal> p : TestStepIssueResolver.proposeName(iTestStep, testProject)

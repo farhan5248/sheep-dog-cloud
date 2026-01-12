@@ -8,8 +8,10 @@ import * as constants from './constants';
 import { ConfigurationService, AsciidocConfiguration, ConfigurationChangeEvent } from './configurationService';
 import { ServerLauncher, ServerStatus } from './serverLauncher';
 import { ExtendedServerCapabilities } from './communicationService';
+import { createLogger, Logger } from './asciiDocLogger';
 
 // Global extension state
+let logger: Logger | undefined;
 let serverLauncher: ServerLauncher | undefined;
 let outputChannel: vscode.OutputChannel | undefined;
 let statusBarItem: vscode.StatusBarItem | undefined;
@@ -24,7 +26,8 @@ let client: LanguageClient | undefined;
  */
 export function activate(context: vscode.ExtensionContext): void {
     outputChannel = vscode.window.createOutputChannel(constants.OUTPUT_CHANNELS.EXTENSION);
-    outputChannel.appendLine('Xtext AsciiDoc Extension: Initializing...');
+    logger = createLogger(outputChannel, 'extension');
+    logger.debug('Entering activate');
     context.subscriptions.push(outputChannel);
 
     // Initialize configuration service
@@ -36,12 +39,12 @@ export function activate(context: vscode.ExtensionContext): void {
 
     // Check if extension is enabled
     if (!configuration.languageServer.enabled) {
-        outputChannel.appendLine('Xtext AsciiDoc language server is disabled in settings');
+        logger.debug('Xtext AsciiDoc language server is disabled in settings');
         return;
     }
 
-    outputChannel.appendLine(`Platform: ${os.platform()}`);
-    outputChannel.appendLine(`Configuration loaded: ${JSON.stringify(configuration, null, 2)}`);
+    logger.debug(`Platform: ${os.platform()}`);
+    logger.debug(`Configuration loaded: ${JSON.stringify(configuration, null, 2)}`);
 
     try {
         // Setup configuration change handlers
@@ -56,10 +59,10 @@ export function activate(context: vscode.ExtensionContext): void {
         // Setup status bar
         setupStatusBar(context, configuration);
 
-        outputChannel.appendLine('Xtext AsciiDoc Extension: Activation completed successfully');
+        logger.debug('Exiting activate');
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        outputChannel.appendLine(`Xtext AsciiDoc Extension: Failed to activate: ${errorMessage}`);
+        logger.error(`Failed in activate: ${errorMessage}`);
 
         // Show error notification based on configuration
         if (configuration.ui.notifications.errors) {
@@ -73,7 +76,7 @@ export function activate(context: vscode.ExtensionContext): void {
  * Called when the extension is being deactivated
  */
 export function deactivate(): Thenable<void> | undefined {
-    outputChannel?.appendLine('Xtext AsciiDoc Extension: Deactivating...');
+    logger?.debug('Entering deactivate');
 
     // Clean up status bar
     if (statusBarItem) {
@@ -93,10 +96,10 @@ export function deactivate(): Thenable<void> | undefined {
             serverLauncher?.dispose();
             serverLauncher = undefined;
             client = undefined;
-            outputChannel?.appendLine('Xtext AsciiDoc Extension: Deactivated successfully');
+            logger?.debug('Exiting deactivate');
         }).catch((error) => {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            outputChannel?.appendLine(`Xtext AsciiDoc Extension: Error during deactivation: ${errorMessage}`);
+            logger?.error(`Failed in deactivate: ${errorMessage}`);
         });
     }
 
@@ -107,11 +110,11 @@ export function deactivate(): Thenable<void> | undefined {
  * Initialize the server launcher with production-ready capabilities
  */
 function initializeServerLauncher(context: vscode.ExtensionContext, configuration: AsciidocConfiguration): void {
-    outputChannel?.appendLine(`Log directory: ${configuration.logDirectory}`);
-    outputChannel?.appendLine(`Debug mode: ${configuration.debug.enabled}`);
-    outputChannel?.appendLine(`Server port: ${configuration.languageServer.port}`);
-    outputChannel?.appendLine(`Server timeout: ${configuration.languageServer.timeout}ms`);
-    outputChannel?.appendLine(`Max retries: ${configuration.languageServer.maxRetries}`);
+    logger?.debug(`Log directory: ${configuration.logDirectory}`);
+    logger?.debug(`Debug mode: ${configuration.debug.enabled}`);
+    logger?.debug(`Server port: ${configuration.languageServer.port}`);
+    logger?.debug(`Server timeout: ${configuration.languageServer.timeout}ms`);
+    logger?.debug(`Max retries: ${configuration.languageServer.maxRetries}`);
 
     // Create server launcher
     serverLauncher = new ServerLauncher(context, configuration, outputChannel!, statusBarItem);
@@ -131,10 +134,10 @@ function initializeServerLauncher(context: vscode.ExtensionContext, configuratio
             context.subscriptions.push(client);
         }
 
-        outputChannel?.appendLine('Xtext AsciiDoc language server started successfully using ServerLauncher');
+        logger?.debug('Xtext AsciiDoc language server started successfully using ServerLauncher');
     }).catch(error => {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        outputChannel?.appendLine(`Failed to start Xtext AsciiDoc language server: ${errorMessage}`);
+        logger?.error(`Failed to start Xtext AsciiDoc language server: ${errorMessage}`);
 
         if (configuration.ui.notifications.errors) {
             vscode.window.showErrorMessage(`Failed to start Xtext AsciiDoc language server: ${errorMessage}`);
@@ -193,12 +196,11 @@ function registerCommands(context: vscode.ExtensionContext): void {
     // Register server management commands
     const restartServerCommand = vscode.commands.registerCommand('asciidoc.server.restart', async () => {
         const commandName = 'asciidoc.server.restart';
-        const startTime = Date.now();
-        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        logger?.debug(`Entering ${commandName}`);
 
         if (!serverLauncher) {
             const errorMsg = 'AsciiDoc Language Server is not running';
-            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            logger?.error(`Failed in ${commandName}: ${errorMsg}`);
             vscode.window.showWarningMessage(errorMsg);
             return;
         }
@@ -210,7 +212,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
             }
 
             const clientOptions = createClientOptions(configuration);
-            outputChannel?.appendLine(`Command ${commandName} parameters: {configuration: ${JSON.stringify({
+            logger?.debug(`${commandName} parameters: {configuration: ${JSON.stringify({
                 enabled: configuration.languageServer.enabled,
                 port: configuration.languageServer.port,
                 timeout: configuration.languageServer.timeout
@@ -221,25 +223,22 @@ function registerCommands(context: vscode.ExtensionContext): void {
             // Update client reference
             client = serverLauncher.getClient();
 
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            logger?.debug(`Exiting ${commandName}`);
             vscode.window.showInformationMessage('AsciiDoc Language Server restarted successfully');
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            logger?.error(`Failed in ${commandName}: ${errorMessage}`);
             vscode.window.showErrorMessage(`Failed to restart AsciiDoc Language Server: ${errorMessage}`);
         }
     });
 
     const showServerHealthCommand = vscode.commands.registerCommand('asciidoc.server.showHealth', () => {
         const commandName = 'asciidoc.server.showHealth';
-        const startTime = Date.now();
-        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        logger?.debug(`Entering ${commandName}`);
 
         if (!serverLauncher) {
             const errorMsg = 'AsciiDoc Language Server is not running';
-            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            logger?.error(`Failed in ${commandName}: ${errorMsg}`);
             vscode.window.showInformationMessage(errorMsg);
             return;
         }
@@ -248,7 +247,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
             const healthInfo = serverLauncher.getHealthInfo();
             const connectionStatus = serverLauncher.getConnectionStatus();
 
-            outputChannel?.appendLine(`Command ${commandName} retrieving health info: {status: ${healthInfo.status}, connected: ${connectionStatus.isConnected}}`);
+            logger?.debug(`${commandName} retrieving health info: {status: ${healthInfo.status}, connected: ${connectionStatus.isConnected}}`);
 
             const uptimeStr = healthInfo.uptime ? `${Math.round(healthInfo.uptime / 1000)}s` : 'Unknown';
             const startTimeStr = healthInfo.startTime ? healthInfo.startTime.toLocaleString() : 'Unknown';
@@ -268,24 +267,21 @@ function registerCommands(context: vscode.ExtensionContext): void {
                 connectionStatus.lastError ? `Connection Error: ${connectionStatus.lastError}` : ''
             ].filter(line => line).join('\n');
 
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            logger?.debug(`Exiting ${commandName}`);
             vscode.window.showInformationMessage(`AsciiDoc Language Server Health:\n\n${healthMessage}`, { modal: true });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            logger?.error(`Failed in ${commandName}: ${errorMessage}`);
         }
     });
 
     const stopServerCommand = vscode.commands.registerCommand('asciidoc.server.stop', async () => {
         const commandName = 'asciidoc.server.stop';
-        const startTime = Date.now();
-        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        logger?.debug(`Entering ${commandName}`);
 
         if (!serverLauncher) {
             const errorMsg = 'AsciiDoc Language Server is not running';
-            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            logger?.error(`Failed in ${commandName}: ${errorMsg}`);
             vscode.window.showWarningMessage(errorMsg);
             return;
         }
@@ -294,13 +290,11 @@ function registerCommands(context: vscode.ExtensionContext): void {
             await serverLauncher.stopServer();
             client = undefined;
 
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            logger?.debug(`Exiting ${commandName}`);
             vscode.window.showInformationMessage('AsciiDoc Language Server stopped');
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            logger?.error(`Failed in ${commandName}: ${errorMessage}`);
             vscode.window.showErrorMessage(`Failed to stop AsciiDoc Language Server: ${errorMessage}`);
         }
     });
@@ -308,12 +302,11 @@ function registerCommands(context: vscode.ExtensionContext): void {
     // Add command to show server capabilities
     const showCapabilitiesCommand = vscode.commands.registerCommand('asciidoc.server.showCapabilities', () => {
         const commandName = 'asciidoc.server.showCapabilities';
-        const startTime = Date.now();
-        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        logger?.debug(`Entering ${commandName}`);
 
         if (!serverLauncher) {
             const errorMsg = 'AsciiDoc Language Server is not running';
-            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            logger?.error(`Failed in ${commandName}: ${errorMsg}`);
             vscode.window.showInformationMessage(errorMsg);
             return;
         }
@@ -322,11 +315,11 @@ function registerCommands(context: vscode.ExtensionContext): void {
             const connectionStatus = serverLauncher.getConnectionStatus();
             const capabilities = connectionStatus.capabilities;
 
-            outputChannel?.appendLine(`Command ${commandName} retrieving capabilities: {hasCapabilities: ${!!capabilities}}`);
+            logger?.debug(`${commandName} retrieving capabilities: {hasCapabilities: ${!!capabilities}}`);
 
             if (!capabilities) {
                 const warningMsg = 'Server capabilities not yet detected. Please wait for server to start.';
-                outputChannel?.appendLine(`Command ${commandName} warning: ${warningMsg}`);
+                logger?.debug(`Exiting ${commandName}: ${warningMsg}`);
                 vscode.window.showInformationMessage(warningMsg);
                 return;
             }
@@ -359,24 +352,21 @@ function registerCommands(context: vscode.ExtensionContext): void {
             }
 
             const capabilitiesMessage = capabilitiesInfo.join('\n');
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            logger?.debug(`Exiting ${commandName}`);
             vscode.window.showInformationMessage(`AsciiDoc Language Server Capabilities:\n\n${capabilitiesMessage}`, { modal: true });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            logger?.error(`Failed in ${commandName}: ${errorMessage}`);
         }
     });
 
     const startServerCommand = vscode.commands.registerCommand('asciidoc.server.start', async () => {
         const commandName = 'asciidoc.server.start';
-        const startTime = Date.now();
-        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        logger?.debug(`Entering ${commandName}`);
 
         if (serverLauncher && serverLauncher.getHealthInfo().status === ServerStatus.RUNNING) {
             const warningMsg = 'AsciiDoc Language Server is already running';
-            outputChannel?.appendLine(`Command ${commandName} warning: ${warningMsg}`);
+            logger?.debug(`Exiting ${commandName}: ${warningMsg}`);
             vscode.window.showWarningMessage(warningMsg);
             return;
         }
@@ -387,7 +377,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
                 throw new Error('Configuration not available');
             }
 
-            outputChannel?.appendLine(`Command ${commandName} parameters: {configuration: ${JSON.stringify({
+            logger?.debug(`${commandName} parameters: {configuration: ${JSON.stringify({
                 enabled: configuration.languageServer.enabled,
                 port: configuration.languageServer.port,
                 timeout: configuration.languageServer.timeout
@@ -404,13 +394,11 @@ function registerCommands(context: vscode.ExtensionContext): void {
                 client = serverLauncher.getClient();
             }
 
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+            logger?.debug(`Exiting ${commandName}`);
             vscode.window.showInformationMessage('AsciiDoc Language Server started successfully');
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            logger?.error(`Failed in ${commandName}: ${errorMessage}`);
             vscode.window.showErrorMessage(`Failed to start AsciiDoc Language Server: ${errorMessage}`);
         }
     });
@@ -418,28 +406,25 @@ function registerCommands(context: vscode.ExtensionContext): void {
     // Add code generation command
     const generateCodeCommand = vscode.commands.registerCommand('asciidoc.server.generateCode', async () => {
         const commandName = 'asciidoc.server.generateCode';
-        const startTime = Date.now();
-        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        logger?.debug(`Entering ${commandName}`);
 
         const activeEditor = vscode.window.activeTextEditor;
         if (!activeEditor || activeEditor.document.languageId !== 'asciidoc') {
             const errorMsg = 'No active AsciiDoc document';
-            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            logger?.error(`Failed in ${commandName}: ${errorMsg}`);
             vscode.window.showWarningMessage(errorMsg);
             return;
         }
 
         try {
             const documentUri = activeEditor.document.uri.toString();
-            outputChannel?.appendLine(`Command ${commandName} parameters: {documentUri: ${documentUri}, serverCommand: "asciidoc.generate2"}`);
+            logger?.debug(`${commandName} parameters: {documentUri: ${documentUri}, serverCommand: "asciidoc.generate2"}`);
             const result = await vscode.commands.executeCommand('asciidoc.generate2', documentUri);
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms: ${result}`);
+            logger?.debug(`Exiting ${commandName}: ${result}`);
             vscode.window.showInformationMessage(`Code generation result: ${result}`);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            logger?.error(`Failed in ${commandName}: ${errorMessage}`);
             vscode.window.showErrorMessage(`Code generation failed: ${errorMessage}`);
         }
     });
@@ -452,7 +437,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
         });
         if (selected) {
             await vscode.workspace.getConfiguration().update('asciidoc.logging.level', selected, vscode.ConfigurationTarget.Workspace);
-            outputChannel?.appendLine(`Logging level changed to: ${selected}`);
+            logger?.debug(`Logging level changed to: ${selected}`);
             vscode.window.showInformationMessage(`AsciiDoc logging level set to ${selected}`);
         }
     });
@@ -468,7 +453,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
 
     const clearLogsCommand = vscode.commands.registerCommand('asciidoc.logging.clearLogs', () => {
         outputChannel?.clear();
-        outputChannel?.appendLine('Extension logs cleared');
+        logger?.debug('Extension logs cleared');
         vscode.window.showInformationMessage('AsciiDoc extension logs cleared');
     });
 
@@ -498,12 +483,11 @@ function registerCommands(context: vscode.ExtensionContext): void {
     // Add workspace validation command
     const validateWorkspaceCommand = vscode.commands.registerCommand('asciidoc.server.validateWorkspace', async () => {
         const commandName = 'asciidoc.server.validateWorkspace';
-        const startTime = Date.now();
-        outputChannel?.appendLine(`Executing command: ${commandName} with parameters: {}`);
+        logger?.debug(`Entering ${commandName}`);
 
         if (!serverLauncher) {
             const errorMsg = 'AsciiDoc Language Server is not running';
-            outputChannel?.appendLine(`Command ${commandName} failed: ${errorMsg}`);
+            logger?.error(`Failed in ${commandName}: ${errorMsg}`);
             vscode.window.showWarningMessage(errorMsg);
             return;
         }
@@ -525,21 +509,21 @@ function registerCommands(context: vscode.ExtensionContext): void {
                     const folderFiles = await vscode.workspace.findFiles(pattern, excludePatterns);
                     asciidocFiles = asciidocFiles.concat(folderFiles);
                 }
-                outputChannel?.appendLine(`Command ${commandName} discovered files across ${vscode.workspace.workspaceFolders.length} workspace folders`);
+                logger?.debug(`${commandName} discovered files across ${vscode.workspace.workspaceFolders.length} workspace folders`);
             } else {
                 // Fallback to global search if no workspace folders
                 asciidocFiles = await vscode.workspace.findFiles('**/*.asciidoc', excludePatterns);
-                outputChannel?.appendLine(`Command ${commandName} discovered files using global search`);
+                logger?.debug(`${commandName} discovered files using global search`);
             }
 
             if (asciidocFiles.length === 0) {
                 const warningMsg = 'No AsciiDoc files found in workspace';
-                outputChannel?.appendLine(`Command ${commandName} warning: ${warningMsg}`);
+                logger?.debug(`Exiting ${commandName}: ${warningMsg}`);
                 vscode.window.showInformationMessage(warningMsg);
                 return;
             }
 
-            outputChannel?.appendLine(`Command ${commandName} parameters: {fileCount: ${asciidocFiles.length}, action: "trigger diagnostics via didChange"}`);
+            logger?.debug(`${commandName} parameters: {fileCount: ${asciidocFiles.length}, action: "trigger diagnostics via didChange"}`);
 
             // Show progress notification
             await vscode.window.withProgress({
@@ -557,7 +541,7 @@ function registerCommands(context: vscode.ExtensionContext): void {
 
                 for (const file of asciidocFiles) {
                     if (token.isCancellationRequested) {
-                        outputChannel?.appendLine(`Command ${commandName} cancelled by user after processing ${processedCount} files`);
+                        logger?.debug(`Exiting ${commandName}: cancelled by user after processing ${processedCount} files`);
                         return;
                     }
 
@@ -586,11 +570,11 @@ function registerCommands(context: vscode.ExtensionContext): void {
                                         text: document.getText()
                                     }
                                 });
-                                outputChannel?.appendLine(`Command ${commandName} sent didOpen for unopened file: ${fileName}`);
+                                logger?.debug(`${commandName} sent didOpen for unopened file: ${fileName}`);
                                 documentVersion = 2; // Increment for next notification
                             } catch (openError) {
                                 const openErrorMessage = openError instanceof Error ? openError.message : 'Unknown error';
-                                outputChannel?.appendLine(`Command ${commandName} failed to open document ${fileName}: ${openErrorMessage}`);
+                                logger?.error(`Failed in ${commandName} to open document ${fileName}: ${openErrorMessage}`);
                                 // Continue with didChange even if didOpen fails
                             }
                         } else {
@@ -610,31 +594,29 @@ function registerCommands(context: vscode.ExtensionContext): void {
                                     text: document.getText()
                                 }]
                             });
-                            outputChannel?.appendLine(`Command ${commandName} sent didChange to trigger diagnostics for: ${fileName}`);
+                            logger?.debug(`${commandName} sent didChange to trigger diagnostics for: ${fileName}`);
                         } catch (changeError) {
                             const changeErrorMessage = changeError instanceof Error ? changeError.message : 'Unknown error';
-                            outputChannel?.appendLine(`Command ${commandName} failed to send didChange for ${fileName}: ${changeErrorMessage}`);
+                            logger?.error(`Failed in ${commandName} to send didChange for ${fileName}: ${changeErrorMessage}`);
                         }
 
                         // Small delay to prevent overwhelming the language server
                         await new Promise(resolve => setTimeout(resolve, 10));
 
                         processedCount++;
-                        outputChannel?.appendLine(`Command ${commandName} triggered diagnostics for file ${processedCount}/${asciidocFiles.length}: ${fileName}`);
+                        logger?.debug(`${commandName} triggered diagnostics for file ${processedCount}/${asciidocFiles.length}: ${fileName}`);
                     } catch (fileError) {
                         const errorMessage = fileError instanceof Error ? fileError.message : 'Unknown error';
-                        outputChannel?.appendLine(`Command ${commandName} file error for ${file.fsPath}: ${errorMessage}`);
+                        logger?.error(`Failed in ${commandName} for file ${file.fsPath}: ${errorMessage}`);
                     }
                 }
 
-                const duration = Date.now() - startTime;
-                outputChannel?.appendLine(`Command ${commandName} completed successfully in ${duration}ms: processed ${processedCount} files`);
+                logger?.debug(`Exiting ${commandName}: processed ${processedCount} files`);
                 vscode.window.showInformationMessage(`Workspace diagnostics triggered: ${processedCount} AsciiDoc files processed`);
             });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const duration = Date.now() - startTime;
-            outputChannel?.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            logger?.error(`Failed in ${commandName}: ${errorMessage}`);
             vscode.window.showErrorMessage(`Workspace diagnostic triggering failed: ${errorMessage}`);
         }
     });
@@ -654,13 +636,13 @@ function registerCommands(context: vscode.ExtensionContext): void {
         exportLogsCommand
     );
 
-    outputChannel?.appendLine('Commands registered successfully (including enhanced server management)');
+    logger?.debug('Commands registered successfully (including enhanced server management)');
 
     // Setup capability change handler if server launcher exists
     if (serverLauncher) {
         const communicationService = serverLauncher.getCommunicationService();
         communicationService.onCapabilityChange((_capabilities: ExtendedServerCapabilities) => {
-            outputChannel?.appendLine('Extension: Server capabilities updated');
+            logger?.debug('Server capabilities updated');
 
             // Update status bar with capability information if desired
             if (statusBarItem && configurationService) {
@@ -680,7 +662,7 @@ function setupConfigurationChangeHandlers(context: vscode.ExtensionContext): voi
     }
 
     const configChangeHandler = configurationService.onConfigurationChange(async (event: ConfigurationChangeEvent) => {
-        outputChannel?.appendLine(`Configuration change detected: ${event.changed.join(', ')}`);
+        logger?.debug(`Configuration change detected: ${event.changed.join(', ')}`);
 
         // Handle UI changes immediately
         if (event.changed.some(key => key.startsWith('ui.'))) {
@@ -696,7 +678,7 @@ function setupConfigurationChangeHandlers(context: vscode.ExtensionContext): voi
         // Handle language server changes
         if (event.affectsLanguageServer) {
             if (event.requiresRestart && event.newConfig.languageServer.restartOnConfigChange) {
-                outputChannel?.appendLine('Configuration change requires language server restart');
+                logger?.debug('Configuration change requires language server restart');
 
                 if (event.newConfig.ui.notifications.info) {
                     vscode.window.showInformationMessage('Restarting AsciiDoc language server due to configuration changes...');
@@ -708,14 +690,14 @@ function setupConfigurationChangeHandlers(context: vscode.ExtensionContext): voi
                     }
                 } catch (error) {
                     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                    outputChannel?.appendLine(`Failed to restart language server: ${errorMessage}`);
+                    logger?.error(`Failed in configuration handler to restart language server: ${errorMessage}`);
 
                     if (event.newConfig.ui.notifications.errors) {
                         vscode.window.showErrorMessage(`Failed to restart AsciiDoc language server: ${errorMessage}`);
                     }
                 }
             } else {
-                outputChannel?.appendLine('Configuration change affects language server but restart not required or disabled');
+                logger?.debug('Configuration change affects language server but restart not required or disabled');
             }
         }
     });
@@ -728,7 +710,7 @@ function setupConfigurationChangeHandlers(context: vscode.ExtensionContext): voi
  */
 async function restartServerLauncher(context: vscode.ExtensionContext, configuration: AsciidocConfiguration): Promise<void> {
     if (serverLauncher) {
-        outputChannel?.appendLine('Restarting server launcher with new configuration...');
+        logger?.debug('Entering restartServerLauncher');
 
         // Create client options for restart
         const clientOptions: LanguageClientOptions = createClientOptions(configuration);
@@ -745,9 +727,9 @@ async function restartServerLauncher(context: vscode.ExtensionContext, configura
             client.setTrace(trace);
         }
 
-        outputChannel?.appendLine('Server launcher restarted successfully');
+        logger?.debug('Exiting restartServerLauncher');
     } else {
-        outputChannel?.appendLine('No server launcher to restart, initializing new one...');
+        logger?.debug('No server launcher to restart, initializing new one...');
         initializeServerLauncher(context, configuration);
     }
 }

@@ -7,6 +7,7 @@
 import * as vscode from 'vscode';
 import { LanguageClient, ServerCapabilities, ErrorHandler, ErrorAction, CloseAction, Message, ErrorHandlerResult, CloseHandlerResult, State } from 'vscode-languageclient/node';
 import { AsciidocConfiguration } from './configurationService';
+import { createLogger, Logger } from './asciiDocLogger';
 
 /**
  * Connection retry configuration
@@ -52,16 +53,18 @@ export interface ConnectionStatus {
 export class CommunicationService {
     private client: LanguageClient | undefined;
     private outputChannel: vscode.OutputChannel;
+    private logger: Logger;
     private configuration: AsciidocConfiguration;
     private connectionStatus: ConnectionStatus;
     private retryTimer: NodeJS.Timeout | undefined;
     private capabilityChangeHandlers: ((capabilities: ExtendedServerCapabilities) => void)[] = [];
-    
+
     constructor(
         outputChannel: vscode.OutputChannel,
         configuration: AsciidocConfiguration
     ) {
         this.outputChannel = outputChannel;
+        this.logger = createLogger(outputChannel, 'CommunicationService');
         this.configuration = configuration;
         this.connectionStatus = {
             isConnected: false,
@@ -73,24 +76,21 @@ export class CommunicationService {
      * Enhanced connection setup with timeout and retry logic (2.2.1)
      */
     public async setupConnection(client: LanguageClient): Promise<void> {
-        const commandName = 'setupConnection';
-        const startTime = Date.now();
-        
         this.client = client;
-        this.outputChannel.appendLine(`Executing command: ${commandName} with parameters: {clientName: ${client.name || 'AsciiDoc Language Client'}}`);
+        this.logger.debug(`Entering setupConnection for client: ${client.name || 'AsciiDoc Language Client'}`);
 
         // Configure enhanced error handling
         this.setupErrorHandling();
-        
+
         // Setup LSP request/response logging
         this.setupLSPLogging();
-        
+
         // Setup LSP lifecycle event logging
         this.setupLSPLifecycleLogging();
-        
+
         // Configure connection timeout
         const retryConfig = this.createRetryConfiguration();
-        this.outputChannel.appendLine(`Command ${commandName} retry config: ${JSON.stringify(retryConfig)}`);
+        this.logger.debug(`setupConnection retry config: ${JSON.stringify(retryConfig)}`);
         
         try {
             await this.connectWithRetry(retryConfig);
@@ -100,13 +100,11 @@ export class CommunicationService {
             
             // Detect server capabilities once connected
             await this.detectServerCapabilities();
-            
-            const duration = Date.now() - startTime;
-            this.outputChannel.appendLine(`Command ${commandName} completed successfully in ${duration}ms`);
+
+            this.logger.debug(`Exiting setupConnection`);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown connection error';
-            const duration = Date.now() - startTime;
-            this.outputChannel.appendLine(`Command ${commandName} failed after ${duration}ms: ${errorMessage}`);
+            this.logger.error(`Failed in setupConnection: ${errorMessage}`);
             this.connectionStatus.lastError = errorMessage;
             throw error;
         }
@@ -122,7 +120,7 @@ export class CommunicationService {
 
         // Custom error handler with enhanced error propagation
         this.client.onDidChangeState((event) => {
-            this.outputChannel.appendLine(`CommunicationService: Client state changed from ${event.oldState} to ${event.newState}`);
+            this.logger.debug(` Client state changed from ${event.oldState} to ${event.newState}`);
             
             if (event.newState === 2) { // Stopped state
                 this.connectionStatus.isConnected = false;
@@ -136,7 +134,7 @@ export class CommunicationService {
         // Custom error handler
         const errorHandler: ErrorHandler = {
             error: (error: Error, message: Message | undefined, count: number | undefined): ErrorHandlerResult => {
-                this.outputChannel.appendLine(`CommunicationService: Server error - ${error.message}`);
+                this.logger.debug(` Server error - ${error.message}`);
                 
                 // Propagate error with context
                 this.propagateError(error, message, count);
@@ -145,7 +143,7 @@ export class CommunicationService {
                 return { action: this.determineErrorAction(error, count) };
             },
             closed: (): CloseHandlerResult => {
-                this.outputChannel.appendLine('CommunicationService: Server connection closed');
+                this.logger.debug(' Server connection closed');
                 this.connectionStatus.isConnected = false;
                 
                 // Show user-friendly notification
@@ -179,7 +177,7 @@ export class CommunicationService {
         }
 
         try {
-            this.outputChannel.appendLine('CommunicationService: Detecting server capabilities...');
+            this.logger.debug(' Detecting server capabilities...');
             
             // Wait for client to be ready
             await this.client.start();
@@ -187,7 +185,7 @@ export class CommunicationService {
             // Get server capabilities
             const capabilities = this.client.initializeResult?.capabilities as ExtendedServerCapabilities;
             if (!capabilities) {
-                this.outputChannel.appendLine('CommunicationService: Warning - No server capabilities detected');
+                this.logger.debug(' Warning - No server capabilities detected');
                 return;
             }
 
@@ -199,12 +197,7 @@ export class CommunicationService {
             // Check for extended AsciiDoc capabilities
             const asciidocFeatures = capabilities.experimental?.asciidocFeatures;
             if (asciidocFeatures) {
-                this.outputChannel.appendLine('CommunicationService: Extended AsciiDoc features detected:');
-                this.outputChannel.appendLine(`  - Custom Validation: ${asciidocFeatures.customValidation ? 'Yes' : 'No'}`);
-                this.outputChannel.appendLine(`  - Advanced Formatting: ${asciidocFeatures.advancedFormatting ? 'Yes' : 'No'}`);
-                this.outputChannel.appendLine(`  - Table Support: ${asciidocFeatures.tableSupport ? 'Yes' : 'No'}`);
-                this.outputChannel.appendLine(`  - Cross References: ${asciidocFeatures.crossReferences ? 'Yes' : 'No'}`);
-                this.outputChannel.appendLine(`  - Document Generation: ${asciidocFeatures.documentGeneration ? 'Yes' : 'No'}`);
+                this.logger.debug(`Extended AsciiDoc features: customValidation=${asciidocFeatures.customValidation}, advancedFormatting=${asciidocFeatures.advancedFormatting}, tableSupport=${asciidocFeatures.tableSupport}, crossReferences=${asciidocFeatures.crossReferences}, documentGeneration=${asciidocFeatures.documentGeneration}`);
             }
 
             // Apply feature toggles based on capabilities
@@ -213,11 +206,11 @@ export class CommunicationService {
             // Notify capability change handlers
             this.notifyCapabilityChange(capabilities);
             
-            this.outputChannel.appendLine('CommunicationService: Server capabilities detection completed');
+            this.logger.debug(' Server capabilities detection completed');
             
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            this.outputChannel.appendLine(`CommunicationService: Error detecting capabilities: ${errorMessage}`);
+            this.logger.debug(` Error detecting capabilities: ${errorMessage}`);
         }
     }
 
@@ -230,7 +223,7 @@ export class CommunicationService {
             return;
         }
 
-        this.outputChannel.appendLine('CommunicationService: Setting up diagnostic handling for proper VSCode integration');
+        this.logger.debug(' Setting up diagnostic handling for proper VSCode integration');
         
         // Ensure diagnostic collection is properly set up
         // The language client handles most diagnostic processing automatically,
@@ -244,10 +237,10 @@ export class CommunicationService {
         if (this.configuration.debug.verboseLogging) {
             // Note: These are internal requests that we can't directly intercept,
             // but we can add general LSP communication monitoring
-            this.outputChannel.appendLine('CommunicationService: Verbose LSP communication logging enabled');
+            this.logger.debug(' Verbose LSP communication logging enabled');
         }
         
-        this.outputChannel.appendLine('CommunicationService: Diagnostic handling setup completed');
+        this.logger.debug(' Diagnostic handling setup completed');
     }
 
     /**
@@ -282,7 +275,7 @@ export class CommunicationService {
      */
     public updateConfiguration(config: AsciidocConfiguration): void {
         this.configuration = config;
-        this.outputChannel.appendLine('CommunicationService: Configuration updated');
+        this.logger.debug(' Configuration updated');
     }
 
     /**
@@ -311,7 +304,7 @@ export class CommunicationService {
 
         while (attempt <= retryConfig.maxRetries) {
             try {
-                this.outputChannel.appendLine(`CommunicationService: Connection attempt ${attempt + 1}/${retryConfig.maxRetries + 1}`);
+                this.logger.debug(` Connection attempt ${attempt + 1}/${retryConfig.maxRetries + 1}`);
                 
                 // Create timeout promise
                 const timeoutPromise = new Promise<never>((_, reject) => {
@@ -329,18 +322,18 @@ export class CommunicationService {
                 // Client should be ready after start() completes
                 // No need for additional ready check in the connection retry logic
 
-                this.outputChannel.appendLine(`CommunicationService: Connection established on attempt ${attempt + 1}`);
+                this.logger.debug(` Connection established on attempt ${attempt + 1}`);
                 return; // Success
                 
             } catch (error) {
                 lastError = error instanceof Error ? error : new Error('Unknown connection error');
                 attempt++;
                 
-                this.outputChannel.appendLine(`CommunicationService: Attempt ${attempt} failed: ${lastError.message}`);
+                this.logger.debug(` Attempt ${attempt} failed: ${lastError.message}`);
                 
                 if (attempt <= retryConfig.maxRetries) {
                     const delay = this.calculateRetryDelay(attempt, retryConfig);
-                    this.outputChannel.appendLine(`CommunicationService: Retrying in ${delay}ms...`);
+                    this.logger.debug(` Retrying in ${delay}ms...`);
                     await this.delay(delay);
                 }
             }
@@ -379,7 +372,7 @@ export class CommunicationService {
         };
 
         // Log detailed error
-        this.outputChannel.appendLine(`CommunicationService: Detailed error context: ${JSON.stringify(errorContext, null, 2)}`);
+        this.logger.debug(` Detailed error context: ${JSON.stringify(errorContext, null, 2)}`);
         
         // Show user-friendly error notification based on error type
         const userMessage = this.createUserFriendlyErrorMessage(error, message);
@@ -451,7 +444,7 @@ export class CommunicationService {
      * Handle connection loss
      */
     private handleConnectionLoss(): void {
-        this.outputChannel.appendLine('CommunicationService: Handling connection loss...');
+        this.logger.debug(' Handling connection loss...');
         
         // Clear retry timer if exists
         if (this.retryTimer) {
@@ -469,7 +462,7 @@ export class CommunicationService {
         const retryConfig = this.createRetryConfiguration();
         const delay = this.calculateRetryDelay(this.connectionStatus.retryCount + 1, retryConfig);
         
-        this.outputChannel.appendLine(`CommunicationService: Scheduling reconnection in ${delay}ms...`);
+        this.logger.debug(` Scheduling reconnection in ${delay}ms...`);
         
         this.retryTimer = setTimeout(() => {
             this.attemptReconnection();
@@ -485,7 +478,7 @@ export class CommunicationService {
         }
 
         try {
-            this.outputChannel.appendLine('CommunicationService: Attempting automatic reconnection...');
+            this.logger.debug(' Attempting automatic reconnection...');
             this.connectionStatus.retryCount++;
             
             const retryConfig = this.createRetryConfiguration();
@@ -498,7 +491,7 @@ export class CommunicationService {
             // Re-detect capabilities
             await this.detectServerCapabilities();
             
-            this.outputChannel.appendLine('CommunicationService: Automatic reconnection successful');
+            this.logger.debug(' Automatic reconnection successful');
             
             if (this.configuration.ui.notifications.info) {
                 vscode.window.showInformationMessage('AsciiDoc Language Server reconnected successfully');
@@ -506,13 +499,13 @@ export class CommunicationService {
             
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            this.outputChannel.appendLine(`CommunicationService: Reconnection failed: ${errorMessage}`);
+            this.logger.debug(` Reconnection failed: ${errorMessage}`);
             
             // Schedule another attempt if under retry limit
             if (this.connectionStatus.retryCount < this.createRetryConfiguration().maxRetries) {
                 this.scheduleReconnection();
             } else {
-                this.outputChannel.appendLine('CommunicationService: Max reconnection attempts reached');
+                this.logger.debug(' Max reconnection attempts reached');
                 if (this.configuration.ui.notifications.errors) {
                     vscode.window.showErrorMessage('Failed to reconnect to AsciiDoc Language Server after multiple attempts.');
                 }
@@ -528,11 +521,11 @@ export class CommunicationService {
             return;
         }
 
-        this.outputChannel.appendLine('CommunicationService: Setting up comprehensive LSP request/response logging');
-        this.outputChannel.appendLine(`CommunicationService: Current logging level: ${this.configuration.logging.level}`);
-        this.outputChannel.appendLine(`CommunicationService: Log requests: ${this.configuration.logging.logRequests}`);
-        this.outputChannel.appendLine(`CommunicationService: Log responses: ${this.configuration.logging.logResponses}`);
-        this.outputChannel.appendLine(`CommunicationService: Log notifications: ${this.configuration.logging.logNotifications}`);
+        this.logger.debug(' Setting up comprehensive LSP request/response logging');
+        this.logger.debug(` Current logging level: ${this.configuration.logging.level}`);
+        this.logger.debug(` Log requests: ${this.configuration.logging.logRequests}`);
+        this.logger.debug(` Log responses: ${this.configuration.logging.logResponses}`);
+        this.logger.debug(` Log notifications: ${this.configuration.logging.logNotifications}`);
 
         // Store reference to client for logging purposes
         const client = this.client;
@@ -661,7 +654,7 @@ export class CommunicationService {
             return originalSendNotification(type, params);
         };
 
-        this.outputChannel.appendLine('CommunicationService: LSP request/response logging setup completed');
+        this.logger.debug(' LSP request/response logging setup completed');
     }
 
 
@@ -673,7 +666,7 @@ export class CommunicationService {
             return;
         }
 
-        this.outputChannel.appendLine('CommunicationService: Setting up LSP lifecycle event logging');
+        this.logger.debug(' Setting up LSP lifecycle event logging');
 
         // Log client state changes
         this.client.onDidChangeState((stateChangeEvent) => {
@@ -708,7 +701,7 @@ export class CommunicationService {
             }
         });
 
-        this.outputChannel.appendLine('CommunicationService: LSP lifecycle event logging setup completed');
+        this.logger.debug(' LSP lifecycle event logging setup completed');
     }
 
     /**
@@ -719,7 +712,7 @@ export class CommunicationService {
             return;
         }
 
-        this.outputChannel.appendLine('CommunicationService: Setting up enhanced notification handlers');
+        this.logger.debug(' Setting up enhanced notification handlers');
 
         // Custom notification for server status
         this.client.onNotification('asciidoc/serverStatus', (params: any) => {
@@ -788,24 +781,14 @@ export class CommunicationService {
         // Note: We do NOT intercept textDocument/publishDiagnostics here as it prevents 
         // VSCode from properly displaying diagnostics. The language client handles this automatically.
         
-        this.outputChannel.appendLine('CommunicationService: Enhanced notification handlers setup completed');
+        this.logger.debug(' Enhanced notification handlers setup completed');
     }
 
     /**
      * Log server capabilities
      */
     private logServerCapabilities(capabilities: ExtendedServerCapabilities): void {
-        this.outputChannel.appendLine('CommunicationService: Server capabilities detected:');
-        this.outputChannel.appendLine(`  - Text Document Sync: ${capabilities.textDocumentSync ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - Completion Provider: ${capabilities.completionProvider ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - Hover Provider: ${capabilities.hoverProvider ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - Definition Provider: ${capabilities.definitionProvider ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - References Provider: ${capabilities.referencesProvider ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - Document Symbol Provider: ${capabilities.documentSymbolProvider ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - Code Action Provider: ${capabilities.codeActionProvider ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - Document Formatting: ${capabilities.documentFormattingProvider ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - Range Formatting: ${capabilities.documentRangeFormattingProvider ? 'Yes' : 'No'}`);
-        this.outputChannel.appendLine(`  - Rename Provider: ${capabilities.renameProvider ? 'Yes' : 'No'}`);
+        this.logger.debug(`Server capabilities: textDocumentSync=${!!capabilities.textDocumentSync}, completionProvider=${!!capabilities.completionProvider}, hoverProvider=${!!capabilities.hoverProvider}, definitionProvider=${!!capabilities.definitionProvider}, referencesProvider=${!!capabilities.referencesProvider}, documentSymbolProvider=${!!capabilities.documentSymbolProvider}, codeActionProvider=${!!capabilities.codeActionProvider}, documentFormattingProvider=${!!capabilities.documentFormattingProvider}, documentRangeFormattingProvider=${!!capabilities.documentRangeFormattingProvider}, renameProvider=${!!capabilities.renameProvider}`);
     }
 
     /**
@@ -814,21 +797,21 @@ export class CommunicationService {
     private applyFeatureToggles(capabilities: ExtendedServerCapabilities): void {
         // Disable features in configuration if server doesn't support them
         if (!capabilities.completionProvider && this.configuration.features.completion.enabled) {
-            this.outputChannel.appendLine('CommunicationService: Disabling completion - not supported by server');
+            this.logger.debug(' Disabling completion - not supported by server');
         }
         
         if (!capabilities.hoverProvider && this.configuration.features.hover.enabled) {
-            this.outputChannel.appendLine('CommunicationService: Disabling hover - not supported by server');
+            this.logger.debug(' Disabling hover - not supported by server');
         }
         
         if (!capabilities.documentFormattingProvider && this.configuration.features.formatting.enabled) {
-            this.outputChannel.appendLine('CommunicationService: Disabling formatting - not supported by server');
+            this.logger.debug(' Disabling formatting - not supported by server');
         }
 
         // Enable advanced features if server supports them
         const asciidocFeatures = capabilities.experimental?.asciidocFeatures;
         if (asciidocFeatures?.customValidation) {
-            this.outputChannel.appendLine('CommunicationService: Enabling custom validation features');
+            this.logger.debug(' Enabling custom validation features');
         }
     }
 
@@ -840,7 +823,7 @@ export class CommunicationService {
             try {
                 handler(capabilities);
             } catch (error) {
-                this.outputChannel.appendLine(`CommunicationService: Error in capability change handler: ${error}`);
+                this.logger.debug(` Error in capability change handler: ${error}`);
             }
         });
     }

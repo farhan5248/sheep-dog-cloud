@@ -35,24 +35,47 @@ Exception handling for Xtext Language Server integration. See [arch-xtext-loggin
 
 Logging patterns for the VS Code extension (xtextasciidocplugin.vscode).
 
-**Framework**: VS Code OutputChannel API (built-in, no external library)
+**Framework**: VS Code OutputChannel API with `asciiDocLogger.ts` helper module
 
 See [arch-xtext-logging.md](../../../../arch-xtext-logging.md) "VS Code Extension Logging" section for when to add logging.
 
-### OutputChannel Initialization
+### Logger Initialization
+
+Use the `createLogger` factory function from `asciiDocLogger.ts`:
 
 **Example**
 ```typescript
-this.outputChannel = vscode.window.createOutputChannel(constants.OUTPUT_CHANNELS.EXTENSION);
+import { createLogger, Logger } from './asciiDocLogger';
+
+// In class:
+private logger: Logger;
+
+// In constructor:
+this.logger = createLogger(outputChannel, 'ModuleName');
 ```
 
 ### Entry/Exit Logging Pattern
 
-Methods use entry/exit logging following the same pattern as Java.
+Methods use entry/exit logging with `logger.debug()`:
 
-See [impl-vscode-outputchannel.md](../../../../impl-vscode-outputchannel.md) for entry, exit, and error logging patterns.
+**Example**
+```typescript
+this.logger.debug(`Entering startServer for timeout: ${configuration.timeout}`);
+// ... method body
+this.logger.debug(`Exiting startServer`);
+```
+
+See [impl-vscode-outputchannel.md](../../../../impl-vscode-outputchannel.md) for complete entry, exit, and error logging patterns.
 
 ### Error Logging Pattern
+
+Use `logger.error()` for Failed messages:
+
+**Example**
+```typescript
+const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+this.logger.error(`Failed in startServer: ${errorMessage}`);
+```
 
 See [impl-vscode-outputchannel.md](../../../../impl-vscode-outputchannel.md) "Error Logging Pattern" section.
 

@@ -4,6 +4,7 @@
 
 1. `uml-package.md` - Package and class naming patterns
 2. `uml-class-{Type}Impl.md` - Wrapper implementation patterns
+3. `uml-class-{Language}Logger.md` - Logger wrapper
 3. `uml-class-{Language}Validator.md` - Validator check methods and constants
 4. `uml-class-{Language}IdeQuickfixProvider.md` - Quick fix methods for Language Server
 5. `uml-class-{Language}IdeContentProposalProvider.md` - Content assist complete methods for Language Server

@@ -2,7 +2,7 @@
 
 ## complete{Type}_{Assignment} methods invoke helper complete{Assignment} methods
 
-**Content**
+
 
 All `complete{Type}_{Assignment}` methods either invoke a helper method or directly invoke the IssueResolver.
 
@@ -17,7 +17,7 @@ public void complete{Type}_{Assignment}({TypeClass} model, Assignment assignment
 
 ## complete{Assignment} helper methods invoke {Type}IssueResolver.suggest{Assignment} methods
 
-**Content**
+
 
 Both helper/complete methods properly delegate to their corresponding `IssueResolver.suggest*` methods.
 

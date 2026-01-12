@@ -2,7 +2,7 @@
 
 ## getConfiguration function reads VS Code settings
 
-**Content**
+
 
 Retrieves extension configuration from VS Code workspace settings.
 
@@ -18,7 +18,7 @@ export function getConfiguration(): ExtensionConfiguration
 
 ## onConfigurationChanged function handles settings updates
 
-**Content**
+
 
 Listens for configuration changes and applies updates.
 

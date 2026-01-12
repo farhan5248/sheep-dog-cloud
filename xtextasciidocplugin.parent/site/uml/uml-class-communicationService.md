@@ -2,7 +2,7 @@
 
 ## sendRequest function sends LSP requests to the server
 
-**Content**
+
 
 Sends custom requests to the language server.
 
@@ -17,7 +17,7 @@ export function sendRequest(client: LanguageClient, method: string, params: any)
 
 ## registerNotificationHandlers function sets up notification listeners
 
-**Content**
+
 
 Registers handlers for custom notifications from the language server.
 

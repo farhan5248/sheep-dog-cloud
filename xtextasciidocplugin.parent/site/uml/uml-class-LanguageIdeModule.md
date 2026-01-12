@@ -2,7 +2,7 @@
 
 ## {Language}IdeModule extends Abstract{Language}IdeModule
 
-**Content**
+
 
 Extends Xtext-generated Abstract{Language}IdeModule base class.
 
@@ -16,7 +16,7 @@ public class {Language}IdeModule extends Abstract{Language}IdeModule
 
 ## {Language}IdeModule binds custom IDE services
 
-**Content**
+
 
 Overrides default bindings to provide custom implementations for:
 - Content assist (IdeContentProposalProvider)

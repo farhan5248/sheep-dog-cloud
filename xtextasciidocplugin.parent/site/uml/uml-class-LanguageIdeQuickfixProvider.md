@@ -2,13 +2,9 @@
 
 ## {Language}IdeQuickfixProvider has fix{Issue} methods for each check{Issue}
 
-**Content**
-
 There doesn't need to be a fix{Issue} method for every check{Issue} method.
 
 If a fix{Issue} method exists, there must be a corresponding check{Issue} method.
-
-Just because there is a check{Issue} method, doesn't mean a fix{Issue} method has to exist.
 
 **Examples**
 
@@ -18,8 +14,6 @@ public void fix{Type}{Aspect}{Issue}(final Issue issue, IssueResolutionAcceptor 
 ```
 
 ## All @Fix annotations in IdeQuickfixProvider exist in {Language}Validator
-
-**Content**
 
 There can be multiple @Fix annotations for one fix{Issue} method.
 
@@ -35,8 +29,6 @@ public void fix{Type}{Aspect}{Issue}(final Issue issue, IssueResolutionAcceptor 
 ```
 
 ## fix{Issue} methods invoke {Type}IssueResolver.correct{Issue} methods
-
-**Content**
 
 Each fix method delegates to the appropriate IssueResolver.correct* method to generate proposals.
 

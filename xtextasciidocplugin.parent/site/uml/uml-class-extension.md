@@ -2,7 +2,7 @@
 
 ## activate function initializes the VS Code extension
 
-**Content**
+
 
 Entry point called when VS Code activates the extension.
 
@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext)
 
 ## deactivate function cleans up the extension
 
-**Content**
+
 
 Called when VS Code deactivates the extension.
 

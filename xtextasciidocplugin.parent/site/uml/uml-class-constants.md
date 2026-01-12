@@ -2,7 +2,7 @@
 
 ## LANGUAGE_ID constant identifies the language
 
-**Content**
+
 
 Unique identifier for the DSL language.
 
@@ -16,7 +16,7 @@ export const LANGUAGE_ID = 'asciidoc'
 
 ## FILE_EXTENSIONS constant lists supported file extensions
 
-**Content**
+
 
 Array of file extensions associated with the language.
 
@@ -30,7 +30,7 @@ export const FILE_EXTENSIONS = ['.adoc', '.asciidoc']
 
 ## COMMAND_IDS constant defines custom command identifiers
 
-**Content**
+
 
 Constants for custom commands exposed by the extension.
 

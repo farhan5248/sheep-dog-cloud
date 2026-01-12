@@ -2,7 +2,7 @@
 
 ## startServer function launches the Xtext language server
 
-**Content**
+
 
 Spawns the Java language server process.
 
@@ -18,7 +18,7 @@ export function startServer(): ChildProcess
 
 ## getServerOptions function creates LSP server options
 
-**Content**
+
 
 Configures how the language client connects to the language server.
 

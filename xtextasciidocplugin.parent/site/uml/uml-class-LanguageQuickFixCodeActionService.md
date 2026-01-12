@@ -2,8 +2,6 @@
 
 ## {Language}QuickFixCodeActionService extends QuickFixCodeActionService
 
-**Content**
-
 Extends Xtext's QuickFixCodeActionService to provide code actions via Language Server Protocol.
 
 Bridges LSP code action requests to the IdeQuickfixProvider.
@@ -15,8 +13,6 @@ public class {Language}QuickFixCodeActionService extends QuickFixCodeActionServi
 ```
 
 ## getCodeActions method handles LSP CodeAction requests
-
-**Content**
 
 Receives code action requests from the VS Code client and delegates to IdeQuickfixProvider.
 

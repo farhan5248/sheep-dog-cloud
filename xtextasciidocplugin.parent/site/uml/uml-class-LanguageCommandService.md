@@ -2,10 +2,6 @@
 
 ## {Language}CommandService extends IExecutableCommandService
 
-**Content**
-
-Implements custom command execution for the language server.
-
 Handles commands sent from VS Code client to the language server.
 
 **Examples**
@@ -15,8 +11,6 @@ public class {Language}CommandService implements IExecutableCommandService
 ```
 
 ## execute method handles custom LSP commands
-
-**Content**
 
 Receives command requests from VS Code and executes the appropriate action.
 
@@ -30,8 +24,6 @@ public Object execute(ExecuteCommandParams params, ILanguageServerAccess access,
 ```
 
 ## getCommands method returns supported command IDs
-
-**Content**
 
 Returns a list of command IDs that this service can handle.
 

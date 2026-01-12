@@ -2,7 +2,7 @@
 
 ## {Type}Impl implements I{Type} interface
 
-**Content**
+
 
 Wrapper classes implement framework-independent interfaces from org.farhan.dsl.lang.
 
@@ -20,7 +20,7 @@ public {ReturnType} get{Assignment}()
 
 ## {Type}Impl wraps EMF eObject
 
-**Content**
+
 
 Wrapper delegates to underlying Xtext-generated EMF object for data access.
 

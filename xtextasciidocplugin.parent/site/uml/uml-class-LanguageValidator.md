@@ -2,7 +2,7 @@
 
 ## {Language}Validator extends Abstract{Language}Validator
 
-**Content**
+
 
 Extends Xtext-generated Abstract{Language}Validator base class.
 
@@ -18,7 +18,7 @@ public class {Language}Validator extends Abstract{Language}Validator
 
 ## {Language}Validator has check{Type} for every validate{Issue}
 
-**Content**
+
 
 Only elements with validation infrastructure (Detector/Types) have check methods.
 
@@ -33,7 +33,7 @@ public void check{Type}{Aspect}({Type} element)
 
 ## {Language}Validator constants match {Type}IssueTypes enums
 
-**Content**
+
 
 The Validator contains constants for issues that have quick fixes.
 

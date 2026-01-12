@@ -1,6 +1,6 @@
 # UML Package Patterns
 
-## xtextasciidocplugin.vscode/src
+## xtextasciidocplugin.vscode
 
 ### extension
 

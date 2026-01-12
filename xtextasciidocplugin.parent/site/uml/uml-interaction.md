@@ -6,15 +6,7 @@ Logging patterns specific to xtextasciidocplugin that supplement [arch-logging.m
 
 **Framework**: VS Code Xtext uses SLF4J directly, which supports parameterized logging with `{}` placeholders.
 
-**When to add logging:**
-- All manually edited classes that call sheep-dog-test methods must have loggers
-- Generated classes (in src-gen/ and xtext-gen/) do NOT have loggers
-- Methods calling sheep-dog-test business logic use entry/exit debug logging
-
-**When entry/exit logging is required:**
-ALL methods that call sheep-dog-test business logic must include entry/exit debug logging for tracing execution flow. This includes:
-- Methods that directly call `*IssueDetector` or `*IssueResolver` classes
-- Methods that call `createAcceptor()` which delegates to `*Resolver` classes
+See [arch-xtext-logging.md](../../../../arch-xtext-logging.md) "When to Add Logging" section for when to add logging and entry/exit logging requirements.
 
 ### Logger Initialization
 
@@ -29,29 +21,11 @@ private static final Logger logger = LoggerFactory.getLogger({ClassName}.class);
 
 Methods that delegate to sheep-dog-test business logic use entry/exit debug logging.
 
-See [arch-logging.md](../../../../arch-logging.md) "SLF4J Projects (Parameterized Logging)" section for patterns.
-
-**Example**
-```java
-public void check{Type}{Aspect}({Type} element) {
-    logger.debug("check{Type}{Aspect} entry: {}", element.getName());
-    // ... business logic delegation
-    logger.debug("check{Type}{Aspect} exit");
-}
-```
+See [impl-slf4j.md](../../../../impl-slf4j.md) for entry, exit, and error logging patterns.
 
 ### Error Logging Pattern
 
-See [arch-logging.md](../../../../arch-logging.md) "Error Logging Pattern (SLF4J)" section.
-
-**Example**
-```java
-try {
-    // ... business logic
-} catch (Exception e) {
-    logger.error("check{Type}{Aspect} failed for: {}", element.getName(), e);
-}
-```
+See [impl-slf4j.md](../../../../impl-slf4j.md) "Error Logging Pattern" section.
 
 ## Java Exceptions
 
@@ -61,95 +35,27 @@ Exception handling for Xtext Language Server integration. See [arch-xtext-loggin
 
 Logging patterns for the VS Code extension (xtextasciidocplugin.vscode).
 
-**Framework**: VS Code extensions use console logging and VS Code Output Channels.
+**Framework**: VS Code OutputChannel API (built-in, no external library)
 
-**When to add logging:**
-- Extension activation/deactivation
-- Language server lifecycle events (start, stop, restart)
-- Configuration changes
-- Error conditions
+See [arch-xtext-logging.md](../../../../arch-xtext-logging.md) "VS Code Extension Logging" section for when to add logging.
 
-### Console Logging Pattern
-
-Use console methods for development debugging:
+### OutputChannel Initialization
 
 **Example**
 ```typescript
-console.log('Extension activated');
-console.debug('Server started with options:', options);
-console.error('Failed to start server:', error);
+this.outputChannel = vscode.window.createOutputChannel(constants.OUTPUT_CHANNELS.EXTENSION);
 ```
 
-### VS Code Output Channel Pattern
+### Entry/Exit Logging Pattern
 
-Use Output Channels for user-visible logging:
+Methods use entry/exit logging following the same pattern as Java.
 
-**Example**
-```typescript
-const outputChannel = vscode.window.createOutputChannel('AsciiDoc');
-outputChannel.appendLine('Language server started');
-outputChannel.show(); // Show output panel on errors
-```
+See [impl-vscode-outputchannel.md](../../../../impl-vscode-outputchannel.md) for entry, exit, and error logging patterns.
 
-### Async Error Handling Pattern
+### Error Logging Pattern
 
-Handle errors in async/await code:
-
-**Example**
-```typescript
-async function startServer(): Promise<void> {
-    try {
-        await client.start();
-        console.log('Language client started');
-    } catch (error) {
-        console.error('Failed to start language client:', error);
-        vscode.window.showErrorMessage('Failed to start AsciiDoc language server');
-    }
-}
-```
-
-### Promise Error Handling Pattern
-
-Handle errors in Promise chains:
-
-**Example**
-```typescript
-client.sendRequest('custom/command', params)
-    .then(result => {
-        console.debug('Command result:', result);
-    })
-    .catch(error => {
-        console.error('Command failed:', error);
-    });
-```
+See [impl-vscode-outputchannel.md](../../../../impl-vscode-outputchannel.md) "Error Logging Pattern" section.
 
 ## TypeScript Exceptions
 
-**Activation Errors**: Catch and log errors during extension activation to prevent silent failures.
-
-**Example**
-```typescript
-export async function activate(context: vscode.ExtensionContext): Promise<void> {
-    try {
-        // ... activation logic
-    } catch (error) {
-        console.error('Extension activation failed:', error);
-        throw error; // Re-throw to signal activation failure to VS Code
-    }
-}
-```
-
-**Deactivation Cleanup**: Ensure cleanup happens even if errors occur.
-
-**Example**
-```typescript
-export async function deactivate(): Promise<void> {
-    if (client) {
-        try {
-            await client.stop();
-        } catch (error) {
-            console.error('Error stopping client:', error);
-        }
-    }
-}
-```
+Exception handling for VS Code extension. See [arch-xtext-logging.md](../../../../arch-xtext-logging.md) "VS Code Extension Exception Handling" section for patterns.

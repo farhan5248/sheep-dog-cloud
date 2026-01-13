@@ -1,5 +1,6 @@
 package org.farhan.dsl.asciidoc.ide.quickfix;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
 import org.farhan.dsl.asciidoc.asciiDoc.Text;
 import org.farhan.dsl.asciidoc.impl.CellImpl;
+import org.farhan.dsl.asciidoc.impl.TestProjectImpl;
 import org.farhan.dsl.asciidoc.impl.TestStepContainerImpl;
 import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 import org.farhan.dsl.asciidoc.impl.TestSuiteImpl;
@@ -45,6 +47,8 @@ import org.farhan.dsl.issues.TestStepContainerIssueResolver;
 import org.farhan.dsl.issues.TestStepIssueResolver;
 import org.farhan.dsl.issues.TestSuiteIssueResolver;
 import org.farhan.dsl.issues.TextIssueResolver;
+import org.farhan.dsl.lang.ITestProject;
+import org.farhan.dsl.lang.SheepDogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +96,7 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 
 		try {
 			EObject eObject = getEObjectFromDiagnostic(options, diagnostic);
-			// Same-file fixes (non-WORKSPACE)
+			initProject(eObject.eResource());
 			if (AsciiDocValidator.CELL_NAME_ONLY.equals(code)) {
 				Cell cell = (Cell) eObject;
 				proposals = CellIssueResolver.correctNameOnly(new CellImpl(cell));
@@ -102,9 +106,7 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 			} else if (AsciiDocValidator.TEST_SUITE_NAME_ONLY.equals(code)) {
 				TestSuite suite = (TestSuite) eObject;
 				proposals = TestSuiteIssueResolver.correctNameOnly(new TestSuiteImpl(suite));
-			}
-			// Workspace fixes (WORKSPACE suffix)
-			else if (AsciiDocValidator.ROW_CELL_LIST_WORKSPACE.equals(code)) {
+			} else if (AsciiDocValidator.ROW_CELL_LIST_WORKSPACE.equals(code)) {
 				Row row = (Row) eObject;
 				proposals = RowIssueResolver
 						.correctCellListWorkspace(new TestStepImpl((TestStep) row.eContainer().eContainer()));
@@ -151,7 +153,9 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 					workspaceEdit.setDocumentChanges(List.of(Either.forLeft(textDocEdit)));
 				} else {
 					// Workspace edit: create new file
+					logger.debug("Creating new file for {}", p.getQualifiedName());
 					CreateFile createFile = getResourceOperation(p);
+					logger.debug("createFile.getUri() for {}", createFile.getUri());
 					VersionedTextDocumentIdentifier textDocId = new VersionedTextDocumentIdentifier();
 					textDocId.setUri(createFile.getUri());
 					textDocId.setVersion(null);
@@ -174,10 +178,22 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 
 	private CreateFile getResourceOperation(SheepDogIssueProposal p) {
 		CreateFile createFile = new CreateFile();
-		createFile.setUri(p.getQualifiedName());
+		TestProjectImpl testProject = (TestProjectImpl) SheepDogFactory.instance.createTestProject();
+		// TODO make a method in ITestProject to get a URI for a qualified name
+		createFile.setUri(
+				testProject.getName().replace("c:", "file:///c%3A") + "/" + testProject.layer2dir
+						+ "/" + p.getQualifiedName().replace(" ", "%20"));
 		createFile.setOptions(new CreateFileOptions());
 		createFile.getOptions().setOverwrite(true);
 		return createFile;
+	}
+
+	private void initProject(Resource resource) {
+		ITestProject parent = SheepDogFactory.instance.createTestProject();
+		String resourcePath = resource.getURI().toFileString().replace(File.separator, "/");
+		String projectPath = resourcePath.split("src/test/resources/asciidoc/specs/")[0].replace("/",
+				File.separator);
+		parent.setName(new File(projectPath).getAbsolutePath());
 	}
 
 	private TextDocumentEdit getTextDocumentEdit(Range range, SheepDogIssueProposal p,

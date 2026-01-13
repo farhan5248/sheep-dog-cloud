@@ -213,11 +213,9 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 
 	private void initProject(Resource resource) {
 		ITestProject parent = SheepDogFactory.instance.createTestProject();
-		if (parent.getName() == null) {
-			IFile resourceIFile = ResourcesPlugin.getWorkspace().getRoot()
-					.getFile(new Path(resource.getURI().toPlatformString(true)));
-			File resourceFile = new File(resourceIFile.getProject().getLocationURI());
-			parent.setName(resourceFile.getAbsolutePath());
-		}
+		String resourcePath = resource.getURI().toFileString().replace(File.separator, "/");
+		String projectPath = resourcePath.split("src/test/resources/asciidoc/specs/")[0].replace("/",
+				File.separator);
+		parent.setName(new File(projectPath).getAbsolutePath());
 	}
 }

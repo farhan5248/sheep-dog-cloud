@@ -70,17 +70,10 @@ public class AsciiDocGenerator extends AbstractGenerator {
 
 	private static void initProject(Resource resource) {
 		ITestProject parent = SheepDogFactory.instance.createTestProject();
-		if (parent.getName() == null) {
-			String resourcePath = resource.getURI().toFileString().replace(File.separator, "/");
-			File resourceFile = new File(resourcePath).getParentFile();
-			while (resourceFile != null && !new File(resourceFile, "pom.xml").exists()
-					&& !new File(resourceFile, "build.gradle").exists()) {
-				resourceFile = resourceFile.getParentFile();
-			}
-			if (resourceFile != null) {
-				parent.setName(resourceFile.getAbsolutePath());
-			}
-		}
+		String resourcePath = resource.getURI().toFileString().replace(File.separator, "/");
+		String projectPath = resourcePath.split("src/test/resources/asciidoc/specs/")[0].replace("/",
+				File.separator);
+		parent.setName(new File(projectPath).getAbsolutePath());
 	}
 
 }

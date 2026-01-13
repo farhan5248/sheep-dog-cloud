@@ -1,6 +1,6 @@
 # UML Package Patterns
 
-## xtextasciidocplugin.vscode
+## src
 
 ### extension
 
@@ -50,3 +50,10 @@
 
 **Examples:**
 - asciiDocLogger.ts
+
+## syntaxes
+
+### {Language}.tmLanguage
+
+**Examples:**
+- syntaxes/asciidoc.tmLanguage.json

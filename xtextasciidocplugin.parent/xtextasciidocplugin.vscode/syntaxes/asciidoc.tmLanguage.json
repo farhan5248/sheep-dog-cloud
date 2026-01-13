@@ -33,6 +33,14 @@
                 }
             ]
         },
+        "tags": {
+            "patterns": [
+                {
+                    "name": "entity.name.tag.sheepdog-asciidoc",
+                    "match": "@\\S+"
+                }
+            ]
+        },
         "comments": {
             "patterns": [
                 {
@@ -126,28 +134,8 @@
                             }
                         },
                         {
-                            "name": "markup.table.row.sheepdog-asciidoc",
-                            "begin": "^\\|",
-                            "end": "$",
-                            "beginCaptures": {
-                                "0": {
-                                    "name": "punctuation.definition.table.cell.sheepdog-asciidoc"
-                                }
-                            },
-                            "patterns": [
-                                {
-                                    "name": "markup.table.cell.sheepdog-asciidoc",
-                                    "match": "\\|([^|\\n]*)",
-                                    "captures": {
-                                        "0": {
-                                            "name": "punctuation.definition.table.cell.sheepdog-asciidoc"
-                                        },
-                                        "1": {
-                                            "name": "string.unquoted.table.cell.sheepdog-asciidoc"
-                                        }
-                                    }
-                                }
-                            ]
+                            "name": "string.unquoted.table.cell.sheepdog-asciidoc",
+                            "match": "^\\|.+$"
                         }
                     ]
                 }
@@ -156,32 +144,20 @@
         "text-blocks": {
             "patterns": [
                 {
-                    "name": "markup.raw.block.sheepdog-asciidoc",
-                    "begin": "^\\+$",
-                    "end": "^(?!----)",
+                    "name": "markup.raw.content.sheepdog-asciidoc",
+                    "begin": "^----$",
+                    "end": "^----$",
                     "beginCaptures": {
                         "0": {
-                            "name": "punctuation.definition.raw.start.sheepdog-asciidoc"
+                            "name": "punctuation.definition.raw.delimiter.sheepdog-asciidoc"
                         }
                     },
-                    "patterns": [
-                        {
-                            "name": "markup.raw.content.sheepdog-asciidoc",
-                            "begin": "^----$",
-                            "end": "^----$",
-                            "beginCaptures": {
-                                "0": {
-                                    "name": "punctuation.definition.raw.delimiter.sheepdog-asciidoc"
-                                }
-                            },
-                            "endCaptures": {
-                                "0": {
-                                    "name": "punctuation.definition.raw.delimiter.sheepdog-asciidoc"
-                                }
-                            },
-                            "contentName": "string.unquoted.raw.text.sheepdog-asciidoc"
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.raw.delimiter.sheepdog-asciidoc"
                         }
-                    ]
+                    },
+                    "contentName": "string.unquoted.raw.text.sheepdog-asciidoc"
                 }
             ]
         },
@@ -226,7 +202,7 @@
             "patterns": [
                 {
                     "name": "markup.tag.sheepdog-asciidoc",
-                    "match": "\\b(@[a-zA-Z0-9_-]+)\\b",
+                    "match": "(@\\S+)",
                     "captures": {
                         "1": {
                             "name": "entity.name.tag.sheepdog-asciidoc"

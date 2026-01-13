@@ -364,6 +364,56 @@
                     "description": "Enable background processing for large documents"
                 }
             }
+        },
+        "configurationDefaults": {
+            "editor.tokenColorCustomizations": {
+                "textMateRules": [
+                    {
+                        "scope": "keyword.control.level1.sheepdog-asciidoc",
+                        "settings": { "foreground": "#400040", "fontStyle": "bold" }
+                    },
+                    {
+                        "scope": "keyword.control.level2.sheepdog-asciidoc",
+                        "settings": { "foreground": "#800080", "fontStyle": "bold" }
+                    },
+                    {
+                        "scope": "keyword.control.level3.sheepdog-asciidoc",
+                        "settings": { "foreground": "#800040", "fontStyle": "bold" }
+                    },
+                    {
+                        "scope": "comment.line.number-sign.sheepdog-asciidoc",
+                        "settings": { "foreground": "#FF8000", "fontStyle": "italic" }
+                    },
+                    {
+                        "scope": "entity.name.tag.sheepdog-asciidoc",
+                        "settings": { "foreground": "#FFC90E", "fontStyle": "bold" }
+                    },
+                    {
+                        "scope": "keyword.other.todo.sheepdog-asciidoc",
+                        "settings": { "foreground": "#00C0C0", "fontStyle": "bold italic" }
+                    },
+                    {
+                        "scope": "string.unquoted.statement.sheepdog-asciidoc",
+                        "settings": { "foreground": "#404040" }
+                    },
+                    {
+                        "scope": "string.unquoted.raw.text.sheepdog-asciidoc",
+                        "settings": { "foreground": "#804000" }
+                    },
+                    {
+                        "scope": ["string.unquoted.table.cell.sheepdog-asciidoc", "punctuation.definition.table.delimiter.sheepdog-asciidoc", "punctuation.definition.table.cell.sheepdog-asciidoc"],
+                        "settings": { "foreground": "#A349A4", "fontStyle": "bold" }
+                    },
+                    {
+                        "scope": "variable.parameter.sheepdog-asciidoc",
+                        "settings": { "foreground": "#00C0C0" }
+                    },
+                    {
+                        "scope": "entity.name.section.sheepdog-asciidoc",
+                        "settings": { "foreground": "#404040" }
+                    }
+                ]
+            }
         }
     },
     "devDependencies": {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.lsp4j.CodeAction;
@@ -29,7 +30,6 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.XtextResource;
 import org.farhan.dsl.asciidoc.asciiDoc.Cell;
-import org.farhan.dsl.asciidoc.asciiDoc.Row;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
@@ -107,9 +107,11 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 				TestSuite suite = (TestSuite) eObject;
 				proposals = TestSuiteIssueResolver.correctNameOnly(new TestSuiteImpl(suite));
 			} else if (AsciiDocValidator.ROW_CELL_LIST_WORKSPACE.equals(code)) {
-				Row row = (Row) eObject;
+				// TODO why does this need to be Cell and not Row? When it's a Row, there'a a class cast exception
+				Cell cell = (Cell) eObject;
+				// TODO why does RowIssueResolver need a TestStepImpl and not a RowImpl?
 				proposals = RowIssueResolver
-						.correctCellListWorkspace(new TestStepImpl((TestStep) row.eContainer().eContainer()));
+						.correctCellListWorkspace(new TestStepImpl((TestStep) cell.eContainer().eContainer().eContainer()));
 			} else if (AsciiDocValidator.TEST_STEP_STEP_OBJECT_NAME_WORKSPACE.equals(code)) {
 				TestStep step = (TestStep) eObject;
 				proposals = TestStepIssueResolver.correctStepObjectNameWorkspace(new TestStepImpl(step));
@@ -179,17 +181,16 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 	private CreateFile getResourceOperation(SheepDogIssueProposal p) {
 		CreateFile createFile = new CreateFile();
 		TestProjectImpl testProject = (TestProjectImpl) SheepDogFactory.instance.createTestProject();
-		// TODO make a method in ITestProject to get a URI for a qualified name
-		createFile.setUri(
-				testProject.getName().replace("c:", "file:///c%3A") + "/" + testProject.layer2dir
-						+ "/" + p.getQualifiedName().replace(" ", "%20"));
+		URI uri = URI.createFileURI(testProject.getName() + "/" + testProject.getStepDefsDir()
+				+ "/" + p.getQualifiedName());
+		createFile.setUri(uri.toString());
 		createFile.setOptions(new CreateFileOptions());
 		createFile.getOptions().setOverwrite(true);
 		return createFile;
 	}
 
 	private void initProject(Resource resource) {
-		ITestProject parent = SheepDogFactory.instance.createTestProject();
+		TestProjectImpl parent = (TestProjectImpl) SheepDogFactory.instance.createTestProject();
 		String resourcePath = resource.getURI().toFileString().replace(File.separator, "/");
 		String projectPath = resourcePath.split("src/test/resources/asciidoc/specs/")[0].replace("/",
 				File.separator);

@@ -7,10 +7,12 @@
 **Examples:**
 - AsciiDocIdeModule
 
-### {Language}CommandService
+## org.farhan.dsl.asciidoc.ide.generator
+
+### {Language}GeneratorCommandService
 
 **Examples:**
-- AsciiDocCommandService
+- AsciiDocGeneratorCommandService
 
 ## org.farhan.dsl.asciidoc.ide.contentassist
 

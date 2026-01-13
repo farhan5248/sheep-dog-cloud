@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -22,6 +24,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 
 public class StepObjectImpl implements IStepObject {
+	private static Logger logger = LoggerFactory.getLogger(StepObjectImpl.class);
 
 	private ITestProject parent;
 	StepObject eObject;

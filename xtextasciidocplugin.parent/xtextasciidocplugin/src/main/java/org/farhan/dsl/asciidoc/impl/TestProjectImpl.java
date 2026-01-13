@@ -2,7 +2,8 @@ package org.farhan.dsl.asciidoc.impl;
 
 import java.io.File;
 import java.util.ArrayList;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.farhan.dsl.lang.IResourceRepository;
 import org.farhan.dsl.lang.IStepObject;
 import org.farhan.dsl.lang.ITestProject;
@@ -11,11 +12,15 @@ import org.farhan.dsl.lang.SheepDogFactory;
 
 public class TestProjectImpl implements ITestProject {
 
-	private static Logger logger = Logger.getLogger(TestProjectImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(TestProjectImpl.class);
 
 	private IResourceRepository sr;
 	private String projectPath;
-	public final String layer2dir;
+	private final String layer2dir;
+
+	public String getStepDefsDir() {
+		return layer2dir;
+	}
 
 	TestProjectImpl(IResourceRepository sr) {
 		// TODO In the future the project name should be accessible here. The

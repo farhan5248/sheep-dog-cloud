@@ -19,9 +19,7 @@
     "categories": [
         "Programming Languages"
     ],
-    "activationEvents": [
-        "onLanguage:asciidoc"
-    ],
+    "activationEvents": [],
     "main": "out/extension",
     "contributes": {
         "languages": [
@@ -188,7 +186,14 @@
                 },
                 "asciidoc.logging.level": {
                     "type": "string",
-                    "enum": ["OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE"],
+                    "enum": [
+                        "OFF",
+                        "ERROR",
+                        "WARN",
+                        "INFO",
+                        "DEBUG",
+                        "TRACE"
+                    ],
                     "default": "INFO",
                     "description": "Set the logging level for the extension and language server",
                     "enumDescriptions": [
@@ -234,13 +239,21 @@
                 },
                 "asciidoc.trace.server": {
                     "type": "string",
-                    "enum": ["off", "messages", "verbose"],
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
                     "default": "off",
                     "description": "Trace level for language server protocol communication"
                 },
                 "asciidoc.trace.level": {
                     "type": "string",
-                    "enum": ["Off", "Messages", "Verbose"],
+                    "enum": [
+                        "Off",
+                        "Messages",
+                        "Verbose"
+                    ],
                     "default": "Messages",
                     "description": "Legacy trace level setting (kept for backward compatibility)"
                 },
@@ -348,7 +361,10 @@
                     "items": {
                         "type": "string"
                     },
-                    "default": [".asciidoc.json", "asciidoc.config.json"],
+                    "default": [
+                        ".asciidoc.json",
+                        "asciidoc.config.json"
+                    ],
                     "description": "Configuration file names to search for in workspace"
                 },
                 "asciidoc.performance.maxFileSize": {
@@ -370,47 +386,80 @@
                 "textMateRules": [
                     {
                         "scope": "keyword.control.level1.sheepdog-asciidoc",
-                        "settings": { "foreground": "#400040", "fontStyle": "bold" }
+                        "settings": {
+                            "foreground": "#400040",
+                            "fontStyle": "bold"
+                        }
                     },
                     {
                         "scope": "keyword.control.level2.sheepdog-asciidoc",
-                        "settings": { "foreground": "#800080", "fontStyle": "bold" }
+                        "settings": {
+                            "foreground": "#800080",
+                            "fontStyle": "bold"
+                        }
                     },
                     {
                         "scope": "keyword.control.level3.sheepdog-asciidoc",
-                        "settings": { "foreground": "#800040", "fontStyle": "bold" }
+                        "settings": {
+                            "foreground": "#800040",
+                            "fontStyle": "bold"
+                        }
                     },
                     {
                         "scope": "comment.line.number-sign.sheepdog-asciidoc",
-                        "settings": { "foreground": "#FF8000", "fontStyle": "italic" }
+                        "settings": {
+                            "foreground": "#FF8000",
+                            "fontStyle": "italic"
+                        }
                     },
                     {
                         "scope": "entity.name.tag.sheepdog-asciidoc",
-                        "settings": { "foreground": "#FFC90E", "fontStyle": "bold" }
+                        "settings": {
+                            "foreground": "#FFC90E",
+                            "fontStyle": "bold"
+                        }
                     },
                     {
                         "scope": "keyword.other.todo.sheepdog-asciidoc",
-                        "settings": { "foreground": "#00C0C0", "fontStyle": "bold italic" }
+                        "settings": {
+                            "foreground": "#00C0C0",
+                            "fontStyle": "bold italic"
+                        }
                     },
                     {
                         "scope": "string.unquoted.statement.sheepdog-asciidoc",
-                        "settings": { "foreground": "#404040" }
+                        "settings": {
+                            "foreground": "#404040"
+                        }
                     },
                     {
                         "scope": "string.unquoted.raw.text.sheepdog-asciidoc",
-                        "settings": { "foreground": "#804000" }
+                        "settings": {
+                            "foreground": "#804000"
+                        }
                     },
                     {
-                        "scope": ["string.unquoted.table.cell.sheepdog-asciidoc", "punctuation.definition.table.delimiter.sheepdog-asciidoc", "punctuation.definition.table.cell.sheepdog-asciidoc"],
-                        "settings": { "foreground": "#A349A4", "fontStyle": "bold" }
+                        "scope": [
+                            "string.unquoted.table.cell.sheepdog-asciidoc",
+                            "punctuation.definition.table.delimiter.sheepdog-asciidoc",
+                            "punctuation.definition.table.cell.sheepdog-asciidoc"
+                        ],
+                        "settings": {
+                            "foreground": "#A349A4",
+                            "fontStyle": "bold"
+                        }
                     },
                     {
                         "scope": "variable.parameter.sheepdog-asciidoc",
-                        "settings": { "foreground": "#00C0C0" }
+                        "settings": {
+                            "foreground": "#00C0C0"
+                        }
                     },
                     {
                         "scope": "entity.name.section.sheepdog-asciidoc",
-                        "settings": { "foreground": "#404040" }
+                        "settings": {
+                            "foreground": "#404040"
+                        }
                     }
                 ]
             }

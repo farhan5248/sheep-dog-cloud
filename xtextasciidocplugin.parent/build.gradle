@@ -198,4 +198,5 @@ release {
     tagCommitMessage = '[release] creating tag: '
     newVersionCommitMessage = '[release] new version commit: '
     failOnSnapshotDependencies = false
+    buildTasks = ['publish']
 }

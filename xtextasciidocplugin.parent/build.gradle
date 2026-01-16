@@ -198,5 +198,5 @@ release {
     tagCommitMessage = '[release] creating tag: '
     newVersionCommitMessage = '[release] new version commit: '
     failOnSnapshotDependencies = false
-    buildTasks = ['publish']
+    buildTasks = [':xtextasciidocplugin:publish', ':xtextasciidocplugin.ide:publish', ':xtextasciidocplugin.vscode:publish']
 }

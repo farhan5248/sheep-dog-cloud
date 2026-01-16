@@ -63,7 +63,7 @@ configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') && !it
 		publications {
 			maven(MavenPublication) {
 				from components.java
-				
+
 				groupId = 'org.farhan'
 				artifactId = project.name
 				version = project.version
@@ -142,6 +142,33 @@ configure(subprojects.findAll { it.name.contains('.vscode') }) {
 	
 	// Hook into the main clean task
 	clean.dependsOn cleanVscodeOutput
+
+	apply plugin: 'maven-publish'
+
+	publishing {
+		publications {
+			vsix(MavenPublication) {
+				groupId = 'org.farhan'
+				artifactId = project.name
+				version = project.version
+
+				artifact(packageExtension.destPath) {
+					extension = 'vsix'
+					builtBy packageExtension
+				}
+			}
+		}
+		repositories {
+			maven {
+				name = "GitHub"
+				url = uri("https://maven.pkg.github.com/farhan5248/sheep-dog-local")
+				credentials {
+					username = project.findProperty("gpr.user") ?: 'farhan5248'
+					password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+				}
+			}
+		}
+	}
 
 }
 

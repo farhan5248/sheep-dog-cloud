@@ -1,0 +1,21 @@
+name: Publish Xtext AsciiDoc Plugin Release
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  xtext-asciidoc-plugin:
+    uses: farhan5248/sheep-dog-ops/.github/workflows/gradle-release.yml@main
+    with:
+      project: 'xtextasciidocplugin.parent'
+    secrets: inherit
+
+  merge-into-develop:
+    needs: [xtext-asciidoc-plugin]
+    uses: farhan5248/sheep-dog-ops/.github/workflows/merge.yml@main
+    with:
+      source: 'main'
+      target: 'develop'
+    secrets: inherit

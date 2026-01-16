@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   sheep-dog-dev-svc:
-    uses: farhan5248/sheep-dog-ops/.github/workflows/release.yml@main
+    uses: farhan5248/sheep-dog-ops/.github/workflows/maven-release.yml@main
     with:
       project: 'sheep-dog-dev-svc'
       plugin: 'Maven'
@@ -16,7 +16,7 @@ jobs:
 
   sheep-dog-dev-svc-maven-plugin:
     needs: [sheep-dog-dev-svc]
-    uses: farhan5248/sheep-dog-ops/.github/workflows/release.yml@main
+    uses: farhan5248/sheep-dog-ops/.github/workflows/maven-release.yml@main
     with:
       project: 'sheep-dog-dev-svc-maven-plugin'
       plugin: 'Maven'

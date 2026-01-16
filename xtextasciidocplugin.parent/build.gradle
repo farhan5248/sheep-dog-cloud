@@ -14,8 +14,7 @@ buildscript {
 
 apply plugin: 'net.researchgate.release'
 
-// Root project version - applies to all artifacts
-version = '1.0.0-SNAPSHOT'
+// Root project version is set in gradle.properties
 
 // Configuration for Xtext projects
 configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') && !it.name.contains('.vscode') }) {

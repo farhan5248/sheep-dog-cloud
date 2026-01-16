@@ -72,7 +72,7 @@ configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') && !it
 		repositories {
 			maven {
 				name = "GitHub"
-				url = uri("https://maven.pkg.github.com/farhan5248/sheep-dog-local")
+				url = uri("https://maven.pkg.github.com/farhan5248/sheep-dog-cloud")
 				credentials {
 					username = project.findProperty("gpr.user") ?: 'farhan5248'
 					password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
@@ -155,7 +155,7 @@ configure(subprojects.findAll { it.name.contains('.vscode') }) {
 		repositories {
 			maven {
 				name = "GitHub"
-				url = uri("https://maven.pkg.github.com/farhan5248/sheep-dog-local")
+				url = uri("https://maven.pkg.github.com/farhan5248/sheep-dog-cloud")
 				credentials {
 					username = project.findProperty("gpr.user") ?: 'farhan5248'
 					password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")

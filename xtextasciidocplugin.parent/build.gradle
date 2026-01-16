@@ -109,7 +109,8 @@ configure(subprojects.findAll { it.name.contains('.vscode') }) {
 		outputs.dir('out')
 	}
 
-	task packageExtension(dependsOn: [npmInstall]) {
+	tasks.register('packageExtension', Exec) {
+		dependsOn npmInstall
 		ext.destDir = new File(buildDir, 'vscode')
 		ext.archiveName = "$project.name-${rootProject.version}.vsix"
 		ext.destPath = "$destDir/$archiveName"
@@ -117,18 +118,11 @@ configure(subprojects.findAll { it.name.contains('.vscode') }) {
 		doFirst {
 			destDir.mkdirs()
 		}
-		doLast {
-			if (System.properties['os.name'].toLowerCase().contains('windows')) {
-				exec {
-					workingDir = projectDir
-					commandLine 'cmd', '/c', 'node_modules\\.bin\\vsce.cmd', 'package', '--out', destPath
-				}
-			} else {
-				exec {
-					workingDir = projectDir
-					commandLine 'node_modules/.bin/vsce', 'package', '--out', destPath
-				}
-			}
+		workingDir = projectDir
+		if (System.properties['os.name'].toLowerCase().contains('windows')) {
+			commandLine 'cmd', '/c', 'node_modules\\.bin\\vsce.cmd', 'package', '--out', destPath
+		} else {
+			commandLine 'node_modules/.bin/vsce', 'package', '--out', destPath
 		}
 	}
 

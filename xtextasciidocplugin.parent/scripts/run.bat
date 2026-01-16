@@ -1,4 +1,4 @@
 cd ..
-call .\gradlew.bat clean
-call .\gradlew.bat installExtension
+call gradle clean
+call gradle installExtension
 cd scripts 

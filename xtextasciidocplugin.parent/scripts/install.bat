@@ -1,4 +1,4 @@
 cd ..
-call .\gradlew.bat clean
-call .\gradlew.bat publishToMavenLocal
+call gradle clean
+call gradle publishToMavenLocal
 cd scripts 

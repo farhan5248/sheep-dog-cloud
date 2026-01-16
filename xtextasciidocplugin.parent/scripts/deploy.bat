@@ -1,4 +1,4 @@
 cd ..
-call .\gradlew.bat clean
-call .\gradlew.bat publish
+call gradle clean
+call gradle publish
 cd scripts 

@@ -24,11 +24,17 @@ jobs:
     needs: [sheep-dog-dev-svc]
     uses: farhan5248/sheep-dog-ops/.github/workflows/snapshot-docker.yml@main
     with:
-      project: 'sheep-dog-dev-svc-maven-plugin'   
+      project: 'sheep-dog-dev-svc-maven-plugin'
+    secrets: inherit
+
+  xtext-asciidoc-plugin:
+    uses: farhan5248/sheep-dog-ops/.github/workflows/gradle-snapshot.yml@main
+    with:
+      project: 'xtextasciidocplugin.parent'
     secrets: inherit
 
   merge-into-main:
-    needs: [sheep-dog-dev-svc-maven-plugin]
+    needs: [sheep-dog-dev-svc-maven-plugin, xtext-asciidoc-plugin]
     uses: farhan5248/sheep-dog-ops/.github/workflows/merge.yml@main
     with:
       source: 'develop'

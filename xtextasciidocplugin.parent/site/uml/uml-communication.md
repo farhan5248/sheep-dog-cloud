@@ -118,13 +118,6 @@ Wrapper class that adapts EMF objects to business logic interfaces by delegating
 - `get{Assignment}()`
 - `getParent()`
 
-### {Type}IssueDetector
-
-Business logic class from sheep-dog-test (not in xtextasciidocplugin) that provides pure validation logic for grammar elements.
-
-**Methods**
-- `validate{Aspect}(I{Type} type)`
-
 ### {Type}IssueResolver
 
 Business logic class from sheep-dog-test (not in xtextasciidocplugin) that generates corrections for invalid grammar elements.
@@ -144,39 +137,3 @@ Singleton from sheep-dog-test (not in xtextasciidocplugin) that creates and mana
 Data container from sheep-dog-test (not in xtextasciidocplugin) that holds proposal information for quick fixes.
 
 **Properties:** id, description, value, qualifiedName
-
-## VS Code Client Integration (TypeScript)
-
-This collaboration applies when VS Code needs to communicate with the language server.
-
-### extension
-
-Entry point that initializes the language client and manages its lifecycle.
-
-**Methods**
-- `activate(context)` - Start language client
-- `deactivate()` - Stop language client
-
-### serverLauncher
-
-Spawns and manages the Java language server process.
-
-**Methods**
-- `startServer()` - Launch language server
-- `getServerOptions()` - Configure server connection
-
-### communicationService
-
-Handles custom LSP communication beyond standard protocol.
-
-**Methods**
-- `sendRequest(client, method, params)` - Send custom requests
-- `registerNotificationHandlers(client)` - Register notification listeners
-
-### configurationService
-
-Manages VS Code extension settings.
-
-**Methods**
-- `getConfiguration()` - Read settings
-- `onConfigurationChanged(event)` - Handle settings updates

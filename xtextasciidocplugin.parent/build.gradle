@@ -38,6 +38,7 @@ configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') && !it
 	
 	apply plugin: 'java-library'
 	apply plugin: 'maven-publish'
+	apply plugin: 'jacoco'
 	dependencies {
 		api platform("org.eclipse.xtext:xtext-dev-bom:${xtextVersion}")
 	}
@@ -45,6 +46,23 @@ configure(subprojects.findAll { it.name.startsWith('xtextasciidocplugin') && !it
 	apply from: "${rootDir}/gradle/source-layout.gradle"
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
+
+	jacoco {
+		toolVersion = '0.8.14'
+	}
+
+	test {
+		useJUnitPlatform()
+		finalizedBy jacocoTestReport
+	}
+
+	jacocoTestReport {
+		dependsOn test
+		reports {
+			xml.required = true
+			html.required = true
+		}
+	}
 	
 	group = 'org.farhan'
 	version = rootProject.version

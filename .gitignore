@@ -4,9 +4,11 @@
 **/out
 **/node_modules
 **/bin
+release.properties
 **/*._trace
 **/*.xtextbin
 **/*.xtendbin
+**/*-report.md
 **/*.pdf
 **/*.doc
 **/*.docx
@@ -24,9 +26,8 @@
 **/*.releaseBackup
 **/*.lnk
 **/*.idea
+**/secrets.yaml
 **/*.env
 **/*.theia-workspace
 **/.classpath
-**/secrets.yaml
-**/release.properties
 .vscode/settings.json

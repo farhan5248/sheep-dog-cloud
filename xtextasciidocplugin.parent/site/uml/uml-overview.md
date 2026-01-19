@@ -20,10 +20,10 @@
 
 ## Technology Preferences Referenced
 
-1. `sheep-dog-main/arch-logging.md` - Logging patterns (SLF4J)
-2. `sheep-dog-main/arch-xtext.md` - General Xtext framework architecture
-3. `sheep-dog-main/impl-slf4j.md` - slf4J configuration
-4. `sheep-dog-main/impl-xtext.md` - Xtext domain terminology and pattern variables
+1. `sheep-dog-main/site/arch/arch-logging.md` - Logging patterns (SLF4J)
+2. `sheep-dog-main/site/arch/arch-xtext.md` - General Xtext framework architecture
+3. `sheep-dog-main/site/impl/impl-slf4j.md` - slf4J configuration
+4. `sheep-dog-main/site/impl/impl-xtext.md` - Xtext domain terminology and pattern variables
 
 ## Sub-Projects
 
@@ -35,4 +35,4 @@ List of sub-project directories where these patterns apply:
 
 ## Pattern Variables
 
-See `sheep-dog-main/impl-xtext.md` Domain Terminology section for pattern variable definitions.
+See `sheep-dog-main/site/impl/impl-xtext.md` Domain Terminology section for pattern variable definitions.

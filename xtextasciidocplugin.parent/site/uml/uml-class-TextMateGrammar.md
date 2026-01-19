@@ -16,8 +16,8 @@ TextMate grammars use regex patterns to identify language constructs and assign 
 
 ## TextMate Grammar uses begin/end for multi-line contexts
 
-Begin/end blocks create isolated scopes where nested patterns don't apply. See [impl-xtext-vscode.md](../../../impl-xtext-vscode.md#context-isolation-with-beginend-blocks) for pattern.
+Begin/end blocks create isolated scopes where nested patterns don't apply. See [impl-xtext-vscode.md](sheep-dog-main/site/impl/impl-xtext-vscode.md#context-isolation-with-beginend-blocks) for pattern.
 
 ## TextMate Grammar uses captures for sub-token highlighting
 
-Named capture groups apply different scopes to parts of a match. See [impl-xtext-vscode.md](../../../impl-xtext-vscode.md#highlighting-parts-of-tokens) for pattern.
+Named capture groups apply different scopes to parts of a match. See [impl-xtext-vscode.md](sheep-dog-main/site/impl/impl-xtext-vscode.md#highlighting-parts-of-tokens) for pattern.

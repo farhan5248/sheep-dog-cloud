@@ -12,7 +12,7 @@
 
     <groupId>org.farhan</groupId>
     <artifactId>sheep-dog-dev-mcp</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
     <name>Sheep Dog Development MCP Server</name>
     <description>MCP server providing development tools for the Sheep Dog ecosystem</description>
@@ -22,6 +22,24 @@
         <java.version>21</java.version>
         <docker.registry.github>ghcr.io</docker.registry.github>
     </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/farhan5248/sheep-dog-cloud</connection>
+        <tag>sheep-dog-dev-mcp-1.0</tag>
+    </scm>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/farhan5248/sheep-dog-cloud</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <repositories>
         <repository>
@@ -106,6 +124,29 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <properties>
+                        <!-- Work around. Surefire does not include enough
+                             information to disambiguate between different
+                             examples and scenarios. -->
+                        <configurationParameters>
+                            cucumber.junit-platform.naming-strategy=long
+                        </configurationParameters>
+                    </properties>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.14</version>
@@ -126,8 +167,37 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.16.2</version>
+                <configuration>
+                    <includes>
+                        <include>org.farhan:*:*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*IT</include>
+                        <include>**/*IntegrationTest</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.1</version>
                 <executions>
                     <execution>
                         <id>unpack</id>
@@ -141,6 +211,8 @@
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>${project.artifactId}</artifactId>
                                     <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <outputDirectory>${project.build.directory}/dependency</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -185,7 +257,7 @@
                     </execution>
                     <execution>
                         <id>push-image</id>
-                        <phase>post-integration-test</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>push</goal>
                         </goals>
@@ -198,6 +270,24 @@
                 <version>3.1.0</version>
                 <executions>
                     <execution>
+                        <id>delete-stack</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>kubectl</executable>
+                            <arguments>
+                                <argument>delete</argument>
+                                <argument>deployments</argument>
+                                <argument>-l</argument>
+                                <argument>app=sheep-dog-dev</argument>
+                                <argument>-n</argument>
+                                <argument>failsafe</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>start-stack</id>
                         <phase>pre-integration-test</phase>
                         <goals>
@@ -209,24 +299,6 @@
                                 <argument>apply</argument>
                                 <argument>-k</argument>
                                 <argument>kubernetes/overlays/failsafe</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>restart-stack</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>kubectl</executable>
-                            <arguments>
-                                <argument>rollout</argument>
-                                <argument>restart</argument>
-                                <argument>deployment</argument>
-                                <argument>sheep-dog-dev-mcp</argument>
-                                <argument>-n</argument>
-                                <argument>failsafe</argument>
                             </arguments>
                         </configuration>
                     </execution>

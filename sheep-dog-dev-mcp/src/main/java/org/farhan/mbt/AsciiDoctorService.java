@@ -46,7 +46,7 @@ public class AsciiDoctorService {
 
 	/**
 	 * Clear objects for AsciiDoctor files
-	 * 
+	 *
 	 * @param tags Test case tags, can be blank or empty
 	 * @throws RestClientException if the request fails
 	 * @throws Exception           if the maximum number of retries is reached
@@ -72,6 +72,99 @@ public class AsciiDoctorService {
 			}
 		}
 		throw new Exception("Max retries reached while clearing objects for AsciiDoctor files");
+	}
+
+	/**
+	 * Convert AsciiDoctor file to UML model
+	 *
+	 * @param tags     Test case tags, can be blank or empty
+	 * @param fileName The name of the file to convert
+	 * @param contents The contents of the file to convert
+	 * @return The converted file content
+	 * @throws Exception if the maximum number of retries is reached
+	 */
+	@Tool(name = "Convert AsciiDoctor to UML", description = "Convert an AsciiDoctor file to the UML model")
+	public String runConvertAsciidoctorToUML(String tags, String fileName, String contents) throws Exception {
+		logger.info("Converting AsciiDoctor file to UML: " + fileName + " with tags: " + tags);
+		TreeMap<String, String> parameters = new TreeMap<String, String>();
+		parameters.put("fileName", fileName);
+		String uri = "/asciidoctor/runConvertAsciidoctorToUML?fileName={fileName}";
+		if (!tags.isEmpty()) {
+			parameters.put("tags", tags);
+			uri += "&tags={tags}";
+		}
+		int retryCount = 0;
+		while (retryCount < RETRY_COUNT) {
+			try {
+				return restClient.post().uri(uri, parameters).body(contents).retrieve().body(String.class);
+			} catch (Exception e) {
+				logger.error("Retry attempt " + (retryCount + 1), e);
+				Thread.sleep(1000);
+				retryCount++;
+			}
+		}
+		throw new Exception("Max retries reached while converting AsciiDoctor file to UML");
+	}
+
+	/**
+	 * Convert UML model to AsciiDoctor file
+	 *
+	 * @param tags     Test case tags, can be blank or empty
+	 * @param fileName The name of the file to convert
+	 * @param contents The existing contents of the file (can be empty)
+	 * @return The converted file content
+	 * @throws Exception if the maximum number of retries is reached
+	 */
+	@Tool(name = "Convert UML to AsciiDoctor", description = "Convert a UML model element to an AsciiDoctor file")
+	public String runConvertUMLToAsciidoctor(String tags, String fileName, String contents) throws Exception {
+		logger.info("Converting UML to AsciiDoctor file: " + fileName + " with tags: " + tags);
+		TreeMap<String, String> parameters = new TreeMap<String, String>();
+		parameters.put("fileName", fileName);
+		String uri = "/asciidoctor/runConvertUMLToAsciidoctor?fileName={fileName}";
+		if (!tags.isEmpty()) {
+			parameters.put("tags", tags);
+			uri += "&tags={tags}";
+		}
+		int retryCount = 0;
+		while (retryCount < RETRY_COUNT) {
+			try {
+				return restClient.post().uri(uri, parameters).body(contents).retrieve().body(String.class);
+			} catch (Exception e) {
+				logger.error("Retry attempt " + (retryCount + 1), e);
+				Thread.sleep(1000);
+				retryCount++;
+			}
+		}
+		throw new Exception("Max retries reached while converting UML to AsciiDoctor file");
+	}
+
+	/**
+	 * Get list of object names for UML to AsciiDoctor conversion
+	 *
+	 * @param tags Test case tags, can be blank or empty
+	 * @return JSON array of TransformableFile objects with file names
+	 * @throws Exception if the maximum number of retries is reached
+	 */
+	@Tool(name = "Get UML to AsciiDoctor object names", description = "Get the list of file names that can be converted from UML to AsciiDoctor")
+	public String getConvertUMLToAsciidoctorObjectNames(String tags) throws Exception {
+		logger.info("Getting UML to AsciiDoctor object names with tags: " + tags);
+		TreeMap<String, String> parameters = new TreeMap<String, String>();
+		String uri = "/asciidoctor/getConvertUMLToAsciidoctorObjectNames";
+		if (!tags.isEmpty()) {
+			parameters.put("tags", tags);
+			uri += "?tags={tags}";
+		}
+		int retryCount = 0;
+		while (retryCount < RETRY_COUNT) {
+			try {
+				return restClient.get().uri(uri, parameters).retrieve().body(String.class);
+			} catch (Exception e) {
+				logger.error("Retry attempt " + (retryCount + 1), e);
+				Thread.sleep(1000);
+				retryCount++;
+			}
+		}
+		throw new Exception("Max retries reached while getting UML to AsciiDoctor object names");
 	}
 
 }

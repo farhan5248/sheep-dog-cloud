@@ -14,8 +14,13 @@ public class McpServerApplication {
 	}
 
 	@Bean
-	public ToolCallbackProvider weatherTools(AsciiDoctorService theService) {
-		return MethodToolCallbackProvider.builder().toolObjects(theService).build();
+	public ToolCallbackProvider asciidoctorTools(AsciiDoctorService asciidoctorService) {
+		return MethodToolCallbackProvider.builder().toolObjects(asciidoctorService).build();
+	}
+
+	@Bean
+	public ToolCallbackProvider cucumberTools(CucumberService cucumberService) {
+		return MethodToolCallbackProvider.builder().toolObjects(cucumberService).build();
 	}
 
 }

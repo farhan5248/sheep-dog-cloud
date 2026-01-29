@@ -268,24 +268,6 @@
                 <version>3.1.0</version>
                 <executions>
                     <execution>
-                        <id>delete-stack</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>kubectl</executable>
-                            <arguments>
-                                <argument>delete</argument>
-                                <argument>deployments</argument>
-                                <argument>-l</argument>
-                                <argument>app=sheep-dog-dev</argument>
-                                <argument>-n</argument>
-                                <argument>failsafe</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>start-stack</id>
                         <phase>pre-integration-test</phase>
                         <goals>

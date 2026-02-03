@@ -95,16 +95,6 @@ public class StepDefinitionImpl implements IStepDefinition {
 	}
 
 	@Override
-	public IStepParameters getStepParameters(IRow headers) {
-		return StepDefinitionUtility.getStepParameters(this, cellsToString(headers.getCellList()));
-	}
-
-	@Override
-	public IStepParameters getStepParameters(IText value) {
-		return StepDefinitionUtility.getStepParameters(this, "| Content");
-	}
-
-	@Override
 	public IStepParameters getStepParameters(String headers) {
 		return StepDefinitionUtility.getStepParameters(this, headers);
 	}

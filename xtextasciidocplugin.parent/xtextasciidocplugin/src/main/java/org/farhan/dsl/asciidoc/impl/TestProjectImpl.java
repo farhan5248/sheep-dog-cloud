@@ -16,11 +16,7 @@ public class TestProjectImpl implements ITestProject {
 
 	private IResourceRepository sr;
 	private String projectPath;
-	private final String layer2dir;
-
-	public String getStepDefsDir() {
-		return layer2dir;
-	}
+	public final String layer2dir;
 
 	TestProjectImpl(IResourceRepository sr) {
 		// TODO In the future the project name should be accessible here. The
@@ -69,7 +65,8 @@ public class TestProjectImpl implements ITestProject {
 				if (text.isEmpty()) {
 					logger.error("Couldn't load StepObject for, file is empty: " + qualifiedName);
 				} else {
-					IStepObject stepObject = SheepDogFactory.instance.createStepObject(qualifiedName);
+					IStepObject stepObject = SheepDogFactory.instance.createStepObject();
+					stepObject.setNameLong(qualifiedName);
 					stepObject.setContent(text);
 					return stepObject;
 				}

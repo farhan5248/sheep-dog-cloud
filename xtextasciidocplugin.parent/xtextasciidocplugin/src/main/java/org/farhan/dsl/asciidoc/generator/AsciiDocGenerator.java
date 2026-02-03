@@ -4,6 +4,7 @@
 package org.farhan.dsl.asciidoc.generator;
 
 import java.io.File;
+import java.util.ArrayList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +13,19 @@ import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
+import org.farhan.dsl.asciidoc.impl.RowImpl;
 import org.farhan.dsl.asciidoc.impl.TestStepImpl;
+import org.farhan.dsl.asciidoc.impl.TextImpl;
+import org.farhan.dsl.issues.RowIssueDetector;
+import org.farhan.dsl.issues.RowIssueResolver;
+import org.farhan.dsl.issues.SheepDogIssueProposal;
+import org.farhan.dsl.issues.TestStepIssueDetector;
+import org.farhan.dsl.issues.TestStepIssueResolver;
+import org.farhan.dsl.issues.TextIssueDetector;
+import org.farhan.dsl.issues.TextIssueResolver;
+import org.farhan.dsl.lang.IStepObject;
 import org.farhan.dsl.lang.ITestProject;
 import org.farhan.dsl.lang.SheepDogBuilder;
-import org.farhan.dsl.lang.SheepDogFactory;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 
 /**
@@ -27,6 +37,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 public class AsciiDocGenerator extends AbstractGenerator {
 
 	private static final Logger logger = LoggerFactory.getLogger(AsciiDocGenerator.class);
+	private static ITestProject testProject;
 
 	@Override
 	public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
@@ -53,9 +64,34 @@ public class AsciiDocGenerator extends AbstractGenerator {
 				for (TestStepContainer scenario : theTestSuite.getTestStepContainerList()) {
 					logger.debug("Processing scenario: {}", scenario.getName());
 					for (TestStep step : scenario.getTestStepList()) {
-						TestStepImpl stepImpl = new TestStepImpl(step);
-						logger.debug("Processing step: {}", stepImpl.getName());
-						SheepDogBuilder.createTestStepReferencedElements(stepImpl);
+						try {
+							TestStepImpl testStep = new TestStepImpl(step);
+							logger.debug("Processing step: {}", testStep.getName());
+
+							if (!TestStepIssueDetector.validateStepObjectNameWorkspace(testStep).isEmpty()) {
+								applyProposal(TestStepIssueResolver.correctStepObjectNameWorkspace(testStep));
+							}
+							if (!TestStepIssueDetector.validateStepDefinitionNameWorkspace(testStep).isEmpty()) {
+								applyProposal(TestStepIssueResolver.correctStepDefinitionNameWorkspace(testStep));
+							}
+							if (step.getTable() != null) {
+								if (!step.getTable().getRowList().isEmpty()
+										&& step.getTable().getRowList().getFirst() != null) {
+									if (!RowIssueDetector
+											.validateCellListWorkspace(new RowImpl(step.getTable().getRowList().getFirst()))
+											.isEmpty()) {
+										applyProposal(RowIssueResolver.correctCellListWorkspace(new TestStepImpl(step)));
+									}
+								}
+							}
+							if (step.getText() != null) {
+								if (!TextIssueDetector.validateNameWorkspace(new TextImpl(step.getText())).isEmpty()) {
+									applyProposal(TextIssueResolver.correctNameWorkspace(new TestStepImpl(step)));
+								}
+							}
+						} catch (Exception e) {
+							logger.error("Failed to process step: {}", e.getMessage(), e);
+						}
 					}
 				}
 			} else {
@@ -68,12 +104,22 @@ public class AsciiDocGenerator extends AbstractGenerator {
 		}
 	}
 
+	private static void applyProposal(ArrayList<SheepDogIssueProposal> proposals) throws Exception {
+		for (SheepDogIssueProposal p : proposals) {
+			if (!p.getQualifiedName().isEmpty()) {
+				IStepObject stepObject = SheepDogBuilder.createStepObject(null, p.getQualifiedName());
+				stepObject.setContent(p.getValue());
+				testProject.addStepObject(stepObject);
+			}
+		}
+	}
+
 	private static void initProject(Resource resource) {
-		ITestProject parent = SheepDogFactory.instance.createTestProject();
+		testProject = SheepDogBuilder.createTestProject();
 		String resourcePath = resource.getURI().toFileString().replace(File.separator, "/");
 		String projectPath = resourcePath.split("src/test/resources/asciidoc/specs/")[0].replace("/",
 				File.separator);
-		parent.setName(new File(projectPath).getAbsolutePath());
+		testProject.setName(new File(projectPath).getAbsolutePath());
 	}
 
 }

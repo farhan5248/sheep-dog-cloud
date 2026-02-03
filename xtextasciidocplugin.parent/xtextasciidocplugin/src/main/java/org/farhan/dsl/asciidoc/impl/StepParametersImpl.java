@@ -54,7 +54,7 @@ public class StepParametersImpl implements IStepParameters {
 
 	@Override
 	public void setTable(ITable value) {
-		throw new UnsupportedOperationException("setTable(ITable value) is not implemented");
+		eObject.setTable(((TableImpl) value).eObject);
 	}
 
 	@Override

@@ -47,7 +47,6 @@ import org.farhan.dsl.issues.TestStepContainerIssueResolver;
 import org.farhan.dsl.issues.TestStepIssueResolver;
 import org.farhan.dsl.issues.TestSuiteIssueResolver;
 import org.farhan.dsl.issues.TextIssueResolver;
-import org.farhan.dsl.lang.ITestProject;
 import org.farhan.dsl.lang.SheepDogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,7 +180,7 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 	private CreateFile getResourceOperation(SheepDogIssueProposal p) {
 		CreateFile createFile = new CreateFile();
 		TestProjectImpl testProject = (TestProjectImpl) SheepDogFactory.instance.createTestProject();
-		URI uri = URI.createFileURI(testProject.getName() + "/" + testProject.getStepDefsDir()
+		URI uri = URI.createFileURI(testProject.getName() + "/" + testProject.layer2dir
 				+ "/" + p.getQualifiedName());
 		createFile.setUri(uri.toString());
 		createFile.setOptions(new CreateFileOptions());

@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.eclipse.emf.common.util.EList;
 import org.farhan.dsl.lang.ICell;
 import org.farhan.dsl.lang.IRow;
@@ -24,7 +22,6 @@ import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
 
 public class StepDefinitionImpl implements IStepDefinition {
 
-	private static Logger logger = LoggerFactory.getLogger(StepDefinitionImpl.class);
 	private StepObjectImpl parent;
 	StepDefinition eObject;
 
@@ -108,8 +105,8 @@ public class StepDefinitionImpl implements IStepDefinition {
 	}
 
 	@Override
-	public IStepParameters getStepParameters(String name) {
-		throw new UnsupportedOperationException("getStepParameters(String name) is not implemented");
+	public IStepParameters getStepParameters(String headers) {
+		return StepDefinitionUtility.getStepParameters(this, headers);
 	}
 
 	@Override

@@ -90,6 +90,8 @@ public class StepObjectImpl implements IStepObject {
 	@Override
 	public void setNameLong(String value) {
 		this.qualifiedName = value;
+		String extension = org.farhan.dsl.lang.SheepDogFactory.instance.createTestProject().getFileExtension();
+		eObject.setName((new java.io.File(qualifiedName)).getName().replaceFirst(extension + "$", ""));
 	}
 
 	@Override

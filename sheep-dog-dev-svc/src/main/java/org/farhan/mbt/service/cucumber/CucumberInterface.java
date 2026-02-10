@@ -27,7 +27,7 @@ public class CucumberInterface extends CucumberJava {
 
     public void addStepDefinition(String name, ArrayList<String> paramList) throws Exception {
 
-        String stepObjectName = StepObjectRefFragments.getStepObjectName(name);
+        String stepObjectName = StepObjectRefFragments.getAll(name);
         String stepDefinitionName = name.replace(stepObjectName, "").trim();
         if (StepObjectRefFragments.isObjectEdgeType(name)) {
             addMethod("transition", false);

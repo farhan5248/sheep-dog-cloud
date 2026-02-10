@@ -126,7 +126,7 @@ public abstract class CucumberJava implements IConvertibleObject {
     }
 
     protected String getSetOrAssert(String stepName) throws Exception {
-        String stepObjectName = StepObjectRefFragments.getStepObjectName(stepName);
+        String stepObjectName = StepObjectRefFragments.getAll(stepName);
         String stepDefinitionName = stepName.replace(stepObjectName, "").trim();
         if (StepDefinitionRefFragments.getStateDesc(stepDefinitionName).endsWith("be")) {
             return "assert";

@@ -34,7 +34,7 @@ public class CucumberClass extends CucumberJava {
 
     public void addStepDefinition(String name, ArrayList<String> paramList) throws Exception {
         addConstructor(name);
-        String stepObjectName = StepObjectRefFragments.getStepObjectName(name);
+        String stepObjectName = StepObjectRefFragments.getAll(name);
         String stepDefinitionName = name.replace(stepObjectName, "").trim();
         MethodDeclaration aMethod = addMethod(convertToCamelCase(stepDefinitionName.replace("'", "")));
         BlockStmt body = aMethod.getBody().get();
@@ -70,7 +70,7 @@ public class CucumberClass extends CucumberJava {
     }
 
     private String getCallForInputOutputsForState(String step) throws Exception {
-        String stepObjectName = StepObjectRefFragments.getStepObjectName(step);
+        String stepObjectName = StepObjectRefFragments.getAll(step);
         return "." + getSetOrAssert(step) + "InputOutputs(\""
                 + StringUtils.capitalize(StepDefinitionRefFragments.getStateType(step.replace(stepObjectName, "")))
                 + "\"" + getSectionArg(step) + getNegativeArg(step) + ")";
@@ -107,7 +107,7 @@ public class CucumberClass extends CucumberJava {
     }
 
     private String getSectionArg(String step) {
-        String stepObjectName = StepObjectRefFragments.getStepObjectName(step);
+        String stepObjectName = StepObjectRefFragments.getAll(step);
         String section = convertToPascalCase(StepDefinitionRefFragments.getPart(step.replace(stepObjectName, "")));
         if (!section.isEmpty()) {
             section = ", \"" + section + "\"";

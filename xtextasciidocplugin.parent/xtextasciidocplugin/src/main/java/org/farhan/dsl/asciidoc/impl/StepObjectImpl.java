@@ -2,13 +2,12 @@ package org.farhan.dsl.asciidoc.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -24,7 +23,6 @@ import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 
 public class StepObjectImpl implements IStepObject {
-	private static Logger logger = LoggerFactory.getLogger(StepObjectImpl.class);
 
 	private ITestProject parent;
 	StepObject eObject;
@@ -91,7 +89,7 @@ public class StepObjectImpl implements IStepObject {
 	public void setNameLong(String value) {
 		this.qualifiedName = value;
 		String extension = org.farhan.dsl.lang.SheepDogFactory.instance.createTestProject().getFileExtension();
-		eObject.setName((new java.io.File(qualifiedName)).getName().replaceFirst(extension + "$", ""));
+		eObject.setName((new File(qualifiedName)).getName().replaceFirst(extension + "$", ""));
 	}
 
 	@Override

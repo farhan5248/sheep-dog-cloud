@@ -54,15 +54,15 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			super._createProposals(assignment, context, acceptor);
 			logger.debug("Exiting _createProposals");
 		} catch (Exception e) {
-			logger.error("Error creating proposals for assignment '{}': {}",
-					assignment != null ? assignment.getFeature() : "null", e.getMessage(), e);
+			logger.error("Error creating proposals for assignment '{}'",
+					assignment != null ? assignment.getFeature() : "null", e);
 		}
 	}
 
 	private void completeStepObject(TestStep step, Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
 		TestStepImpl testStep = new TestStepImpl(step);
-		logger.debug("Entering completeStepObject for element: {}", testStep.getName());
+		logger.debug("Entering completeStepObject for element: {} {}", testStep.getStepObjectName(), testStep.getStepDefinitionName());
 		try {
 			initProject(step.eResource());
 			for (SheepDogIssueProposal p : TestStepIssueResolver.suggestStepObjectNameWorkspace(testStep)) {
@@ -74,7 +74,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Failed in content assist for {}: {}", testStep.getName(), e.getMessage(), e);
+			logger.error("Failed in content assist for {} {}", testStep.getStepObjectName(), testStep.getStepDefinitionName(), e);
 		}
 		logger.debug("Exiting completeStepObject");
 	}
@@ -82,7 +82,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 	private void completeStepDefinitionName(TestStep step, Assignment assignment, ContentAssistContext context,
 			IIdeContentProposalAcceptor acceptor) {
 		TestStepImpl testStep = new TestStepImpl(step);
-		logger.debug("Entering completeStepDefinitionName for element: {}", testStep.getName());
+		logger.debug("Entering completeStepDefinitionName for element: {} {}", testStep.getStepObjectName(), testStep.getStepDefinitionName());
 		try {
 			initProject(step.eResource());
 			for (SheepDogIssueProposal p : TestStepIssueResolver.suggestStepDefinitionNameWorkspace(testStep)) {
@@ -94,7 +94,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Failed in content assist for {}: {}", testStep.getName(), e.getMessage(), e);
+			logger.error("Failed in content assist for {} {}", testStep.getStepObjectName(), testStep.getStepDefinitionName(), e);
 		}
 		logger.debug("Exiting completeStepDefinitionName");
 	}
@@ -113,7 +113,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Failed in content assist for {}: {}", step.toString(), e.getMessage(), e);
+			logger.error("Failed in content assist for {}", step.toString(), e);
 		}
 		logger.debug("Exiting completeCellList");
 	}

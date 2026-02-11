@@ -66,7 +66,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 					for (TestStep step : scenario.getTestStepList()) {
 						try {
 							TestStepImpl testStep = new TestStepImpl(step);
-							logger.debug("Processing step: {}", testStep.getName());
+							logger.debug("Processing step: {} {}", testStep.getStepObjectName(), testStep.getStepDefinitionName());
 
 							if (!TestStepIssueDetector.validateStepObjectNameWorkspace(testStep).isEmpty()) {
 								applyProposal(TestStepIssueResolver.correctStepObjectNameWorkspace(testStep));

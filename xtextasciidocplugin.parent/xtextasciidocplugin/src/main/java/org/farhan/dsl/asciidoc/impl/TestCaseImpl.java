@@ -10,48 +10,43 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestCase;
 
 public class TestCaseImpl extends TestStepContainerImpl implements ITestCase {
 
-	public TestCaseImpl(TestCase testCase) {
-		super(testCase);
-	}
+    public TestCaseImpl(TestCase testCase) {
+        super(testCase);
+    }
 
-	@Override
-	public ArrayList<ITestData> getTestDataList() {
-		throw new UnsupportedOperationException("ArrayList<ITestData> getTestDataList() is not implemented");
-	}
+    @Override
+    public ArrayList<ITestData> getTestDataList() {
+        throw new UnsupportedOperationException("ArrayList<ITestData> getTestDataList() is not implemented");
+    }
 
-	@Override
-	public String getNameLong() {
-		throw new UnsupportedOperationException("getNameLong() is not implemented");
-	}
+    @Override
+    public IStatement getStatement(int index) {
+        throw new UnsupportedOperationException("getStatement(int index) is not implemented");
+    }
 
-	@Override
-	public IStatement getStatement(int index) {
-		throw new UnsupportedOperationException("getStatement(int index) is not implemented");
-	}
+    @Override
+    public IStatement getStatement(String name) {
+        throw new UnsupportedOperationException("getStatement(String name) is not implemented");
+    }
 
-	@Override
-	public IStatement getStatement(String name) {
-		throw new UnsupportedOperationException("getStatement(String name) is not implemented");
-	}
+    @Override
+    public ITestStep getTestStep(int index) {
+        throw new UnsupportedOperationException("getTestStep(int index) is not implemented");
+    }
 
-	@Override
-	public ITestStep getTestStep(int index) {
-		throw new UnsupportedOperationException("getTestStep(int index) is not implemented");
-	}
+    @Override
+    public ITestStep getTestStep(String name) {
+        throw new UnsupportedOperationException("getTestStep(String name) is not implemented");
+    }
 
-	@Override
-	public ITestStep getTestStep(String name) {
-		throw new UnsupportedOperationException("getTestStep(String name) is not implemented");
-	}
+    @Override
+    public ITestData getTestData(int index) {
+        throw new UnsupportedOperationException("getTestData(int index) is not implemented");
+    }
 
-	@Override
-	public ITestData getTestData(int index) {
-		throw new UnsupportedOperationException("getTestData(int index) is not implemented");
-	}
-
-	@Override
-	public ITestData getTestData(String name) {
-		throw new UnsupportedOperationException("getTestData(String name) is not implemented");
-	}
+    @Override
+    public ITestData getTestData(String name) {
+        throw new UnsupportedOperationException("getTestData(String name) is not implemented");
+    }
 
 }

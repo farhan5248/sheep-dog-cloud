@@ -132,7 +132,7 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 	@Check(CheckType.FAST)
 	public void checkTestStepNameOnly(TestStep step) {
 		TestStepImpl testStep = new TestStepImpl(step);
-		logger.debug("Entering checkTestStepNameOnly for element: " + testStep.getName());
+		logger.debug("Entering checkTestStepNameOnly for element: " + testStep.getStepObjectName() + " " + testStep.getStepDefinitionName());
 		try {
 			initProject(step.eResource());
 			String problems = TestStepIssueDetector.validateStepObjectNameOnly(testStep);
@@ -155,7 +155,7 @@ public class AsciiDocValidator extends AbstractAsciiDocValidator {
 	@Check(CheckType.FAST)
 	public void checkTestStepNameWorkspace(TestStep step) {
 		TestStepImpl testStep = new TestStepImpl(step);
-		logger.debug("Entering checkTestStepNameWorkspace for element: " + testStep.getName());
+		logger.debug("Entering checkTestStepNameWorkspace for element: " + testStep.getStepObjectName() + " " + testStep.getStepDefinitionName());
 		try {
 			initProject(step.eResource());
 			String problems = TestStepIssueDetector.validateStepObjectNameWorkspace(testStep);

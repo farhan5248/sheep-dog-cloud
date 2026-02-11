@@ -20,6 +20,8 @@ import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
+import org.farhan.dsl.asciidoc.asciiDoc.Text;
+import org.farhan.dsl.lang.IText;
 
 public class AsciiDocFactoryImpl implements ISheepDogFactory {
 
@@ -99,6 +101,12 @@ public class AsciiDocFactoryImpl implements ISheepDogFactory {
 	public ICell createCell() {
 		Cell cell = AsciiDocFactory.eINSTANCE.createCell();
 		return new CellImpl(cell);
+	}
+
+	@Override
+	public IText createText() {
+		Text text = AsciiDocFactory.eINSTANCE.createText();
+		return new TextImpl(text);
 	}
 
 }

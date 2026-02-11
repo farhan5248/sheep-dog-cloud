@@ -211,7 +211,7 @@
                 },
                 {
                     "name": "markup.todo.sheepdog-asciidoc",
-                    "match": "\\b(TODO|FIXME|HACK|NOTE|XXX)\\b",
+                    "match": "(\\b(?:TODO|FIXME|HACK|NOTE|XXX)\\b.*)",
                     "captures": {
                         "1": {
                             "name": "keyword.other.todo.sheepdog-asciidoc"

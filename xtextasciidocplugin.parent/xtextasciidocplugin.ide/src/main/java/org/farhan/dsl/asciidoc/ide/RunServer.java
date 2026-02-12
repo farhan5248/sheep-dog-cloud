@@ -1,7 +1,7 @@
 package org.farhan.dsl.asciidoc.ide;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.farhan.dsl.lang.SheepDogLoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -32,7 +32,7 @@ import com.google.inject.Injector;
  */
 public class RunServer {
 
-	private static final Logger logger = LoggerFactory.getLogger(RunServer.class);
+	private static final Logger logger = SheepDogLoggerFactory.getLogger(RunServer.class);
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		logger.debug("Entering {}", "main");

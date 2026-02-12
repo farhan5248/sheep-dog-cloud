@@ -6,7 +6,7 @@ package org.farhan.dsl.asciidoc.validation;
 import java.io.File;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.farhan.dsl.lang.SheepDogLoggerFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -39,7 +39,7 @@ import org.farhan.dsl.lang.SheepDogFactory;
  */
 public class AsciiDocValidator extends AbstractAsciiDocValidator {
 
-	private static final Logger logger = LoggerFactory.getLogger(AsciiDocValidator.class);
+	private static final Logger logger = SheepDogLoggerFactory.getLogger(AsciiDocValidator.class);
 	public static final String CELL_NAME_ONLY = "CELL_NAME_ONLY";
 	public static final String TEST_STEP_CONTAINER_NAME_ONLY = "TEST_STEP_CONTAINER_NAME_ONLY";
 	public static final String TEST_STEP_CONTAINER_TEST_STEP_FILE_LIST_FILE = "TEST_STEP_CONTAINER_TEST_STEP_FILE_LIST_FILE";

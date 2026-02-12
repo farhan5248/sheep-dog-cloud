@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.farhan.dsl.lang.SheepDogLoggerFactory;
 import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
@@ -36,7 +36,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
  */
 public class AsciiDocGenerator extends AbstractGenerator {
 
-	private static final Logger logger = LoggerFactory.getLogger(AsciiDocGenerator.class);
+	private static final Logger logger = SheepDogLoggerFactory.getLogger(AsciiDocGenerator.class);
 	private static ITestProject testProject;
 
 	@Override

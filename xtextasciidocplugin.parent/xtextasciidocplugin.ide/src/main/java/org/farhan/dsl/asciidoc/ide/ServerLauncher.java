@@ -8,7 +8,7 @@
 package org.farhan.dsl.asciidoc.ide;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.farhan.dsl.lang.SheepDogLoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -34,7 +34,7 @@ import com.google.inject.Inject;
  */
 public class ServerLauncher {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ServerLauncher.class);
+	private static final Logger logger = SheepDogLoggerFactory.getLogger(ServerLauncher.class);
 	
 	// TODO this has hardcoded names
 	private static boolean IS_DEBUG = true;

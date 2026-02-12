@@ -49,11 +49,11 @@ import org.farhan.dsl.issues.TestSuiteIssueResolver;
 import org.farhan.dsl.issues.TextIssueResolver;
 import org.farhan.dsl.lang.SheepDogFactory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.farhan.dsl.lang.SheepDogLoggerFactory;
 
 public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService {
 
-	private static final Logger logger = LoggerFactory.getLogger(AsciiDocQuickFixCodeActionService.class);
+	private static final Logger logger = SheepDogLoggerFactory.getLogger(AsciiDocQuickFixCodeActionService.class);
 
 	@Override
 	public List<Either<Command, CodeAction>> getCodeActions(Options options) {

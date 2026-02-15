@@ -8,6 +8,7 @@ import org.eclipse.xtext.ide.editor.contentassist.ContentAssistEntry;
 import org.eclipse.xtext.ide.editor.contentassist.IIdeContentProposalAcceptor;
 import org.eclipse.xtext.ide.editor.contentassist.IdeContentProposalProvider;
 import org.farhan.dsl.issues.*;
+import org.farhan.dsl.lang.SheepDogIssueProposal;
 import org.farhan.dsl.lang.ITestProject;
 import org.farhan.dsl.lang.SheepDogFactory;
 
@@ -67,7 +68,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			initProject(step.eResource());
 			for (SheepDogIssueProposal p : TestStepIssueResolver.suggestStepObjectNameWorkspace(testStep)) {
 				ContentAssistEntry proposal = getProposalCreator().createSnippet(
-						p.getValue(), p.getId(), context);
+						p.getValue().toString(), p.getId(), context);
 				if (proposal != null) {
 					proposal.setDocumentation(p.getDescription());
 					acceptor.accept(proposal, 0);
@@ -87,7 +88,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			initProject(step.eResource());
 			for (SheepDogIssueProposal p : TestStepIssueResolver.suggestStepDefinitionNameWorkspace(testStep)) {
 				ContentAssistEntry proposal = getProposalCreator().createSnippet(
-						p.getValue(), p.getId(), context);
+						p.getValue().toString(), p.getId(), context);
 				if (proposal != null) {
 					proposal.setDocumentation(p.getDescription());
 					acceptor.accept(proposal, 0);
@@ -106,7 +107,7 @@ public class AsciiDocIdeContentProposalProvider extends IdeContentProposalProvid
 			initProject(step.eResource());
 			for (SheepDogIssueProposal p : RowIssueResolver.suggestCellListWorkspace(new TestStepImpl(step))) {
 				ContentAssistEntry proposal = getProposalCreator().createSnippet(
-						p.getValue(), p.getId(), context);
+						p.getValue().toString(), p.getId(), context);
 				if (proposal != null) {
 					proposal.setDocumentation(p.getDescription());
 					acceptor.accept(proposal, 0);

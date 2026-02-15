@@ -42,7 +42,7 @@ import org.farhan.dsl.asciidoc.impl.TestSuiteImpl;
 import org.farhan.dsl.asciidoc.validation.AsciiDocValidator;
 import org.farhan.dsl.issues.CellIssueResolver;
 import org.farhan.dsl.issues.RowIssueResolver;
-import org.farhan.dsl.issues.SheepDogIssueProposal;
+import org.farhan.dsl.lang.SheepDogIssueProposal;
 import org.farhan.dsl.issues.TestStepContainerIssueResolver;
 import org.farhan.dsl.issues.TestStepIssueResolver;
 import org.farhan.dsl.issues.TestSuiteIssueResolver;
@@ -142,7 +142,7 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 
 				WorkspaceEdit workspaceEdit = new WorkspaceEdit();
 
-				if (p.getQualifiedName().isEmpty()) {
+				if (!(p.getValue() instanceof org.farhan.dsl.lang.IStepObject)) {
 					// Same-file edit: use diagnostic range and options URI
 					VersionedTextDocumentIdentifier textDocId = new VersionedTextDocumentIdentifier();
 					textDocId.setUri(options.getURI());
@@ -154,7 +154,7 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 					workspaceEdit.setDocumentChanges(List.of(Either.forLeft(textDocEdit)));
 				} else {
 					// Workspace edit: create new file
-					logger.debug("Creating new file for {}", p.getQualifiedName());
+					logger.debug("Creating new file for IStepObject");
 					CreateFile createFile = getResourceOperation(p);
 					logger.debug("createFile.getUri() for {}", createFile.getUri());
 					VersionedTextDocumentIdentifier textDocId = new VersionedTextDocumentIdentifier();
@@ -180,8 +180,9 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 	private CreateFile getResourceOperation(SheepDogIssueProposal p) {
 		CreateFile createFile = new CreateFile();
 		TestProjectImpl testProject = (TestProjectImpl) SheepDogFactory.instance.createTestProject();
+		org.farhan.dsl.lang.IStepObject stepObject = (org.farhan.dsl.lang.IStepObject) p.getValue();
 		URI uri = URI.createFileURI(testProject.getName() + "/" + testProject.layer2dir
-				+ "/" + p.getQualifiedName());
+				+ "/" + stepObject.getNameLong());
 		createFile.setUri(uri.toString());
 		createFile.setOptions(new CreateFileOptions());
 		createFile.getOptions().setOverwrite(true);
@@ -197,10 +198,15 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 	}
 
 	private TextDocumentEdit getTextDocumentEdit(Range range, SheepDogIssueProposal p,
-			VersionedTextDocumentIdentifier textDocId) {
+			VersionedTextDocumentIdentifier textDocId) throws Exception {
 		TextEdit textEdit = new TextEdit();
 		textEdit.setRange(range);
-		textEdit.setNewText(p.getValue());
+		if (p.getValue() instanceof org.farhan.dsl.lang.IStepObject) {
+			org.farhan.dsl.lang.IStepObject stepObject = (org.farhan.dsl.lang.IStepObject) p.getValue();
+			textEdit.setNewText(stepObject.getContent());
+		} else {
+			textEdit.setNewText(p.getValue().toString());
+		}
 		TextDocumentEdit textDocEdit = new TextDocumentEdit();
 		textDocEdit.setTextDocument(textDocId);
 		textDocEdit.setEdits(List.of(textEdit));

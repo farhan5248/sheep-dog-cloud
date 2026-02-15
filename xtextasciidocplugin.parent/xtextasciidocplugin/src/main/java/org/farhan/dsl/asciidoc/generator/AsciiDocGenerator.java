@@ -18,11 +18,11 @@ import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 import org.farhan.dsl.asciidoc.impl.TextImpl;
 import org.farhan.dsl.issues.RowIssueDetector;
 import org.farhan.dsl.issues.RowIssueResolver;
-import org.farhan.dsl.issues.SheepDogIssueProposal;
 import org.farhan.dsl.issues.TestStepIssueDetector;
 import org.farhan.dsl.issues.TestStepIssueResolver;
 import org.farhan.dsl.issues.TextIssueDetector;
 import org.farhan.dsl.issues.TextIssueResolver;
+import org.farhan.dsl.lang.SheepDogIssueProposal;
 import org.farhan.dsl.lang.IStepObject;
 import org.farhan.dsl.lang.ITestProject;
 import org.farhan.dsl.lang.SheepDogBuilder;
@@ -106,10 +106,8 @@ public class AsciiDocGenerator extends AbstractGenerator {
 
 	private static void applyProposal(ArrayList<SheepDogIssueProposal> proposals) throws Exception {
 		for (SheepDogIssueProposal p : proposals) {
-			if (!p.getQualifiedName().isEmpty()) {
-				IStepObject stepObject = SheepDogBuilder.createStepObject(null, p.getQualifiedName());
-				stepObject.setContent(p.getValue());
-				testProject.addStepObject(stepObject);
+			if (p.getValue() instanceof IStepObject) {
+				testProject.addStepObject((IStepObject) p.getValue());
 			}
 		}
 	}

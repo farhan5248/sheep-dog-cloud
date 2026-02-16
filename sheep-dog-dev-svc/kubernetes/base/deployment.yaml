@@ -122,6 +122,8 @@ spec:
           image: ghcr.io/farhan5248/sheep-dog-dev-svc:latest
           imagePullPolicy: "Always"
           env:
+            - name: JAVA_OPTS
+              value: "-Xmx3g -Xms1g"
             - name: LOG_LEVEL
               value: "INFO"  # Set to DEBUG to enable debug logging
             - name: LOG_PATH
@@ -151,10 +153,10 @@ spec:
               mountPath: /logs
           resources:
             limits:
-              memory: "2Gi"
+              memory: "4Gi"
               cpu: "500m"
             requests:
-              memory: "1Gi"
+              memory: "2Gi"
               cpu: "250m"
       volumes:
         - name: logs-volume

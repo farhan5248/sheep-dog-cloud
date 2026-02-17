@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.farhan.dsl.cucumber.cucumber.Background;
-import org.farhan.dsl.cucumber.cucumber.DocString;
 import org.farhan.dsl.cucumber.cucumber.Examples;
 import org.farhan.dsl.cucumber.cucumber.ExamplesTable;
 import org.farhan.dsl.cucumber.cucumber.Row;
@@ -225,7 +224,8 @@ public class ConvertUMLToCucumber extends Converter {
 		}
 
 		if (!srcTestSuite.getDescription().isEmpty()) {
-			for (String statement : srcTestSuite.getDescription()) {
+		    tgtObjTestSuite.clearFeatureStatement();
+            for (String statement : srcTestSuite.getDescription()) {
 				tgtObjTestSuite.addFeatureStatement(statement);
 			}
 		}

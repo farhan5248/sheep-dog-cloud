@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 
 public class ConvertUMLToCucumberGuice extends ConvertUMLToCucumber {
 
-	private static final Logger log = LoggerFactory.getLogger(ConvertUMLToCucumberGuice.class);
-
 	public ConvertUMLToCucumberGuice(String tags, IResourceRepository fa, String serverHost, int serverPort) {
 		super(tags, fa, serverHost, serverPort);
 	}

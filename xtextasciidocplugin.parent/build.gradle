@@ -210,6 +210,12 @@ updateVersion {
 		}
 	}
 
+tasks.register('stripSnapshotDeps', StripSnapshotTask)
+tasks.register('restoreSnapshotDeps', RestoreSnapshotTask)
+
+beforeReleaseBuild.dependsOn stripSnapshotDeps
+updateVersion.finalizedBy restoreSnapshotDeps
+
 release {
     tagTemplate = 'v${version}'
 	preTagCommitMessage = '[release] pre tag commit: '

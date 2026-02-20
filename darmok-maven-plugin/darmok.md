@@ -19,10 +19,11 @@ mvn org.farhan:darmok-maven-plugin:run
 | Property | Default | Description |
 |---|---|---|
 | specsDir | ../../sheep-dog-qa/sheep-dog-specs | Path to specs project (relative to baseDir) |
-| asciidocDir | ${specsDir}/src/test/resources/asciidoc/specs/Ubiquitous Language | Path to asciidoc files |
+| asciidocDir | ../../sheep-dog-qa/sheep-dog-specs/src/test/resources/asciidoc/specs/Ubiquitous Language | Path to asciidoc files |
 | scenariosFile | scenarios-list.txt | Scenarios list file in baseDir |
-| host | dev.sheepdogdev.io | Server host |
-| mavenPlugin | org.farhan:sheep-dog-dev-svc-maven-plugin | Maven plugin for UML conversions |
+| host | dev.sheepdogdev.io | Service host |
+| port | 80 | Service port |
+| timeout | 300000 | Service health check timeout (ms) |
 | model | sonnet | Claude CLI model |
 | coAuthor | Claude Sonnet 4.5 <noreply@anthropic.com> | Git co-author for commits |
 | maxRetries | 3 | Max retries for Claude CLI errors |

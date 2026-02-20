@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.function.Supplier;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -29,7 +30,7 @@ public abstract class MBTMojo extends AbstractMojo {
 
 	private final RestTemplate restTemplate;
 	private HttpEntity<Void> requestEntity;
-	private final int RETRY_COUNT = 60;
+	private static final int RETRY_COUNT = 60;
 
 	public MBTMojo() {
 		baseDir = new File("").getAbsolutePath();
@@ -54,6 +55,23 @@ public abstract class MBTMojo extends AbstractMojo {
 		return "http://" + host + ":" + port + "/";
 	}
 
+	private <T> T retry(Supplier<T> action, String operation) throws Exception {
+		int retryCount = 0;
+		while (retryCount < RETRY_COUNT) {
+			try {
+				return action.get();
+			} catch (Exception e) {
+				retryCount++;
+				getLog().error("Retry attempt " + retryCount + " for " + operation, e);
+				if (retryCount >= RETRY_COUNT) {
+					throw new Exception("Max retries reached while " + operation, e);
+				}
+				Thread.sleep(1000);
+			}
+		}
+		throw new Exception("Max retries reached while " + operation);
+	}
+
 	private void clearObjects(String resource, String goal) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		String url = getHost() + resource + "/clear" + goal + "Objects";
@@ -61,19 +79,11 @@ public abstract class MBTMojo extends AbstractMojo {
 			parameters.put("tags", tags);
 			url += "?tags={tags}";
 		}
-		int retryCount = 0;
-		while (retryCount < RETRY_COUNT) {
-			try {
-				restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, parameters);
-
-				return; // Exit if successful
-			} catch (Exception e) {
-				getLog().error("Retry attempt " + (retryCount + 1), e);
-				Thread.sleep(1000);
-				retryCount++;
-			}
-		}
-		throw new Exception("Max retries reached while clearing objects for goal: " + goal);
+		String finalUrl = url;
+		retry(() -> {
+			restTemplate.exchange(finalUrl, HttpMethod.DELETE, requestEntity, Void.class, parameters);
+			return null;
+		}, "clearing objects for goal: " + goal);
 	}
 
 	private String convertObject(String resource, String goal, String fileName, String contents) throws Exception {
@@ -84,49 +94,34 @@ public abstract class MBTMojo extends AbstractMojo {
 			url += "&tags={tags}";
 		}
 		parameters.put("fileName", fileName);
-		int retryCount = 0;
-		while (retryCount < RETRY_COUNT) {
-			try {
-				ResponseEntity<TransformableFile> postResponse = restTemplate.exchange(url, HttpMethod.POST,
-						new HttpEntity<>(contents,
-								requestEntity != null ? requestEntity.getHeaders() : new HttpHeaders()),
-						TransformableFile.class, parameters);
-				return postResponse.getBody().getFileContent();
-			} catch (Exception e) {
-				getLog().error("Retry attempt " + (retryCount + 1), e);
-				Thread.sleep(1000);
-				retryCount++;
-			}
-		}
-		throw new Exception("Max retries reached while converting objects for goal: " + goal);
+		String finalUrl = url;
+		return retry(() -> {
+			ResponseEntity<TransformableFile> postResponse = restTemplate.exchange(finalUrl, HttpMethod.POST,
+					new HttpEntity<>(contents,
+							requestEntity != null ? requestEntity.getHeaders() : new HttpHeaders()),
+					TransformableFile.class, parameters);
+			return postResponse.getBody().getFileContent();
+		}, "converting object for goal: " + goal);
 	}
 
 	private List<TransformableFile> getObjectNames(String resource, String goal) throws Exception {
-
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
 		String url = getHost() + resource + "/get" + goal + "ObjectNames";
 		if (!tags.isEmpty()) {
 			parameters.put("tags", tags);
 			url += "?tags={tags}";
 		}
-		int retryCount = 0;
-		while (retryCount < RETRY_COUNT) {
-			try {
-				ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(url, HttpMethod.GET,
-						requestEntity, new ParameterizedTypeReference<List<TransformableFile>>() {
-						}, parameters);
-				List<TransformableFile> fileList = response.getBody();
-				for (TransformableFile tf : fileList) {
-					getLog().info("ObjectName: " + tf.getFileName());
-				}
-				return fileList;
-			} catch (Exception e) {
-				getLog().error("Retry attempt " + (retryCount + 1), e);
-				Thread.sleep(1000);
-				retryCount++;
+		String finalUrl = url;
+		return retry(() -> {
+			ResponseEntity<List<TransformableFile>> response = restTemplate.exchange(finalUrl, HttpMethod.GET,
+					requestEntity, new ParameterizedTypeReference<List<TransformableFile>>() {
+					}, parameters);
+			List<TransformableFile> fileList = response.getBody();
+			for (TransformableFile tf : fileList) {
+				getLog().info("ObjectName: " + tf.getFileName());
 			}
-		}
-		throw new Exception("Max retries reached while getting object names for goal: " + goal);
+			return fileList;
+		}, "getting object names for goal: " + goal);
 	}
 
 	private void waitForService() throws MojoExecutionException {

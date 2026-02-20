@@ -1,3 +1,0 @@
-File: Validation for Only Issues
-  Scenario: Test suite name should start with a capital letter validation
-    Tag: Validate

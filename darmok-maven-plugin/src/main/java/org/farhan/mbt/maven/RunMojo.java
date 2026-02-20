@@ -26,18 +26,21 @@ public class RunMojo extends AbstractMojo {
 	@Parameter(property = "specsDir", defaultValue = "../../sheep-dog-qa/sheep-dog-specs")
 	public String specsDir;
 
-	@Parameter(property = "asciidocDir", defaultValue = "${specsDir}/src/test/resources/asciidoc/specs/Ubiquitous Language")
+	@Parameter(property = "asciidocDir", defaultValue = "../../sheep-dog-qa/sheep-dog-specs/src/test/resources/asciidoc/specs/Ubiquitous Language")
 	public String asciidocDir;
 
 	@Parameter(property = "scenariosFile", defaultValue = "scenarios-list.txt")
 	public String scenariosFile;
 
-	// Server / Maven properties
+	// Server properties
 	@Parameter(property = "host", defaultValue = "dev.sheepdogdev.io")
 	public String host;
 
-	@Parameter(property = "mavenPlugin", defaultValue = "org.farhan:sheep-dog-dev-svc-maven-plugin")
-	public String mavenPlugin;
+	@Parameter(property = "port", defaultValue = "80")
+	public int port;
+
+	@Parameter(property = "timeout", defaultValue = "300000")
+	public int timeout;
 
 	// Claude CLI properties
 	@Parameter(property = "model", defaultValue = "sonnet")
@@ -195,24 +198,32 @@ public class RunMojo extends AbstractMojo {
 					git.run(baseDir, "commit", "-m", commitMsg);
 					getLog().info("");
 
-					// Run rgr-refactor
-					getLog().info("Running rgr-refactor for file: " + fileName);
-					getLog().info("");
-					long refactorStart = System.currentTimeMillis();
-					int refactorExit = runRgrRefactor();
-					long refactorDuration = System.currentTimeMillis() - refactorStart;
+					// Check if src/main has changes (code was modified, not just tests)
+					int mainDiffExit = git.run(baseDir, "diff", "HEAD~1", "--quiet", "--", "src/main");
+					boolean hasMainChanges = (mainDiffExit != 0);
 
-					if (refactorExit != 0) {
-						throw new MojoExecutionException("rgr-refactor failed with exit code " + refactorExit);
+					if (hasMainChanges) {
+						// Run rgr-refactor
+						getLog().info("Running rgr-refactor for file: " + fileName);
+						getLog().info("");
+						long refactorStart = System.currentTimeMillis();
+						int refactorExit = runRgrRefactor();
+						long refactorDuration = System.currentTimeMillis() - refactorStart;
+
+						if (refactorExit != 0) {
+							throw new MojoExecutionException("rgr-refactor failed with exit code " + refactorExit);
+						}
+
+						// Commit refactor changes
+						String refactorCommitMsg = "run-rgr-refactor " + fileName + "\n\nCo-Authored-By: " + coAuthor;
+						getLog().info("Committing changes: " + refactorCommitMsg.split("\n")[0] + " (Duration: " + formatDuration(refactorDuration) + ")");
+						git.run(baseDir, "add", ".");
+						git.run(baseDir, "commit", "-m", refactorCommitMsg);
+					} else {
+						getLog().info("Skipping rgr-refactor (no src/main changes)");
 					}
-
-					// Commit refactor changes
-					String refactorCommitMsg = "run-rgr-refactor " + fileName + "\n\nCo-Authored-By: " + coAuthor;
-					getLog().info("Committing changes: " + refactorCommitMsg.split("\n")[0] + " (Duration: " + formatDuration(refactorDuration) + ")");
-					git.run(baseDir, "add", ".");
-					git.run(baseDir, "commit", "-m", refactorCommitMsg);
 				} else {
-					getLog().info("Skipping rgr-refactor (nothing staged for this file)");
+					getLog().info("Skipping commit (nothing staged for this file)");
 				}
 
 				totalFilesProcessed++;
@@ -317,28 +328,18 @@ public class RunMojo extends AbstractMojo {
 
 	private int runRgrRed(String pattern) throws Exception {
 		String runnerClassName = pattern + "Test";
+		ServiceClient service = new ServiceClient(getLog(), host, port, timeout);
 
 		getLog().info("RGR-Red: Pattern=" + pattern + ", Runner=" + runnerClassName);
 
-		// Step 1: AsciiDoctor to UML in sheep-dog-specs
+		// Step 1: AsciiDoctor to UML (direct REST call to service)
 		getLog().info("  STEP 1: AsciiDoctor to UML Conversion");
-		int step1Exit = maven.run(baseDir + "/" + specsDir,
-			mavenPlugin + ":asciidoctor-to-uml",
-			"-Dtags=" + pattern,
-			"-Dhost=" + host);
-		if (step1Exit != 0) {
-			getLog().info("  Warning: AsciiDoctor-to-UML exited with code " + step1Exit);
-		}
+		service.executeToUML("asciidoctor/", "ConvertAsciidoctorToUML", pattern,
+				baseDir + "/" + specsDir, ".asciidoc");
 
-		// Step 2: UML to Cucumber-Guice in sheep-dog-test
+		// Step 2: UML to Cucumber-Guice (direct REST call to service)
 		getLog().info("  STEP 2: UML to Cucumber-Guice Conversion");
-		int step2Exit = maven.run(baseDir,
-			mavenPlugin + ":uml-to-cucumber-guice",
-			"-Dtags=" + pattern,
-			"-Dhost=" + host);
-		if (step2Exit != 0) {
-			getLog().info("  Warning: UML-to-Cucumber-Guice exited with code " + step2Exit);
-		}
+		service.executeFromUML("cucumber/", "ConvertUMLToCucumberGuice", pattern, baseDir);
 
 		// Step 3: Generate runner class
 		getLog().info("  STEP 3: Generate Runner Class");
@@ -351,7 +352,7 @@ public class RunMojo extends AbstractMojo {
 
 		// Step 4: Run tests
 		getLog().info("  STEP 4: Running tests with " + runnerClassName);
-		int testExitCode = maven.run(baseDir, "verify", "-Dtest=" + runnerClassName);
+		int testExitCode = maven.run(baseDir, "test", "-Dtest=" + runnerClassName);
 
 		if (testExitCode == 0) {
 			getLog().info("  Tests are PASSING - no failing tests to fix (returning 100)");
@@ -375,16 +376,50 @@ public class RunMojo extends AbstractMojo {
 	}
 
 	private int runCleanUp() throws Exception {
-		getLog().info("Clean NUL Files");
-		ClaudeRunner claude = new ClaudeRunner(getLog(), model, maxRetries, retryWaitSeconds);
-		int cleanExit = claude.run(baseDir + "/../..", "/clean-nul-files");
-		if (cleanExit != 0) {
-			getLog().info("Warning: clean-nul-files completed with exit code " + cleanExit);
-		}
+		Path sheepDogMain = Path.of(baseDir, "../..").normalize();
 
-		getLog().info("Running mvn clean...");
-		MavenRunner mvn = new MavenRunner(getLog());
-		return mvn.run(baseDir, "clean");
+		getLog().info("Deleting NUL files...");
+		int deleted = deleteNulFiles(sheepDogMain);
+		getLog().info("Deleted " + deleted + " NUL files");
+
+		getLog().info("Deleting target directory...");
+		deleteDirectory(Path.of(baseDir, "target"));
+		return 0;
+	}
+
+	private int deleteNulFiles(Path root) throws Exception {
+		int[] count = { 0 };
+		Files.walk(root)
+			.filter(Files::isRegularFile)
+			.filter(p -> {
+				String name = p.getFileName().toString();
+				return "NUL".equals(name) || "nul".equals(name);
+			})
+			.forEach(p -> {
+				try {
+					getLog().info("  Deleting: " + p);
+					Files.delete(p);
+					count[0]++;
+				} catch (Exception e) {
+					getLog().info("  Warning: Could not delete " + p + ": " + e.getMessage());
+				}
+			});
+		return count[0];
+	}
+
+	private void deleteDirectory(Path dir) throws Exception {
+		if (!Files.exists(dir)) {
+			return;
+		}
+		Files.walk(dir)
+			.sorted(java.util.Comparator.reverseOrder())
+			.forEach(p -> {
+				try {
+					Files.delete(p);
+				} catch (Exception e) {
+					getLog().info("  Warning: Could not delete " + p + ": " + e.getMessage());
+				}
+			});
 	}
 
 	// =========================================================================

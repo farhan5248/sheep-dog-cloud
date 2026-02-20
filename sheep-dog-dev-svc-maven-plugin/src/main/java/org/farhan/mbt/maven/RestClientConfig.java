@@ -7,11 +7,22 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 @Configuration
 public class RestClientConfig {
 
+    private int connectTimeout = 60000;
+    private int readTimeout = 60000;
+
+    public RestClientConfig() {
+    }
+
+    public RestClientConfig(int connectTimeout, int readTimeout) {
+        this.connectTimeout = connectTimeout;
+        this.readTimeout = readTimeout;
+    }
+
     @Bean
     public RestTemplate restTemplate() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(60000); // 60 seconds
-        factory.setReadTimeout(60000);    // 60 seconds
+        factory.setConnectTimeout(connectTimeout);
+        factory.setReadTimeout(readTimeout);
         RestTemplate restTemplate = new RestTemplate(factory);
         return restTemplate;
     }

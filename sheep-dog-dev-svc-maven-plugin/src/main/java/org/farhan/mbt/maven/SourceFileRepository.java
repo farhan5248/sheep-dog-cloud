@@ -1,15 +1,13 @@
 package org.farhan.mbt.maven;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import org.farhan.dsl.lang.IResourceRepository;
-
-public class SourceFileRepository implements IResourceRepository {
+public class SourceFileRepository {
 
 	private final String BASEDIR;
 
@@ -21,18 +19,15 @@ public class SourceFileRepository implements IResourceRepository {
 		BASEDIR = baseDir;
 	}
 
-	@Override
 	public void clear(String tags) {
 		deleteDir(new File(BASEDIR));
 	}
 
-	@Override
 	public boolean contains(String tags, String path) {
 		path = BASEDIR + "/" + path;
 		return new File(path).exists();
 	}
 
-	@Override
 	public void delete(String tags, String path) {
 		new File(BASEDIR + path).delete();
 	}
@@ -49,13 +44,11 @@ public class SourceFileRepository implements IResourceRepository {
 		}
 	}
 
-	@Override
 	public String get(String tags, String path) throws Exception {
 		path = BASEDIR + "/" + path;
 		return new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 	}
 
-	@Override
 	public ArrayList<String> list(String tags, String path, String extension) {
 		String root = BASEDIR;
 		ArrayList<String> files = new ArrayList<String>();
@@ -74,13 +67,9 @@ public class SourceFileRepository implements IResourceRepository {
 		return files;
 	}
 
-	@Override
 	public void put(String tags, String path, String content) throws Exception {
-		path = BASEDIR + "/" + path;
-		new File(path).getParentFile().mkdirs();
-		PrintWriter pw = new PrintWriter(path, StandardCharsets.UTF_8);
-		pw.write(content);
-		pw.flush();
-		pw.close();
+		Path filePath = Paths.get(BASEDIR, path);
+		Files.createDirectories(filePath.getParent());
+		Files.writeString(filePath, content, StandardCharsets.UTF_8);
 	}
 }

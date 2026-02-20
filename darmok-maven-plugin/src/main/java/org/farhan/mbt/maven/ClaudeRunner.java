@@ -56,11 +56,11 @@ public class ClaudeRunner extends ProcessRunner {
 			attempt++;
 
 			if (attempt > 1) {
-				log.info("Retry attempt " + attempt + " of " + maxRetries + "...");
+				log.debug("Retry attempt " + attempt + " of " + maxRetries + "...");
 			}
 
-			log.info("Executing: " + String.join(" ", command));
-			log.info("-------------------------------------------");
+			log.debug("Executing: " + String.join(" ", command));
+			log.debug("-------------------------------------------");
 
 			ProcessBuilder pb = new ProcessBuilder(command);
 			pb.directory(new File(workingDirectory));
@@ -73,31 +73,31 @@ public class ClaudeRunner extends ProcessRunner {
 					new InputStreamReader(process.getInputStream()))) {
 				String line;
 				while ((line = reader.readLine()) != null) {
-					log.info(line);
+					log.debug(line);
 					outputLines.add(line);
 				}
 			}
 			exitCode = process.waitFor();
 
-			log.info("-------------------------------------------");
+			log.debug("-------------------------------------------");
 
 			if (exitCode == 0) {
-				log.info("Claude CLI completed successfully");
+				log.debug("Claude CLI completed successfully");
 				break;
 			}
 
 			String matchedPattern = findRetryableError(outputLines);
 			if (matchedPattern != null && attempt < maxRetries) {
-				log.info("Retryable error detected: " + matchedPattern);
-				log.info("Claude CLI exited with code " + exitCode);
-				log.info("Waiting " + retryWaitSeconds + " seconds before retry...");
+				log.warn("Retryable error detected: " + matchedPattern);
+				log.warn("Claude CLI exited with code " + exitCode);
+				log.warn("Waiting " + retryWaitSeconds + " seconds before retry...");
 				Thread.sleep(retryWaitSeconds * 1000L);
 			} else {
 				if (matchedPattern != null) {
-					log.info("Retryable error detected: " + matchedPattern);
-					log.info("Max retries (" + maxRetries + ") exhausted");
+					log.error("Retryable error detected: " + matchedPattern);
+					log.error("Max retries (" + maxRetries + ") exhausted");
 				}
-				log.info("Claude CLI exited with code " + exitCode);
+				log.debug("Claude CLI exited with code " + exitCode);
 				break;
 			}
 		}

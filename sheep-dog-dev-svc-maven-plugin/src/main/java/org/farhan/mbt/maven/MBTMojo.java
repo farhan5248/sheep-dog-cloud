@@ -62,10 +62,11 @@ public abstract class MBTMojo extends AbstractMojo {
 				return action.get();
 			} catch (Exception e) {
 				retryCount++;
-				getLog().error("Retry attempt " + retryCount + " for " + operation, e);
 				if (retryCount >= RETRY_COUNT) {
+					getLog().error("Retry attempt " + retryCount + " for " + operation, e);
 					throw new Exception("Max retries reached while " + operation, e);
 				}
+				getLog().warn("Retry attempt " + retryCount + " for " + operation, e);
 				Thread.sleep(1000);
 			}
 		}
@@ -118,7 +119,7 @@ public abstract class MBTMojo extends AbstractMojo {
 					}, parameters);
 			List<TransformableFile> fileList = response.getBody();
 			for (TransformableFile tf : fileList) {
-				getLog().info("ObjectName: " + tf.getFileName());
+				getLog().debug("ObjectName: " + tf.getFileName());
 			}
 			return fileList;
 		}, "getting object names for goal: " + goal);
@@ -131,12 +132,12 @@ public abstract class MBTMojo extends AbstractMojo {
 				ResponseEntity<String> response = restTemplate.getForEntity(getHost() + "actuator/health",
 						String.class);
 				if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("\"status\":\"UP\"")) {
-					getLog().info("Service ready");
+					getLog().debug("Service ready");
 					return;
 				}
 			} catch (Exception e) {
 				long timeLeft = (timeout - (System.currentTimeMillis() - startTime)) / 1000;
-				getLog().info("Service not ready yet, " + timeLeft + " seconds remaining");
+				getLog().debug("Service not ready yet, " + timeLeft + " seconds remaining");
 			}
 
 			try {
@@ -174,12 +175,12 @@ public abstract class MBTMojo extends AbstractMojo {
 						if (fileName.startsWith(dir + "stepdefs")) {
 							tempFiles.add(fileName);
 						} else {
-							getLog().info("Converting: " + fileName);
+							getLog().debug("Converting: " + fileName);
 							convertObject(resource, goal, fileName, sr.get("", fileName));
 						}
 					}
 					for (String fileName : tempFiles) {
-						getLog().info("Converting: " + fileName);
+						getLog().debug("Converting: " + fileName);
 						convertObject(resource, goal, fileName, sr.get("", fileName));
 					}
 				}
@@ -188,7 +189,7 @@ public abstract class MBTMojo extends AbstractMojo {
 					String content = convertObject(resource, goal, tf.getFileName(),
 							sr.contains("", tf.getFileName()) ? sr.get("", tf.getFileName()) : null);
 					if (!content.isEmpty()) {
-						getLog().info("Converting: " + tf.getFileName());
+						getLog().debug("Converting: " + tf.getFileName());
 						sr.put("", tf.getFileName(), content);
 					}
 				}

@@ -35,7 +35,7 @@ public class ProcessRunner {
 		pb.directory(new File(workingDirectory));
 		pb.redirectErrorStream(true);
 
-		log.info("Running: " + String.join(" ", command));
+		log.debug("Running: " + String.join(" ", command));
 
 		Process process = pb.start();
 		process.getOutputStream().close();
@@ -43,7 +43,7 @@ public class ProcessRunner {
 				new InputStreamReader(process.getInputStream()))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				log.info(line);
+				log.debug(line);
 			}
 		}
 		return process.waitFor();

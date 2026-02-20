@@ -66,12 +66,12 @@ public class ServiceClient {
 						getBaseUrl() + "actuator/health", String.class);
 				if (response.getStatusCode() == HttpStatus.OK
 						&& response.getBody().contains("\"status\":\"UP\"")) {
-					log.info("Service ready");
+					log.debug("Service ready");
 					return;
 				}
 			} catch (Exception e) {
 				long timeLeft = (timeout - (System.currentTimeMillis() - startTime)) / 1000;
-				log.info("Service not ready yet, " + timeLeft + " seconds remaining");
+				log.debug("Service not ready yet, " + timeLeft + " seconds remaining");
 			}
 
 			try {
@@ -136,7 +136,7 @@ public class ServiceClient {
 					parameters);
 			List<TransformableFile> fileList = response.getBody();
 			for (TransformableFile tf : fileList) {
-				log.info("ObjectName: " + tf.getFileName());
+				log.debug("ObjectName: " + tf.getFileName());
 			}
 			return fileList;
 		}, "getting object names for goal: " + goal);
@@ -159,14 +159,14 @@ public class ServiceClient {
 				if (fileName.startsWith(dir + "stepdefs")) {
 					stepdefs.add(fileName);
 				} else {
-					log.info("Converting: " + fileName);
+					log.debug("Converting: " + fileName);
 					String content = Files.readString(
 							Path.of(baseDir, fileName), StandardCharsets.UTF_8);
 					convertObject(resource, goal, tags, fileName, content);
 				}
 			}
 			for (String fileName : stepdefs) {
-				log.info("Converting: " + fileName);
+				log.debug("Converting: " + fileName);
 				String content = Files.readString(
 						Path.of(baseDir, fileName), StandardCharsets.UTF_8);
 				convertObject(resource, goal, tags, fileName, content);
@@ -187,7 +187,7 @@ public class ServiceClient {
 			String content = convertObject(resource, goal, tags,
 					tf.getFileName(), existingContent);
 			if (content != null && !content.isEmpty()) {
-				log.info("Converting: " + tf.getFileName());
+				log.debug("Converting: " + tf.getFileName());
 				Files.createDirectories(filePath.getParent());
 				Files.writeString(filePath, content, StandardCharsets.UTF_8);
 			}

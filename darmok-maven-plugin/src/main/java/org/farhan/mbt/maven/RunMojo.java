@@ -276,7 +276,7 @@ public class RunMojo extends AbstractMojo {
 		String filePath = baseDir + "/" + asciidocDir + "/" + fileName + ".asciidoc";
 		File file = new File(filePath);
 		if (!file.exists()) {
-			getLog().info("WARNING: File not found: " + fileName + ".asciidoc");
+			getLog().warn("File not found: " + fileName + ".asciidoc");
 			return false;
 		}
 
@@ -303,9 +303,9 @@ public class RunMojo extends AbstractMojo {
 					if (!alreadyHasTag) {
 						newContent.add("");
 						newContent.add("@" + tag);
-						getLog().info("  Added tag @" + tag + " to file");
+						getLog().debug("  Added tag @" + tag + " to file");
 					} else {
-						getLog().info("  Tag already present in file");
+						getLog().debug("  Tag already present in file");
 					}
 
 					// Append remaining lines and write
@@ -318,7 +318,7 @@ public class RunMojo extends AbstractMojo {
 			}
 		}
 
-		getLog().info("WARNING: Scenario not found in file: " + scenarioName);
+		getLog().warn("Scenario not found in file: " + scenarioName);
 		return false;
 	}
 
@@ -330,47 +330,47 @@ public class RunMojo extends AbstractMojo {
 		String runnerClassName = pattern + "Test";
 		ServiceClient service = new ServiceClient(getLog(), host, port, timeout);
 
-		getLog().info("RGR-Red: Pattern=" + pattern + ", Runner=" + runnerClassName);
+		getLog().debug("RGR-Red: Pattern=" + pattern + ", Runner=" + runnerClassName);
 
 		// Step 1: AsciiDoctor to UML (direct REST call to service)
-		getLog().info("  STEP 1: AsciiDoctor to UML Conversion");
+		getLog().debug("  STEP 1: AsciiDoctor to UML Conversion");
 		service.executeToUML("asciidoctor/", "ConvertAsciidoctorToUML", pattern,
 				baseDir + "/" + specsDir, ".asciidoc");
 
 		// Step 2: UML to Cucumber-Guice (direct REST call to service)
-		getLog().info("  STEP 2: UML to Cucumber-Guice Conversion");
+		getLog().debug("  STEP 2: UML to Cucumber-Guice Conversion");
 		service.executeFromUML("cucumber/", "ConvertUMLToCucumberGuice", pattern, baseDir);
 
 		// Step 3: Generate runner class
-		getLog().info("  STEP 3: Generate Runner Class");
+		getLog().debug("  STEP 3: Generate Runner Class");
 		String runnerClassPath = baseDir
 			+ "/src/test/java/org/farhan/suites/" + runnerClassName + ".java";
 		Files.createDirectories(Path.of(runnerClassPath).getParent());
 		String runnerContent = generateRunnerClassContent(pattern, runnerClassName);
 		writeFileWithLF(runnerClassPath, List.of(runnerContent.split("\n", -1)));
-		getLog().info("  Created runner class: " + runnerClassPath);
+		getLog().debug("  Created runner class: " + runnerClassPath);
 
 		// Step 4: Run tests
-		getLog().info("  STEP 4: Running tests with " + runnerClassName);
+		getLog().debug("  STEP 4: Running tests with " + runnerClassName);
 		int testExitCode = maven.run(baseDir, "test", "-Dtest=" + runnerClassName);
 
 		if (testExitCode == 0) {
-			getLog().info("  Tests are PASSING - no failing tests to fix (returning 100)");
+			getLog().debug("  Tests are PASSING - no failing tests to fix (returning 100)");
 			return 100;
 		} else {
-			getLog().info("  Tests are FAILING - ready for green phase (returning 0)");
+			getLog().debug("  Tests are FAILING - ready for green phase (returning 0)");
 			return 0;
 		}
 	}
 
 	private int runRgrGreen(String pattern) throws Exception {
-		getLog().info("RGR-Green: Pattern=" + pattern);
+		getLog().debug("RGR-Green: Pattern=" + pattern);
 		ClaudeRunner claude = new ClaudeRunner(getLog(), model, maxRetries, retryWaitSeconds);
 		return claude.run(baseDir + "/../..", "/rgr-green sheep-dog-test " + pattern);
 	}
 
 	private int runRgrRefactor() throws Exception {
-		getLog().info("RGR-Refactor: " + pipeline + " sheep-dog-test");
+		getLog().debug("RGR-Refactor: " + pipeline + " sheep-dog-test");
 		ClaudeRunner claude = new ClaudeRunner(getLog(), model, maxRetries, retryWaitSeconds);
 		return claude.run(baseDir + "/../..", "/rgr-refactor " + pipeline + " sheep-dog-test");
 	}
@@ -378,11 +378,11 @@ public class RunMojo extends AbstractMojo {
 	private int runCleanUp() throws Exception {
 		Path sheepDogMain = Path.of(baseDir, "../..").normalize();
 
-		getLog().info("Deleting NUL files...");
+		getLog().debug("Deleting NUL files...");
 		int deleted = deleteNulFiles(sheepDogMain);
-		getLog().info("Deleted " + deleted + " NUL files");
+		getLog().debug("Deleted " + deleted + " NUL files");
 
-		getLog().info("Deleting target directory...");
+		getLog().debug("Deleting target directory...");
 		deleteDirectory(Path.of(baseDir, "target"));
 		return 0;
 	}
@@ -397,11 +397,11 @@ public class RunMojo extends AbstractMojo {
 			})
 			.forEach(p -> {
 				try {
-					getLog().info("  Deleting: " + p);
+					getLog().debug("  Deleting: " + p);
 					Files.delete(p);
 					count[0]++;
 				} catch (Exception e) {
-					getLog().info("  Warning: Could not delete " + p + ": " + e.getMessage());
+					getLog().debug("  Warning: Could not delete " + p + ": " + e.getMessage());
 				}
 			});
 		return count[0];
@@ -417,7 +417,7 @@ public class RunMojo extends AbstractMojo {
 				try {
 					Files.delete(p);
 				} catch (Exception e) {
-					getLog().info("  Warning: Could not delete " + p + ": " + e.getMessage());
+					getLog().debug("  Warning: Could not delete " + p + ": " + e.getMessage());
 				}
 			});
 	}

@@ -6,6 +6,7 @@ on:
     branches: [ "develop" ]
     paths:
       - '.github/**'
+      - '**/kubernetes/**'
       - '**/docker/**'
       - '**/src/**'
       - '**/pom.xml'
@@ -34,6 +35,13 @@ jobs:
       project: 'sheep-dog-dev-mcp'
     secrets: inherit
 
+  darmok-maven-plugin:
+    needs: [sheep-dog-dev-svc-maven-plugin]
+    uses: farhan5248/sheep-dog-ops/.github/workflows/snapshot-docker.yml@main
+    with:
+      project: 'darmok-maven-plugin'
+    secrets: inherit
+
   xtext-asciidoc-plugin:
     uses: farhan5248/sheep-dog-ops/.github/workflows/gradle-snapshot.yml@main
     with:
@@ -41,7 +49,7 @@ jobs:
     secrets: inherit
 
   merge-into-main:
-    needs: [sheep-dog-dev-svc-maven-plugin, sheep-dog-dev-mcp, xtext-asciidoc-plugin]
+    needs: [sheep-dog-dev-svc-maven-plugin, sheep-dog-dev-mcp, darmok-maven-plugin, xtext-asciidoc-plugin]
     uses: farhan5248/sheep-dog-ops/.github/workflows/merge.yml@main
     with:
       source: 'develop'

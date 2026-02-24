@@ -17,10 +17,11 @@ import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransi
 import org.farhan.dsl.asciidoc.asciiDoc.And;
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
 import org.farhan.dsl.asciidoc.asciiDoc.Cell;
+import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.Given;
-import org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList;
+import org.farhan.dsl.asciidoc.asciiDoc.Line;
+import org.farhan.dsl.asciidoc.asciiDoc.NestedDescription;
 import org.farhan.dsl.asciidoc.asciiDoc.Row;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
@@ -54,17 +55,20 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 			case AsciiDocPackage.CELL:
 				sequence_Cell(context, (Cell) semanticObject); 
 				return; 
+			case AsciiDocPackage.DESCRIPTION:
+				sequence_Description(context, (Description) semanticObject); 
+				return; 
 			case AsciiDocPackage.GIVEN:
 				sequence_Given(context, (Given) semanticObject); 
 				return; 
-			case AsciiDocPackage.NESTED_STATEMENT_LIST:
-				sequence_NestedStatementList(context, (NestedStatementList) semanticObject); 
+			case AsciiDocPackage.LINE:
+				sequence_Line(context, (Line) semanticObject); 
+				return; 
+			case AsciiDocPackage.NESTED_DESCRIPTION:
+				sequence_NestedDescription(context, (NestedDescription) semanticObject); 
 				return; 
 			case AsciiDocPackage.ROW:
 				sequence_Row(context, (Row) semanticObject); 
-				return; 
-			case AsciiDocPackage.STATEMENT:
-				sequence_Statement(context, (Statement) semanticObject); 
 				return; 
 			case AsciiDocPackage.STEP_DEFINITION:
 				sequence_StepDefinition(context, (StepDefinition) semanticObject); 
@@ -142,6 +146,20 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     Description returns Description
+	 *
+	 * Constraint:
+	 *     lineList+=Line+
+	 * </pre>
+	 */
+	protected void sequence_Description(ISerializationContext context, Description semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
 	 *     TestStep returns Given
 	 *     Given returns Given
 	 *
@@ -157,13 +175,33 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	/**
 	 * <pre>
 	 * Contexts:
-	 *     NestedStatementList returns NestedStatementList
+	 *     Line returns Line
 	 *
 	 * Constraint:
-	 *     statementList+=Statement+
+	 *     name=Title
 	 * </pre>
 	 */
-	protected void sequence_NestedStatementList(ISerializationContext context, NestedStatementList semanticObject) {
+	protected void sequence_Line(ISerializationContext context, Line semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, AsciiDocPackage.Literals.LINE__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AsciiDocPackage.Literals.LINE__NAME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getLineAccess().getNameTitleParserRuleCall_0_0(), semanticObject.getName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     NestedDescription returns NestedDescription
+	 *
+	 * Constraint:
+	 *     lineList+=Line+
+	 * </pre>
+	 */
+	protected void sequence_NestedDescription(ISerializationContext context, NestedDescription semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -185,30 +223,10 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	/**
 	 * <pre>
 	 * Contexts:
-	 *     Statement returns Statement
-	 *
-	 * Constraint:
-	 *     name=Title
-	 * </pre>
-	 */
-	protected void sequence_Statement(ISerializationContext context, Statement semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, AsciiDocPackage.Literals.STATEMENT__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AsciiDocPackage.Literals.STATEMENT__NAME));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getStatementAccess().getNameTitleParserRuleCall_0_0(), semanticObject.getName());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * <pre>
-	 * Contexts:
 	 *     StepDefinition returns StepDefinition
 	 *
 	 * Constraint:
-	 *     (name=Title statementList+=Statement* stepParameterList+=StepParameters*)
+	 *     (name=Title description=Description? stepParameterList+=StepParameters*)
 	 * </pre>
 	 */
 	protected void sequence_StepDefinition(ISerializationContext context, StepDefinition semanticObject) {
@@ -223,7 +241,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     StepObject returns StepObject
 	 *
 	 * Constraint:
-	 *     (name=Title statementList+=Statement* stepDefinitionList+=StepDefinition*)
+	 *     (name=Title description=Description? stepDefinitionList+=StepDefinition*)
 	 * </pre>
 	 */
 	protected void sequence_StepObject(ISerializationContext context, StepObject semanticObject) {
@@ -237,7 +255,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     StepParameters returns StepParameters
 	 *
 	 * Constraint:
-	 *     (name=Title statementList=NestedStatementList? table=Table)
+	 *     (name=Title nestedDescription=NestedDescription? table=Table)
 	 * </pre>
 	 */
 	protected void sequence_StepParameters(ISerializationContext context, StepParameters semanticObject) {
@@ -266,7 +284,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     TestCase returns TestCase
 	 *
 	 * Constraint:
-	 *     (name=Title statementList+=Statement* testStepList+=TestStep* testDataList+=TestData*)
+	 *     (name=Title description=Description? testStepList+=TestStep* testDataList+=TestData*)
 	 * </pre>
 	 */
 	protected void sequence_TestCase(ISerializationContext context, TestCase semanticObject) {
@@ -280,7 +298,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     TestData returns TestData
 	 *
 	 * Constraint:
-	 *     (name=Title statementList=NestedStatementList? table=Table)
+	 *     (name=Title nestedDescription=NestedDescription? table=Table)
 	 * </pre>
 	 */
 	protected void sequence_TestData(ISerializationContext context, TestData semanticObject) {
@@ -295,7 +313,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     TestSetup returns TestSetup
 	 *
 	 * Constraint:
-	 *     (name=Title statementList+=Statement* testStepList+=TestStep*)
+	 *     (name=Title description=Description? testStepList+=TestStep*)
 	 * </pre>
 	 */
 	protected void sequence_TestSetup(ISerializationContext context, TestSetup semanticObject) {
@@ -310,7 +328,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     TestSuite returns TestSuite
 	 *
 	 * Constraint:
-	 *     (name=Title statementList+=Statement* testStepContainerList+=TestStepContainer*)
+	 *     (name=Title description=Description? testStepContainerList+=TestStepContainer*)
 	 * </pre>
 	 */
 	protected void sequence_TestSuite(ISerializationContext context, TestSuite semanticObject) {

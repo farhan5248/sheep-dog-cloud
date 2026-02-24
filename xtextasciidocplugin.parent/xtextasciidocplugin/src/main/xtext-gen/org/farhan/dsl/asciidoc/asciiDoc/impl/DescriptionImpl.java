@@ -18,40 +18,40 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
-import org.farhan.dsl.asciidoc.asciiDoc.Cell;
-import org.farhan.dsl.asciidoc.asciiDoc.Row;
+import org.farhan.dsl.asciidoc.asciiDoc.Description;
+import org.farhan.dsl.asciidoc.asciiDoc.Line;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Row</b></em>'.
+ * An implementation of the model object '<em><b>Description</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.RowImpl#getCellList <em>Cell List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.DescriptionImpl#getLineList <em>Line List</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class RowImpl extends MinimalEObjectImpl.Container implements Row
+public class DescriptionImpl extends MinimalEObjectImpl.Container implements Description
 {
   /**
-   * The cached value of the '{@link #getCellList() <em>Cell List</em>}' containment reference list.
+   * The cached value of the '{@link #getLineList() <em>Line List</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCellList()
+   * @see #getLineList()
    * @generated
    * @ordered
    */
-  protected EList<Cell> cellList;
+  protected EList<Line> lineList;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected RowImpl()
+  protected DescriptionImpl()
   {
     super();
   }
@@ -64,7 +64,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row
   @Override
   protected EClass eStaticClass()
   {
-    return AsciiDocPackage.Literals.ROW;
+    return AsciiDocPackage.Literals.DESCRIPTION;
   }
 
   /**
@@ -73,13 +73,13 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row
    * @generated
    */
   @Override
-  public EList<Cell> getCellList()
+  public EList<Line> getLineList()
   {
-    if (cellList == null)
+    if (lineList == null)
     {
-      cellList = new EObjectContainmentEList<Cell>(Cell.class, this, AsciiDocPackage.ROW__CELL_LIST);
+      lineList = new EObjectContainmentEList<Line>(Line.class, this, AsciiDocPackage.DESCRIPTION__LINE_LIST);
     }
-    return cellList;
+    return lineList;
   }
 
   /**
@@ -92,8 +92,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row
   {
     switch (featureID)
     {
-      case AsciiDocPackage.ROW__CELL_LIST:
-        return ((InternalEList<?>)getCellList()).basicRemove(otherEnd, msgs);
+      case AsciiDocPackage.DESCRIPTION__LINE_LIST:
+        return ((InternalEList<?>)getLineList()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -108,8 +108,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row
   {
     switch (featureID)
     {
-      case AsciiDocPackage.ROW__CELL_LIST:
-        return getCellList();
+      case AsciiDocPackage.DESCRIPTION__LINE_LIST:
+        return getLineList();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -125,9 +125,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row
   {
     switch (featureID)
     {
-      case AsciiDocPackage.ROW__CELL_LIST:
-        getCellList().clear();
-        getCellList().addAll((Collection<? extends Cell>)newValue);
+      case AsciiDocPackage.DESCRIPTION__LINE_LIST:
+        getLineList().clear();
+        getLineList().addAll((Collection<? extends Line>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -143,8 +143,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row
   {
     switch (featureID)
     {
-      case AsciiDocPackage.ROW__CELL_LIST:
-        getCellList().clear();
+      case AsciiDocPackage.DESCRIPTION__LINE_LIST:
+        getLineList().clear();
         return;
     }
     super.eUnset(featureID);
@@ -160,10 +160,10 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row
   {
     switch (featureID)
     {
-      case AsciiDocPackage.ROW__CELL_LIST:
-        return cellList != null && !cellList.isEmpty();
+      case AsciiDocPackage.DESCRIPTION__LINE_LIST:
+        return lineList != null && !lineList.isEmpty();
     }
     return super.eIsSet(featureID);
   }
 
-} //RowImpl
+} //DescriptionImpl

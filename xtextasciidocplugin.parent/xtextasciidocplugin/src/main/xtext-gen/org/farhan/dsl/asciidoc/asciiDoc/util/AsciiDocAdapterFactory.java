@@ -151,9 +151,14 @@ public class AsciiDocAdapterFactory extends AdapterFactoryImpl
         return createTextAdapter();
       }
       @Override
-      public Adapter caseNestedStatementList(NestedStatementList object)
+      public Adapter caseDescription(Description object)
       {
-        return createNestedStatementListAdapter();
+        return createDescriptionAdapter();
+      }
+      @Override
+      public Adapter caseNestedDescription(NestedDescription object)
+      {
+        return createNestedDescriptionAdapter();
       }
       @Override
       public Adapter caseTable(Table object)
@@ -171,9 +176,9 @@ public class AsciiDocAdapterFactory extends AdapterFactoryImpl
         return createCellAdapter();
       }
       @Override
-      public Adapter caseStatement(Statement object)
+      public Adapter caseLine(Line object)
       {
-        return createStatementAdapter();
+        return createLineAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -423,16 +428,31 @@ public class AsciiDocAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList <em>Nested Statement List</em>}'.
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Description <em>Description</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Description
    * @generated
    */
-  public Adapter createNestedStatementListAdapter()
+  public Adapter createDescriptionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.NestedDescription <em>Nested Description</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.NestedDescription
+   * @generated
+   */
+  public Adapter createNestedDescriptionAdapter()
   {
     return null;
   }
@@ -483,16 +503,16 @@ public class AsciiDocAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Statement <em>Statement</em>}'.
+   * Creates a new adapter for an object of class '{@link org.farhan.dsl.asciidoc.asciiDoc.Line <em>Line</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.Statement
+   * @see org.farhan.dsl.asciidoc.asciiDoc.Line
    * @generated
    */
-  public Adapter createStatementAdapter()
+  public Adapter createLineAdapter()
   {
     return null;
   }

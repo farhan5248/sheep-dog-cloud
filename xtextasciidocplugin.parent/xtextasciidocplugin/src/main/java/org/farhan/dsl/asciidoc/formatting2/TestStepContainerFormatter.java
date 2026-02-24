@@ -8,7 +8,7 @@ import org.farhan.dsl.asciidoc.services.AsciiDocGrammarAccess;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.And;
 import org.farhan.dsl.asciidoc.asciiDoc.Given;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.asciiDoc.Line;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.Then;
 import org.farhan.dsl.asciidoc.asciiDoc.When;
@@ -50,10 +50,12 @@ public abstract class TestStepContainerFormatter extends Formatter {
 		formatKeywordTrailingSpace(df.getRegion(theAbstractScenario, getKeyword(a)), doc);
 		formatTitle(df.getRegion(theAbstractScenario, getTitleRuleCall(a)), doc);
 		formatEOL2RuleCall(df.getRegion(theAbstractScenario, getEOLRuleCall(a)), doc);
-		for (Statement s : theAbstractScenario.getStatementList()) {
-			StatementFormatter formatter = new StatementFormatter(s);
-			formatter.isLast(isLastElement(s, theAbstractScenario.getStatementList()));
-			formatter.format(doc, ga, df);
+		if (theAbstractScenario.getDescription() != null) {
+			for (Line s : theAbstractScenario.getDescription().getLineList()) {
+				StatementFormatter formatter = new StatementFormatter(s);
+				formatter.isLast(isLastElement(s, theAbstractScenario.getDescription().getLineList()));
+				formatter.format(doc, ga, df);
+			}
 		}
 		for (TestStep s : theAbstractScenario.getTestStepList()) {
 			TestStepFormatter formatter = newStepFormatter(s);

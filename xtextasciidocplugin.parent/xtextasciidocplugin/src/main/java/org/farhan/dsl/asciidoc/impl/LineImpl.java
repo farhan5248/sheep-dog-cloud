@@ -1,17 +1,17 @@
 package org.farhan.dsl.asciidoc.impl;
 
-import org.farhan.dsl.lang.IStatement;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.lang.ILine;
+import org.farhan.dsl.asciidoc.asciiDoc.Line;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 
-public class StatementImpl implements IStatement {
+public class LineImpl implements ILine {
 
-	Statement eObject;
+	Line eObject;
 	private Object parent;
 
-	public StatementImpl(Statement statement) {
-		this.eObject = statement;
+	public LineImpl(Line line) {
+		this.eObject = line;
 	}
 
 	@Override

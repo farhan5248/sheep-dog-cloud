@@ -3,19 +3,19 @@ package org.farhan.dsl.asciidoc.formatting2;
 import org.eclipse.xtext.formatting2.IFormattableDocument;
 import org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion;
 import org.farhan.dsl.asciidoc.services.AsciiDocGrammarAccess;
-import org.farhan.dsl.asciidoc.services.AsciiDocGrammarAccess.StatementElements;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.services.AsciiDocGrammarAccess.LineElements;
+import org.farhan.dsl.asciidoc.asciiDoc.Line;
 
 public class StatementFormatter extends Formatter {
 
-	private Statement theStatement;
+	private Line theStatement;
 
-	public StatementFormatter(Statement theStatement) {
+	public StatementFormatter(Line theStatement) {
 		this.theStatement = theStatement;
 	}
 
 	public void format(IFormattableDocument doc, AsciiDocGrammarAccess ga, AsciiDocFormatter df) {
-		StatementElements a = ga.getStatementAccess();
+		LineElements a = ga.getLineAccess();
 		formatTitleNoSpace(df.getRegion(theStatement, a.getNameTitleParserRuleCall_0_0()), doc);
 		formatEOL12RuleCall(df.getRegion(theStatement, a.getEOLTerminalRuleCall_1()), doc);
 	}

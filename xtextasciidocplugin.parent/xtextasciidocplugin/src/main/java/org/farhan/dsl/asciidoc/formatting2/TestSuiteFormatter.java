@@ -7,7 +7,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSetup;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
 import org.farhan.dsl.asciidoc.asciiDoc.TestCase;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.asciiDoc.Line;
 
 public class TestSuiteFormatter extends Formatter {
 
@@ -32,10 +32,12 @@ public class TestSuiteFormatter extends Formatter {
 		formatKeywordTrailingSpace(df.getRegion(theFeature, a.getTestSuiteKeyword_1()), doc);
 		formatTitle(df.getRegion(theFeature, a.getNameTitleParserRuleCall_2_0()), doc);
 		formatEOL2RuleCall(df.getRegion(theFeature, a.getEOLTerminalRuleCall_3()), doc);
-		for (Statement s : theFeature.getStatementList()) {
-			StatementFormatter formatter = new StatementFormatter(s);
-			formatter.isLast(isLastElement(s, theFeature.getStatementList()));
-			formatter.format(doc, ga, df);
+		if (theFeature.getDescription() != null) {
+			for (Line s : theFeature.getDescription().getLineList()) {
+				StatementFormatter formatter = new StatementFormatter(s);
+				formatter.isLast(isLastElement(s, theFeature.getDescription().getLineList()));
+				formatter.format(doc, ga, df);
+			}
 		}
 		for (TestStepContainer s : theFeature.getTestStepContainerList()) {
 			TestStepContainerFormatter formatter = newAbstractTestCaseFormatter(s);

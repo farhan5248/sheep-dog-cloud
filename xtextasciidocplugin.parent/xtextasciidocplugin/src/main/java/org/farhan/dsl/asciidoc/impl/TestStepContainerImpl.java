@@ -2,11 +2,13 @@ package org.farhan.dsl.asciidoc.impl;
 
 import java.util.ArrayList;
 
-import org.farhan.dsl.lang.IStatement;
+import org.farhan.dsl.lang.IDescription;
+import org.farhan.dsl.lang.ILine;
 import org.farhan.dsl.lang.ITestStep;
 import org.farhan.dsl.lang.ITestStepContainer;
 import org.farhan.dsl.lang.ITestSuite;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory;
+import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 import org.farhan.dsl.asciidoc.asciiDoc.TestSuite;
@@ -34,12 +36,11 @@ public class TestStepContainerImpl implements ITestStepContainer {
     }
 
     @Override
-    public ArrayList<IStatement> getStatementList() {
-        ArrayList<IStatement> statementList = new ArrayList<IStatement>();
-        for (Statement s : eObject.getStatementList()) {
-            statementList.add(new StatementImpl(s));
+    public IDescription getDescription() {
+        if (eObject.getDescription() != null) {
+            return new DescriptionImpl(eObject.getDescription());
         }
-        return statementList;
+        return null;
     }
 
     @Override
@@ -58,18 +59,8 @@ public class TestStepContainerImpl implements ITestStepContainer {
     }
 
     @Override
-    public IStatement getStatement(int index) {
-        throw new UnsupportedOperationException("getStatement(int index) is not implemented");
-    }
-
-    @Override
-    public IStatement getStatement(String name) {
-        throw new UnsupportedOperationException("getStatement(String name) is not implemented");
-    }
-
-    @Override
     public ITestStep getTestStep(int index) {
-        throw new UnsupportedOperationException("getTestStep(int index) is not implemented");
+        return new TestStepImpl(eObject.getTestStepList().get(index));
     }
 
     @Override
@@ -78,8 +69,13 @@ public class TestStepContainerImpl implements ITestStepContainer {
     }
 
     @Override
-    public boolean addStatement(IStatement value) {
-        eObject.getStatementList().add(((StatementImpl) value).eObject);
+    public boolean addLine(ILine value) {
+        Description list = eObject.getDescription();
+        if (list == null) {
+            list = AsciiDocFactory.eINSTANCE.createDescription();
+            eObject.setDescription(list);
+        }
+        list.getLineList().add(((LineImpl) value).eObject);
         return true;
     }
 

@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getName <em>Name</em>}</li>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getStatementList <em>Statement List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getNestedDescription <em>Nested Description</em>}</li>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getTable <em>Table</em>}</li>
  * </ul>
  *
@@ -48,26 +48,26 @@ public interface TestData extends EObject
   void setName(String value);
 
   /**
-   * Returns the value of the '<em><b>Statement List</b></em>' containment reference.
+   * Returns the value of the '<em><b>Nested Description</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Statement List</em>' containment reference.
-   * @see #setStatementList(NestedStatementList)
-   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getTestData_StatementList()
+   * @return the value of the '<em>Nested Description</em>' containment reference.
+   * @see #setNestedDescription(NestedDescription)
+   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getTestData_NestedDescription()
    * @model containment="true"
    * @generated
    */
-  NestedStatementList getStatementList();
+  NestedDescription getNestedDescription();
 
   /**
-   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getStatementList <em>Statement List</em>}' containment reference.
+   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getNestedDescription <em>Nested Description</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Statement List</em>' containment reference.
-   * @see #getStatementList()
+   * @param value the new value of the '<em>Nested Description</em>' containment reference.
+   * @see #getNestedDescription()
    * @generated
    */
-  void setStatementList(NestedStatementList value);
+  void setNestedDescription(NestedDescription value);
 
   /**
    * Returns the value of the '<em><b>Table</b></em>' containment reference.

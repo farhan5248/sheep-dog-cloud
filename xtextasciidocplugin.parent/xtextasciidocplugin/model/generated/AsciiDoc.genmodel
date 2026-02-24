@@ -8,19 +8,19 @@
       fileExtensions="asciidoc" ecorePackage="AsciiDoc.ecore#/">
     <genClasses ecoreClass="AsciiDoc.ecore#//Model">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Model/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//Model/statementList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//Model/description"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//StepObject">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepObject/stepDefinitionList"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//StepDefinition">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//StepDefinition/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepDefinition/statementList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepDefinition/description"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepDefinition/stepParameterList"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//StepParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//StepParameters/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepParameters/statementList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepParameters/nestedDescription"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepParameters/table"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestSuite">
@@ -28,7 +28,7 @@
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestStepContainer">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//TestStepContainer/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestStepContainer/statementList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestStepContainer/description"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestStepContainer/testStepList"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestSetup"/>
@@ -37,7 +37,7 @@
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//TestData/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestData/statementList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestData/nestedDescription"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestData/table"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestStep">
@@ -53,8 +53,11 @@
     <genClasses ecoreClass="AsciiDoc.ecore#//Text">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Text/name"/>
     </genClasses>
-    <genClasses ecoreClass="AsciiDoc.ecore#//NestedStatementList">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//NestedStatementList/statementList"/>
+    <genClasses ecoreClass="AsciiDoc.ecore#//Description">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//Description/lineList"/>
+    </genClasses>
+    <genClasses ecoreClass="AsciiDoc.ecore#//NestedDescription">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//NestedDescription/lineList"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//Table">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//Table/rowList"/>
@@ -65,8 +68,8 @@
     <genClasses ecoreClass="AsciiDoc.ecore#//Cell">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Cell/name"/>
     </genClasses>
-    <genClasses ecoreClass="AsciiDoc.ecore#//Statement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Statement/name"/>
+    <genClasses ecoreClass="AsciiDoc.ecore#//Line">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Line/name"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

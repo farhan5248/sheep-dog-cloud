@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getName <em>Name</em>}</li>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getStatementList <em>Statement List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getDescription <em>Description</em>}</li>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getTestStepList <em>Test Step List</em>}</li>
  * </ul>
  *
@@ -50,16 +50,26 @@ public interface TestStepContainer extends EObject
   void setName(String value);
 
   /**
-   * Returns the value of the '<em><b>Statement List</b></em>' containment reference list.
-   * The list contents are of type {@link org.farhan.dsl.asciidoc.asciiDoc.Statement}.
+   * Returns the value of the '<em><b>Description</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Statement List</em>' containment reference list.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getTestStepContainer_StatementList()
+   * @return the value of the '<em>Description</em>' containment reference.
+   * @see #setDescription(Description)
+   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getTestStepContainer_Description()
    * @model containment="true"
    * @generated
    */
-  EList<Statement> getStatementList();
+  Description getDescription();
+
+  /**
+   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer#getDescription <em>Description</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Description</em>' containment reference.
+   * @see #getDescription()
+   * @generated
+   */
+  void setDescription(Description value);
 
   /**
    * Returns the value of the '<em><b>Test Step List</b></em>' containment reference list.

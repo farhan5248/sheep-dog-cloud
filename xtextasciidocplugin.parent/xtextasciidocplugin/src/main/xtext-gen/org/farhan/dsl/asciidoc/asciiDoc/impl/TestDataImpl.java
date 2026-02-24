@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
-import org.farhan.dsl.asciidoc.asciiDoc.NestedStatementList;
+import org.farhan.dsl.asciidoc.asciiDoc.NestedDescription;
 import org.farhan.dsl.asciidoc.asciiDoc.Table;
 import org.farhan.dsl.asciidoc.asciiDoc.TestData;
 
@@ -26,7 +26,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestData;
  * </p>
  * <ul>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestDataImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestDataImpl#getStatementList <em>Statement List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestDataImpl#getNestedDescription <em>Nested Description</em>}</li>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestDataImpl#getTable <em>Table</em>}</li>
  * </ul>
  *
@@ -55,14 +55,14 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getStatementList() <em>Statement List</em>}' containment reference.
+   * The cached value of the '{@link #getNestedDescription() <em>Nested Description</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStatementList()
+   * @see #getNestedDescription()
    * @generated
    * @ordered
    */
-  protected NestedStatementList statementList;
+  protected NestedDescription nestedDescription;
 
   /**
    * The cached value of the '{@link #getTable() <em>Table</em>}' containment reference.
@@ -126,9 +126,9 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
    * @generated
    */
   @Override
-  public NestedStatementList getStatementList()
+  public NestedDescription getNestedDescription()
   {
-    return statementList;
+    return nestedDescription;
   }
 
   /**
@@ -136,13 +136,13 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetStatementList(NestedStatementList newStatementList, NotificationChain msgs)
+  public NotificationChain basicSetNestedDescription(NestedDescription newNestedDescription, NotificationChain msgs)
   {
-    NestedStatementList oldStatementList = statementList;
-    statementList = newStatementList;
+    NestedDescription oldNestedDescription = nestedDescription;
+    nestedDescription = newNestedDescription;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AsciiDocPackage.TEST_DATA__STATEMENT_LIST, oldStatementList, newStatementList);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION, oldNestedDescription, newNestedDescription);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -154,20 +154,20 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
    * @generated
    */
   @Override
-  public void setStatementList(NestedStatementList newStatementList)
+  public void setNestedDescription(NestedDescription newNestedDescription)
   {
-    if (newStatementList != statementList)
+    if (newNestedDescription != nestedDescription)
     {
       NotificationChain msgs = null;
-      if (statementList != null)
-        msgs = ((InternalEObject)statementList).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AsciiDocPackage.TEST_DATA__STATEMENT_LIST, null, msgs);
-      if (newStatementList != null)
-        msgs = ((InternalEObject)newStatementList).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AsciiDocPackage.TEST_DATA__STATEMENT_LIST, null, msgs);
-      msgs = basicSetStatementList(newStatementList, msgs);
+      if (nestedDescription != null)
+        msgs = ((InternalEObject)nestedDescription).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION, null, msgs);
+      if (newNestedDescription != null)
+        msgs = ((InternalEObject)newNestedDescription).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION, null, msgs);
+      msgs = basicSetNestedDescription(newNestedDescription, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.TEST_DATA__STATEMENT_LIST, newStatementList, newStatementList));
+      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION, newNestedDescription, newNestedDescription));
   }
 
   /**
@@ -230,8 +230,8 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
   {
     switch (featureID)
     {
-      case AsciiDocPackage.TEST_DATA__STATEMENT_LIST:
-        return basicSetStatementList(null, msgs);
+      case AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION:
+        return basicSetNestedDescription(null, msgs);
       case AsciiDocPackage.TEST_DATA__TABLE:
         return basicSetTable(null, msgs);
     }
@@ -250,8 +250,8 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
     {
       case AsciiDocPackage.TEST_DATA__NAME:
         return getName();
-      case AsciiDocPackage.TEST_DATA__STATEMENT_LIST:
-        return getStatementList();
+      case AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION:
+        return getNestedDescription();
       case AsciiDocPackage.TEST_DATA__TABLE:
         return getTable();
     }
@@ -271,8 +271,8 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
       case AsciiDocPackage.TEST_DATA__NAME:
         setName((String)newValue);
         return;
-      case AsciiDocPackage.TEST_DATA__STATEMENT_LIST:
-        setStatementList((NestedStatementList)newValue);
+      case AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION:
+        setNestedDescription((NestedDescription)newValue);
         return;
       case AsciiDocPackage.TEST_DATA__TABLE:
         setTable((Table)newValue);
@@ -294,8 +294,8 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
       case AsciiDocPackage.TEST_DATA__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case AsciiDocPackage.TEST_DATA__STATEMENT_LIST:
-        setStatementList((NestedStatementList)null);
+      case AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION:
+        setNestedDescription((NestedDescription)null);
         return;
       case AsciiDocPackage.TEST_DATA__TABLE:
         setTable((Table)null);
@@ -316,8 +316,8 @@ public class TestDataImpl extends MinimalEObjectImpl.Container implements TestDa
     {
       case AsciiDocPackage.TEST_DATA__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case AsciiDocPackage.TEST_DATA__STATEMENT_LIST:
-        return statementList != null;
+      case AsciiDocPackage.TEST_DATA__NESTED_DESCRIPTION:
+        return nestedDescription != null;
       case AsciiDocPackage.TEST_DATA__TABLE:
         return table != null;
     }

@@ -7,21 +7,21 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Cell</b></em>'.
+ * A representation of the model object '<em><b>Line</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.Cell#getName <em>Name</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.Line#getName <em>Name</em>}</li>
  * </ul>
  *
- * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getCell()
+ * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getLine()
  * @model
  * @generated
  */
-public interface Cell extends EObject
+public interface Line extends EObject
 {
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
@@ -29,14 +29,14 @@ public interface Cell extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
-   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getCell_Name()
+   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getLine_Name()
    * @model
    * @generated
    */
   String getName();
 
   /**
-   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.Cell#getName <em>Name</em>}' attribute.
+   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.Line#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Name</em>' attribute.
@@ -45,4 +45,4 @@ public interface Cell extends EObject
    */
   void setName(String value);
 
-} // Cell
+} // Line

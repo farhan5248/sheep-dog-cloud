@@ -9,22 +9,22 @@ Model:
 
 StepObject:
 	'=' 'Step-Object:' name=Title EOL
-	statementList+=Statement*
+	description=Description?
 	stepDefinitionList+=StepDefinition*;
 
 StepDefinition:
 	'==' 'Step-Definition:' name=Title EOL
-	statementList+=Statement*
+	description=Description?
 	stepParameterList+=StepParameters*;
 
 StepParameters:
 	'*' 'Step-Parameters:' name=Title EOL
-	statementList=NestedStatementList?
+	nestedDescription=NestedDescription?
 	table=Table;
 
 TestSuite:
 	'=' 'Test-Suite:' name=Title EOL
-	statementList+=Statement*
+	description=Description?
 	testStepContainerList+=TestStepContainer*;
 
 TestStepContainer:
@@ -32,18 +32,18 @@ TestStepContainer:
 
 TestSetup:
 	'==' 'Test-Setup:' name=Title EOL
-	statementList+=Statement*
+	description=Description?
 	testStepList+=TestStep*;
 
 TestCase:
 	'==' 'Test-Case:' name=Title EOL
-	statementList+=Statement*
+	description=Description?
 	testStepList+=TestStep*
 	testDataList+=TestData*;
 
 TestData:
 	'*' 'Test-Data:' name=Title EOL
-	statementList=NestedStatementList?
+	nestedDescription=NestedDescription?
 	table=Table;
 
 TestStep:
@@ -69,9 +69,12 @@ Text:
 	'+' EOL
 	name=RAWTEXT EOL;
 
-NestedStatementList:
+Description:
+	lineList+=Line+;
+
+NestedDescription:
 	'+' EOL
-	statementList+=Statement+;
+	lineList+=Line+;
 
 Table:
 	'+' EOL
@@ -85,8 +88,7 @@ Row:
 Cell:
 	'|' name=Title;
 
-// TODO There need to be better names than Text, Statement, Title, WORD etc ...
-Statement:
+Line:
 	name=Title EOL;
 
 Title:
@@ -104,7 +106,7 @@ Title:
 // without breaking it up into its parts
 // TODO do I need to define single spaces?
 StepObjectRef:
-	WORD+ ('file' | 'page' | 'response' | 'dialog' | 'directory' | 'request' | 'goal' | 'job' | 'action');
+	WORD+ ('file' | 'page' | 'response' | 'dialog' | 'directory' | 'request' | 'goal' | 'job' | 'action' | 'popup' | 'annotation' | 'hover' | 'tooltip');
 
 StepDefinitionRef:
 	WORD+;

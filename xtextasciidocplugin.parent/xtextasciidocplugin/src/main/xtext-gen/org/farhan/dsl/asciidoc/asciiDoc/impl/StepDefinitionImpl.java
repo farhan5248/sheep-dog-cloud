@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
 
@@ -33,7 +33,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
  * </p>
  * <ul>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepDefinitionImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepDefinitionImpl#getStatementList <em>Statement List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepDefinitionImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.StepDefinitionImpl#getStepParameterList <em>Step Parameter List</em>}</li>
  * </ul>
  *
@@ -62,14 +62,14 @@ public class StepDefinitionImpl extends MinimalEObjectImpl.Container implements 
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getStatementList() <em>Statement List</em>}' containment reference list.
+   * The cached value of the '{@link #getDescription() <em>Description</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStatementList()
+   * @see #getDescription()
    * @generated
    * @ordered
    */
-  protected EList<Statement> statementList;
+  protected Description description;
 
   /**
    * The cached value of the '{@link #getStepParameterList() <em>Step Parameter List</em>}' containment reference list.
@@ -133,13 +133,48 @@ public class StepDefinitionImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    */
   @Override
-  public EList<Statement> getStatementList()
+  public Description getDescription()
   {
-    if (statementList == null)
+    return description;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetDescription(Description newDescription, NotificationChain msgs)
+  {
+    Description oldDescription = description;
+    description = newDescription;
+    if (eNotificationRequired())
     {
-      statementList = new EObjectContainmentEList<Statement>(Statement.class, this, AsciiDocPackage.STEP_DEFINITION__STATEMENT_LIST);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AsciiDocPackage.STEP_DEFINITION__DESCRIPTION, oldDescription, newDescription);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
     }
-    return statementList;
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setDescription(Description newDescription)
+  {
+    if (newDescription != description)
+    {
+      NotificationChain msgs = null;
+      if (description != null)
+        msgs = ((InternalEObject)description).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AsciiDocPackage.STEP_DEFINITION__DESCRIPTION, null, msgs);
+      if (newDescription != null)
+        msgs = ((InternalEObject)newDescription).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AsciiDocPackage.STEP_DEFINITION__DESCRIPTION, null, msgs);
+      msgs = basicSetDescription(newDescription, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.STEP_DEFINITION__DESCRIPTION, newDescription, newDescription));
   }
 
   /**
@@ -167,8 +202,8 @@ public class StepDefinitionImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case AsciiDocPackage.STEP_DEFINITION__STATEMENT_LIST:
-        return ((InternalEList<?>)getStatementList()).basicRemove(otherEnd, msgs);
+      case AsciiDocPackage.STEP_DEFINITION__DESCRIPTION:
+        return basicSetDescription(null, msgs);
       case AsciiDocPackage.STEP_DEFINITION__STEP_PARAMETER_LIST:
         return ((InternalEList<?>)getStepParameterList()).basicRemove(otherEnd, msgs);
     }
@@ -187,8 +222,8 @@ public class StepDefinitionImpl extends MinimalEObjectImpl.Container implements 
     {
       case AsciiDocPackage.STEP_DEFINITION__NAME:
         return getName();
-      case AsciiDocPackage.STEP_DEFINITION__STATEMENT_LIST:
-        return getStatementList();
+      case AsciiDocPackage.STEP_DEFINITION__DESCRIPTION:
+        return getDescription();
       case AsciiDocPackage.STEP_DEFINITION__STEP_PARAMETER_LIST:
         return getStepParameterList();
     }
@@ -209,9 +244,8 @@ public class StepDefinitionImpl extends MinimalEObjectImpl.Container implements 
       case AsciiDocPackage.STEP_DEFINITION__NAME:
         setName((String)newValue);
         return;
-      case AsciiDocPackage.STEP_DEFINITION__STATEMENT_LIST:
-        getStatementList().clear();
-        getStatementList().addAll((Collection<? extends Statement>)newValue);
+      case AsciiDocPackage.STEP_DEFINITION__DESCRIPTION:
+        setDescription((Description)newValue);
         return;
       case AsciiDocPackage.STEP_DEFINITION__STEP_PARAMETER_LIST:
         getStepParameterList().clear();
@@ -234,8 +268,8 @@ public class StepDefinitionImpl extends MinimalEObjectImpl.Container implements 
       case AsciiDocPackage.STEP_DEFINITION__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case AsciiDocPackage.STEP_DEFINITION__STATEMENT_LIST:
-        getStatementList().clear();
+      case AsciiDocPackage.STEP_DEFINITION__DESCRIPTION:
+        setDescription((Description)null);
         return;
       case AsciiDocPackage.STEP_DEFINITION__STEP_PARAMETER_LIST:
         getStepParameterList().clear();
@@ -256,8 +290,8 @@ public class StepDefinitionImpl extends MinimalEObjectImpl.Container implements 
     {
       case AsciiDocPackage.STEP_DEFINITION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case AsciiDocPackage.STEP_DEFINITION__STATEMENT_LIST:
-        return statementList != null && !statementList.isEmpty();
+      case AsciiDocPackage.STEP_DEFINITION__DESCRIPTION:
+        return description != null;
       case AsciiDocPackage.STEP_DEFINITION__STEP_PARAMETER_LIST:
         return stepParameterList != null && !stepParameterList.isEmpty();
     }

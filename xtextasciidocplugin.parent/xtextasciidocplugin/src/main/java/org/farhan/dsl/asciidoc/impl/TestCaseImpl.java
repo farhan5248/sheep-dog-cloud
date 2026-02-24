@@ -2,7 +2,6 @@ package org.farhan.dsl.asciidoc.impl;
 
 import java.util.ArrayList;
 
-import org.farhan.dsl.lang.IStatement;
 import org.farhan.dsl.lang.ITestCase;
 import org.farhan.dsl.lang.ITestData;
 import org.farhan.dsl.lang.ITestStep;
@@ -17,16 +16,6 @@ public class TestCaseImpl extends TestStepContainerImpl implements ITestCase {
     @Override
     public ArrayList<ITestData> getTestDataList() {
         throw new UnsupportedOperationException("ArrayList<ITestData> getTestDataList() is not implemented");
-    }
-
-    @Override
-    public IStatement getStatement(int index) {
-        throw new UnsupportedOperationException("getStatement(int index) is not implemented");
-    }
-
-    @Override
-    public IStatement getStatement(String name) {
-        throw new UnsupportedOperationException("getStatement(String name) is not implemented");
     }
 
     @Override

@@ -159,13 +159,22 @@ public interface AsciiDocFactory extends EFactory
   Text createText();
 
   /**
-   * Returns a new object of class '<em>Nested Statement List</em>'.
+   * Returns a new object of class '<em>Description</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Nested Statement List</em>'.
+   * @return a new object of class '<em>Description</em>'.
    * @generated
    */
-  NestedStatementList createNestedStatementList();
+  Description createDescription();
+
+  /**
+   * Returns a new object of class '<em>Nested Description</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Nested Description</em>'.
+   * @generated
+   */
+  NestedDescription createNestedDescription();
 
   /**
    * Returns a new object of class '<em>Table</em>'.
@@ -195,13 +204,13 @@ public interface AsciiDocFactory extends EFactory
   Cell createCell();
 
   /**
-   * Returns a new object of class '<em>Statement</em>'.
+   * Returns a new object of class '<em>Line</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Statement</em>'.
+   * @return a new object of class '<em>Line</em>'.
    * @generated
    */
-  Statement createStatement();
+  Line createLine();
 
   /**
    * Returns the package supported by this factory.

@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
 
@@ -33,7 +33,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.TestStepContainer;
  * </p>
  * <ul>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepContainerImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepContainerImpl#getStatementList <em>Statement List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepContainerImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TestStepContainerImpl#getTestStepList <em>Test Step List</em>}</li>
  * </ul>
  *
@@ -62,14 +62,14 @@ public class TestStepContainerImpl extends MinimalEObjectImpl.Container implemen
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getStatementList() <em>Statement List</em>}' containment reference list.
+   * The cached value of the '{@link #getDescription() <em>Description</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStatementList()
+   * @see #getDescription()
    * @generated
    * @ordered
    */
-  protected EList<Statement> statementList;
+  protected Description description;
 
   /**
    * The cached value of the '{@link #getTestStepList() <em>Test Step List</em>}' containment reference list.
@@ -133,13 +133,48 @@ public class TestStepContainerImpl extends MinimalEObjectImpl.Container implemen
    * @generated
    */
   @Override
-  public EList<Statement> getStatementList()
+  public Description getDescription()
   {
-    if (statementList == null)
+    return description;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetDescription(Description newDescription, NotificationChain msgs)
+  {
+    Description oldDescription = description;
+    description = newDescription;
+    if (eNotificationRequired())
     {
-      statementList = new EObjectContainmentEList<Statement>(Statement.class, this, AsciiDocPackage.TEST_STEP_CONTAINER__STATEMENT_LIST);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION, oldDescription, newDescription);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
     }
-    return statementList;
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setDescription(Description newDescription)
+  {
+    if (newDescription != description)
+    {
+      NotificationChain msgs = null;
+      if (description != null)
+        msgs = ((InternalEObject)description).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION, null, msgs);
+      if (newDescription != null)
+        msgs = ((InternalEObject)newDescription).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION, null, msgs);
+      msgs = basicSetDescription(newDescription, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION, newDescription, newDescription));
   }
 
   /**
@@ -167,8 +202,8 @@ public class TestStepContainerImpl extends MinimalEObjectImpl.Container implemen
   {
     switch (featureID)
     {
-      case AsciiDocPackage.TEST_STEP_CONTAINER__STATEMENT_LIST:
-        return ((InternalEList<?>)getStatementList()).basicRemove(otherEnd, msgs);
+      case AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION:
+        return basicSetDescription(null, msgs);
       case AsciiDocPackage.TEST_STEP_CONTAINER__TEST_STEP_LIST:
         return ((InternalEList<?>)getTestStepList()).basicRemove(otherEnd, msgs);
     }
@@ -187,8 +222,8 @@ public class TestStepContainerImpl extends MinimalEObjectImpl.Container implemen
     {
       case AsciiDocPackage.TEST_STEP_CONTAINER__NAME:
         return getName();
-      case AsciiDocPackage.TEST_STEP_CONTAINER__STATEMENT_LIST:
-        return getStatementList();
+      case AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION:
+        return getDescription();
       case AsciiDocPackage.TEST_STEP_CONTAINER__TEST_STEP_LIST:
         return getTestStepList();
     }
@@ -209,9 +244,8 @@ public class TestStepContainerImpl extends MinimalEObjectImpl.Container implemen
       case AsciiDocPackage.TEST_STEP_CONTAINER__NAME:
         setName((String)newValue);
         return;
-      case AsciiDocPackage.TEST_STEP_CONTAINER__STATEMENT_LIST:
-        getStatementList().clear();
-        getStatementList().addAll((Collection<? extends Statement>)newValue);
+      case AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION:
+        setDescription((Description)newValue);
         return;
       case AsciiDocPackage.TEST_STEP_CONTAINER__TEST_STEP_LIST:
         getTestStepList().clear();
@@ -234,8 +268,8 @@ public class TestStepContainerImpl extends MinimalEObjectImpl.Container implemen
       case AsciiDocPackage.TEST_STEP_CONTAINER__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case AsciiDocPackage.TEST_STEP_CONTAINER__STATEMENT_LIST:
-        getStatementList().clear();
+      case AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION:
+        setDescription((Description)null);
         return;
       case AsciiDocPackage.TEST_STEP_CONTAINER__TEST_STEP_LIST:
         getTestStepList().clear();
@@ -256,8 +290,8 @@ public class TestStepContainerImpl extends MinimalEObjectImpl.Container implemen
     {
       case AsciiDocPackage.TEST_STEP_CONTAINER__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case AsciiDocPackage.TEST_STEP_CONTAINER__STATEMENT_LIST:
-        return statementList != null && !statementList.isEmpty();
+      case AsciiDocPackage.TEST_STEP_CONTAINER__DESCRIPTION:
+        return description != null;
       case AsciiDocPackage.TEST_STEP_CONTAINER__TEST_STEP_LIST:
         return testStepList != null && !testStepList.isEmpty();
     }

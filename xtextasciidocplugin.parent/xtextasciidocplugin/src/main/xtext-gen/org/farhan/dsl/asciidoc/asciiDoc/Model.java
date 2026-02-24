@@ -3,8 +3,6 @@
  */
 package org.farhan.dsl.asciidoc.asciiDoc;
 
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -17,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.Model#getName <em>Name</em>}</li>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.Model#getStatementList <em>Statement List</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.Model#getDescription <em>Description</em>}</li>
  * </ul>
  *
  * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getModel()
@@ -49,15 +47,25 @@ public interface Model extends EObject
   void setName(String value);
 
   /**
-   * Returns the value of the '<em><b>Statement List</b></em>' containment reference list.
-   * The list contents are of type {@link org.farhan.dsl.asciidoc.asciiDoc.Statement}.
+   * Returns the value of the '<em><b>Description</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Statement List</em>' containment reference list.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getModel_StatementList()
+   * @return the value of the '<em>Description</em>' containment reference.
+   * @see #setDescription(Description)
+   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getModel_Description()
    * @model containment="true"
    * @generated
    */
-  EList<Statement> getStatementList();
+  Description getDescription();
+
+  /**
+   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.Model#getDescription <em>Description</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Description</em>' containment reference.
+   * @see #getDescription()
+   * @generated
+   */
+  void setDescription(Description value);
 
 } // Model

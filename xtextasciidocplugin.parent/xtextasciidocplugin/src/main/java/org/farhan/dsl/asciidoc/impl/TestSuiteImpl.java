@@ -1,7 +1,10 @@
 package org.farhan.dsl.asciidoc.impl;
 
 import java.util.ArrayList;
-import org.farhan.dsl.lang.IStatement;
+
+import org.farhan.dsl.lang.IDescription;
+import org.farhan.dsl.lang.ILine;
+import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.lang.ITestCase;
 import org.farhan.dsl.lang.ITestProject;
 import org.farhan.dsl.lang.ITestSetup;
@@ -23,8 +26,13 @@ public class TestSuiteImpl implements ITestSuite {
 	}
 
 	@Override
-	public boolean addStatement(IStatement value) {
-		eObject.getStatementList().add(((StatementImpl) value).eObject);
+	public boolean addLine(ILine value) {
+		Description list = eObject.getDescription();
+		if (list == null) {
+			list = org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory.eINSTANCE.createDescription();
+			eObject.setDescription(list);
+		}
+		list.getLineList().add(((LineImpl) value).eObject);
 		return true;
 	}
 
@@ -64,18 +72,11 @@ public class TestSuiteImpl implements ITestSuite {
 	}
 
 	@Override
-	public IStatement getStatement(int index) {
-		throw new UnsupportedOperationException("getStatement(int index) is not implemented");
-	}
-
-	@Override
-	public IStatement getStatement(String name) {
-		throw new UnsupportedOperationException("getStatement(String name) is not implemented");
-	}
-
-	@Override
-	public ArrayList<IStatement> getStatementList() {
-		throw new UnsupportedOperationException("ArrayList<IStatement> getStatementList() is not implemented");
+	public IDescription getDescription() {
+		if (eObject.getDescription() != null) {
+			return new DescriptionImpl(eObject.getDescription());
+		}
+		return null;
 	}
 
 	@Override
@@ -104,8 +105,12 @@ public class TestSuiteImpl implements ITestSuite {
 
 	@Override
 	public ArrayList<ITestStepContainer> getTestStepContainerList() {
-		throw new UnsupportedOperationException(
-				"ArrayList<ITestStepContainer> getTestStepContainerList() is not implemented");
+		ArrayList<ITestStepContainer> list = new ArrayList<ITestStepContainer>();
+		for (TestStepContainer tsc : eObject.getTestStepContainerList()) {
+			TestStepContainerImpl tsci = new TestStepContainerImpl(tsc);
+			list.add(tsci);
+		}
+		return list;
 	}
 
 	@Override

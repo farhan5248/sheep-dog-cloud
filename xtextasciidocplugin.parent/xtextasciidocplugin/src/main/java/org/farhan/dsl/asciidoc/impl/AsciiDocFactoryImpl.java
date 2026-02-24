@@ -1,10 +1,10 @@
 package org.farhan.dsl.asciidoc.impl;
 
 import org.farhan.dsl.lang.ICell;
+import org.farhan.dsl.lang.ILine;
 import org.farhan.dsl.lang.IResourceRepository;
 import org.farhan.dsl.lang.IRow;
 import org.farhan.dsl.lang.ISheepDogFactory;
-import org.farhan.dsl.lang.IStatement;
 import org.farhan.dsl.lang.IStepDefinition;
 import org.farhan.dsl.lang.IStepObject;
 import org.farhan.dsl.lang.IStepParameters;
@@ -54,7 +54,7 @@ public class AsciiDocFactoryImpl implements ISheepDogFactory {
 
 	@Override
 	public ITestCase createTestCase() {
-		throw new UnsupportedOperationException("createTestCase() is not implemented");
+		throw new UnsupportedOperationException("createTestCase(String value) is not implemented");
 	}
 
 	@Override
@@ -67,22 +67,22 @@ public class AsciiDocFactoryImpl implements ISheepDogFactory {
 
 	@Override
 	public ITestSetup createTestSetup() {
-		throw new UnsupportedOperationException("createTestSetup() is not implemented");
+		throw new UnsupportedOperationException("createTestSetup(String name) is not implemented");
 	}
 
 	@Override
 	public ITestStep createTestStep() {
-		throw new UnsupportedOperationException("createTestStep() is not implemented");
+		throw new UnsupportedOperationException("createTestStep(String value) is not implemented");
 	}
 
 	@Override
 	public ITestSuite createTestSuite() {
-		throw new UnsupportedOperationException("createTestSuite() is not implemented");
+		throw new UnsupportedOperationException("createTestSuite(String qualifiedName) is not implemented");
 	}
 
 	@Override
-	public IStatement createStatement() {
-		return null;
+	public ILine createLine() {
+		return new LineImpl(AsciiDocFactory.eINSTANCE.createLine());
 	}
 
 	@Override

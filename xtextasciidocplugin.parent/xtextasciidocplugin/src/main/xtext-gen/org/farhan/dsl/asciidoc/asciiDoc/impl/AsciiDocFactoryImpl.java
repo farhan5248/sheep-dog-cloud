@@ -80,11 +80,12 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
       case AsciiDocPackage.THEN: return createThen();
       case AsciiDocPackage.AND: return createAnd();
       case AsciiDocPackage.TEXT: return createText();
-      case AsciiDocPackage.NESTED_STATEMENT_LIST: return createNestedStatementList();
+      case AsciiDocPackage.DESCRIPTION: return createDescription();
+      case AsciiDocPackage.NESTED_DESCRIPTION: return createNestedDescription();
       case AsciiDocPackage.TABLE: return createTable();
       case AsciiDocPackage.ROW: return createRow();
       case AsciiDocPackage.CELL: return createCell();
-      case AsciiDocPackage.STATEMENT: return createStatement();
+      case AsciiDocPackage.LINE: return createLine();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -276,10 +277,22 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
    * @generated
    */
   @Override
-  public NestedStatementList createNestedStatementList()
+  public Description createDescription()
   {
-    NestedStatementListImpl nestedStatementList = new NestedStatementListImpl();
-    return nestedStatementList;
+    DescriptionImpl description = new DescriptionImpl();
+    return description;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NestedDescription createNestedDescription()
+  {
+    NestedDescriptionImpl nestedDescription = new NestedDescriptionImpl();
+    return nestedDescription;
   }
 
   /**
@@ -324,10 +337,10 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
    * @generated
    */
   @Override
-  public Statement createStatement()
+  public Line createLine()
   {
-    StatementImpl statement = new StatementImpl();
-    return statement;
+    LineImpl line = new LineImpl();
+    return line;
   }
 
   /**

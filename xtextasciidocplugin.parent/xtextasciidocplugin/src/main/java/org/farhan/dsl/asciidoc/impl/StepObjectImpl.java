@@ -13,12 +13,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.xtext.resource.SaveOptions;
-import org.farhan.dsl.lang.IStatement;
+import org.farhan.dsl.lang.IDescription;
+import org.farhan.dsl.lang.ILine;
 import org.farhan.dsl.lang.IStepDefinition;
 import org.farhan.dsl.lang.IStepObject;
 import org.farhan.dsl.lang.ITestProject;
 import org.farhan.dsl.lang.SheepDogFactory;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 
@@ -51,12 +52,11 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	@Override
-	public ArrayList<IStatement> getStatementList() {
-		ArrayList<IStatement> statementList = new ArrayList<IStatement>();
-		for (Statement s : eObject.getStatementList()) {
-			statementList.add(new StatementImpl(s));
+	public IDescription getDescription() {
+		if (eObject.getDescription() != null) {
+			return new DescriptionImpl(eObject.getDescription());
 		}
-		return statementList;
+		return null;
 	}
 
 	@Override
@@ -93,16 +93,6 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	@Override
-	public IStatement getStatement(int index) {
-		throw new UnsupportedOperationException("getStatement(int index) is not implemented");
-	}
-
-	@Override
-	public IStatement getStatement(String name) {
-		throw new UnsupportedOperationException("getStatement(String name) is not implemented");
-	}
-
-	@Override
 	public IStepDefinition getStepDefinition(int index) {
 		throw new UnsupportedOperationException("getStepDefinition(int index) is not implemented");
 	}
@@ -126,8 +116,13 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	@Override
-	public boolean addStatement(IStatement value) {
-		eObject.getStatementList().add(((StatementImpl) value).eObject);
+	public boolean addLine(ILine value) {
+		Description list = eObject.getDescription();
+		if (list == null) {
+			list = org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory.eINSTANCE.createDescription();
+			eObject.setDescription(list);
+		}
+		list.getLineList().add(((LineImpl) value).eObject);
 		return true;
 	}
 

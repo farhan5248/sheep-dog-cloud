@@ -43,7 +43,7 @@ public class TableImpl implements ITable {
 
 	@Override
 	public IRow getRow(int index) {
-		throw new UnsupportedOperationException("getRow(int index) is not implemented");
+		return new RowImpl(eObject.getRowList().get(index));
 	}
 
 	@Override

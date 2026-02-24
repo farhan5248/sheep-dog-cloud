@@ -17,7 +17,18 @@ afterEvaluate {
 
 npmInstall.dependsOn copyApplication
 
-task installExtension(type: Exec, dependsOn: packageExtension) {
+task uninstallExtension(type: Exec) {
+    ignoreExitValue = true
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'code.cmd'
+    } else {
+        commandLine 'code'
+    }
+    args '--uninstall-extension', 'sheep-dog-tools.xtext-asciidoc-plugin'
+}
+
+task installExtension(type: Exec, dependsOn: [packageExtension, uninstallExtension]) {
+    mustRunAfter uninstallExtension
     if (System.properties['os.name'].toLowerCase().contains('windows')) {
         commandLine 'code.cmd'
     } else {

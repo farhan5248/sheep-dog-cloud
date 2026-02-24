@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
-import org.farhan.dsl.lang.IStatement;
+import org.farhan.dsl.lang.IDescription;
+import org.farhan.dsl.lang.ILine;
 import org.farhan.dsl.lang.IStepDefinition;
 import org.farhan.dsl.lang.IStepObject;
 import org.farhan.dsl.lang.IStepParameters;
 import org.farhan.dsl.lang.SheepDogUtility;
-import org.farhan.dsl.asciidoc.asciiDoc.Statement;
+import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory;
+import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
@@ -24,8 +26,13 @@ public class StepDefinitionImpl implements IStepDefinition {
     }
 
     @Override
-    public boolean addStatement(IStatement value) {
-        eObject.getStatementList().add(((StatementImpl) value).eObject);
+    public boolean addLine(ILine value) {
+        Description list = eObject.getDescription();
+        if (list == null) {
+            list = AsciiDocFactory.eINSTANCE.createDescription();
+            eObject.setDescription(list);
+        }
+        list.getLineList().add(((LineImpl) value).eObject);
         return true;
     }
 
@@ -60,22 +67,11 @@ public class StepDefinitionImpl implements IStepDefinition {
     }
 
     @Override
-    public IStatement getStatement(int index) {
-        throw new UnsupportedOperationException("getStatement(int index) is not implemented");
-    }
-
-    @Override
-    public IStatement getStatement(String name) {
-        throw new UnsupportedOperationException("getStatement(String name) is not implemented");
-    }
-
-    @Override
-    public ArrayList<IStatement> getStatementList() {
-        ArrayList<IStatement> statementList = new ArrayList<IStatement>();
-        for (Statement s : eObject.getStatementList()) {
-            statementList.add(new StatementImpl(s));
+    public IDescription getDescription() {
+        if (eObject.getDescription() != null) {
+            return new DescriptionImpl(eObject.getDescription());
         }
-        return statementList;
+        return null;
     }
 
     @Override

@@ -29,7 +29,7 @@ public class TestProjectImpl implements ITestProject {
 
 	public boolean addStepObject(IStepObject stepObject) {
 		try {
-			sr.put("", projectPath + "/" + layer2dir + "/" + stepObject.getNameLong(), stepObject.getContent());
+			sr.put("", projectPath + "/" + layer2dir + "/" + stepObject.getFullName(), stepObject.getContent());
 			return true;
 		} catch (Exception e) {
 			logger.error("Couldn't write step object:", e);
@@ -66,7 +66,7 @@ public class TestProjectImpl implements ITestProject {
 					logger.error("Couldn't load StepObject for, file is empty: " + qualifiedName);
 				} else {
 					IStepObject stepObject = SheepDogFactory.instance.createStepObject();
-					stepObject.setNameLong(qualifiedName);
+					stepObject.setFullName(qualifiedName);
 					stepObject.setContent(text);
 					return stepObject;
 				}

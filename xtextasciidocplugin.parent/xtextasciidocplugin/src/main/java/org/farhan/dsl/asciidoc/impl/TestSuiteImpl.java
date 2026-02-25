@@ -59,8 +59,8 @@ public class TestSuiteImpl implements ITestSuite {
 	}
 
 	@Override
-	public String getNameLong() {
-		throw new UnsupportedOperationException("getNameLong() is not implemented");
+	public String getFullName() {
+		throw new UnsupportedOperationException("getFullName() is not implemented");
 	}
 
 	@Override
@@ -124,8 +124,8 @@ public class TestSuiteImpl implements ITestSuite {
 	}
 
 	@Override
-	public void setNameLong(String value) {
-		throw new UnsupportedOperationException("setNameLong(String value) is not implemented");
+	public void setFullName(String value) {
+		throw new UnsupportedOperationException("setFullName(String value) is not implemented");
 	}
 
 	public void setParent(ITestProject parent) {

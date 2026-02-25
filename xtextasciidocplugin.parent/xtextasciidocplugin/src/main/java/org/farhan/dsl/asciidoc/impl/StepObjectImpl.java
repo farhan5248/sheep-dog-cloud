@@ -47,7 +47,7 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	@Override
-	public String getNameLong() {
+	public String getFullName() {
 		return qualifiedName;
 	}
 
@@ -86,7 +86,7 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	@Override
-	public void setNameLong(String value) {
+	public void setFullName(String value) {
 		this.qualifiedName = value;
 		String extension = org.farhan.dsl.lang.SheepDogFactory.instance.createTestProject().getFileExtension();
 		eObject.setName((new File(qualifiedName)).getName().replaceFirst(extension + "$", ""));

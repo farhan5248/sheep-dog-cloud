@@ -182,7 +182,7 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 		TestProjectImpl testProject = (TestProjectImpl) SheepDogFactory.instance.createTestProject();
 		org.farhan.dsl.lang.IStepObject stepObject = (org.farhan.dsl.lang.IStepObject) p.getValue();
 		URI uri = URI.createFileURI(testProject.getName() + "/" + testProject.layer2dir
-				+ "/" + stepObject.getNameLong());
+				+ "/" + stepObject.getFullName());
 		createFile.setUri(uri.toString());
 		createFile.setOptions(new CreateFileOptions());
 		createFile.getOptions().setOverwrite(true);

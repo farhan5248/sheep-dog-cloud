@@ -51,7 +51,7 @@
     <genClasses ecoreClass="AsciiDoc.ecore#//Then"/>
     <genClasses ecoreClass="AsciiDoc.ecore#//And"/>
     <genClasses ecoreClass="AsciiDoc.ecore#//Text">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Text/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Text/content"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//Description">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//Description/lineList"/>
@@ -69,7 +69,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Cell/name"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//Line">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Line/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//Line/content"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

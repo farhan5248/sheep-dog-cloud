@@ -76,7 +76,7 @@ public class AsciiDocLexer extends InternalAsciiDocLexer {
 		// 1 identify initial keyword
 		// 2 greedily handle tokens that follow till end of line
 
-		// Some rules are multi line, like RAWTEXT or a multiline comment if it were
+		// Some rules are multi line, like TEXT_BLOCK or a multiline comment if it were
 		// implemented.
 		// They automatically handle the greedy collection of tokens
 
@@ -96,7 +96,7 @@ public class AsciiDocLexer extends InternalAsciiDocLexer {
 			mRULE_WS();
 			// multi line greedy automatic collection
 		} else if (isKeyword("----")) {
-			mRULE_RAWTEXT();
+			mRULE_TEXT_BLOCK();
 			// delimiter reset
 		} else if (isKeyword("\n")) {
 			mRULE_EOL();

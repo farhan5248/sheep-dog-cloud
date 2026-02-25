@@ -22,9 +22,10 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalAsciiDocParser extends AbstractInternalContentAssistParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_WORD", "RULE_EOL", "RULE_RAWTEXT", "RULE_WS", "RULE_SL_COMMENT", "'file'", "'page'", "'response'", "'dialog'", "'directory'", "'request'", "'goal'", "'job'", "'action'", "'popup'", "'annotation'", "'hover'", "'tooltip'", "'='", "'Step-Object:'", "'=='", "'Step-Definition:'", "'*'", "'Step-Parameters:'", "'Test-Suite:'", "'Test-Setup:'", "'Test-Case:'", "'Test-Data:'", "'Given:'", "'When:'", "'Then:'", "'And:'", "'+'", "'|==='", "'|'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_WORD", "RULE_EOL", "RULE_TEXT_BLOCK", "RULE_WS", "RULE_SL_COMMENT", "'file'", "'page'", "'response'", "'dialog'", "'directory'", "'request'", "'goal'", "'job'", "'action'", "'popup'", "'annotation'", "'hover'", "'tooltip'", "'='", "'Step-Object:'", "'=='", "'Step-Definition:'", "'*'", "'Step-Parameters:'", "'Test-Suite:'", "'Test-Setup:'", "'Test-Case:'", "'Test-Data:'", "'Given:'", "'When:'", "'Then:'", "'And:'", "'+'", "'|==='", "'|'"
     };
     public static final int RULE_WORD=4;
+    public static final int RULE_TEXT_BLOCK=6;
     public static final int RULE_SL_COMMENT=8;
     public static final int T__19=19;
     public static final int T__15=15;
@@ -49,7 +50,6 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
     public static final int T__9=9;
     public static final int RULE_EOL=5;
     public static final int RULE_WS=7;
-    public static final int RULE_RAWTEXT=6;
     public static final int T__26=26;
     public static final int T__27=27;
     public static final int T__28=28;
@@ -2393,7 +2393,7 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
                 if ( (LA7_1==RULE_EOL) ) {
                     int LA7_2 = input.LA(3);
 
-                    if ( (LA7_2==RULE_RAWTEXT) ) {
+                    if ( (LA7_2==RULE_TEXT_BLOCK) ) {
                         alt7=2;
                     }
                     else if ( (LA7_2==37) ) {
@@ -2504,7 +2504,7 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
                 if ( (LA8_1==RULE_EOL) ) {
                     int LA8_2 = input.LA(3);
 
-                    if ( (LA8_2==RULE_RAWTEXT) ) {
+                    if ( (LA8_2==RULE_TEXT_BLOCK) ) {
                         alt8=2;
                     }
                     else if ( (LA8_2==37) ) {
@@ -2615,7 +2615,7 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
                 if ( (LA9_1==RULE_EOL) ) {
                     int LA9_2 = input.LA(3);
 
-                    if ( (LA9_2==RULE_RAWTEXT) ) {
+                    if ( (LA9_2==RULE_TEXT_BLOCK) ) {
                         alt9=2;
                     }
                     else if ( (LA9_2==37) ) {
@@ -2726,7 +2726,7 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
                 if ( (LA10_1==RULE_EOL) ) {
                     int LA10_2 = input.LA(3);
 
-                    if ( (LA10_2==RULE_RAWTEXT) ) {
+                    if ( (LA10_2==RULE_TEXT_BLOCK) ) {
                         alt10=2;
                     }
                     else if ( (LA10_2==37) ) {
@@ -8865,31 +8865,31 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
 
 
     // $ANTLR start "rule__Text__Group__2__Impl"
-    // InternalAsciiDoc.g:2794:1: rule__Text__Group__2__Impl : ( ( rule__Text__NameAssignment_2 ) ) ;
+    // InternalAsciiDoc.g:2794:1: rule__Text__Group__2__Impl : ( ( rule__Text__ContentAssignment_2 ) ) ;
     public final void rule__Text__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:2798:1: ( ( ( rule__Text__NameAssignment_2 ) ) )
-            // InternalAsciiDoc.g:2799:1: ( ( rule__Text__NameAssignment_2 ) )
+            // InternalAsciiDoc.g:2798:1: ( ( ( rule__Text__ContentAssignment_2 ) ) )
+            // InternalAsciiDoc.g:2799:1: ( ( rule__Text__ContentAssignment_2 ) )
             {
-            // InternalAsciiDoc.g:2799:1: ( ( rule__Text__NameAssignment_2 ) )
-            // InternalAsciiDoc.g:2800:2: ( rule__Text__NameAssignment_2 )
+            // InternalAsciiDoc.g:2799:1: ( ( rule__Text__ContentAssignment_2 ) )
+            // InternalAsciiDoc.g:2800:2: ( rule__Text__ContentAssignment_2 )
             {
-             before(grammarAccess.getTextAccess().getNameAssignment_2()); 
-            // InternalAsciiDoc.g:2801:2: ( rule__Text__NameAssignment_2 )
-            // InternalAsciiDoc.g:2801:3: rule__Text__NameAssignment_2
+             before(grammarAccess.getTextAccess().getContentAssignment_2()); 
+            // InternalAsciiDoc.g:2801:2: ( rule__Text__ContentAssignment_2 )
+            // InternalAsciiDoc.g:2801:3: rule__Text__ContentAssignment_2
             {
             pushFollow(FOLLOW_2);
-            rule__Text__NameAssignment_2();
+            rule__Text__ContentAssignment_2();
 
             state._fsp--;
 
 
             }
 
-             after(grammarAccess.getTextAccess().getNameAssignment_2()); 
+             after(grammarAccess.getTextAccess().getContentAssignment_2()); 
 
             }
 
@@ -10219,31 +10219,31 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
 
 
     // $ANTLR start "rule__Line__Group__0__Impl"
-    // InternalAsciiDoc.g:3247:1: rule__Line__Group__0__Impl : ( ( rule__Line__NameAssignment_0 ) ) ;
+    // InternalAsciiDoc.g:3247:1: rule__Line__Group__0__Impl : ( ( rule__Line__ContentAssignment_0 ) ) ;
     public final void rule__Line__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:3251:1: ( ( ( rule__Line__NameAssignment_0 ) ) )
-            // InternalAsciiDoc.g:3252:1: ( ( rule__Line__NameAssignment_0 ) )
+            // InternalAsciiDoc.g:3251:1: ( ( ( rule__Line__ContentAssignment_0 ) ) )
+            // InternalAsciiDoc.g:3252:1: ( ( rule__Line__ContentAssignment_0 ) )
             {
-            // InternalAsciiDoc.g:3252:1: ( ( rule__Line__NameAssignment_0 ) )
-            // InternalAsciiDoc.g:3253:2: ( rule__Line__NameAssignment_0 )
+            // InternalAsciiDoc.g:3252:1: ( ( rule__Line__ContentAssignment_0 ) )
+            // InternalAsciiDoc.g:3253:2: ( rule__Line__ContentAssignment_0 )
             {
-             before(grammarAccess.getLineAccess().getNameAssignment_0()); 
-            // InternalAsciiDoc.g:3254:2: ( rule__Line__NameAssignment_0 )
-            // InternalAsciiDoc.g:3254:3: rule__Line__NameAssignment_0
+             before(grammarAccess.getLineAccess().getContentAssignment_0()); 
+            // InternalAsciiDoc.g:3254:2: ( rule__Line__ContentAssignment_0 )
+            // InternalAsciiDoc.g:3254:3: rule__Line__ContentAssignment_0
             {
             pushFollow(FOLLOW_2);
-            rule__Line__NameAssignment_0();
+            rule__Line__ContentAssignment_0();
 
             state._fsp--;
 
 
             }
 
-             after(grammarAccess.getLineAccess().getNameAssignment_0()); 
+             after(grammarAccess.getLineAccess().getContentAssignment_0()); 
 
             }
 
@@ -12093,22 +12093,22 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
     // $ANTLR end "rule__And__TextAssignment_5_1"
 
 
-    // $ANTLR start "rule__Text__NameAssignment_2"
-    // InternalAsciiDoc.g:3920:1: rule__Text__NameAssignment_2 : ( RULE_RAWTEXT ) ;
-    public final void rule__Text__NameAssignment_2() throws RecognitionException {
+    // $ANTLR start "rule__Text__ContentAssignment_2"
+    // InternalAsciiDoc.g:3920:1: rule__Text__ContentAssignment_2 : ( RULE_TEXT_BLOCK ) ;
+    public final void rule__Text__ContentAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:3924:1: ( ( RULE_RAWTEXT ) )
-            // InternalAsciiDoc.g:3925:2: ( RULE_RAWTEXT )
+            // InternalAsciiDoc.g:3924:1: ( ( RULE_TEXT_BLOCK ) )
+            // InternalAsciiDoc.g:3925:2: ( RULE_TEXT_BLOCK )
             {
-            // InternalAsciiDoc.g:3925:2: ( RULE_RAWTEXT )
-            // InternalAsciiDoc.g:3926:3: RULE_RAWTEXT
+            // InternalAsciiDoc.g:3925:2: ( RULE_TEXT_BLOCK )
+            // InternalAsciiDoc.g:3926:3: RULE_TEXT_BLOCK
             {
-             before(grammarAccess.getTextAccess().getNameRAWTEXTTerminalRuleCall_2_0()); 
-            match(input,RULE_RAWTEXT,FOLLOW_2); 
-             after(grammarAccess.getTextAccess().getNameRAWTEXTTerminalRuleCall_2_0()); 
+             before(grammarAccess.getTextAccess().getContentTEXT_BLOCKTerminalRuleCall_2_0()); 
+            match(input,RULE_TEXT_BLOCK,FOLLOW_2); 
+             after(grammarAccess.getTextAccess().getContentTEXT_BLOCKTerminalRuleCall_2_0()); 
 
             }
 
@@ -12127,7 +12127,7 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
         }
         return ;
     }
-    // $ANTLR end "rule__Text__NameAssignment_2"
+    // $ANTLR end "rule__Text__ContentAssignment_2"
 
 
     // $ANTLR start "rule__Description__LineListAssignment"
@@ -12335,9 +12335,9 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
     // $ANTLR end "rule__Cell__NameAssignment_1"
 
 
-    // $ANTLR start "rule__Line__NameAssignment_0"
-    // InternalAsciiDoc.g:4010:1: rule__Line__NameAssignment_0 : ( ruleTitle ) ;
-    public final void rule__Line__NameAssignment_0() throws RecognitionException {
+    // $ANTLR start "rule__Line__ContentAssignment_0"
+    // InternalAsciiDoc.g:4010:1: rule__Line__ContentAssignment_0 : ( ruleTitle ) ;
+    public final void rule__Line__ContentAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -12348,13 +12348,13 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
             // InternalAsciiDoc.g:4015:2: ( ruleTitle )
             // InternalAsciiDoc.g:4016:3: ruleTitle
             {
-             before(grammarAccess.getLineAccess().getNameTitleParserRuleCall_0_0()); 
+             before(grammarAccess.getLineAccess().getContentTitleParserRuleCall_0_0()); 
             pushFollow(FOLLOW_2);
             ruleTitle();
 
             state._fsp--;
 
-             after(grammarAccess.getLineAccess().getNameTitleParserRuleCall_0_0()); 
+             after(grammarAccess.getLineAccess().getContentTitleParserRuleCall_0_0()); 
 
             }
 
@@ -12373,7 +12373,7 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
         }
         return ;
     }
-    // $ANTLR end "rule__Line__NameAssignment_0"
+    // $ANTLR end "rule__Line__ContentAssignment_0"
 
     // Delegated rules
 

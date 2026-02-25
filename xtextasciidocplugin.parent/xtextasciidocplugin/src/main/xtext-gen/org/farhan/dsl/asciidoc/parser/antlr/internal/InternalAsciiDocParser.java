@@ -21,9 +21,10 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_EOL", "RULE_RAWTEXT", "RULE_WORD", "RULE_WS", "RULE_SL_COMMENT", "'='", "'Step-Object:'", "'=='", "'Step-Definition:'", "'*'", "'Step-Parameters:'", "'Test-Suite:'", "'Test-Setup:'", "'Test-Case:'", "'Test-Data:'", "'Given:'", "'When:'", "'Then:'", "'And:'", "'+'", "'|==='", "'|'", "'file'", "'page'", "'response'", "'dialog'", "'directory'", "'request'", "'goal'", "'job'", "'action'", "'popup'", "'annotation'", "'hover'", "'tooltip'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_EOL", "RULE_TEXT_BLOCK", "RULE_WORD", "RULE_WS", "RULE_SL_COMMENT", "'='", "'Step-Object:'", "'=='", "'Step-Definition:'", "'*'", "'Step-Parameters:'", "'Test-Suite:'", "'Test-Setup:'", "'Test-Case:'", "'Test-Data:'", "'Given:'", "'When:'", "'Then:'", "'And:'", "'+'", "'|==='", "'|'", "'file'", "'page'", "'response'", "'dialog'", "'directory'", "'request'", "'goal'", "'job'", "'action'", "'popup'", "'annotation'", "'hover'", "'tooltip'"
     };
     public static final int RULE_WORD=6;
+    public static final int RULE_TEXT_BLOCK=5;
     public static final int RULE_SL_COMMENT=8;
     public static final int T__19=19;
     public static final int T__15=15;
@@ -48,7 +49,6 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
     public static final int T__9=9;
     public static final int RULE_EOL=4;
     public static final int RULE_WS=7;
-    public static final int RULE_RAWTEXT=5;
     public static final int T__26=26;
     public static final int T__27=27;
     public static final int T__28=28;
@@ -2273,7 +2273,7 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
                     if ( (LA17_3==24) ) {
                         alt17=1;
                     }
-                    else if ( (LA17_3==RULE_RAWTEXT) ) {
+                    else if ( (LA17_3==RULE_TEXT_BLOCK) ) {
                         alt17=2;
                     }
                 }
@@ -2528,7 +2528,7 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
                     if ( (LA18_3==24) ) {
                         alt18=1;
                     }
-                    else if ( (LA18_3==RULE_RAWTEXT) ) {
+                    else if ( (LA18_3==RULE_TEXT_BLOCK) ) {
                         alt18=2;
                     }
                 }
@@ -2783,7 +2783,7 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
                     if ( (LA19_3==24) ) {
                         alt19=1;
                     }
-                    else if ( (LA19_3==RULE_RAWTEXT) ) {
+                    else if ( (LA19_3==RULE_TEXT_BLOCK) ) {
                         alt19=2;
                     }
                 }
@@ -3038,7 +3038,7 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
                     if ( (LA20_3==24) ) {
                         alt20=1;
                     }
-                    else if ( (LA20_3==RULE_RAWTEXT) ) {
+                    else if ( (LA20_3==RULE_TEXT_BLOCK) ) {
                         alt20=2;
                     }
                 }
@@ -3180,24 +3180,24 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleText"
-    // InternalAsciiDoc.g:1272:1: ruleText returns [EObject current=null] : (otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_name_2_0= RULE_RAWTEXT ) ) this_EOL_3= RULE_EOL ) ;
+    // InternalAsciiDoc.g:1272:1: ruleText returns [EObject current=null] : (otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_content_2_0= RULE_TEXT_BLOCK ) ) this_EOL_3= RULE_EOL ) ;
     public final EObject ruleText() throws RecognitionException {
         EObject current = null;
 
         Token otherlv_0=null;
         Token this_EOL_1=null;
-        Token lv_name_2_0=null;
+        Token lv_content_2_0=null;
         Token this_EOL_3=null;
 
 
         	enterRule();
 
         try {
-            // InternalAsciiDoc.g:1278:2: ( (otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_name_2_0= RULE_RAWTEXT ) ) this_EOL_3= RULE_EOL ) )
-            // InternalAsciiDoc.g:1279:2: (otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_name_2_0= RULE_RAWTEXT ) ) this_EOL_3= RULE_EOL )
+            // InternalAsciiDoc.g:1278:2: ( (otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_content_2_0= RULE_TEXT_BLOCK ) ) this_EOL_3= RULE_EOL ) )
+            // InternalAsciiDoc.g:1279:2: (otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_content_2_0= RULE_TEXT_BLOCK ) ) this_EOL_3= RULE_EOL )
             {
-            // InternalAsciiDoc.g:1279:2: (otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_name_2_0= RULE_RAWTEXT ) ) this_EOL_3= RULE_EOL )
-            // InternalAsciiDoc.g:1280:3: otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_name_2_0= RULE_RAWTEXT ) ) this_EOL_3= RULE_EOL
+            // InternalAsciiDoc.g:1279:2: (otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_content_2_0= RULE_TEXT_BLOCK ) ) this_EOL_3= RULE_EOL )
+            // InternalAsciiDoc.g:1280:3: otherlv_0= '+' this_EOL_1= RULE_EOL ( (lv_content_2_0= RULE_TEXT_BLOCK ) ) this_EOL_3= RULE_EOL
             {
             otherlv_0=(Token)match(input,23,FOLLOW_5); 
 
@@ -3207,15 +3207,15 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
 
             			newLeafNode(this_EOL_1, grammarAccess.getTextAccess().getEOLTerminalRuleCall_1());
             		
-            // InternalAsciiDoc.g:1288:3: ( (lv_name_2_0= RULE_RAWTEXT ) )
-            // InternalAsciiDoc.g:1289:4: (lv_name_2_0= RULE_RAWTEXT )
+            // InternalAsciiDoc.g:1288:3: ( (lv_content_2_0= RULE_TEXT_BLOCK ) )
+            // InternalAsciiDoc.g:1289:4: (lv_content_2_0= RULE_TEXT_BLOCK )
             {
-            // InternalAsciiDoc.g:1289:4: (lv_name_2_0= RULE_RAWTEXT )
-            // InternalAsciiDoc.g:1290:5: lv_name_2_0= RULE_RAWTEXT
+            // InternalAsciiDoc.g:1289:4: (lv_content_2_0= RULE_TEXT_BLOCK )
+            // InternalAsciiDoc.g:1290:5: lv_content_2_0= RULE_TEXT_BLOCK
             {
-            lv_name_2_0=(Token)match(input,RULE_RAWTEXT,FOLLOW_5); 
+            lv_content_2_0=(Token)match(input,RULE_TEXT_BLOCK,FOLLOW_5); 
 
-            					newLeafNode(lv_name_2_0, grammarAccess.getTextAccess().getNameRAWTEXTTerminalRuleCall_2_0());
+            					newLeafNode(lv_content_2_0, grammarAccess.getTextAccess().getContentTEXT_BLOCKTerminalRuleCall_2_0());
             				
 
             					if (current==null) {
@@ -3223,9 +3223,9 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
             					}
             					setWithLastConsumed(
             						current,
-            						"name",
-            						lv_name_2_0,
-            						"org.farhan.dsl.asciidoc.AsciiDoc.RAWTEXT");
+            						"content",
+            						lv_content_2_0,
+            						"org.farhan.dsl.asciidoc.AsciiDoc.TEXT_BLOCK");
             				
 
             }
@@ -3967,35 +3967,35 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleLine"
-    // InternalAsciiDoc.g:1549:1: ruleLine returns [EObject current=null] : ( ( (lv_name_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL ) ;
+    // InternalAsciiDoc.g:1549:1: ruleLine returns [EObject current=null] : ( ( (lv_content_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL ) ;
     public final EObject ruleLine() throws RecognitionException {
         EObject current = null;
 
         Token this_EOL_1=null;
-        AntlrDatatypeRuleToken lv_name_0_0 = null;
+        AntlrDatatypeRuleToken lv_content_0_0 = null;
 
 
 
         	enterRule();
 
         try {
-            // InternalAsciiDoc.g:1555:2: ( ( ( (lv_name_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL ) )
-            // InternalAsciiDoc.g:1556:2: ( ( (lv_name_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL )
+            // InternalAsciiDoc.g:1555:2: ( ( ( (lv_content_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL ) )
+            // InternalAsciiDoc.g:1556:2: ( ( (lv_content_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL )
             {
-            // InternalAsciiDoc.g:1556:2: ( ( (lv_name_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL )
-            // InternalAsciiDoc.g:1557:3: ( (lv_name_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL
+            // InternalAsciiDoc.g:1556:2: ( ( (lv_content_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL )
+            // InternalAsciiDoc.g:1557:3: ( (lv_content_0_0= ruleTitle ) ) this_EOL_1= RULE_EOL
             {
-            // InternalAsciiDoc.g:1557:3: ( (lv_name_0_0= ruleTitle ) )
-            // InternalAsciiDoc.g:1558:4: (lv_name_0_0= ruleTitle )
+            // InternalAsciiDoc.g:1557:3: ( (lv_content_0_0= ruleTitle ) )
+            // InternalAsciiDoc.g:1558:4: (lv_content_0_0= ruleTitle )
             {
-            // InternalAsciiDoc.g:1558:4: (lv_name_0_0= ruleTitle )
-            // InternalAsciiDoc.g:1559:5: lv_name_0_0= ruleTitle
+            // InternalAsciiDoc.g:1558:4: (lv_content_0_0= ruleTitle )
+            // InternalAsciiDoc.g:1559:5: lv_content_0_0= ruleTitle
             {
 
-            					newCompositeNode(grammarAccess.getLineAccess().getNameTitleParserRuleCall_0_0());
+            					newCompositeNode(grammarAccess.getLineAccess().getContentTitleParserRuleCall_0_0());
             				
             pushFollow(FOLLOW_5);
-            lv_name_0_0=ruleTitle();
+            lv_content_0_0=ruleTitle();
 
             state._fsp--;
 
@@ -4005,8 +4005,8 @@ public class InternalAsciiDocParser extends AbstractInternalAntlrParser {
             					}
             					set(
             						current,
-            						"name",
-            						lv_name_0_0,
+            						"content",
+            						lv_content_0_0,
             						"org.farhan.dsl.asciidoc.AsciiDoc.Title");
             					afterParserOrEnumRuleCall();
             				

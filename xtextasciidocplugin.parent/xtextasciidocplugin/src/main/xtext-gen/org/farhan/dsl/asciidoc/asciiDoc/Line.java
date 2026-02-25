@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.Line#getName <em>Name</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.Line#getContent <em>Content</em>}</li>
  * </ul>
  *
  * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getLine()
@@ -24,25 +24,25 @@ import org.eclipse.emf.ecore.EObject;
 public interface Line extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Name</b></em>' attribute.
+   * Returns the value of the '<em><b>Content</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getLine_Name()
+   * @return the value of the '<em>Content</em>' attribute.
+   * @see #setContent(String)
+   * @see org.farhan.dsl.asciidoc.asciiDoc.AsciiDocPackage#getLine_Content()
    * @model
    * @generated
    */
-  String getName();
+  String getContent();
 
   /**
-   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.Line#getName <em>Name</em>}' attribute.
+   * Sets the value of the '{@link org.farhan.dsl.asciidoc.asciiDoc.Line#getContent <em>Content</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
+   * @param value the new value of the '<em>Content</em>' attribute.
+   * @see #getContent()
    * @generated
    */
-  void setName(String value);
+  void setContent(String value);
 
 } // Line

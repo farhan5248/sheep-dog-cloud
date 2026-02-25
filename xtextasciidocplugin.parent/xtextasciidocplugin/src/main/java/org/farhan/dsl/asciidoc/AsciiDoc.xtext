@@ -67,7 +67,7 @@ And:
 
 Text:
 	'+' EOL
-	name=RAWTEXT EOL;
+	content=TEXT_BLOCK EOL;
 
 Description:
 	lineList+=Line+;
@@ -89,7 +89,7 @@ Cell:
 	'|' name=Title;
 
 Line:
-	name=Title EOL;
+	content=Title EOL;
 
 Title:
 	WORD+;
@@ -120,7 +120,7 @@ terminal SL_COMMENT:
 terminal EOL:
 	('\n')+;
 
-terminal RAWTEXT:
+terminal TEXT_BLOCK:
 	'----' '\n' (.)+ '\n' '----';
 
 terminal WORD:

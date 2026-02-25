@@ -48,7 +48,7 @@ public class AsciiDocContentAssistLexer extends InternalAsciiDocLexer {
 			mRULE_WS();
 			// multi line greedy automatic collection
 		} else if (isKeyword("----")) {
-			mRULE_RAWTEXT();
+			mRULE_TEXT_BLOCK();
 			// delimiter reset
 		} else if (isKeyword("\n")) {
 			mRULE_EOL();

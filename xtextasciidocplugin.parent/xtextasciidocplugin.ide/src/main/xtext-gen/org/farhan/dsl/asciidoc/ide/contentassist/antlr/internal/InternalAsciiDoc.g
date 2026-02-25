@@ -2797,9 +2797,9 @@ rule__Text__Group__2__Impl
 	}
 :
 (
-	{ before(grammarAccess.getTextAccess().getNameAssignment_2()); }
-	(rule__Text__NameAssignment_2)
-	{ after(grammarAccess.getTextAccess().getNameAssignment_2()); }
+	{ before(grammarAccess.getTextAccess().getContentAssignment_2()); }
+	(rule__Text__ContentAssignment_2)
+	{ after(grammarAccess.getTextAccess().getContentAssignment_2()); }
 )
 ;
 finally {
@@ -3250,9 +3250,9 @@ rule__Line__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getLineAccess().getNameAssignment_0()); }
-	(rule__Line__NameAssignment_0)
-	{ after(grammarAccess.getLineAccess().getNameAssignment_0()); }
+	{ before(grammarAccess.getLineAccess().getContentAssignment_0()); }
+	(rule__Line__ContentAssignment_0)
+	{ after(grammarAccess.getLineAccess().getContentAssignment_0()); }
 )
 ;
 finally {
@@ -3917,15 +3917,15 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__Text__NameAssignment_2
+rule__Text__ContentAssignment_2
 	@init {
 		int stackSize = keepStackSize();
 	}
 :
 	(
-		{ before(grammarAccess.getTextAccess().getNameRAWTEXTTerminalRuleCall_2_0()); }
-		RULE_RAWTEXT
-		{ after(grammarAccess.getTextAccess().getNameRAWTEXTTerminalRuleCall_2_0()); }
+		{ before(grammarAccess.getTextAccess().getContentTEXT_BLOCKTerminalRuleCall_2_0()); }
+		RULE_TEXT_BLOCK
+		{ after(grammarAccess.getTextAccess().getContentTEXT_BLOCKTerminalRuleCall_2_0()); }
 	)
 ;
 finally {
@@ -4007,15 +4007,15 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__Line__NameAssignment_0
+rule__Line__ContentAssignment_0
 	@init {
 		int stackSize = keepStackSize();
 	}
 :
 	(
-		{ before(grammarAccess.getLineAccess().getNameTitleParserRuleCall_0_0()); }
+		{ before(grammarAccess.getLineAccess().getContentTitleParserRuleCall_0_0()); }
 		ruleTitle
-		{ after(grammarAccess.getLineAccess().getNameTitleParserRuleCall_0_0()); }
+		{ after(grammarAccess.getLineAccess().getContentTitleParserRuleCall_0_0()); }
 	)
 ;
 finally {
@@ -4028,6 +4028,6 @@ RULE_SL_COMMENT : '#' ~('\n')* RULE_EOL;
 
 RULE_EOL : '\n'+;
 
-RULE_RAWTEXT : '----' '\n' .+ '\n' '----';
+RULE_TEXT_BLOCK : '----' '\n' .+ '\n' '----';
 
 RULE_WORD : ~((' '|'\t'|'\r'|'\n'))+;

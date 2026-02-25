@@ -95,13 +95,13 @@ public class AsciiDocParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getAndAccess().getStepDefinitionNameAssignment_3(), "rule__And__StepDefinitionNameAssignment_3");
 			builder.put(grammarAccess.getAndAccess().getTableAssignment_5_0(), "rule__And__TableAssignment_5_0");
 			builder.put(grammarAccess.getAndAccess().getTextAssignment_5_1(), "rule__And__TextAssignment_5_1");
-			builder.put(grammarAccess.getTextAccess().getNameAssignment_2(), "rule__Text__NameAssignment_2");
+			builder.put(grammarAccess.getTextAccess().getContentAssignment_2(), "rule__Text__ContentAssignment_2");
 			builder.put(grammarAccess.getDescriptionAccess().getLineListAssignment(), "rule__Description__LineListAssignment");
 			builder.put(grammarAccess.getNestedDescriptionAccess().getLineListAssignment_2(), "rule__NestedDescription__LineListAssignment_2");
 			builder.put(grammarAccess.getTableAccess().getRowListAssignment_4(), "rule__Table__RowListAssignment_4");
 			builder.put(grammarAccess.getRowAccess().getCellListAssignment_0(), "rule__Row__CellListAssignment_0");
 			builder.put(grammarAccess.getCellAccess().getNameAssignment_1(), "rule__Cell__NameAssignment_1");
-			builder.put(grammarAccess.getLineAccess().getNameAssignment_0(), "rule__Line__NameAssignment_0");
+			builder.put(grammarAccess.getLineAccess().getContentAssignment_0(), "rule__Line__ContentAssignment_0");
 		}
 	}
 	

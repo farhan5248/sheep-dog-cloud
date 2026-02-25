@@ -13,6 +13,7 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalAsciiDocLexer extends Lexer {
     public static final int RULE_WORD=4;
+    public static final int RULE_TEXT_BLOCK=6;
     public static final int RULE_SL_COMMENT=8;
     public static final int T__19=19;
     public static final int T__15=15;
@@ -37,7 +38,6 @@ public class InternalAsciiDocLexer extends Lexer {
     public static final int T__9=9;
     public static final int RULE_EOL=5;
     public static final int RULE_WS=7;
-    public static final int RULE_RAWTEXT=6;
     public static final int T__26=26;
     public static final int T__27=27;
     public static final int T__28=28;
@@ -848,18 +848,18 @@ public class InternalAsciiDocLexer extends Lexer {
     }
     // $ANTLR end "RULE_EOL"
 
-    // $ANTLR start "RULE_RAWTEXT"
-    public final void mRULE_RAWTEXT() throws RecognitionException {
+    // $ANTLR start "RULE_TEXT_BLOCK"
+    public final void mRULE_TEXT_BLOCK() throws RecognitionException {
         try {
-            int _type = RULE_RAWTEXT;
+            int _type = RULE_TEXT_BLOCK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalAsciiDoc.g:4031:14: ( '----' '\\n' ( . )+ '\\n' '----' )
-            // InternalAsciiDoc.g:4031:16: '----' '\\n' ( . )+ '\\n' '----'
+            // InternalAsciiDoc.g:4031:17: ( '----' '\\n' ( . )+ '\\n' '----' )
+            // InternalAsciiDoc.g:4031:19: '----' '\\n' ( . )+ '\\n' '----'
             {
             match("----"); 
 
             match('\n'); 
-            // InternalAsciiDoc.g:4031:28: ( . )+
+            // InternalAsciiDoc.g:4031:31: ( . )+
             int cnt4=0;
             loop4:
             do {
@@ -912,7 +912,7 @@ public class InternalAsciiDocLexer extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // InternalAsciiDoc.g:4031:28: .
+            	    // InternalAsciiDoc.g:4031:31: .
             	    {
             	    matchAny(); 
 
@@ -940,7 +940,7 @@ public class InternalAsciiDocLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "RULE_RAWTEXT"
+    // $ANTLR end "RULE_TEXT_BLOCK"
 
     // $ANTLR start "RULE_WORD"
     public final void mRULE_WORD() throws RecognitionException {
@@ -1000,7 +1000,7 @@ public class InternalAsciiDocLexer extends Lexer {
     // $ANTLR end "RULE_WORD"
 
     public void mTokens() throws RecognitionException {
-        // InternalAsciiDoc.g:1:8: ( T__9 | T__10 | T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | RULE_WS | RULE_SL_COMMENT | RULE_EOL | RULE_RAWTEXT | RULE_WORD )
+        // InternalAsciiDoc.g:1:8: ( T__9 | T__10 | T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | RULE_WS | RULE_SL_COMMENT | RULE_EOL | RULE_TEXT_BLOCK | RULE_WORD )
         int alt6=35;
         alt6 = dfa6.predict(input);
         switch (alt6) {
@@ -1236,14 +1236,14 @@ public class InternalAsciiDocLexer extends Lexer {
                 }
                 break;
             case 34 :
-                // InternalAsciiDoc.g:1:222: RULE_RAWTEXT
+                // InternalAsciiDoc.g:1:222: RULE_TEXT_BLOCK
                 {
-                mRULE_RAWTEXT(); 
+                mRULE_TEXT_BLOCK(); 
 
                 }
                 break;
             case 35 :
-                // InternalAsciiDoc.g:1:235: RULE_WORD
+                // InternalAsciiDoc.g:1:238: RULE_WORD
                 {
                 mRULE_WORD(); 
 
@@ -1502,7 +1502,7 @@ public class InternalAsciiDocLexer extends Lexer {
             this.transition = DFA6_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__9 | T__10 | T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | RULE_WS | RULE_SL_COMMENT | RULE_EOL | RULE_RAWTEXT | RULE_WORD );";
+            return "1:1: Tokens : ( T__9 | T__10 | T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | RULE_WS | RULE_SL_COMMENT | RULE_EOL | RULE_TEXT_BLOCK | RULE_WORD );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;

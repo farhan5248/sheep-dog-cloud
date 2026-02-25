@@ -21,7 +21,7 @@ import org.farhan.dsl.asciidoc.asciiDoc.Text;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TextImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TextImpl#getContent <em>Content</em>}</li>
  * </ul>
  *
  * @generated
@@ -29,24 +29,24 @@ import org.farhan.dsl.asciidoc.asciiDoc.Text;
 public class TextImpl extends MinimalEObjectImpl.Container implements Text
 {
   /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The default value of the '{@link #getContent() <em>Content</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   * @see #getContent()
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
+  protected static final String CONTENT_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The cached value of the '{@link #getContent() <em>Content</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   * @see #getContent()
    * @generated
    * @ordered
    */
-  protected String name = NAME_EDEFAULT;
+  protected String content = CONTENT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -75,9 +75,9 @@ public class TextImpl extends MinimalEObjectImpl.Container implements Text
    * @generated
    */
   @Override
-  public String getName()
+  public String getContent()
   {
-    return name;
+    return content;
   }
 
   /**
@@ -86,12 +86,12 @@ public class TextImpl extends MinimalEObjectImpl.Container implements Text
    * @generated
    */
   @Override
-  public void setName(String newName)
+  public void setContent(String newContent)
   {
-    String oldName = name;
-    name = newName;
+    String oldContent = content;
+    content = newContent;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.TEXT__NAME, oldName, name));
+      eNotify(new ENotificationImpl(this, Notification.SET, AsciiDocPackage.TEXT__CONTENT, oldContent, content));
   }
 
   /**
@@ -104,8 +104,8 @@ public class TextImpl extends MinimalEObjectImpl.Container implements Text
   {
     switch (featureID)
     {
-      case AsciiDocPackage.TEXT__NAME:
-        return getName();
+      case AsciiDocPackage.TEXT__CONTENT:
+        return getContent();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -120,8 +120,8 @@ public class TextImpl extends MinimalEObjectImpl.Container implements Text
   {
     switch (featureID)
     {
-      case AsciiDocPackage.TEXT__NAME:
-        setName((String)newValue);
+      case AsciiDocPackage.TEXT__CONTENT:
+        setContent((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -137,8 +137,8 @@ public class TextImpl extends MinimalEObjectImpl.Container implements Text
   {
     switch (featureID)
     {
-      case AsciiDocPackage.TEXT__NAME:
-        setName(NAME_EDEFAULT);
+      case AsciiDocPackage.TEXT__CONTENT:
+        setContent(CONTENT_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -154,8 +154,8 @@ public class TextImpl extends MinimalEObjectImpl.Container implements Text
   {
     switch (featureID)
     {
-      case AsciiDocPackage.TEXT__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case AsciiDocPackage.TEXT__CONTENT:
+        return CONTENT_EDEFAULT == null ? content != null : !CONTENT_EDEFAULT.equals(content);
     }
     return super.eIsSet(featureID);
   }
@@ -171,8 +171,8 @@ public class TextImpl extends MinimalEObjectImpl.Container implements Text
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
-    result.append(name);
+    result.append(" (content: ");
+    result.append(content);
     result.append(')');
     return result.toString();
   }

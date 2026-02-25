@@ -653,7 +653,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
-  public EAttribute getText_Name()
+  public EAttribute getText_Content()
   {
     return (EAttribute)textEClass.getEStructuralFeatures().get(0);
   }
@@ -785,7 +785,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
-  public EAttribute getLine_Name()
+  public EAttribute getLine_Content()
   {
     return (EAttribute)lineEClass.getEStructuralFeatures().get(0);
   }
@@ -871,7 +871,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
     andEClass = createEClass(AND);
 
     textEClass = createEClass(TEXT);
-    createEAttribute(textEClass, TEXT__NAME);
+    createEAttribute(textEClass, TEXT__CONTENT);
 
     descriptionEClass = createEClass(DESCRIPTION);
     createEReference(descriptionEClass, DESCRIPTION__LINE_LIST);
@@ -889,7 +889,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
     createEAttribute(cellEClass, CELL__NAME);
 
     lineEClass = createEClass(LINE);
-    createEAttribute(lineEClass, LINE__NAME);
+    createEAttribute(lineEClass, LINE__CONTENT);
   }
 
   /**
@@ -981,7 +981,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
     initEClass(andEClass, And.class, "And", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(textEClass, Text.class, "Text", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getText_Name(), ecorePackage.getEString(), "name", null, 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getText_Content(), ecorePackage.getEString(), "content", null, 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(descriptionEClass, Description.class, "Description", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getDescription_LineList(), this.getLine(), null, "lineList", null, 0, -1, Description.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -999,7 +999,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
     initEAttribute(getCell_Name(), ecorePackage.getEString(), "name", null, 0, 1, Cell.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(lineEClass, Line.class, "Line", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getLine_Name(), ecorePackage.getEString(), "name", null, 0, 1, Line.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLine_Content(), ecorePackage.getEString(), "content", null, 0, 1, Line.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

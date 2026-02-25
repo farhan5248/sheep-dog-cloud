@@ -24,7 +24,7 @@ public class NestedDescriptionImpl implements INestedDescription {
 	@Override
 	public ILine getLine(String name) {
 		for (Line l : eObject.getLineList()) {
-			if (l.getName().equals(name)) {
+			if (l.getContent().equals(name)) {
 				return new LineImpl(l);
 			}
 		}

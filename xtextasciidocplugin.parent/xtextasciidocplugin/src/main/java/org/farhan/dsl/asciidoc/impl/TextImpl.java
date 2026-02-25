@@ -16,12 +16,12 @@ public class TextImpl implements IText {
 
 	@Override
 	public String getName() {
-		return eObject.getName();
+		return eObject.getContent();
 	}
 
 	@Override
 	public void setName(String value) {
-		eObject.setName(value);
+		eObject.setContent(value);
 	}
 
 	@Override

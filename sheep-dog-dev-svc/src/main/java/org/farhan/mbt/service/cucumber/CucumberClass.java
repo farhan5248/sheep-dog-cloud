@@ -72,7 +72,7 @@ public class CucumberClass extends CucumberJava {
     private String getCallForInputOutputsForState(String step) throws Exception {
         String stepObjectName = StepObjectRefFragments.getAll(step);
         return "." + getSetOrAssert(step) + "InputOutputs(\""
-                + StringUtils.capitalize(StepDefinitionRefFragments.getStateType(step.replace(stepObjectName, "")))
+                + StringUtils.capitalize(StepDefinitionRefFragments.getStateDesc(step.replace(stepObjectName, "")))
                 + "\"" + getSectionArg(step) + getNegativeArg(step) + ")";
     }
 

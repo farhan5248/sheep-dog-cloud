@@ -46,7 +46,7 @@ public class CucumberInterface extends CucumberJava {
                     addMethod(
                             getSetOrAssert(name)
                                     + convertToPascalCase(StepDefinitionRefFragments.getPart(stepDefinitionName))
-                                    + convertToPascalCase(StepDefinitionRefFragments.getStateType(stepDefinitionName)),
+                                    + convertToPascalCase(StepDefinitionRefFragments.getStateDesc(stepDefinitionName)),
                             true);
                 } else {
                     for (String param : paramList) {

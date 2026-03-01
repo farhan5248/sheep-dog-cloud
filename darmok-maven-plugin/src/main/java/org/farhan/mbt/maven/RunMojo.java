@@ -290,30 +290,51 @@ public class RunMojo extends AbstractMojo {
 			if (line.matches("^== Test-Case: .+$")) {
 				String testCaseName = line.substring("== Test-Case: ".length());
 				if (testCaseName.equals(scenarioName)) {
-					// Check if tag already present on next line
-					boolean alreadyHasTag = false;
+					// Find the first non-empty line after the Test-Case header
 					int nextLineIndex = i + 1;
+					while (nextLineIndex < content.size() && content.get(nextLineIndex).trim().isEmpty()) {
+						nextLineIndex++;
+					}
+
+					boolean hasTagLine = false;
+					boolean alreadyHasTag = false;
 					if (nextLineIndex < content.size()) {
 						String nextLine = content.get(nextLineIndex).trim();
 						if (nextLine.startsWith("@")) {
-							alreadyHasTag = true;
+							hasTagLine = true;
+							for (String existingTag : nextLine.split(" ")) {
+								if (existingTag.equals("@" + tag)) {
+									alreadyHasTag = true;
+									break;
+								}
+							}
 						}
 					}
 
 					if (!alreadyHasTag) {
-						newContent.add("");
-						newContent.add("@" + tag);
+						if (hasTagLine) {
+							// Append tag to existing tag line
+							for (int k = i + 1; k < nextLineIndex; k++) {
+								newContent.add(content.get(k));
+							}
+							newContent.add(content.get(nextLineIndex).trim() + " @" + tag);
+							for (int j = nextLineIndex + 1; j < content.size(); j++) {
+								newContent.add(content.get(j));
+							}
+						} else {
+							newContent.add("");
+							newContent.add("@" + tag);
+							for (int j = i + 1; j < content.size(); j++) {
+								newContent.add(content.get(j));
+							}
+						}
 						getLog().debug("  Added tag @" + tag + " to file");
+						writeFileWithLF(filePath, newContent);
+						return true;
 					} else {
-						getLog().debug("  Tag already present in file");
+						getLog().debug("  Tag @" + tag + " already present in file");
+						return false;
 					}
-
-					// Append remaining lines and write
-					for (int j = i + 1; j < content.size(); j++) {
-						newContent.add(content.get(j));
-					}
-					writeFileWithLF(filePath, newContent);
-					return !alreadyHasTag;
 				}
 			}
 		}

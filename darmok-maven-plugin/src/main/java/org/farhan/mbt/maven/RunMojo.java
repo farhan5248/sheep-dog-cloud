@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -83,9 +84,10 @@ public class RunMojo extends AbstractMojo {
 
 	private void initLogs() throws Exception {
 		Path logDir = resolveLogDir();
-		mojoLog = new CategoryLog(getLog(), "mojo", logDir.resolve("mojo.log"));
-		runnerLog = new CategoryLog(getLog(), "runner", logDir.resolve("runners.log"));
-		clientLog = new CategoryLog(getLog(), "client", logDir.resolve("clients.log"));
+		String date = LocalDate.now().toString();
+		mojoLog = new CategoryLog(getLog(), "mojo", logDir.resolve("darmok.mojo." + date + ".log"));
+		runnerLog = new CategoryLog(getLog(), "runner", logDir.resolve("darmok.runners." + date + ".log"));
+		clientLog = new CategoryLog(getLog(), "client", logDir.resolve("darmok.clients." + date + ".log"));
 	}
 
 	private void closeLogs() {

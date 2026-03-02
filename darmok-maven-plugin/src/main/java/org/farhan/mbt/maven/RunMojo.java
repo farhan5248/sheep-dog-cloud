@@ -63,6 +63,9 @@ public class RunMojo extends AbstractMojo {
 	private String baseDir;
 	private GitRunner git;
 	private MavenRunner maven;
+	private CategoryLog mojoLog;
+	private CategoryLog runnerLog;
+	private CategoryLog clientLog;
 
 	private record ScenarioEntry(String file, String scenario, String tag) {}
 
@@ -70,32 +73,50 @@ public class RunMojo extends AbstractMojo {
 	// Execute
 	// =========================================================================
 
+	private Path resolveLogDir() {
+		String logPath = System.getenv("LOG_PATH");
+		if (logPath != null && !logPath.isEmpty()) {
+			return Path.of(logPath);
+		}
+		return Path.of(baseDir, "target", "darmok");
+	}
+
+	private void initLogs() throws Exception {
+		Path logDir = resolveLogDir();
+		mojoLog = new CategoryLog(getLog(), "mojo", logDir.resolve("mojo.log"));
+		runnerLog = new CategoryLog(getLog(), "runner", logDir.resolve("runners.log"));
+		clientLog = new CategoryLog(getLog(), "client", logDir.resolve("clients.log"));
+	}
+
+	private void closeLogs() {
+		if (mojoLog != null) mojoLog.close();
+		if (runnerLog != null) runnerLog.close();
+		if (clientLog != null) clientLog.close();
+	}
+
 	public void execute() throws MojoExecutionException {
 		try {
 			baseDir = project.getBasedir().getAbsolutePath();
+			initLogs();
 
-			git = new GitRunner(getLog());
-			maven = new MavenRunner(getLog());
+			git = new GitRunner(runnerLog);
+			maven = new MavenRunner(runnerLog);
 
-			getLog().info("===========================================");
-			getLog().info("RGR Automation Plugin");
-			getLog().info("===========================================");
-			getLog().info("");
+			mojoLog.info("RGR Automation Plugin");
+			mojoLog.info("Log files: " + resolveLogDir());
 
 			// Parse scenarios
 			List<ScenarioEntry> scenarios = parseScenarios(baseDir + "/" + scenariosFile);
-			getLog().info("Found " + scenarios.size() + " scenarios to process");
-			getLog().info("");
+			mojoLog.info("Found " + scenarios.size() + " scenarios to process");
+			mojoLog.info("");
 
 			// Clean up
-			getLog().info("===========================================");
-			getLog().info("Running clean up...");
-			getLog().info("===========================================");
+			mojoLog.info("Running clean up...");
 			int cleanUpExit = runCleanUp();
 			if (cleanUpExit != 0) {
 				throw new MojoExecutionException("Clean up failed with exit code " + cleanUpExit);
 			}
-			getLog().info("");
+			mojoLog.info("");
 
 			// Group scenarios by file (preserving order)
 			LinkedHashMap<String, List<ScenarioEntry>> scenariosByFile = new LinkedHashMap<>();
@@ -103,8 +124,8 @@ public class RunMojo extends AbstractMojo {
 				scenariosByFile.computeIfAbsent(entry.file(), k -> new ArrayList<>()).add(entry);
 			}
 
-			getLog().info("Found " + scenariosByFile.size() + " feature files to process");
-			getLog().info("");
+			mojoLog.info("Found " + scenariosByFile.size() + " feature files to process");
+			mojoLog.info("");
 
 			int totalProcessed = 0;
 			int totalTagsAdded = 0;
@@ -115,25 +136,18 @@ public class RunMojo extends AbstractMojo {
 				String fileName = fileGroup.getKey();
 				List<ScenarioEntry> fileScenarios = fileGroup.getValue();
 
-				getLog().info("==========================================");
-				getLog().info("FEATURE FILE: " + fileName);
-				getLog().info("==========================================");
-				getLog().info("Scenarios in this file: " + fileScenarios.size());
-				getLog().info("");
+				mojoLog.info("FEATURE FILE: " + fileName + " (" + fileScenarios.size() + " scenarios)");
 
 				// Inner loop: each scenario
 				for (ScenarioEntry entry : fileScenarios) {
 					String scenarioName = entry.scenario();
 					String tag = entry.tag();
 
-					getLog().info("==========================================");
-					getLog().info("Processing Scenario: " + scenarioName);
-					getLog().info("Tag: " + tag);
-					getLog().info("==========================================");
+					mojoLog.info("Processing Scenario: " + scenarioName + " [" + tag + "]");
 
 					if ("NoTag".equals(tag)) {
-						getLog().info("  Skipping (NoTag)");
-						getLog().info("");
+						mojoLog.info("  Skipping (NoTag)");
+						mojoLog.info("");
 						continue;
 					}
 
@@ -144,9 +158,9 @@ public class RunMojo extends AbstractMojo {
 					}
 
 					// Run rgr-red
-					getLog().info("");
-					getLog().info("Running Red-Green workflow for tag: " + tag);
-					getLog().info("  [1/2] Running rgr-red...");
+					mojoLog.info("");
+					mojoLog.info("Running Red-Green workflow for tag: " + tag);
+					mojoLog.info("  [1/2] Running rgr-red...");
 					long redStart = System.currentTimeMillis();
 					int redExitCode = runRgrRed(tag);
 					long redDuration = System.currentTimeMillis() - redStart;
@@ -154,7 +168,7 @@ public class RunMojo extends AbstractMojo {
 					if (redExitCode != 0 && redExitCode != 100) {
 						throw new MojoExecutionException("rgr-red failed with exit code " + redExitCode);
 					}
-					getLog().info("  Completed rgr-red (Duration: " + formatDuration(redDuration) + ")");
+					mojoLog.info("  Completed rgr-red (Duration: " + formatDuration(redDuration) + ")");
 
 					// Stage changes
 					git.run(baseDir, "add", ".");
@@ -162,30 +176,28 @@ public class RunMojo extends AbstractMojo {
 					// Run rgr-green if tests are failing
 					long greenDuration = 0;
 					if (redExitCode == 0) {
-						getLog().info("  [2/2] Running rgr-green...");
+						mojoLog.info("  [2/2] Running rgr-green...");
 						long greenStart = System.currentTimeMillis();
 						int greenExitCode = runRgrGreen(tag);
 						greenDuration = System.currentTimeMillis() - greenStart;
 						if (greenExitCode != 0) {
 							throw new MojoExecutionException("rgr-green failed with exit code " + greenExitCode);
 						}
-						getLog().info("  Completed rgr-green (Duration: " + formatDuration(greenDuration) + ")");
+						mojoLog.info("  Completed rgr-green (Duration: " + formatDuration(greenDuration) + ")");
 						git.run(baseDir, "add", ".");
 					} else {
-						getLog().info("  [2/2] Skipping rgr-green (tests already passing)");
+						mojoLog.info("  [2/2] Skipping rgr-green (tests already passing)");
 					}
 
 					long totalDuration = redDuration + greenDuration;
-					getLog().info("");
-					getLog().info("  Red-Green workflow completed for tag: " + tag + " (Total Duration: " + formatDuration(totalDuration) + ")");
+					mojoLog.info("");
+					mojoLog.info("  Red-Green workflow completed for tag: " + tag + " (Total Duration: " + formatDuration(totalDuration) + ")");
 					totalProcessed++;
-					getLog().info("");
+					mojoLog.info("");
 				}
 
 				// After all scenarios in file: commit and refactor
-				getLog().info("==========================================");
-				getLog().info("All scenarios in file " + fileName + " processed");
-				getLog().info("==========================================");
+				mojoLog.info("All scenarios in file " + fileName + " processed");
 
 				int diffQuietExit = git.run(baseDir, "diff", "--cached", "--quiet");
 				boolean hasStagedChanges = (diffQuietExit != 0);
@@ -193,10 +205,10 @@ public class RunMojo extends AbstractMojo {
 				if (hasStagedChanges) {
 					// Commit red-green changes
 					String commitMsg = "run-rgr red-green " + fileName + "\n\nCo-Authored-By: " + coAuthor;
-					getLog().info("Committing all red-green changes for file: " + commitMsg.split("\n")[0]);
+					mojoLog.info("Committing all red-green changes for file: " + commitMsg.split("\n")[0]);
 					git.run(baseDir, "add", ".");
 					git.run(baseDir, "commit", "-m", commitMsg);
-					getLog().info("");
+					mojoLog.info("");
 
 					// Check if src/main has changes (code was modified, not just tests)
 					int mainDiffExit = git.run(baseDir, "diff", "HEAD~1", "--quiet", "--", "src/main");
@@ -204,8 +216,8 @@ public class RunMojo extends AbstractMojo {
 
 					if (hasMainChanges) {
 						// Run rgr-refactor
-						getLog().info("Running rgr-refactor for file: " + fileName);
-						getLog().info("");
+						mojoLog.info("Running rgr-refactor for file: " + fileName);
+						mojoLog.info("");
 						long refactorStart = System.currentTimeMillis();
 						int refactorExit = runRgrRefactor();
 						long refactorDuration = System.currentTimeMillis() - refactorStart;
@@ -216,32 +228,30 @@ public class RunMojo extends AbstractMojo {
 
 						// Commit refactor changes
 						String refactorCommitMsg = "run-rgr-refactor " + fileName + "\n\nCo-Authored-By: " + coAuthor;
-						getLog().info("Committing changes: " + refactorCommitMsg.split("\n")[0] + " (Duration: " + formatDuration(refactorDuration) + ")");
+						mojoLog.info("Committing changes: " + refactorCommitMsg.split("\n")[0] + " (Duration: " + formatDuration(refactorDuration) + ")");
 						git.run(baseDir, "add", ".");
 						git.run(baseDir, "commit", "-m", refactorCommitMsg);
 					} else {
-						getLog().info("Skipping rgr-refactor (no src/main changes)");
+						mojoLog.info("Skipping rgr-refactor (no src/main changes)");
 					}
 				} else {
-					getLog().info("Skipping commit (nothing staged for this file)");
+					mojoLog.info("Skipping commit (nothing staged for this file)");
 				}
 
 				totalFilesProcessed++;
-				getLog().info("");
+				mojoLog.info("");
 			}
 
-			getLog().info("");
-			getLog().info("==========================================");
-			getLog().info("RGR Automation Complete!");
-			getLog().info("==========================================");
-			getLog().info("Total feature files processed: " + totalFilesProcessed);
-			getLog().info("Total scenarios processed: " + totalProcessed);
-			getLog().info("Total tags added: " + totalTagsAdded);
-			getLog().info("==========================================");
+			mojoLog.info("RGR Automation Complete!");
+			mojoLog.info("Total feature files processed: " + totalFilesProcessed);
+			mojoLog.info("Total scenarios processed: " + totalProcessed);
+			mojoLog.info("Total tags added: " + totalTagsAdded);
 		} catch (MojoExecutionException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new MojoExecutionException(e.getMessage(), e);
+		} finally {
+			closeLogs();
 		}
 	}
 
@@ -276,7 +286,7 @@ public class RunMojo extends AbstractMojo {
 		String filePath = baseDir + "/" + asciidocDir + "/" + fileName + ".asciidoc";
 		File file = new File(filePath);
 		if (!file.exists()) {
-			getLog().warn("File not found: " + fileName + ".asciidoc");
+			mojoLog.warn("File not found: " + fileName + ".asciidoc");
 			return false;
 		}
 
@@ -328,18 +338,18 @@ public class RunMojo extends AbstractMojo {
 								newContent.add(content.get(j));
 							}
 						}
-						getLog().debug("  Added tag @" + tag + " to file");
+						mojoLog.debug("  Added tag @" + tag + " to file");
 						writeFileWithLF(filePath, newContent);
 						return true;
 					} else {
-						getLog().debug("  Tag @" + tag + " already present in file");
+						mojoLog.debug("  Tag @" + tag + " already present in file");
 						return false;
 					}
 				}
 			}
 		}
 
-		getLog().warn("Scenario not found in file: " + scenarioName);
+		mojoLog.warn("Scenario not found in file: " + scenarioName);
 		return false;
 	}
 
@@ -349,61 +359,61 @@ public class RunMojo extends AbstractMojo {
 
 	private int runRgrRed(String pattern) throws Exception {
 		String runnerClassName = pattern + "Test";
-		ServiceClient service = new ServiceClient(getLog(), host, port, timeout);
+		ServiceClient service = new ServiceClient(clientLog, host, port, timeout);
 
-		getLog().debug("RGR-Red: Pattern=" + pattern + ", Runner=" + runnerClassName);
+		mojoLog.debug("RGR-Red: Pattern=" + pattern + ", Runner=" + runnerClassName);
 
 		// Step 1: AsciiDoctor to UML (direct REST call to service)
-		getLog().debug("  STEP 1: AsciiDoctor to UML Conversion");
+		mojoLog.debug("  STEP 1: AsciiDoctor to UML Conversion");
 		service.executeToUML("asciidoctor/", "ConvertAsciidoctorToUML", pattern,
 				baseDir + "/" + specsDir, ".asciidoc");
 
 		// Step 2: UML to Cucumber-Guice (direct REST call to service)
-		getLog().debug("  STEP 2: UML to Cucumber-Guice Conversion");
+		mojoLog.debug("  STEP 2: UML to Cucumber-Guice Conversion");
 		service.executeFromUML("cucumber/", "ConvertUMLToCucumberGuice", pattern, baseDir);
 
 		// Step 3: Generate runner class
-		getLog().debug("  STEP 3: Generate Runner Class");
+		mojoLog.debug("  STEP 3: Generate Runner Class");
 		String runnerClassPath = baseDir
 			+ "/src/test/java/org/farhan/suites/" + runnerClassName + ".java";
 		Files.createDirectories(Path.of(runnerClassPath).getParent());
 		String runnerContent = generateRunnerClassContent(pattern, runnerClassName);
 		writeFileWithLF(runnerClassPath, List.of(runnerContent.split("\n", -1)));
-		getLog().debug("  Created runner class: " + runnerClassPath);
+		mojoLog.debug("  Created runner class: " + runnerClassPath);
 
 		// Step 4: Run tests
-		getLog().debug("  STEP 4: Running tests with " + runnerClassName);
+		mojoLog.debug("  STEP 4: Running tests with " + runnerClassName);
 		int testExitCode = maven.run(baseDir, "test", "-Dtest=" + runnerClassName);
 
 		if (testExitCode == 0) {
-			getLog().debug("  Tests are PASSING - no failing tests to fix (returning 100)");
+			mojoLog.debug("  Tests are PASSING - no failing tests to fix (returning 100)");
 			return 100;
 		} else {
-			getLog().debug("  Tests are FAILING - ready for green phase (returning 0)");
+			mojoLog.debug("  Tests are FAILING - ready for green phase (returning 0)");
 			return 0;
 		}
 	}
 
 	private int runRgrGreen(String pattern) throws Exception {
-		getLog().debug("RGR-Green: Pattern=" + pattern);
-		ClaudeRunner claude = new ClaudeRunner(getLog(), model, maxRetries, retryWaitSeconds);
+		mojoLog.info("RGR-Green: Pattern=" + pattern);
+		ClaudeRunner claude = new ClaudeRunner(runnerLog, model, maxRetries, retryWaitSeconds);
 		return claude.run(baseDir + "/../..", "/rgr-green sheep-dog-test " + pattern);
 	}
 
 	private int runRgrRefactor() throws Exception {
-		getLog().debug("RGR-Refactor: " + pipeline + " sheep-dog-test");
-		ClaudeRunner claude = new ClaudeRunner(getLog(), model, maxRetries, retryWaitSeconds);
+		mojoLog.info("RGR-Refactor: " + pipeline + " sheep-dog-test");
+		ClaudeRunner claude = new ClaudeRunner(runnerLog, model, maxRetries, retryWaitSeconds);
 		return claude.run(baseDir + "/../..", "/rgr-refactor " + pipeline + " sheep-dog-test");
 	}
 
 	private int runCleanUp() throws Exception {
 		Path sheepDogMain = Path.of(baseDir, "../..").normalize();
 
-		getLog().debug("Deleting NUL files...");
+		mojoLog.info("Deleting NUL files...");
 		int deleted = deleteNulFiles(sheepDogMain);
-		getLog().debug("Deleted " + deleted + " NUL files");
+		mojoLog.info("Deleted " + deleted + " NUL files");
 
-		getLog().debug("Deleting target directory...");
+		mojoLog.info("Deleting target directory...");
 		deleteDirectory(Path.of(baseDir, "target"));
 		return 0;
 	}
@@ -418,11 +428,11 @@ public class RunMojo extends AbstractMojo {
 			})
 			.forEach(p -> {
 				try {
-					getLog().debug("  Deleting: " + p);
+					mojoLog.debug("  Deleting: " + p);
 					Files.delete(p);
 					count[0]++;
 				} catch (Exception e) {
-					getLog().debug("  Warning: Could not delete " + p + ": " + e.getMessage());
+					mojoLog.debug("  Warning: Could not delete " + p + ": " + e.getMessage());
 				}
 			});
 		return count[0];
@@ -438,7 +448,7 @@ public class RunMojo extends AbstractMojo {
 				try {
 					Files.delete(p);
 				} catch (Exception e) {
-					getLog().debug("  Warning: Could not delete " + p + ": " + e.getMessage());
+					mojoLog.debug("  Warning: Could not delete " + p + ": " + e.getMessage());
 				}
 			});
 	}

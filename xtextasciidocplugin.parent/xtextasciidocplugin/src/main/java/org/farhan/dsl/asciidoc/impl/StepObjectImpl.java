@@ -14,12 +14,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.xtext.resource.SaveOptions;
 import org.farhan.dsl.lang.IDescription;
-import org.farhan.dsl.lang.ILine;
 import org.farhan.dsl.lang.IStepDefinition;
 import org.farhan.dsl.lang.IStepObject;
 import org.farhan.dsl.lang.ITestProject;
 import org.farhan.dsl.lang.SheepDogFactory;
-import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 
@@ -116,14 +114,8 @@ public class StepObjectImpl implements IStepObject {
 	}
 
 	@Override
-	public boolean addLine(ILine value) {
-		Description list = eObject.getDescription();
-		if (list == null) {
-			list = org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory.eINSTANCE.createDescription();
-			eObject.setDescription(list);
-		}
-		list.getLineList().add(((LineImpl) value).eObject);
-		return true;
+	public void setDescription(IDescription value) {
+		eObject.setDescription(((DescriptionImpl) value).eObject);
 	}
 
 	@Override

@@ -3,8 +3,8 @@ package org.farhan.mbt.service.cucumber;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
-import org.farhan.dsl.lang.StepDefinitionRefFragments;
-import org.farhan.dsl.lang.StepObjectRefFragments;
+import org.farhan.dsl.grammar.StepDefinitionRefFragments;
+import org.farhan.dsl.grammar.StepObjectRefFragments;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 

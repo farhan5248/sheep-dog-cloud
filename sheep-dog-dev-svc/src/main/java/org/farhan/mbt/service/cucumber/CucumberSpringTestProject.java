@@ -1,7 +1,7 @@
 package org.farhan.mbt.service.cucumber;
 
 import org.farhan.mbt.core.IConvertibleObject;
-import org.farhan.dsl.lang.IResourceRepository;
+import org.farhan.dsl.grammar.IResourceRepository;
 
 public class CucumberSpringTestProject extends CucumberTestProject {
 

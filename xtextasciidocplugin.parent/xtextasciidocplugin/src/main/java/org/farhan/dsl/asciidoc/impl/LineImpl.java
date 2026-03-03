@@ -1,6 +1,6 @@
 package org.farhan.dsl.asciidoc.impl;
 
-import org.farhan.dsl.lang.ILine;
+import org.farhan.dsl.grammar.ILine;
 import org.farhan.dsl.asciidoc.asciiDoc.Line;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;

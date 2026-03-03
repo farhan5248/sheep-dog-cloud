@@ -3,12 +3,12 @@ package org.farhan.dsl.asciidoc.impl;
 import java.io.File;
 import java.util.ArrayList;
 import org.slf4j.Logger;
-import org.farhan.dsl.lang.SheepDogLoggerFactory;
-import org.farhan.dsl.lang.IResourceRepository;
-import org.farhan.dsl.lang.IStepObject;
-import org.farhan.dsl.lang.ITestProject;
-import org.farhan.dsl.lang.ITestSuite;
-import org.farhan.dsl.lang.SheepDogFactory;
+import org.farhan.dsl.grammar.SheepDogLoggerFactory;
+import org.farhan.dsl.grammar.IResourceRepository;
+import org.farhan.dsl.grammar.IStepObject;
+import org.farhan.dsl.grammar.ITestProject;
+import org.farhan.dsl.grammar.ITestSuite;
+import org.farhan.dsl.grammar.SheepDogFactory;
 
 public class TestProjectImpl implements ITestProject {
 

@@ -1,6 +1,6 @@
 package org.farhan.mbt.service.cucumber;
 
-import org.farhan.dsl.lang.StepObjectRefFragments;
+import org.farhan.dsl.grammar.StepObjectRefFragments;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;

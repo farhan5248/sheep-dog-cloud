@@ -6,7 +6,7 @@ package org.farhan.dsl.asciidoc.validation;
 import java.io.File;
 
 import org.slf4j.Logger;
-import org.farhan.dsl.lang.SheepDogLoggerFactory;
+import org.farhan.dsl.grammar.SheepDogLoggerFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -28,8 +28,8 @@ import org.farhan.dsl.asciidoc.impl.TestStepImpl;
 import org.farhan.dsl.asciidoc.impl.TestSuiteImpl;
 import org.farhan.dsl.asciidoc.impl.TextImpl;
 import org.farhan.dsl.issues.*;
-import org.farhan.dsl.lang.ITestProject;
-import org.farhan.dsl.lang.SheepDogFactory;
+import org.farhan.dsl.grammar.ITestProject;
+import org.farhan.dsl.grammar.SheepDogFactory;
 
 /**
  * This class contains custom validation rules.

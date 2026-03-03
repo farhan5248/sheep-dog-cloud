@@ -2,9 +2,9 @@ package org.farhan.dsl.asciidoc.impl;
 
 import java.util.ArrayList;
 
-import org.farhan.dsl.lang.ITestCase;
-import org.farhan.dsl.lang.ITestData;
-import org.farhan.dsl.lang.ITestStep;
+import org.farhan.dsl.grammar.ITestCase;
+import org.farhan.dsl.grammar.ITestData;
+import org.farhan.dsl.grammar.ITestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.TestCase;
 
 public class TestCaseImpl extends TestStepContainerImpl implements ITestCase {

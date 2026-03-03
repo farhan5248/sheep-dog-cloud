@@ -1,7 +1,7 @@
 package org.farhan.dsl.asciidoc.ide;
 
 import org.slf4j.Logger;
-import org.farhan.dsl.lang.SheepDogLoggerFactory;
+import org.farhan.dsl.grammar.SheepDogLoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

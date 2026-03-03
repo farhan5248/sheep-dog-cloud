@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
-import org.farhan.dsl.lang.IDescription;
-import org.farhan.dsl.lang.IStepDefinition;
-import org.farhan.dsl.lang.IStepObject;
-import org.farhan.dsl.lang.IStepParameters;
-import org.farhan.dsl.lang.SheepDogUtility;
+import org.farhan.dsl.grammar.IDescription;
+import org.farhan.dsl.grammar.IStepDefinition;
+import org.farhan.dsl.grammar.IStepObject;
+import org.farhan.dsl.grammar.IStepParameters;
+import org.farhan.dsl.grammar.SheepDogUtility;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;

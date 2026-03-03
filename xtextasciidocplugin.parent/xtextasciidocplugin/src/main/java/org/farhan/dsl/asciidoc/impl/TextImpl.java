@@ -1,7 +1,7 @@
 package org.farhan.dsl.asciidoc.impl;
 
-import org.farhan.dsl.lang.ITestStep;
-import org.farhan.dsl.lang.IText;
+import org.farhan.dsl.grammar.ITestStep;
+import org.farhan.dsl.grammar.IText;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 import org.farhan.dsl.asciidoc.asciiDoc.Text;
 

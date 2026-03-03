@@ -3,8 +3,8 @@ package org.farhan.dsl.asciidoc.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.farhan.dsl.lang.ILine;
-import org.farhan.dsl.lang.INestedDescription;
+import org.farhan.dsl.grammar.ILine;
+import org.farhan.dsl.grammar.INestedDescription;
 import org.farhan.dsl.asciidoc.asciiDoc.Line;
 import org.farhan.dsl.asciidoc.asciiDoc.NestedDescription;
 

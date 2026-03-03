@@ -4,7 +4,7 @@
 
 
 
-Wrapper classes implement framework-independent interfaces from org.farhan.dsl.lang.
+Wrapper classes implement framework-independent interfaces from org.farhan.dsl.grammar.
 
 Provides bridge pattern between Xtext EMF objects and business logic.
 

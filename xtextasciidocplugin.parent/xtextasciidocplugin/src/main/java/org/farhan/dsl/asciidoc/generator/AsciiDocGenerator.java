@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.slf4j.Logger;
-import org.farhan.dsl.lang.SheepDogLoggerFactory;
+import org.farhan.dsl.grammar.SheepDogLoggerFactory;
 import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
@@ -22,10 +22,10 @@ import org.farhan.dsl.issues.TestStepIssueDetector;
 import org.farhan.dsl.issues.TestStepIssueResolver;
 import org.farhan.dsl.issues.TextIssueDetector;
 import org.farhan.dsl.issues.TextIssueResolver;
-import org.farhan.dsl.lang.SheepDogIssueProposal;
-import org.farhan.dsl.lang.IStepObject;
-import org.farhan.dsl.lang.ITestProject;
-import org.farhan.dsl.lang.SheepDogBuilder;
+import org.farhan.dsl.grammar.SheepDogIssueProposal;
+import org.farhan.dsl.grammar.IStepObject;
+import org.farhan.dsl.grammar.ITestProject;
+import org.farhan.dsl.grammar.SheepDogBuilder;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;
 
 /**

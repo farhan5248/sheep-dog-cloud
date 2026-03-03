@@ -8,7 +8,7 @@ import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.parser.antlr.Lexer;
 import org.eclipse.xtext.parser.antlr.LexerBindings;
 import org.eclipse.xtext.parser.antlr.LexerProvider;
-import org.farhan.dsl.lang.SheepDogFactory;
+import org.farhan.dsl.grammar.SheepDogFactory;
 import org.farhan.dsl.asciidoc.parser.antlr.CustomAsciiDocParser;
 import org.farhan.dsl.asciidoc.parser.antlr.internal.InternalAsciiDocLexer;
 import org.farhan.dsl.asciidoc.parser.antlr.internal.AsciiDocLexer;

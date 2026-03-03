@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.farhan.dsl.cucumber.CucumberStandaloneSetup;
 import org.farhan.mbt.core.IConvertibleObject;
 import org.farhan.mbt.core.ConvertibleProject;
-import org.farhan.dsl.lang.IResourceRepository;
+import org.farhan.dsl.grammar.IResourceRepository;
 
 public class CucumberTestProject extends ConvertibleProject {
 

@@ -1,6 +1,6 @@
 package org.farhan.mbt.service.cucumber;
 
-import org.farhan.dsl.lang.IResourceRepository;
+import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.core.UMLTestProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,16 +1,16 @@
 package org.farhan.dsl.asciidoc.ide.contentassist;
 
 import org.slf4j.Logger;
-import org.farhan.dsl.lang.SheepDogLoggerFactory;
+import org.farhan.dsl.grammar.SheepDogLoggerFactory;
 
 import org.eclipse.xtext.ide.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ide.editor.contentassist.ContentAssistEntry;
 import org.eclipse.xtext.ide.editor.contentassist.IIdeContentProposalAcceptor;
 import org.eclipse.xtext.ide.editor.contentassist.IdeContentProposalProvider;
 import org.farhan.dsl.issues.*;
-import org.farhan.dsl.lang.SheepDogIssueProposal;
-import org.farhan.dsl.lang.ITestProject;
-import org.farhan.dsl.lang.SheepDogFactory;
+import org.farhan.dsl.grammar.SheepDogIssueProposal;
+import org.farhan.dsl.grammar.ITestProject;
+import org.farhan.dsl.grammar.SheepDogFactory;
 
 import java.io.File;
 

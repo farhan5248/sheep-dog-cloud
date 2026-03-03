@@ -13,11 +13,11 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.xtext.resource.SaveOptions;
-import org.farhan.dsl.lang.IDescription;
-import org.farhan.dsl.lang.IStepDefinition;
-import org.farhan.dsl.lang.IStepObject;
-import org.farhan.dsl.lang.ITestProject;
-import org.farhan.dsl.lang.SheepDogFactory;
+import org.farhan.dsl.grammar.IDescription;
+import org.farhan.dsl.grammar.IStepDefinition;
+import org.farhan.dsl.grammar.IStepObject;
+import org.farhan.dsl.grammar.ITestProject;
+import org.farhan.dsl.grammar.SheepDogFactory;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
 
@@ -86,7 +86,7 @@ public class StepObjectImpl implements IStepObject {
 	@Override
 	public void setFullName(String value) {
 		this.qualifiedName = value;
-		String extension = org.farhan.dsl.lang.SheepDogFactory.instance.createTestProject().getFileExtension();
+		String extension = org.farhan.dsl.grammar.SheepDogFactory.instance.createTestProject().getFileExtension();
 		eObject.setName((new File(qualifiedName)).getName().replaceFirst(extension + "$", ""));
 	}
 

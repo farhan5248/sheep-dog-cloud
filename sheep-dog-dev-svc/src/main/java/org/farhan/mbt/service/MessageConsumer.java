@@ -5,7 +5,7 @@ import org.farhan.mbt.config.JmsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.farhan.mbt.core.Converter;
-import org.farhan.dsl.lang.IResourceRepository;
+import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.exception.MessageConsumingException;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.cucumber.ConvertCucumberToUML;

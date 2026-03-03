@@ -3,7 +3,7 @@ package org.farhan.mbt.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.farhan.dsl.lang.IResourceRepository;
+import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.model.ModelSourceFile;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;

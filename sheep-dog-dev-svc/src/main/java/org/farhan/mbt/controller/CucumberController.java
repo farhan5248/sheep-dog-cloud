@@ -3,7 +3,7 @@ package org.farhan.mbt.controller;
 import java.util.List;
 
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
-import org.farhan.dsl.lang.IResourceRepository;
+import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.CucumberService;
 import org.farhan.mbt.service.cucumber.ConvertCucumberToUML;

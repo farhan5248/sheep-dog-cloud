@@ -1,9 +1,9 @@
 package org.farhan.dsl.asciidoc.impl;
 
-import org.farhan.dsl.lang.INestedDescription;
-import org.farhan.dsl.lang.IStepDefinition;
-import org.farhan.dsl.lang.IStepParameters;
-import org.farhan.dsl.lang.ITable;
+import org.farhan.dsl.grammar.INestedDescription;
+import org.farhan.dsl.grammar.IStepDefinition;
+import org.farhan.dsl.grammar.IStepParameters;
+import org.farhan.dsl.grammar.ITable;
 import org.farhan.dsl.asciidoc.asciiDoc.StepParameters;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 

@@ -2,11 +2,11 @@ package org.farhan.dsl.asciidoc.impl;
 
 import java.util.ArrayList;
 
-import org.farhan.dsl.lang.IDescription;
-import org.farhan.dsl.lang.ILine;
-import org.farhan.dsl.lang.ITestStep;
-import org.farhan.dsl.lang.ITestStepContainer;
-import org.farhan.dsl.lang.ITestSuite;
+import org.farhan.dsl.grammar.IDescription;
+import org.farhan.dsl.grammar.ILine;
+import org.farhan.dsl.grammar.ITestStep;
+import org.farhan.dsl.grammar.ITestStepContainer;
+import org.farhan.dsl.grammar.ITestSuite;
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory;
 import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.TestStep;

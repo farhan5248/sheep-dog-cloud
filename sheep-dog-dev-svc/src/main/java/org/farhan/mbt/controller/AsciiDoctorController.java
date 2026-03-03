@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
 import org.farhan.mbt.asciidoctor.ConvertUMLToAsciidoctor;
-import org.farhan.dsl.lang.IResourceRepository;
+import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.AsciiDoctorService;
 import org.slf4j.Logger;

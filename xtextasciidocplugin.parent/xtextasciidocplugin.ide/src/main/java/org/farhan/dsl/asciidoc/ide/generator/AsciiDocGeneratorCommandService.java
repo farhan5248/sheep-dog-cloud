@@ -10,7 +10,7 @@ import org.eclipse.xtext.ide.server.commands.IExecutableCommandService;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.farhan.dsl.asciidoc.generator.AsciiDocGenerator;
 import org.slf4j.Logger;
-import org.farhan.dsl.lang.SheepDogLoggerFactory;
+import org.farhan.dsl.grammar.SheepDogLoggerFactory;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;

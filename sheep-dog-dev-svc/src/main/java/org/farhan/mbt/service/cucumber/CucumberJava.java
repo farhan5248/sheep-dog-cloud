@@ -7,9 +7,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import org.apache.commons.lang3.StringUtils;
-import org.farhan.dsl.lang.StepDefinitionRefFragments;
-import org.farhan.dsl.lang.StepObjectRefFragments;
-import org.farhan.dsl.lang.StepDefinitionRefStateTypes;
+import org.farhan.dsl.grammar.StepDefinitionRefFragments;
+import org.farhan.dsl.grammar.StepObjectRefFragments;
+import org.farhan.dsl.grammar.StepDefinitionRefStateTypes;
 import org.farhan.mbt.core.IConvertibleObject;
 
 import com.github.javaparser.JavaParser;

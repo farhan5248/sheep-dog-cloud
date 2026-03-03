@@ -42,14 +42,14 @@ import org.farhan.dsl.asciidoc.impl.TestSuiteImpl;
 import org.farhan.dsl.asciidoc.validation.AsciiDocValidator;
 import org.farhan.dsl.issues.CellIssueResolver;
 import org.farhan.dsl.issues.RowIssueResolver;
-import org.farhan.dsl.lang.SheepDogIssueProposal;
+import org.farhan.dsl.grammar.SheepDogIssueProposal;
 import org.farhan.dsl.issues.TestStepContainerIssueResolver;
 import org.farhan.dsl.issues.TestStepIssueResolver;
 import org.farhan.dsl.issues.TestSuiteIssueResolver;
 import org.farhan.dsl.issues.TextIssueResolver;
-import org.farhan.dsl.lang.SheepDogFactory;
+import org.farhan.dsl.grammar.SheepDogFactory;
 import org.slf4j.Logger;
-import org.farhan.dsl.lang.SheepDogLoggerFactory;
+import org.farhan.dsl.grammar.SheepDogLoggerFactory;
 
 public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService {
 
@@ -142,7 +142,7 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 
 				WorkspaceEdit workspaceEdit = new WorkspaceEdit();
 
-				if (!(p.getValue() instanceof org.farhan.dsl.lang.IStepObject)) {
+				if (!(p.getValue() instanceof org.farhan.dsl.grammar.IStepObject)) {
 					// Same-file edit: use diagnostic range and options URI
 					VersionedTextDocumentIdentifier textDocId = new VersionedTextDocumentIdentifier();
 					textDocId.setUri(options.getURI());
@@ -180,7 +180,7 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 	private CreateFile getResourceOperation(SheepDogIssueProposal p) {
 		CreateFile createFile = new CreateFile();
 		TestProjectImpl testProject = (TestProjectImpl) SheepDogFactory.instance.createTestProject();
-		org.farhan.dsl.lang.IStepObject stepObject = (org.farhan.dsl.lang.IStepObject) p.getValue();
+		org.farhan.dsl.grammar.IStepObject stepObject = (org.farhan.dsl.grammar.IStepObject) p.getValue();
 		URI uri = URI.createFileURI(testProject.getName() + "/" + testProject.layer2dir
 				+ "/" + stepObject.getFullName());
 		createFile.setUri(uri.toString());
@@ -201,8 +201,8 @@ public class AsciiDocQuickFixCodeActionService extends QuickFixCodeActionService
 			VersionedTextDocumentIdentifier textDocId) throws Exception {
 		TextEdit textEdit = new TextEdit();
 		textEdit.setRange(range);
-		if (p.getValue() instanceof org.farhan.dsl.lang.IStepObject) {
-			org.farhan.dsl.lang.IStepObject stepObject = (org.farhan.dsl.lang.IStepObject) p.getValue();
+		if (p.getValue() instanceof org.farhan.dsl.grammar.IStepObject) {
+			org.farhan.dsl.grammar.IStepObject stepObject = (org.farhan.dsl.grammar.IStepObject) p.getValue();
 			textEdit.setNewText(stepObject.getContent());
 		} else {
 			textEdit.setNewText(p.getValue().toString());

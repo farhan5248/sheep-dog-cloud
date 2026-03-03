@@ -1,6 +1,6 @@
 package org.farhan.mbt.service;
 
-import org.farhan.dsl.lang.IResourceRepository;
+import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.core.UMLTestProject;
 import org.farhan.mbt.model.UMLTestStep;
 import org.farhan.mbt.model.UMLTestSuite;

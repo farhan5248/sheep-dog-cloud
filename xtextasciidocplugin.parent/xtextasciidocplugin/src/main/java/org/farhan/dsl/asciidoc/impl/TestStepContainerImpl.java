@@ -80,6 +80,11 @@ public class TestStepContainerImpl implements ITestStepContainer {
     }
 
     @Override
+    public void setDescription(IDescription value) {
+        throw new UnsupportedOperationException("setDescription(IDescription value) is not implemented");
+    }
+
+    @Override
     public boolean addTestStep(ITestStep value) {
         eObject.getTestStepList().add(((TestStepImpl) value).eObject);
         return true;

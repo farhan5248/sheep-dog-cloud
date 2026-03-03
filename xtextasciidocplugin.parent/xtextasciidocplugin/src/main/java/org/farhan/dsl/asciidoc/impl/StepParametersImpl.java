@@ -1,5 +1,6 @@
 package org.farhan.dsl.asciidoc.impl;
 
+import org.farhan.dsl.grammar.ILine;
 import org.farhan.dsl.grammar.INestedDescription;
 import org.farhan.dsl.grammar.IStepDefinition;
 import org.farhan.dsl.grammar.IStepParameters;
@@ -54,6 +55,17 @@ public class StepParametersImpl implements IStepParameters {
     @Override
     public void setNestedDescription(INestedDescription value) {
         eObject.setNestedDescription(((NestedDescriptionImpl) value).eObject);
+    }
+
+    @Override
+    public boolean addLine(ILine value) {
+        org.farhan.dsl.asciidoc.asciiDoc.NestedDescription list = eObject.getNestedDescription();
+        if (list == null) {
+            list = org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory.eINSTANCE.createNestedDescription();
+            eObject.setNestedDescription(list);
+        }
+        list.getLineList().add(((LineImpl) value).eObject);
+        return true;
     }
 
 }

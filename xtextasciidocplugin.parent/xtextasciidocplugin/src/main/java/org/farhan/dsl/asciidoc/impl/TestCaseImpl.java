@@ -38,4 +38,9 @@ public class TestCaseImpl extends TestStepContainerImpl implements ITestCase {
         throw new UnsupportedOperationException("getTestData(String name) is not implemented");
     }
 
+    @Override
+    public boolean addTestData(ITestData value) {
+        throw new UnsupportedOperationException("addTestData(ITestData value) is not implemented");
+    }
+
 }

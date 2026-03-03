@@ -128,6 +128,11 @@ public class TestSuiteImpl implements ITestSuite {
 		throw new UnsupportedOperationException("setFullName(String value) is not implemented");
 	}
 
+	@Override
+	public void setDescription(IDescription value) {
+		throw new UnsupportedOperationException("setDescription(IDescription value) is not implemented");
+	}
+
 	public void setParent(ITestProject parent) {
 		this.parent = parent;
 	}

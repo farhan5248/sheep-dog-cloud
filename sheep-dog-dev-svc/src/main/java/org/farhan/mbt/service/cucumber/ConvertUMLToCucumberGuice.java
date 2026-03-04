@@ -12,6 +12,9 @@ public class ConvertUMLToCucumberGuice extends ConvertUMLToCucumber {
 	}
 
 	public void initProjects() throws Exception {
+		if (model != null && project != null) {
+			return;
+		}
 		model = new UMLTestProject(this.tags, this.fa);
 		project = new CucumberGuiceTestProject(this.tags, this.fa);
 		model.init();

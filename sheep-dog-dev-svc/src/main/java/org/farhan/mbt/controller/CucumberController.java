@@ -2,7 +2,6 @@ package org.farhan.mbt.controller;
 
 import java.util.List;
 
-import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
 import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.CucumberService;
@@ -53,7 +52,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
 		logger.info("Starting clearConvertCucumberToUMLObjects");
 		logger.info("tags:" + tags);
-		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository));
+		service.clearObjects(new ConvertCucumberToUML(tags, repository));
 		logger.info("Ending clearConvertCucumberToUMLObjects");
 	}
 

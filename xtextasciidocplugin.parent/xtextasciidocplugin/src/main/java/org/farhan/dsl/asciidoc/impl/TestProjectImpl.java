@@ -17,6 +17,8 @@ public class TestProjectImpl implements ITestProject {
 
 	private IResourceRepository sr;
 	private String projectPath;
+	public final String baseDir;
+	public final String layer1dir;
 	public final String layer2dir;
 
 	TestProjectImpl(IResourceRepository sr) {
@@ -24,14 +26,15 @@ public class TestProjectImpl implements ITestProject {
 		// constructor should get a path that includes the project name. It
 		// can then intercept the project name and save it.
 		this.sr = sr;
+		baseDir = "src/test/resources/asciidoc";
+		layer1dir = "src/test/resources/asciidoc/specs";
 		layer2dir = "src/test/resources/asciidoc/stepdefs";
 		projectPath = null;
 	}
 
-	public boolean addTestDocument(ITestDocument value) {
+	public boolean addStepObject(IStepObject value) {
 		try {
-			IStepObject stepObject = (IStepObject) value;
-			sr.put("", projectPath + "/" + layer2dir + "/" + stepObject.getFullName(), stepObject.getContent());
+			sr.put("", projectPath + "/" + baseDir + "/" + value.getFullName(), value.getContent());
 			return true;
 		} catch (Exception e) {
 			logger.error("Couldn't write step object:", e);
@@ -41,7 +44,13 @@ public class TestProjectImpl implements ITestProject {
 
 	@Override
 	public boolean addTestSuite(ITestSuite value) {
-		throw new UnsupportedOperationException("addTestSuite(ITestSuite value) is not implemented");
+		try {
+			sr.put("", projectPath + "/" + baseDir + "/" + value.getFullName(), value.getContent());
+			return true;
+		} catch (Exception e) {
+			logger.error("Couldn't write test suite:", e);
+			return false;
+		}
 	}
 
 	@Override
@@ -60,21 +69,37 @@ public class TestProjectImpl implements ITestProject {
 	}
 
 	@Override
-	public ITestDocument getTestDocument(String qualifiedName) {
-		if (sr.contains("", projectPath + "/" + layer2dir + "/" + qualifiedName)) {
-			try {
-				String text = sr.get("", projectPath + "/" + layer2dir + "/" + qualifiedName);
-				if (text.isEmpty()) {
-					logger.error("Couldn't load StepObject for, file is empty: " + qualifiedName);
-				} else {
-					IStepObject stepObject = SheepDogFactory.instance.createStepObject();
-					stepObject.setFullName(qualifiedName);
-					stepObject.setContent(text);
-					return stepObject;
+	public ITestDocument getTestDocument(String fullName) {
+		try {
+			if (fullName.startsWith("stepdefs/")) {
+				String filePath = projectPath + "/" + baseDir + "/" + fullName;
+				if (sr.contains("", filePath)) {
+					String text = sr.get("", filePath);
+					if (text.isEmpty()) {
+						logger.error("Couldn't load TestDocument for, file is empty: " + fullName);
+					} else {
+						IStepObject stepObject = SheepDogFactory.instance.createStepObject();
+						stepObject.setFullName(fullName);
+						stepObject.setContent(text);
+						return stepObject;
+					}
 				}
-			} catch (Exception e) {
-				logger.error("Couldn't load StepObject for: " + qualifiedName, e);
+			} else if (fullName.startsWith("specs/")) {
+				String filePath = projectPath + "/" + baseDir + "/" + fullName;
+				if (sr.contains("", filePath)) {
+					String text = sr.get("", filePath);
+					if (text.isEmpty()) {
+						logger.error("Couldn't load TestDocument for, file is empty: " + fullName);
+					} else {
+						ITestSuite testSuite = SheepDogFactory.instance.createTestSuite();
+						testSuite.setFullName(fullName);
+						testSuite.setContent(text);
+						return testSuite;
+					}
+				}
 			}
+		} catch (Exception e) {
+			logger.error("Couldn't load TestDocument for: " + fullName, e);
 		}
 		return null;
 	}
@@ -85,27 +110,15 @@ public class TestProjectImpl implements ITestProject {
 		try {
 			// TODO instead of empty tags, append it to the prefix?
 			for (String stepObjectFileName : sr.list("", projectPath + "/" + layer2dir, getFileExtension())) {
-				objects.add(getTestDocument(stepObjectFileName.replace(projectPath + "/" + layer2dir + "/", "")));
+				objects.add(getTestDocument("stepdefs/" + stepObjectFileName.replace(projectPath + "/" + layer2dir + "/", "")));
+			}
+			for (String testSuiteFileName : sr.list("", projectPath + "/" + layer1dir, getFileExtension())) {
+				objects.add(getTestDocument("specs/" + testSuiteFileName.replace(projectPath + "/" + layer1dir + "/", "")));
 			}
 		} catch (Exception e) {
-			logger.error("Couldn't get StepObject list:", e);
+			logger.error("Couldn't get TestDocument list:", e);
 		}
 		return objects;
-	}
-
-	@Override
-	public ITestSuite getTestSuite(int index) {
-		throw new UnsupportedOperationException("getTestSuite(int index) is not implemented");
-	}
-
-	@Override
-	public ITestSuite getTestSuite(String name) {
-		throw new UnsupportedOperationException("getTestSuite(String name) is not implemented");
-	}
-
-	@Override
-	public ArrayList<ITestSuite> getTestSuiteList() {
-		throw new UnsupportedOperationException("getTestSuiteList() is not implemented");
 	}
 
 	public void setName(String projectPath) {

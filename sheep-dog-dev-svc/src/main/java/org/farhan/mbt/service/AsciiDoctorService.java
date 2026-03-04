@@ -96,11 +96,9 @@ public class AsciiDoctorService {
         long startTime = System.currentTimeMillis();
         long timeoutMillis = TimeUnit.SECONDS.toMillis(timeoutSeconds);
 
-        try {
-            Queue queue = jmsTemplate.getConnectionFactory()
-                    .createConnection()
-                    .createSession(false, jakarta.jms.Session.AUTO_ACKNOWLEDGE)
-                    .createQueue(JmsConfig.SOURCE_FILES_QUEUE);
+        try (jakarta.jms.Connection connection = jmsTemplate.getConnectionFactory().createConnection();
+             jakarta.jms.Session session = connection.createSession(false, jakarta.jms.Session.AUTO_ACKNOWLEDGE)) {
+            Queue queue = session.createQueue(JmsConfig.SOURCE_FILES_QUEUE);
 
             while (System.currentTimeMillis() - startTime < timeoutMillis) {
                 // Check queue depth

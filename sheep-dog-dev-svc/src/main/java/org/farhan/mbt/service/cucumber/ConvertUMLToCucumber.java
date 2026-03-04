@@ -38,14 +38,13 @@ public class ConvertUMLToCucumber extends Converter {
 	private static final Logger log = LoggerFactory.getLogger(ConvertUMLToCucumber.class);
 	protected CucumberPathConverter pathConverter;
 
-	private final RestTemplate restTemplate;
+	private static final RestTemplate restTemplate = new RestTemplate();
 	private final int RETRY_COUNT = 10;
 	private String serverHost;
 	private int serverPort;
 
 	public ConvertUMLToCucumber(String tags, IResourceRepository fa, String serverHost, int serverPort) {
 		super(tags, fa);
-		restTemplate = new RestTemplate();
 		this.serverHost = serverHost;
 		this.serverPort = serverPort;
 	}
@@ -303,6 +302,9 @@ public class ConvertUMLToCucumber extends Converter {
 	}
 
 	public void initProjects() throws Exception {
+		if (model != null && project != null) {
+			return;
+		}
 		model = new UMLTestProject(this.tags, this.fa);
 		project = new CucumberTestProject(this.tags, this.fa);
 		model.init();

@@ -116,6 +116,9 @@ public class ConvertCucumberToUML extends Converter {
 	}
 
 	public void initProjects() throws Exception {
+		if (model != null && project != null) {
+			return;
+		}
 		project = new CucumberTestProject(this.tags, this.fa);
 		model = new UMLTestProject(this.tags, this.fa);
 		project.init();

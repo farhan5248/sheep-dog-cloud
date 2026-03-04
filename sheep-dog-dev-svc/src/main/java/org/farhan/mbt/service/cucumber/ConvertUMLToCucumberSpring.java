@@ -12,6 +12,9 @@ public class ConvertUMLToCucumberSpring extends ConvertUMLToCucumber {
 	}
 
 	public void initProjects() throws Exception {
+		if (model != null && project != null) {
+			return;
+		}
 		model = new UMLTestProject(this.tags, this.fa);
 		project = new CucumberSpringTestProject(this.tags, this.fa);
 		model.init();

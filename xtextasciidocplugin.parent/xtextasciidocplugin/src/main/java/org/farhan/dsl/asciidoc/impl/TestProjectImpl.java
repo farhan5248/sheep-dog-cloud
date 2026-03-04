@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.farhan.dsl.grammar.SheepDogLoggerFactory;
 import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.dsl.grammar.IStepObject;
+import org.farhan.dsl.grammar.ITestDocument;
 import org.farhan.dsl.grammar.ITestProject;
 import org.farhan.dsl.grammar.ITestSuite;
 import org.farhan.dsl.grammar.SheepDogFactory;
@@ -27,8 +28,9 @@ public class TestProjectImpl implements ITestProject {
 		projectPath = null;
 	}
 
-	public boolean addStepObject(IStepObject stepObject) {
+	public boolean addTestDocument(ITestDocument value) {
 		try {
+			IStepObject stepObject = (IStepObject) value;
 			sr.put("", projectPath + "/" + layer2dir + "/" + stepObject.getFullName(), stepObject.getContent());
 			return true;
 		} catch (Exception e) {
@@ -53,12 +55,12 @@ public class TestProjectImpl implements ITestProject {
 	}
 
 	@Override
-	public IStepObject getStepObject(int index) {
-		throw new UnsupportedOperationException("getStepObject(int index) is not implemented");
+	public ITestDocument getTestDocument(int index) {
+		throw new UnsupportedOperationException("getTestDocument(int index) is not implemented");
 	}
 
 	@Override
-	public IStepObject getStepObject(String qualifiedName) {
+	public ITestDocument getTestDocument(String qualifiedName) {
 		if (sr.contains("", projectPath + "/" + layer2dir + "/" + qualifiedName)) {
 			try {
 				String text = sr.get("", projectPath + "/" + layer2dir + "/" + qualifiedName);
@@ -78,12 +80,12 @@ public class TestProjectImpl implements ITestProject {
 	}
 
 	@Override
-	public ArrayList<IStepObject> getStepObjectList() {
-		ArrayList<IStepObject> objects = new ArrayList<IStepObject>();
+	public ArrayList<ITestDocument> getTestDocumentList() {
+		ArrayList<ITestDocument> objects = new ArrayList<ITestDocument>();
 		try {
 			// TODO instead of empty tags, append it to the prefix?
 			for (String stepObjectFileName : sr.list("", projectPath + "/" + layer2dir, getFileExtension())) {
-				objects.add(getStepObject(stepObjectFileName.replace(projectPath + "/" + layer2dir + "/", "")));
+				objects.add(getTestDocument(stepObjectFileName.replace(projectPath + "/" + layer2dir + "/", "")));
 			}
 		} catch (Exception e) {
 			logger.error("Couldn't get StepObject list:", e);

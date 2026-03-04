@@ -107,7 +107,7 @@ public class AsciiDocGenerator extends AbstractGenerator {
 	private static void applyProposal(ArrayList<SheepDogIssueProposal> proposals) throws Exception {
 		for (SheepDogIssueProposal p : proposals) {
 			if (p.getValue() instanceof IStepObject) {
-				testProject.addStepObject((IStepObject) p.getValue());
+				testProject.addTestDocument((IStepObject) p.getValue());
 			}
 		}
 	}

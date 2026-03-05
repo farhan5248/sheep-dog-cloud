@@ -49,7 +49,8 @@ public class MessageConsumer {
                     IN_FLIGHT = 0;
                     return; // Skip unsupported file types
                 }
-                mojo.convertFile(file.getFileName(), file.getFileContent() == null ? "" : file.getFileContent());
+                String content = file.getFileContent() == null ? "" : file.getFileContent();
+                mojo.convertFile(file.getFileName(), content);
                 logger.info("Transformed source file: {}", file.getFileName());
                 IN_FLIGHT = 0;
                 return;
@@ -73,4 +74,5 @@ public class MessageConsumer {
         }
 
     }
+
 }

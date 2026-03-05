@@ -30,10 +30,8 @@ import org.farhan.dsl.grammar.IText;
 
 public class AsciiDocFactoryImpl implements ISheepDogFactory {
 
-	// TODO this assumes that there's just one open project in the eclipse
-	// workspace.
-	private static TestProjectImpl testProject;
-	private static IResourceRepository sr;
+	private TestProjectImpl testProject;
+	private IResourceRepository sr;
 
 	public AsciiDocFactoryImpl(IResourceRepository sourceFileRepository) {
 		sr = sourceFileRepository;

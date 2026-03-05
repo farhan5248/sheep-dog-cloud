@@ -2,6 +2,10 @@ package org.farhan.mbt.controller;
 
 import java.util.List;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.farhan.mbt.asciidoctor.ConvertAsciidoctorToUML;
 import org.farhan.mbt.asciidoctor.ConvertUMLToAsciidoctor;
 import org.farhan.dsl.grammar.IResourceRepository;
@@ -47,6 +51,26 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 		logger.info("Ending clearConvertAsciidoctorToUMLObjects");
 	}
 
+	@GetMapping("/getConvertAsciidoctorToUMLFileChecksums")
+	public List<TransformableFile> getConvertAsciidoctorToUMLFileChecksums(
+			@RequestParam(value = "tags", defaultValue = "") String tags) {
+		logger.info("Starting getConvertAsciidoctorToUMLFileChecksums");
+		List<TransformableFile> fileList = service.getFileChecksums(repository, tags);
+		logger.info("Ending getConvertAsciidoctorToUMLFileChecksums");
+		return fileList;
+	}
+
+	@DeleteMapping("/deleteConvertAsciidoctorToUMLObject")
+	public void deleteConvertAsciidoctorToUMLObject(
+			@RequestParam(value = "tags", defaultValue = "") String tags,
+			@RequestParam(value = "fileName") String fileName) {
+		logger.info("Starting deleteConvertAsciidoctorToUMLObject");
+		logger.info("tags:" + tags);
+		logger.info("fileName:" + fileName);
+		service.deleteObject(repository, tags, fileName);
+		logger.info("Ending deleteConvertAsciidoctorToUMLObject");
+	}
+
 	@GetMapping("/getConvertUMLToAsciidoctorObjectNames")
 	public List<TransformableFile> getConvertUMLToAsciidoctorObjectNames(
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
@@ -75,8 +99,35 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 		service.convertSourceObject(
 				new ConvertAsciidoctorToUML(tags, repository),
 				mtr);
+		storeChecksum(tags, fileName, contents);
 		logger.info("Ending runConvertAsciidoctorToUML");
 		return mtr;
+	}
+
+	private void storeChecksum(String tags, String fileName, String contents) {
+		try {
+			repository.put(tags, "checksums/" + fileName, computeSHA1(contents));
+		} catch (Exception e) {
+			logger.warn("Failed to store checksum for file: {}", fileName, e);
+		}
+	}
+
+	private String computeSHA1(String content) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-1");
+			byte[] hash = digest.digest(
+					(content == null ? "" : content).getBytes(StandardCharsets.UTF_8));
+			StringBuilder hexString = new StringBuilder();
+			for (byte b : hash) {
+				String hex = Integer.toHexString(0xff & b);
+				if (hex.length() == 1)
+					hexString.append('0');
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("SHA-1 algorithm not available", e);
+		}
 	}
 
 	@PostMapping("/runConvertUMLToAsciidoctor")

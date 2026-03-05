@@ -1,5 +1,8 @@
 package org.farhan.mbt.controller;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.farhan.dsl.grammar.IResourceRepository;
@@ -56,6 +59,26 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("Ending clearConvertCucumberToUMLObjects");
 	}
 
+	@GetMapping("/getConvertCucumberToUMLFileChecksums")
+	public List<TransformableFile> getConvertCucumberToUMLFileChecksums(
+			@RequestParam(value = "tags", defaultValue = "") String tags) {
+		logger.info("Starting getConvertCucumberToUMLFileChecksums");
+		List<TransformableFile> fileList = service.getFileChecksums(repository, tags);
+		logger.info("Ending getConvertCucumberToUMLFileChecksums");
+		return fileList;
+	}
+
+	@DeleteMapping("/deleteConvertCucumberToUMLObject")
+	public void deleteConvertCucumberToUMLObject(
+			@RequestParam(value = "tags", defaultValue = "") String tags,
+			@RequestParam(value = "fileName") String fileName) {
+		logger.info("Starting deleteConvertCucumberToUMLObject");
+		logger.info("tags:" + tags);
+		logger.info("fileName:" + fileName);
+		service.deleteObject(repository, tags, fileName);
+		logger.info("Ending deleteConvertCucumberToUMLObject");
+	}
+
 	@GetMapping("/getConvertUMLToCucumberGuiceObjectNames")
 	public List<TransformableFile> getConvertUMLToCucumberGuiceObjectNames(
 			@RequestParam(value = "tags", defaultValue = "") String tags) {
@@ -99,8 +122,35 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		service.convertSourceObject(
 				new ConvertCucumberToUML(tags, repository),
 				mtr);
+		storeChecksum(tags, fileName, contents);
 		logger.info("Ending runConvertCucumberToUML");
 		return mtr;
+	}
+
+	private void storeChecksum(String tags, String fileName, String contents) {
+		try {
+			repository.put(tags, "checksums/" + fileName, computeSHA1(contents));
+		} catch (Exception e) {
+			logger.warn("Failed to store checksum for file: {}", fileName, e);
+		}
+	}
+
+	private String computeSHA1(String content) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-1");
+			byte[] hash = digest.digest(
+					(content == null ? "" : content).getBytes(StandardCharsets.UTF_8));
+			StringBuilder hexString = new StringBuilder();
+			for (byte b : hash) {
+				String hex = Integer.toHexString(0xff & b);
+				if (hex.length() == 1)
+					hexString.append('0');
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("SHA-1 algorithm not available", e);
+		}
 	}
 
 	@Override

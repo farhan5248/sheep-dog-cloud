@@ -32,8 +32,11 @@ public class SourceH2Repository implements IResourceRepository {
 
 	@Override
 	public void delete(String tags, String path) {
-		// TODO Auto-generated method stub
-		
+		String fullPath = tags + "/" + path;
+		ModelSourceFile file = repository.findByFileName(fullPath);
+		if (file != null) {
+			repository.delete(file);
+		}
 	}
 
 	@Override

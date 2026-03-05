@@ -5,6 +5,7 @@ public class TransformableFile {
     private String fileName;
     private String fileContent;
     private String tags;
+    private String fileChecksum;
 
     public TransformableFile() {
     }
@@ -42,5 +43,13 @@ public class TransformableFile {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public String getFileChecksum() {
+        return fileChecksum;
+    }
+
+    public void setFileChecksum(String fileChecksum) {
+        this.fileChecksum = fileChecksum;
     }
 }

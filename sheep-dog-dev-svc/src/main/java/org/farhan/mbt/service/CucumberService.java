@@ -1,10 +1,12 @@
 package org.farhan.mbt.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.farhan.mbt.config.JmsConfig;
 import org.farhan.mbt.core.Converter;
+import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.exception.PublishingException;
 import org.farhan.mbt.exception.TransformationException;
 import org.farhan.mbt.model.TransformableFile;
@@ -29,12 +31,31 @@ public class CucumberService {
 
     public TransformableFile convertObject(Converter mojo, String fileName, String contents) {
         try {
+            String input = contents == null ? "" : contents;
             // The replace \r is because when run on a windows machine the tests return a \r
             // but not on a linux machine
-            TransformableFile mtr = new TransformableFile(fileName,
-                    mojo.convertFile(fileName, contents == null ? "" : contents).replace("\r", ""));
-            logger.debug("response: " + mtr.toString());
-            return mtr;
+            String result = mojo.convertFile(fileName, input).replace("\r", "");
+            String normalizedInput = input.replace("\r", "");
+            if (result.equals(normalizedInput)) {
+                return new TransformableFile(fileName, "");
+            }
+            // Debug: find first difference
+            int minLen = Math.min(result.length(), normalizedInput.length());
+            for (int i = 0; i < minLen; i++) {
+                if (result.charAt(i) != normalizedInput.charAt(i)) {
+                    int start = Math.max(0, i - 20);
+                    int endR = Math.min(result.length(), i + 20);
+                    int endI = Math.min(normalizedInput.length(), i + 20);
+                    logger.info("Diff at pos {} in {}: result=[{}] input=[{}]", i, fileName,
+                            result.substring(start, endR).replace("\n", "\\n"),
+                            normalizedInput.substring(start, endI).replace("\n", "\\n"));
+                    break;
+                }
+            }
+            if (result.length() != normalizedInput.length()) {
+                logger.info("Length diff in {}: result={} input={}", fileName, result.length(), normalizedInput.length());
+            }
+            return new TransformableFile(fileName, result);
         } catch (Exception e) {
             throw new TransformationException(fileName, e);
         }
@@ -61,6 +82,30 @@ public class CucumberService {
             return fileList;
         } catch (Exception e) {
             throw new TransformationException("Getting object names for tags: " + tags, e);
+        }
+    }
+
+    public List<TransformableFile> getFileChecksums(IResourceRepository repository, String tags) {
+        List<TransformableFile> fileList = new ArrayList<>();
+        try {
+            for (String checksumFileName : repository.list(tags, "checksums/", "")) {
+                String checksum = repository.get(tags, checksumFileName);
+                String originalFileName = checksumFileName.replaceFirst("^checksums/", "");
+                TransformableFile tf = new TransformableFile(originalFileName, null, tags);
+                tf.setFileChecksum(checksum);
+                fileList.add(tf);
+            }
+        } catch (Exception e) {
+            throw new TransformationException("Getting file checksums for tags: " + tags, e);
+        }
+        return fileList;
+    }
+
+    public void deleteObject(IResourceRepository repository, String tags, String fileName) {
+        try {
+            repository.delete(tags, "checksums/" + fileName);
+        } catch (Exception e) {
+            throw new TransformationException("Deleting object: " + fileName, e);
         }
     }
 

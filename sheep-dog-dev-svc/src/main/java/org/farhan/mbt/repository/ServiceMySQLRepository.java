@@ -31,7 +31,11 @@ public class ServiceMySQLRepository implements IResourceRepository {
 
 	@Override
 	public void delete(String tags, String path) {
-		// Not implemented in this project
+		String fullPath = tags + "/" + path;
+		ModelSourceFile file = repository.findByFileName(fullPath);
+		if (file != null) {
+			repository.delete(file);
+		}
 	}
 
 	@Override

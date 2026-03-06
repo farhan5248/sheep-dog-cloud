@@ -108,7 +108,7 @@ public class AsciiDocLexer extends InternalAsciiDocLexer {
 			mRULE_WORD();
 		} else if (hasConstantDelimiter) {
 			if (isKeyword("|")) {
-				mT__25();
+				mT__25();// '|'
 			} else {
 				mRULE_WORD();
 			}
@@ -116,56 +116,56 @@ public class AsciiDocLexer extends InternalAsciiDocLexer {
 			super.mTokens();
 			// single line no collection
 		} else if (isKeyword("+")) {
-			mT__23();
+			mT__23();// '+'
 		} else if (isKeyword("|===")) {
-			mT__24();
-		} else if (isKeyword("*")) {
-			mT__13();
+			mT__24();// '|==='
+		} else if (isKeyword("===")) {
+			mT__13();// '==='
 		} else if (isKeyword("==")) {
-			mT__11();
+			mT__11();// '=='
 		} else if (isKeyword("=")) {
-			mT__9();
+			mT__9();// '='
 			// single line automatic collection
 		} else if (isKeyword("#")) {
 			mRULE_SL_COMMENT();
 			// single line no delimiter collection
 		} else if (isKeyword("Step-Object:")) {
-			mT__10();// 'Object:'
+			mT__10();// 'Step-Object:'
 			hasNoDelimiter = true;
 		} else if (isKeyword("Step-Definition:")) {
-			mT__12();// 'Definition:'
+			mT__12();// 'Step-Definition:'
 			hasNoDelimiter = true;
 		} else if (isKeyword("Step-Parameters:")) {
-			mT__14();// 'Parameters:'
+			mT__14();// 'Step-Parameters:'
 			hasNoDelimiter = true;
 		} else if (isKeyword("Test-Suite:")) {
-			mT__15();// 'Feature:'
+			mT__15();// 'Test-Suite:'
 			hasNoDelimiter = true;
 		} else if (isKeyword("Test-Setup:")) {
-			mT__16();// 'Background:'
+			mT__16();// 'Test-Setup:'
 			hasNoDelimiter = true;
 		} else if (isKeyword("Test-Case:")) {
-			mT__17();// 'Scenario:'
+			mT__17();// 'Test-Case:'
 			hasNoDelimiter = true;
 		} else if (isKeyword("Test-Data:")) {
-			mT__18();// 'Examples:'
+			mT__18();// 'Test-Data:'
 			hasNoDelimiter = true;
 			// single line constant delimiter collection
 		} else if (isKeyword("|")) {
-			mT__25();
+			mT__25();// '|'
 			hasConstantDelimiter = true;
 			// single line variable delimiter collection
 		} else if (isKeyword("Given:")) {
-			mT__19();// 'Given'
+			mT__19();// 'Given:'
 			hasVariableDelimiter = true;
 		} else if (isKeyword("When:")) {
-			mT__20();// 'When'
+			mT__20();// 'When:'
 			hasVariableDelimiter = true;
 		} else if (isKeyword("Then:")) {
-			mT__21();// 'Then'
+			mT__21();// 'Then:'
 			hasVariableDelimiter = true;
 		} else if (isKeyword("And:")) {
-			mT__22();// 'And'
+			mT__22();// 'And:'
 			hasVariableDelimiter = true;
 			// catch all
 		} else {

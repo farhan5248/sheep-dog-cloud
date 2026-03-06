@@ -20,7 +20,7 @@ public class AndFormatter extends TestStepFormatter {
 
 	@Override
 	protected Keyword getEqualsKeyword(AbstractParserRuleElementFinder a) {
-		return ((AndElements) a).getAsteriskKeyword_0();
+		return ((AndElements) a).getEqualsSignEqualsSignEqualsSignKeyword_0();
 	}
 
 	@Override

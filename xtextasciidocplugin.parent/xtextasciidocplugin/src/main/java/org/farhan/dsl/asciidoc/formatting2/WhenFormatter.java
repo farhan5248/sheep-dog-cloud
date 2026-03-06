@@ -20,7 +20,7 @@ public class WhenFormatter extends TestStepFormatter {
 
 	@Override
 	protected Keyword getEqualsKeyword(AbstractParserRuleElementFinder a) {
-		return ((WhenElements) a).getAsteriskKeyword_0();
+		return ((WhenElements) a).getEqualsSignEqualsSignEqualsSignKeyword_0();
 	}
 
 	@Override

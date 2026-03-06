@@ -80,16 +80,16 @@ Feature: Create Documentation From Code
           
           Desc 2
           
-          * Given: The Search application Login page is valid
+          === Given: The Search application Login page is valid
           
-          * When: The Search application Home page is created as follows
+          === When: The Search application Home page is created as follows
           +
           |===
           | grp | ins
           | 10  | 5  
           |===
           
-          * Then: The Search application Logout page is created as follows
+          === Then: The Search application Logout page is created as follows
           +
           ----
             text1
@@ -101,25 +101,25 @@ Feature: Create Documentation From Code
           
           Desc 3
           
-          * Given: The Search application Login page is invalid
+          === Given: The Search application Login page is invalid
           
-          * When: The Search application Home page is created as follows
+          === When: The Search application Home page is created as follows
           +
           |===
           | grp | ins  
           | 8   | {ins}
           |===
           
-          * Then: The Search application Logout page is invalid
+          === Then: The Search application Logout page is invalid
           
-          * Test-Data: Some data
+          === Test-Data: Some data
           +
           |===
           | ins
           | 4  
           |===
           
-          * Test-Data: Dataset 2
+          === Test-Data: Dataset 2
           +
           |===
           | ins

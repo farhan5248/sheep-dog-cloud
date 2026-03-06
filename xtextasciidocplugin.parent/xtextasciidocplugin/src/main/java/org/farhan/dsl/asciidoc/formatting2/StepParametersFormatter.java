@@ -16,7 +16,7 @@ public class StepParametersFormatter extends Formatter {
 	public void format(IFormattableDocument doc, AsciiDocGrammarAccess ga, AsciiDocFormatter df) {
 		StepParametersElements a = ga.getStepParametersAccess();
 
-		formatKeywordTrailingSpace(df.getRegion(theStepParameters, a.getAsteriskKeyword_0()), doc);
+		formatKeywordTrailingSpace(df.getRegion(theStepParameters, a.getEqualsSignEqualsSignEqualsSignKeyword_0()), doc);
 		formatKeywordTrailingSpace(df.getRegion(theStepParameters, a.getStepParametersKeyword_1()), doc);
 		formatTitle(df.getRegion(theStepParameters, a.getNameTitleParserRuleCall_2_0()), doc);
 

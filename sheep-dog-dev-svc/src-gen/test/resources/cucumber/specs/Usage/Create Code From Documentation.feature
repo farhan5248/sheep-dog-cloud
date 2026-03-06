@@ -27,9 +27,9 @@ Feature: Create Code From Documentation
           @tag2
           Desc 2
           
-          * Given: The blah application Object page is valid
+          === Given: The blah application Object page is valid
           
-          * Then: The Object page is created as follows
+          === Then: The Object page is created as follows
           +
           ----
             text1
@@ -42,23 +42,23 @@ Feature: Create Code From Documentation
           @tag3
           Desc 3
           
-          * Given: The blah application Object page is invalid
+          === Given: The blah application Object page is invalid
           
-          * When: The Object page is created as follows
+          === When: The Object page is created as follows
           +
           |===
           | grp | ins
           | 8 | {ins}
           |===
           
-          * Test-Data: Some data
+          === Test-Data: Some data
           +
           |===
           | ins
           | 4
           |===
           
-          * Test-Data: Dataset 2
+          === Test-Data: Dataset 2
           +
           |===
           | ins
@@ -76,13 +76,13 @@ Feature: Create Code From Documentation
           
           == Step-Definition: is created as follows
           
-          * Step-Parameters: 1
+          === Step-Parameters: 1
           +
           |===
           | grp | ins
           |===
           
-          * Step-Parameters: 2
+          === Step-Parameters: 2
           +
           |===
           | Content

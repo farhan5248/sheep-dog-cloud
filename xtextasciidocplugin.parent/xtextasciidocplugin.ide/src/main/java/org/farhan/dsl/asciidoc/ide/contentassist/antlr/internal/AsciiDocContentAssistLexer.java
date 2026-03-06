@@ -35,7 +35,7 @@ public class AsciiDocContentAssistLexer extends InternalAsciiDocLexer {
 
 	// Content Assist token mapping (different from runtime):
 	// T__22 = '='            T__23 = 'Step-Object:'     T__24 = '=='
-	// T__25 = 'Step-Definition:'  T__26 = '*'           T__27 = 'Step-Parameters:'
+	// T__25 = 'Step-Definition:'  T__26 = '==='         T__27 = 'Step-Parameters:'
 	// T__28 = 'Test-Suite:'       T__29 = 'Test-Setup:'   T__30 = 'Test-Case:'
 	// T__31 = 'Test-Data:'        T__32 = 'Given:'        T__33 = 'When:'
 	// T__34 = 'Then:'             T__35 = 'And:'          T__36 = '+'
@@ -71,8 +71,8 @@ public class AsciiDocContentAssistLexer extends InternalAsciiDocLexer {
 			mT__36(); // '+'
 		} else if (isKeyword("|===")) {
 			mT__37(); // '|==='
-		} else if (isKeyword("*")) {
-			mT__26(); // '*'
+		} else if (isKeyword("===")) {
+			mT__26(); // '==='
 		} else if (isKeyword("==")) {
 			mT__24(); // '=='
 		} else if (isKeyword("=")) {

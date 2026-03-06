@@ -97,7 +97,7 @@
             "patterns": [
                 {
                     "name": "markup.heading.3.sheepdog-asciidoc",
-                    "match": "^(\\*)\\s+(Given:|When:|Then:|And:|Step-Parameters:|Test-Data:)\\s+(.+)$",
+                    "match": "^(===)\\s+(Given:|When:|Then:|And:|Step-Parameters:|Test-Data:)\\s+(.+)$",
                     "captures": {
                         "1": {
                             "name": "punctuation.definition.heading.sheepdog-asciidoc"
@@ -166,7 +166,7 @@
                 {
                     "name": "markup.list.sheepdog-asciidoc",
                     "begin": "^\\+$",
-                    "end": "^(?![^#*=|+\\n])",
+                    "end": "^(?![^#=|+\\n])",
                     "beginCaptures": {
                         "0": {
                             "name": "punctuation.definition.list.start.sheepdog-asciidoc"
@@ -184,7 +184,7 @@
             "patterns": [
                 {
                     "name": "markup.other.statement.sheepdog-asciidoc",
-                    "match": "^([^#*=|+\\n].*)$",
+                    "match": "^([^#=|+\\n].*)$",
                     "captures": {
                         "1": {
                             "name": "string.unquoted.statement.sheepdog-asciidoc",

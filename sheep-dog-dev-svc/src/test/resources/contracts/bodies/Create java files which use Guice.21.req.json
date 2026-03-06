@@ -6,13 +6,13 @@
 
 == Step-Definition: is created as follows
 
-* Step-Parameters: 1
+=== Step-Parameters: 1
 +
 |===
 | grp | ins
 |===
 
-* Step-Parameters: 2
+=== Step-Parameters: 2
 +
 |===
 | Content

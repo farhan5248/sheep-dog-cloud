@@ -18,7 +18,7 @@ StepDefinition:
 	stepParameterList+=StepParameters*;
 
 StepParameters:
-	'*' 'Step-Parameters:' name=Title EOL
+	'===' 'Step-Parameters:' name=Title EOL
 	nestedDescription=NestedDescription?
 	table=Table;
 
@@ -42,7 +42,7 @@ TestCase:
 	testDataList+=TestData*;
 
 TestData:
-	'*' 'Test-Data:' name=Title EOL
+	'===' 'Test-Data:' name=Title EOL
 	nestedDescription=NestedDescription?
 	table=Table;
 
@@ -50,19 +50,19 @@ TestStep:
 	Given | When | Then | And;
 
 Given:
-	'*' 'Given:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
+	'===' 'Given:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
 	(table=Table | text=Text)?;
 
 When:
-	'*' 'When:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
+	'===' 'When:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
 	(table=Table | text=Text)?;
 
 Then:
-	'*' 'Then:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
+	'===' 'Then:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
 	(table=Table | text=Text)?;
 
 And:
-	'*' 'And:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
+	'===' 'And:' stepObjectName=StepObjectRef stepDefinitionName=StepDefinitionRef EOL
 	(table=Table | text=Text)?;
 
 Text:

@@ -28,9 +28,9 @@ Feature: Format Asciidoc Files
           @tag2
           Desc 2
           
-          * Given: The blah application Object page is valid
+          === Given: The blah application Object page is valid
           
-          * Then: The blah application Object page is created as follows
+          === Then: The blah application Object page is created as follows
           +
           ----
             text1
@@ -43,23 +43,23 @@ Feature: Format Asciidoc Files
           @tag3
           Desc 3
           
-          * Given: The blah application Object page is invalid
+          === Given: The blah application Object page is invalid
           
-          * When: The blah application Object page is created as follows
+          === When: The blah application Object page is created as follows
           +
           |===
           | grp | ins
           | 8 | {ins}
           |===
           
-          * Test-Data: Some data
+          === Test-Data: Some data
           +
           |===
           | ins
           | 4
           |===
           
-          * Test-Data: Dataset 2
+          === Test-Data: Dataset 2
           +
           |===
           | ins
@@ -77,13 +77,13 @@ Feature: Format Asciidoc Files
           
           == Step-Definition: is created as follows
           
-          * Step-Parameters: 1
+          === Step-Parameters: 1
           +
           |===
           | grp | ins
           |===
           
-          * Step-Parameters: 2
+          === Step-Parameters: 2
           +
           |===
           | Content
@@ -102,9 +102,9 @@ Feature: Format Asciidoc Files
           @tag2
           Desc 2
           
-          * Given: The blah application Object page is valid
+          === Given: The blah application Object page is valid
           
-          * Then: The blah application Object page is created as follows
+          === Then: The blah application Object page is created as follows
           +
           ----
             text1
@@ -117,23 +117,23 @@ Feature: Format Asciidoc Files
           @tag3
           Desc 3
           
-          * Given: The blah application Object page is invalid
+          === Given: The blah application Object page is invalid
           
-          * When: The blah application Object page is created as follows
+          === When: The blah application Object page is created as follows
           +
           |===
           | grp | ins  
           | 8   | {ins}
           |===
           
-          * Test-Data: Some data
+          === Test-Data: Some data
           +
           |===
           | ins
           | 4  
           |===
           
-          * Test-Data: Dataset 2
+          === Test-Data: Dataset 2
           +
           |===
           | ins
@@ -147,13 +147,13 @@ Feature: Format Asciidoc Files
           
           == Step-Definition: is created as follows
           
-          * Step-Parameters: 1
+          === Step-Parameters: 1
           +
           |===
           | grp | ins
           |===
           
-          * Step-Parameters: 2
+          === Step-Parameters: 2
           +
           |===
           | Content

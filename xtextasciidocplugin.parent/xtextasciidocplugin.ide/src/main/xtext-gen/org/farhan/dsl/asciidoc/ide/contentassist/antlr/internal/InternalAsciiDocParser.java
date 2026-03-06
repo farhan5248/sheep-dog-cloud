@@ -22,7 +22,7 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalAsciiDocParser extends AbstractInternalContentAssistParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_WORD", "RULE_EOL", "RULE_TEXT_BLOCK", "RULE_WS", "RULE_SL_COMMENT", "'file'", "'page'", "'response'", "'dialog'", "'directory'", "'request'", "'goal'", "'job'", "'action'", "'popup'", "'annotation'", "'hover'", "'tooltip'", "'='", "'Step-Object:'", "'=='", "'Step-Definition:'", "'*'", "'Step-Parameters:'", "'Test-Suite:'", "'Test-Setup:'", "'Test-Case:'", "'Test-Data:'", "'Given:'", "'When:'", "'Then:'", "'And:'", "'+'", "'|==='", "'|'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_WORD", "RULE_EOL", "RULE_TEXT_BLOCK", "RULE_WS", "RULE_SL_COMMENT", "'file'", "'page'", "'response'", "'dialog'", "'directory'", "'request'", "'goal'", "'job'", "'action'", "'popup'", "'annotation'", "'hover'", "'tooltip'", "'='", "'Step-Object:'", "'=='", "'Step-Definition:'", "'==='", "'Step-Parameters:'", "'Test-Suite:'", "'Test-Setup:'", "'Test-Case:'", "'Test-Data:'", "'Given:'", "'When:'", "'Then:'", "'And:'", "'+'", "'|==='", "'|'"
     };
     public static final int RULE_WORD=4;
     public static final int RULE_TEXT_BLOCK=6;
@@ -4162,21 +4162,21 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
 
 
     // $ANTLR start "rule__StepParameters__Group__0__Impl"
-    // InternalAsciiDoc.g:1255:1: rule__StepParameters__Group__0__Impl : ( '*' ) ;
+    // InternalAsciiDoc.g:1255:1: rule__StepParameters__Group__0__Impl : ( '===' ) ;
     public final void rule__StepParameters__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:1259:1: ( ( '*' ) )
-            // InternalAsciiDoc.g:1260:1: ( '*' )
+            // InternalAsciiDoc.g:1259:1: ( ( '===' ) )
+            // InternalAsciiDoc.g:1260:1: ( '===' )
             {
-            // InternalAsciiDoc.g:1260:1: ( '*' )
-            // InternalAsciiDoc.g:1261:2: '*'
+            // InternalAsciiDoc.g:1260:1: ( '===' )
+            // InternalAsciiDoc.g:1261:2: '==='
             {
-             before(grammarAccess.getStepParametersAccess().getAsteriskKeyword_0()); 
+             before(grammarAccess.getStepParametersAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
             match(input,26,FOLLOW_2); 
-             after(grammarAccess.getStepParametersAccess().getAsteriskKeyword_0()); 
+             after(grammarAccess.getStepParametersAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
 
             }
 
@@ -6277,21 +6277,21 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
 
 
     // $ANTLR start "rule__TestData__Group__0__Impl"
-    // InternalAsciiDoc.g:1930:1: rule__TestData__Group__0__Impl : ( '*' ) ;
+    // InternalAsciiDoc.g:1930:1: rule__TestData__Group__0__Impl : ( '===' ) ;
     public final void rule__TestData__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:1934:1: ( ( '*' ) )
-            // InternalAsciiDoc.g:1935:1: ( '*' )
+            // InternalAsciiDoc.g:1934:1: ( ( '===' ) )
+            // InternalAsciiDoc.g:1935:1: ( '===' )
             {
-            // InternalAsciiDoc.g:1935:1: ( '*' )
-            // InternalAsciiDoc.g:1936:2: '*'
+            // InternalAsciiDoc.g:1935:1: ( '===' )
+            // InternalAsciiDoc.g:1936:2: '==='
             {
-             before(grammarAccess.getTestDataAccess().getAsteriskKeyword_0()); 
+             before(grammarAccess.getTestDataAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
             match(input,26,FOLLOW_2); 
-             after(grammarAccess.getTestDataAccess().getAsteriskKeyword_0()); 
+             after(grammarAccess.getTestDataAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
 
             }
 
@@ -6771,21 +6771,21 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
 
 
     // $ANTLR start "rule__Given__Group__0__Impl"
-    // InternalAsciiDoc.g:2092:1: rule__Given__Group__0__Impl : ( '*' ) ;
+    // InternalAsciiDoc.g:2092:1: rule__Given__Group__0__Impl : ( '===' ) ;
     public final void rule__Given__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:2096:1: ( ( '*' ) )
-            // InternalAsciiDoc.g:2097:1: ( '*' )
+            // InternalAsciiDoc.g:2096:1: ( ( '===' ) )
+            // InternalAsciiDoc.g:2097:1: ( '===' )
             {
-            // InternalAsciiDoc.g:2097:1: ( '*' )
-            // InternalAsciiDoc.g:2098:2: '*'
+            // InternalAsciiDoc.g:2097:1: ( '===' )
+            // InternalAsciiDoc.g:2098:2: '==='
             {
-             before(grammarAccess.getGivenAccess().getAsteriskKeyword_0()); 
+             before(grammarAccess.getGivenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
             match(input,26,FOLLOW_2); 
-             after(grammarAccess.getGivenAccess().getAsteriskKeyword_0()); 
+             after(grammarAccess.getGivenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
 
             }
 
@@ -7257,21 +7257,21 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
 
 
     // $ANTLR start "rule__When__Group__0__Impl"
-    // InternalAsciiDoc.g:2254:1: rule__When__Group__0__Impl : ( '*' ) ;
+    // InternalAsciiDoc.g:2254:1: rule__When__Group__0__Impl : ( '===' ) ;
     public final void rule__When__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:2258:1: ( ( '*' ) )
-            // InternalAsciiDoc.g:2259:1: ( '*' )
+            // InternalAsciiDoc.g:2258:1: ( ( '===' ) )
+            // InternalAsciiDoc.g:2259:1: ( '===' )
             {
-            // InternalAsciiDoc.g:2259:1: ( '*' )
-            // InternalAsciiDoc.g:2260:2: '*'
+            // InternalAsciiDoc.g:2259:1: ( '===' )
+            // InternalAsciiDoc.g:2260:2: '==='
             {
-             before(grammarAccess.getWhenAccess().getAsteriskKeyword_0()); 
+             before(grammarAccess.getWhenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
             match(input,26,FOLLOW_2); 
-             after(grammarAccess.getWhenAccess().getAsteriskKeyword_0()); 
+             after(grammarAccess.getWhenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
 
             }
 
@@ -7743,21 +7743,21 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
 
 
     // $ANTLR start "rule__Then__Group__0__Impl"
-    // InternalAsciiDoc.g:2416:1: rule__Then__Group__0__Impl : ( '*' ) ;
+    // InternalAsciiDoc.g:2416:1: rule__Then__Group__0__Impl : ( '===' ) ;
     public final void rule__Then__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:2420:1: ( ( '*' ) )
-            // InternalAsciiDoc.g:2421:1: ( '*' )
+            // InternalAsciiDoc.g:2420:1: ( ( '===' ) )
+            // InternalAsciiDoc.g:2421:1: ( '===' )
             {
-            // InternalAsciiDoc.g:2421:1: ( '*' )
-            // InternalAsciiDoc.g:2422:2: '*'
+            // InternalAsciiDoc.g:2421:1: ( '===' )
+            // InternalAsciiDoc.g:2422:2: '==='
             {
-             before(grammarAccess.getThenAccess().getAsteriskKeyword_0()); 
+             before(grammarAccess.getThenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
             match(input,26,FOLLOW_2); 
-             after(grammarAccess.getThenAccess().getAsteriskKeyword_0()); 
+             after(grammarAccess.getThenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
 
             }
 
@@ -8229,21 +8229,21 @@ public class InternalAsciiDocParser extends AbstractInternalContentAssistParser 
 
 
     // $ANTLR start "rule__And__Group__0__Impl"
-    // InternalAsciiDoc.g:2578:1: rule__And__Group__0__Impl : ( '*' ) ;
+    // InternalAsciiDoc.g:2578:1: rule__And__Group__0__Impl : ( '===' ) ;
     public final void rule__And__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalAsciiDoc.g:2582:1: ( ( '*' ) )
-            // InternalAsciiDoc.g:2583:1: ( '*' )
+            // InternalAsciiDoc.g:2582:1: ( ( '===' ) )
+            // InternalAsciiDoc.g:2583:1: ( '===' )
             {
-            // InternalAsciiDoc.g:2583:1: ( '*' )
-            // InternalAsciiDoc.g:2584:2: '*'
+            // InternalAsciiDoc.g:2583:1: ( '===' )
+            // InternalAsciiDoc.g:2584:2: '==='
             {
-             before(grammarAccess.getAndAccess().getAsteriskKeyword_0()); 
+             before(grammarAccess.getAndAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
             match(input,26,FOLLOW_2); 
-             after(grammarAccess.getAndAccess().getAsteriskKeyword_0()); 
+             after(grammarAccess.getAndAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); 
 
             }
 

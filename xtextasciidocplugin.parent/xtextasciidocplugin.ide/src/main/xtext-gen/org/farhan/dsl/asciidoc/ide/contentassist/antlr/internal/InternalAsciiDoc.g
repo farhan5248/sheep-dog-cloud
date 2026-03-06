@@ -1258,9 +1258,9 @@ rule__StepParameters__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getStepParametersAccess().getAsteriskKeyword_0()); }
-	'*'
-	{ after(grammarAccess.getStepParametersAccess().getAsteriskKeyword_0()); }
+	{ before(grammarAccess.getStepParametersAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
+	'==='
+	{ after(grammarAccess.getStepParametersAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
 )
 ;
 finally {
@@ -1933,9 +1933,9 @@ rule__TestData__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getTestDataAccess().getAsteriskKeyword_0()); }
-	'*'
-	{ after(grammarAccess.getTestDataAccess().getAsteriskKeyword_0()); }
+	{ before(grammarAccess.getTestDataAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
+	'==='
+	{ after(grammarAccess.getTestDataAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
 )
 ;
 finally {
@@ -2095,9 +2095,9 @@ rule__Given__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getGivenAccess().getAsteriskKeyword_0()); }
-	'*'
-	{ after(grammarAccess.getGivenAccess().getAsteriskKeyword_0()); }
+	{ before(grammarAccess.getGivenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
+	'==='
+	{ after(grammarAccess.getGivenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
 )
 ;
 finally {
@@ -2257,9 +2257,9 @@ rule__When__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getWhenAccess().getAsteriskKeyword_0()); }
-	'*'
-	{ after(grammarAccess.getWhenAccess().getAsteriskKeyword_0()); }
+	{ before(grammarAccess.getWhenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
+	'==='
+	{ after(grammarAccess.getWhenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
 )
 ;
 finally {
@@ -2419,9 +2419,9 @@ rule__Then__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getThenAccess().getAsteriskKeyword_0()); }
-	'*'
-	{ after(grammarAccess.getThenAccess().getAsteriskKeyword_0()); }
+	{ before(grammarAccess.getThenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
+	'==='
+	{ after(grammarAccess.getThenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
 )
 ;
 finally {
@@ -2581,9 +2581,9 @@ rule__And__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getAndAccess().getAsteriskKeyword_0()); }
-	'*'
-	{ after(grammarAccess.getAndAccess().getAsteriskKeyword_0()); }
+	{ before(grammarAccess.getAndAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
+	'==='
+	{ after(grammarAccess.getAndAccess().getEqualsSignEqualsSignEqualsSignKeyword_0()); }
 )
 ;
 finally {

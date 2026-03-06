@@ -288,9 +288,9 @@ ruleStepParameters returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		otherlv_0='*'
+		otherlv_0='==='
 		{
-			newLeafNode(otherlv_0, grammarAccess.getStepParametersAccess().getAsteriskKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getStepParametersAccess().getEqualsSignEqualsSignEqualsSignKeyword_0());
 		}
 		otherlv_1='Step-Parameters:'
 		{
@@ -695,9 +695,9 @@ ruleTestData returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		otherlv_0='*'
+		otherlv_0='==='
 		{
-			newLeafNode(otherlv_0, grammarAccess.getTestDataAccess().getAsteriskKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getTestDataAccess().getEqualsSignEqualsSignEqualsSignKeyword_0());
 		}
 		otherlv_1='Test-Data:'
 		{
@@ -837,9 +837,9 @@ ruleGiven returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		otherlv_0='*'
+		otherlv_0='==='
 		{
-			newLeafNode(otherlv_0, grammarAccess.getGivenAccess().getAsteriskKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getGivenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0());
 		}
 		otherlv_1='Given:'
 		{
@@ -947,9 +947,9 @@ ruleWhen returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		otherlv_0='*'
+		otherlv_0='==='
 		{
-			newLeafNode(otherlv_0, grammarAccess.getWhenAccess().getAsteriskKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getWhenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0());
 		}
 		otherlv_1='When:'
 		{
@@ -1057,9 +1057,9 @@ ruleThen returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		otherlv_0='*'
+		otherlv_0='==='
 		{
-			newLeafNode(otherlv_0, grammarAccess.getThenAccess().getAsteriskKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getThenAccess().getEqualsSignEqualsSignEqualsSignKeyword_0());
 		}
 		otherlv_1='Then:'
 		{
@@ -1167,9 +1167,9 @@ ruleAnd returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		otherlv_0='*'
+		otherlv_0='==='
 		{
-			newLeafNode(otherlv_0, grammarAccess.getAndAccess().getAsteriskKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getAndAccess().getEqualsSignEqualsSignEqualsSignKeyword_0());
 		}
 		otherlv_1='And:'
 		{

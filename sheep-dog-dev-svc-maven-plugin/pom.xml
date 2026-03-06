@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -232,25 +234,36 @@
 						<configuration>
 							<skip>${skipTests}</skip>
 							<target>
-								<taskdef name="report" classname="org.jacoco.ant.ReportTask" classpathref="maven.plugin.classpath" />
+								<taskdef name="report"
+									classname="org.jacoco.ant.ReportTask"
+									classpathref="maven.plugin.classpath" />
 								<report>
 									<executiondata>
-										<file file="${project.build.directory}/jacoco.exec" />
+										<file
+											file="${project.build.directory}/jacoco.exec" />
 									</executiondata>
 									<structure name="${project.name}">
 										<classfiles>
-											<fileset dir="${project.build.directory}/classes" />
-											<fileset dir="${project.build.directory}/test-classes" />
+											<fileset
+												dir="${project.build.directory}/classes" />
+											<fileset
+												dir="${project.build.directory}/test-classes" />
 										</classfiles>
 										<sourcefiles encoding="UTF-8">
-											<fileset dir="${project.build.sourceDirectory}" />
-											<fileset dir="${project.build.testSourceDirectory}" />
-											<fileset dir="${project.basedir}/src-gen/test/java" />
+											<fileset
+												dir="${project.build.sourceDirectory}" />
+											<fileset
+												dir="${project.build.testSourceDirectory}" />
+											<fileset
+												dir="${project.basedir}/src-gen/test/java" />
 										</sourcefiles>
 									</structure>
-									<html destdir="${project.build.directory}/site/jacoco-with-tests" />
-									<xml destfile="${project.build.directory}/site/jacoco-with-tests/jacoco.xml" />
-									<csv destfile="${project.build.directory}/site/jacoco-with-tests/jacoco.csv" />
+									<html
+										destdir="${project.build.directory}/site/jacoco-with-tests" />
+									<xml
+										destfile="${project.build.directory}/site/jacoco-with-tests/jacoco.xml" />
+									<csv
+										destfile="${project.build.directory}/site/jacoco-with-tests/jacoco.csv" />
 								</report>
 							</target>
 						</configuration>
@@ -316,6 +329,24 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
+						<id>delete-stack</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>kubectl</executable>
+							<arguments>
+								<argument>delete</argument>
+								<argument>deployments</argument>
+								<argument>-l</argument>
+								<argument>app=sheep-dog-dev</argument>
+								<argument>-n</argument>
+								<argument>failsafe</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
 						<id>start-stack</id>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -326,7 +357,8 @@
 							<arguments>
 								<argument>apply</argument>
 								<argument>-k</argument>
-								<argument>../sheep-dog-dev-svc/kubernetes/overlays/failsafe</argument>
+								<argument>
+									../sheep-dog-dev-svc/kubernetes/overlays/failsafe</argument>
 							</arguments>
 						</configuration>
 					</execution>

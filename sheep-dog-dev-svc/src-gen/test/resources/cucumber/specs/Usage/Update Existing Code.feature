@@ -50,7 +50,7 @@ Feature: Update Existing Code
               public void isInvalid() {
                   BlahFactory.get("ObjectPage").setComponent("blah");
                   BlahFactory.get("ObjectPage").setPath("Object");
-                  BlahFactory.get("ObjectPage").setInputOutputs("Invalid");
+                  BlahFactory.get("ObjectPage").setInputOutputsState("Invalid");
               }
           }
           """
@@ -73,12 +73,12 @@ Feature: Update Existing Code
               public void isInvalid() {
                   BlahFactory.get("ObjectPage").setComponent("blah");
                   BlahFactory.get("ObjectPage").setPath("Object");
-                  BlahFactory.get("ObjectPage").setInputOutputs("Invalid");
+                  BlahFactory.get("ObjectPage").setInputOutputsState("Invalid");
               }
           
               @Given("^The blah application Object page is empty$")
               public void isEmpty() {
-                  object.setInputOutputs("Empty");
+                  object.setInputOutputsState("Empty");
               }
           }
           """

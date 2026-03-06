@@ -172,17 +172,17 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
-                  object.setInputOutputs(dataTable);
+                  object.setInputOutputsDataTable(dataTable);
               }
           
               @Given("^The blah application Object page is invalid$")
               public void isInvalid() {
-                  object.setInputOutputs("Invalid");
+                  object.setInputOutputsState("Invalid");
               }
           
               @Given("^The blah application Object page is valid$")
               public void isValid() {
-                  object.setInputOutputs("Valid");
+                  object.setInputOutputsState("Valid");
               }
           }
           """
@@ -209,17 +209,17 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
-                  object.setInputOutputs(dataTable);
+                  object.setInputOutputsDataTable(dataTable);
               }
           
               @Given("^The blah application Object page is invalid$")
               public void isInvalid() {
-                  object.setInputOutputs("Invalid");
+                  object.setInputOutputsState("Invalid");
               }
           
               @Given("^The blah application Object page is valid$")
               public void isValid() {
-                  object.setInputOutputs("Valid");
+                  object.setInputOutputsState("Valid");
               }
           }
           """
@@ -250,17 +250,17 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
-                  object.setInputOutputs(dataTable);
+                  object.setInputOutputsDataTable(dataTable);
               }
           
               @Given("^The blah application Object page is invalid$")
               public void isInvalid() {
-                  object.setInputOutputs("Invalid");
+                  object.setInputOutputsState("Invalid");
               }
           
               @Given("^The blah application Object page is valid$")
               public void isValid() {
-                  object.setInputOutputs("Valid");
+                  object.setInputOutputsState("Valid");
               }
           }
           """

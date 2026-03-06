@@ -1,4 +1,4 @@
-package org.farhan.mbt.service.cucumber;
+package org.farhan.mbt.cucumber;
 
 import java.util.ArrayList;
 

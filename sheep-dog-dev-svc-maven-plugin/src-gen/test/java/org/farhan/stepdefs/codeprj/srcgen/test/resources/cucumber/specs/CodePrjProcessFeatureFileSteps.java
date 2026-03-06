@@ -12,11 +12,11 @@ public class CodePrjProcessFeatureFileSteps extends TestSteps {
 
     @Given("^The code-prj project src-gen/test/resources/cucumber/specs/Process.feature file is created as follows$")
     public void isCreatedAsFollows(String docString) {
-        object.setInputOutputs("Content", docString);
+        object.setInputOutputsDocString("Content", docString);
     }
 
     @Given("^The code-prj project src-gen/test/resources/cucumber/specs/Process.feature file will be created as follows$")
     public void willBeCreatedAsFollows(String docString) {
-        object.assertInputOutputs("Content", docString);
+        object.assertInputOutputsDocString("Content", docString);
     }
 }

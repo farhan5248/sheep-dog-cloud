@@ -433,7 +433,7 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
-						<id>restart-stack</id>
+						<id>delete-stack</id>
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>exec</goal>
@@ -441,8 +441,7 @@
 						<configuration>
 							<executable>kubectl</executable>
 							<arguments>
-								<argument>rollout</argument>
-								<argument>restart</argument>
+								<argument>delete</argument>
 								<argument>deployments</argument>
 								<argument>-l</argument>
 								<argument>app=sheep-dog-dev</argument>

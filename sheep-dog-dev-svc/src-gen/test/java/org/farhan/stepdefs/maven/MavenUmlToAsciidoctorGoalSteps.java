@@ -18,7 +18,7 @@ public class MavenUmlToAsciidoctorGoalSteps extends TestSteps {
 
     @Given("^The maven plugin uml-to-asciidoctor goal is executed with$")
     public void isExecutedWith(DataTable dataTable) {
-        object.setInputOutputs(dataTable);
+        object.setInputOutputsDataTable(dataTable);
         object.transition();
     }
 }

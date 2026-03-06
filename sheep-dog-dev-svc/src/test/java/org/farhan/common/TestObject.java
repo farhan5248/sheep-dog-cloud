@@ -27,31 +27,31 @@ public abstract class TestObject {
 		return exceptionAsString;
 	}
 
-	public void assertInputOutputs(DataTable dataTable) {
+	public void assertInputOutputsDataTable(DataTable dataTable) {
 		processInputOutputs(dataTable, "assert", "");
 	}
 
-	public void assertInputOutputs(DataTable dataTable, String sectionName) {
+	public void assertInputOutputsDataTable(DataTable dataTable, String sectionName) {
 		processInputOutputs(dataTable, "assert", sectionName);
 	}
 
-	public void assertInputOutputs(DataTable dataTable, String sectionName, boolean negativeTest) {
+	public void assertInputOutputsDataTable(DataTable dataTable, String sectionName, boolean negativeTest) {
 		processInputOutputs(dataTable, "assert", sectionName);
 	}
 
-	public void assertInputOutputs(String key) {
+	public void assertInputOutputsState(String key) {
 		HashMap<String, String> row = new HashMap<String, String>();
 		row.put(key, "true");
 		processInputOutputs(row, "assert", "");
 	}
 
-	public void assertInputOutputs(String key, boolean negativeTest) {
+	public void assertInputOutputsState(String key, boolean negativeTest) {
 		HashMap<String, String> row = new HashMap<String, String>();
 		row.put(key, Boolean.toString(negativeTest));
 		processInputOutputs(row, "assert", "");
 	}
 
-	public void assertInputOutputs(String key, String value) {
+	public void assertInputOutputsDocString(String key, String value) {
 		HashMap<String, String> row = new HashMap<String, String>();
 		row.put(key, value);
 		processInputOutputs(row, "assert", "");
@@ -88,19 +88,19 @@ public abstract class TestObject {
 		}
 	}
 
-	public void setInputOutputs(DataTable dataTable) {
+	public void setInputOutputsDataTable(DataTable dataTable) {
 		processInputOutputs(dataTable, "set", "");
 	}
 
-	public void setInputOutputs(DataTable dataTable, String sectionName) {
+	public void setInputOutputsDataTable(DataTable dataTable, String sectionName) {
 		processInputOutputs(dataTable, "set", sectionName);
 	}
 
-	public void setInputOutputs(DataTable dataTable, String sectionName, boolean negativeTest) {
+	public void setInputOutputsDataTable(DataTable dataTable, String sectionName, boolean negativeTest) {
 		processInputOutputs(dataTable, "set", sectionName);
 	}
 
-	public void setInputOutputs(String key, String value) {
+	public void setInputOutputsDocString(String key, String value) {
 		HashMap<String, String> row = new HashMap<String, String>();
 		row.put(key, value);
 		processInputOutputs(row, "set", "");

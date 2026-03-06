@@ -24,10 +24,12 @@ public class MessageConsumer {
     private static final Logger logger = LoggerFactory.getLogger(MessageConsumer.class);
 
     private final IResourceRepository repository;
+    private final UMLService umlService;
 
     @Autowired
-    public MessageConsumer(IResourceRepository repository) {
+    public MessageConsumer(IResourceRepository repository, UMLService umlService) {
         this.repository = repository;
+        this.umlService = umlService;
     }
 
     @JmsListener(destination = JmsConfig.SOURCE_FILES_QUEUE)
@@ -51,6 +53,7 @@ public class MessageConsumer {
                 }
                 String content = file.getFileContent() == null ? "" : file.getFileContent();
                 mojo.convertFile(file.getFileName(), content);
+                umlService.invalidateCache();
                 logger.info("Transformed source file: {}", file.getFileName());
                 IN_FLIGHT = 0;
                 return;

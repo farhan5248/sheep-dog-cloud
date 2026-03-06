@@ -11,6 +11,7 @@ import org.farhan.mbt.asciidoctor.ConvertUMLToAsciidoctor;
 import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.AsciiDoctorService;
+import org.farhan.mbt.service.UMLService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,13 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 	// controller
 	private final IResourceRepository repository;
 	private final AsciiDoctorService service;
+	private final UMLService umlService;
 
 	@Autowired
-	public AsciiDoctorController(IResourceRepository repository, AsciiDoctorService service) {
+	public AsciiDoctorController(IResourceRepository repository, AsciiDoctorService service, UMLService umlService) {
 		this.repository = repository;
 		this.service = service;
+		this.umlService = umlService;
 	}
 
 	@DeleteMapping("/clearConvertAsciidoctorToUMLObjects")
@@ -48,6 +51,7 @@ public class AsciiDoctorController implements ApplicationListener<ApplicationRea
 		logger.info("Starting clearConvertAsciidoctorToUMLObjects");
 		logger.info("tags:" + tags);
 		service.clearObjects(new ConvertAsciidoctorToUML(tags, repository));
+		umlService.invalidateCache();
 		logger.info("Ending clearConvertAsciidoctorToUMLObjects");
 	}
 

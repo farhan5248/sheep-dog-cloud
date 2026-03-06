@@ -8,6 +8,7 @@ import java.util.List;
 import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.mbt.model.TransformableFile;
 import org.farhan.mbt.service.CucumberService;
+import org.farhan.mbt.service.UMLService;
 import org.farhan.mbt.service.cucumber.ConvertCucumberToUML;
 import org.farhan.mbt.service.cucumber.ConvertUMLToCucumber;
 import org.farhan.mbt.service.cucumber.ConvertUMLToCucumberGuice;
@@ -37,6 +38,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 	// controller
 	private final IResourceRepository repository;
 	private final CucumberService service;
+	private final UMLService umlService;
 
 	@Value("${sheepdog.host:dev.sheepdogdev.io}")
 	private String serverHost;
@@ -45,9 +47,10 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 	private int serverPort;
 
 	@Autowired
-	public CucumberController(IResourceRepository repository, CucumberService service) {
+	public CucumberController(IResourceRepository repository, CucumberService service, UMLService umlService) {
 		this.repository = repository;
 		this.service = service;
+		this.umlService = umlService;
 	}
 
 	@DeleteMapping("/clearConvertCucumberToUMLObjects")
@@ -56,6 +59,7 @@ public class CucumberController implements ApplicationListener<ApplicationReadyE
 		logger.info("Starting clearConvertCucumberToUMLObjects");
 		logger.info("tags:" + tags);
 		service.clearObjects(new ConvertCucumberToUML(tags, repository));
+		umlService.invalidateCache();
 		logger.info("Ending clearConvertCucumberToUMLObjects");
 	}
 

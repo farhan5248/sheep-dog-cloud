@@ -20,21 +20,32 @@ public class UMLService {
 
     private static final Logger logger = LoggerFactory.getLogger(UMLService.class);
     private final IResourceRepository repository;
+    private String cachedProjectId;
+    private UMLTestProject cachedModel;
 
     @Autowired
     public UMLService(IResourceRepository repository) {
         this.repository = repository;
     }
 
+    private synchronized UMLTestProject getModel(String projectId) throws Exception {
+        if (cachedModel == null || !projectId.equals(cachedProjectId)) {
+            cachedModel = new UMLTestProject(projectId, repository);
+            cachedModel.init();
+            cachedProjectId = projectId;
+        }
+        return cachedModel;
+    }
+
+    public synchronized void invalidateCache() {
+        cachedModel = null;
+        cachedProjectId = null;
+    }
+
     // TODO make these int
     public UMLTestStep getUMLTestStep(String projectId, String suiteId, String caseId, String stepId)
             throws Exception {
-        // TODO having a model like this isn't very efficient, but it'll work for now
-        // It's not efficient because it loads the entire model for every query each
-        // time. Even if I kept one model cached per id/tag, I'd have to make sure any
-        // writes to it are updating the same one.
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         UMLTestStep testStep = null;
         if (caseId == null || caseId.isEmpty()) {
             testStep = new UMLTestStep(
@@ -50,8 +61,7 @@ public class UMLService {
 
     public UMLTestCase getUMLTestCase(String projectId, String suiteId, String caseId)
             throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         UMLTestCase testCase = new UMLTestCase(model.getTestSuiteList().get(Integer.parseInt(suiteId))
                 .getTestCaseList().get(Integer.parseInt(caseId)));
         return testCase;
@@ -59,8 +69,7 @@ public class UMLService {
 
     public UMLTestSetup getUMLTestSetup(String projectId, String suiteId)
             throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         UMLTestSetup testSetup = new UMLTestSetup(
                 model.getTestSuiteList().get(Integer.parseInt(suiteId)).getTestSetup());
         return testSetup;
@@ -68,8 +77,7 @@ public class UMLService {
 
     public UMLTestData getUMLTestData(String projectId, String suiteId, String caseId, String dataId)
             throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         UMLTestData testData = new UMLTestData(model.getTestSuiteList().get(Integer.parseInt(suiteId))
                 .getTestCaseList().get(Integer.parseInt(caseId)).getTestDataList()
                 .get(Integer.parseInt(dataId)));
@@ -78,16 +86,14 @@ public class UMLService {
 
     public org.farhan.mbt.model.UMLTestProject getUMLTestProject(String projectId)
             throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         org.farhan.mbt.model.UMLTestProject umlTestProject = new org.farhan.mbt.model.UMLTestProject(model);
         return umlTestProject;
     }
 
     public UMLStepParameters getUMLStepParameters(String projectId, String objectId, String definitionId,
             String parametersId) throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         UMLStepParameters stepParameters = new UMLStepParameters(
                 model.getStepObjectList().get(Integer.parseInt(objectId)).getStepDefinitionList()
                         .get(Integer.parseInt(definitionId)).getStepParametersList()
@@ -97,8 +103,7 @@ public class UMLService {
 
     public UMLStepDefinition getUMLStepDefinition(String projectId, String objectId, String definitionId)
             throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         UMLStepDefinition stepDefinition = new UMLStepDefinition(model.getStepObjectList()
                 .get(Integer.parseInt(objectId)).getStepDefinitionList().get(Integer.parseInt(definitionId)));
         return stepDefinition;
@@ -106,8 +111,7 @@ public class UMLService {
 
     public UMLStepObject getUMLStepObject(String projectId, String objectId, String qualifiedName)
             throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         UMLStepObject stepObject = new UMLStepObject(
                 objectId == null ? model.getStepObject(qualifiedName)
                         : model.getStepObjectList().get(Integer.parseInt(objectId)));
@@ -116,8 +120,7 @@ public class UMLService {
 
     public UMLTestSuite getUMLTestSuite(String projectId, String suiteId, String qualifiedName)
             throws Exception {
-        UMLTestProject model = new UMLTestProject(projectId, repository);
-        model.init();
+        UMLTestProject model = getModel(projectId);
         UMLTestSuite testSuite = new UMLTestSuite(
                 suiteId == null ? model.getTestSuite(qualifiedName)
                         : model.getTestSuiteList().get(Integer.parseInt(suiteId)));

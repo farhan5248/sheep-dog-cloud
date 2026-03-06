@@ -71,13 +71,14 @@ public abstract class MBTMojo extends AbstractMojo {
             } catch (Exception e) {
                 retryCount++;
                 if (retryCount >= RETRY_COUNT) {
-                    getLog().error("Retry attempt " + retryCount + " for " + operation, e);
-                    throw new Exception("Max retries reached while " + operation, e);
+                    getLog().error("Retry attempt " + retryCount + " for " + operation);
+                    throw new Exception("Retry attempt " + retryCount + " for " + operation);
                 }
-                getLog().warn("Retry attempt " + retryCount + " for " + operation, e);
-                Thread.sleep(1000);
+                getLog().warn("Retry attempt " + retryCount + " for " + operation);
+                Thread.sleep(10000);
             }
         }
+        getLog().error("Max retries reached while " + operation);
         throw new Exception("Max retries reached while " + operation);
     }
 

@@ -1,7 +1,7 @@
 package org.farhan.dsl.asciidoc.impl;
 
+import org.farhan.dsl.grammar.IDescription;
 import org.farhan.dsl.grammar.ILine;
-import org.farhan.dsl.grammar.INestedDescription;
 import org.farhan.dsl.grammar.IStepDefinition;
 import org.farhan.dsl.grammar.IStepParameters;
 import org.farhan.dsl.grammar.ITable;
@@ -30,9 +30,9 @@ public class StepParametersImpl implements IStepParameters {
     }
 
     @Override
-    public INestedDescription getNestedDescription() {
-        if (eObject.getNestedDescription() != null) {
-            return new NestedDescriptionImpl(eObject.getNestedDescription());
+    public IDescription getDescription() {
+        if (eObject.getDescription() != null) {
+            return new DescriptionImpl(eObject.getDescription());
         }
         return null;
     }
@@ -53,16 +53,16 @@ public class StepParametersImpl implements IStepParameters {
     }
 
     @Override
-    public void setNestedDescription(INestedDescription value) {
-        eObject.setNestedDescription(((NestedDescriptionImpl) value).eObject);
+    public void setDescription(IDescription value) {
+        eObject.setDescription(((DescriptionImpl) value).eObject);
     }
 
     @Override
     public boolean addLine(ILine value) {
-        org.farhan.dsl.asciidoc.asciiDoc.NestedDescription list = eObject.getNestedDescription();
+        org.farhan.dsl.asciidoc.asciiDoc.Description list = eObject.getDescription();
         if (list == null) {
-            list = org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory.eINSTANCE.createNestedDescription();
-            eObject.setNestedDescription(list);
+            list = org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory.eINSTANCE.createDescription();
+            eObject.setDescription(list);
         }
         list.getLineList().add(((LineImpl) value).eObject);
         return true;

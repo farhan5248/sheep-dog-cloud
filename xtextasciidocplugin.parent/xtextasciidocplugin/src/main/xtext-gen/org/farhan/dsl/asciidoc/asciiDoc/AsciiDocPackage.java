@@ -206,13 +206,13 @@ public interface AsciiDocPackage extends EPackage
   int STEP_PARAMETERS__NAME = 0;
 
   /**
-   * The feature id for the '<em><b>Nested Description</b></em>' containment reference.
+   * The feature id for the '<em><b>Description</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STEP_PARAMETERS__NESTED_DESCRIPTION = 1;
+  int STEP_PARAMETERS__DESCRIPTION = 1;
 
   /**
    * The feature id for the '<em><b>Table</b></em>' containment reference.
@@ -445,13 +445,13 @@ public interface AsciiDocPackage extends EPackage
   int TEST_DATA__NAME = 0;
 
   /**
-   * The feature id for the '<em><b>Nested Description</b></em>' containment reference.
+   * The feature id for the '<em><b>Description</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TEST_DATA__NESTED_DESCRIPTION = 1;
+  int TEST_DATA__DESCRIPTION = 1;
 
   /**
    * The feature id for the '<em><b>Table</b></em>' containment reference.
@@ -803,34 +803,6 @@ public interface AsciiDocPackage extends EPackage
   int DESCRIPTION_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.NestedDescriptionImpl <em>Nested Description</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.NestedDescriptionImpl
-   * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getNestedDescription()
-   * @generated
-   */
-  int NESTED_DESCRIPTION = 16;
-
-  /**
-   * The feature id for the '<em><b>Line List</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int NESTED_DESCRIPTION__LINE_LIST = 0;
-
-  /**
-   * The number of structural features of the '<em>Nested Description</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int NESTED_DESCRIPTION_FEATURE_COUNT = 1;
-
-  /**
    * The meta object id for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TableImpl <em>Table</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -838,7 +810,7 @@ public interface AsciiDocPackage extends EPackage
    * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getTable()
    * @generated
    */
-  int TABLE = 17;
+  int TABLE = 16;
 
   /**
    * The feature id for the '<em><b>Row List</b></em>' containment reference list.
@@ -866,7 +838,7 @@ public interface AsciiDocPackage extends EPackage
    * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getRow()
    * @generated
    */
-  int ROW = 18;
+  int ROW = 17;
 
   /**
    * The feature id for the '<em><b>Cell List</b></em>' containment reference list.
@@ -894,7 +866,7 @@ public interface AsciiDocPackage extends EPackage
    * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getCell()
    * @generated
    */
-  int CELL = 19;
+  int CELL = 18;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -922,7 +894,7 @@ public interface AsciiDocPackage extends EPackage
    * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getLine()
    * @generated
    */
-  int LINE = 20;
+  int LINE = 19;
 
   /**
    * The feature id for the '<em><b>Content</b></em>' attribute.
@@ -1061,15 +1033,15 @@ public interface AsciiDocPackage extends EPackage
   EAttribute getStepParameters_Name();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getNestedDescription <em>Nested Description</em>}'.
+   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getDescription <em>Description</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Nested Description</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getNestedDescription()
+   * @return the meta object for the containment reference '<em>Description</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getDescription()
    * @see #getStepParameters()
    * @generated
    */
-  EReference getStepParameters_NestedDescription();
+  EReference getStepParameters_Description();
 
   /**
    * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.StepParameters#getTable <em>Table</em>}'.
@@ -1199,15 +1171,15 @@ public interface AsciiDocPackage extends EPackage
   EAttribute getTestData_Name();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getNestedDescription <em>Nested Description</em>}'.
+   * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getDescription <em>Description</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Nested Description</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.TestData#getNestedDescription()
+   * @return the meta object for the containment reference '<em>Description</em>'.
+   * @see org.farhan.dsl.asciidoc.asciiDoc.TestData#getDescription()
    * @see #getTestData()
    * @generated
    */
-  EReference getTestData_NestedDescription();
+  EReference getTestData_Description();
 
   /**
    * Returns the meta object for the containment reference '{@link org.farhan.dsl.asciidoc.asciiDoc.TestData#getTable <em>Table</em>}'.
@@ -1355,27 +1327,6 @@ public interface AsciiDocPackage extends EPackage
    * @generated
    */
   EReference getDescription_LineList();
-
-  /**
-   * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.NestedDescription <em>Nested Description</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Nested Description</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.NestedDescription
-   * @generated
-   */
-  EClass getNestedDescription();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.farhan.dsl.asciidoc.asciiDoc.NestedDescription#getLineList <em>Line List</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Line List</em>'.
-   * @see org.farhan.dsl.asciidoc.asciiDoc.NestedDescription#getLineList()
-   * @see #getNestedDescription()
-   * @generated
-   */
-  EReference getNestedDescription_LineList();
 
   /**
    * Returns the meta object for class '{@link org.farhan.dsl.asciidoc.asciiDoc.Table <em>Table</em>}'.
@@ -1581,12 +1532,12 @@ public interface AsciiDocPackage extends EPackage
     EAttribute STEP_PARAMETERS__NAME = eINSTANCE.getStepParameters_Name();
 
     /**
-     * The meta object literal for the '<em><b>Nested Description</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Description</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference STEP_PARAMETERS__NESTED_DESCRIPTION = eINSTANCE.getStepParameters_NestedDescription();
+    EReference STEP_PARAMETERS__DESCRIPTION = eINSTANCE.getStepParameters_Description();
 
     /**
      * The meta object literal for the '<em><b>Table</b></em>' containment reference feature.
@@ -1695,12 +1646,12 @@ public interface AsciiDocPackage extends EPackage
     EAttribute TEST_DATA__NAME = eINSTANCE.getTestData_Name();
 
     /**
-     * The meta object literal for the '<em><b>Nested Description</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Description</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference TEST_DATA__NESTED_DESCRIPTION = eINSTANCE.getTestData_NestedDescription();
+    EReference TEST_DATA__DESCRIPTION = eINSTANCE.getTestData_Description();
 
     /**
      * The meta object literal for the '<em><b>Table</b></em>' containment reference feature.
@@ -1827,24 +1778,6 @@ public interface AsciiDocPackage extends EPackage
      * @generated
      */
     EReference DESCRIPTION__LINE_LIST = eINSTANCE.getDescription_LineList();
-
-    /**
-     * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.NestedDescriptionImpl <em>Nested Description</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.NestedDescriptionImpl
-     * @see org.farhan.dsl.asciidoc.asciiDoc.impl.AsciiDocPackageImpl#getNestedDescription()
-     * @generated
-     */
-    EClass NESTED_DESCRIPTION = eINSTANCE.getNestedDescription();
-
-    /**
-     * The meta object literal for the '<em><b>Line List</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference NESTED_DESCRIPTION__LINE_LIST = eINSTANCE.getNestedDescription_LineList();
 
     /**
      * The meta object literal for the '{@link org.farhan.dsl.asciidoc.asciiDoc.impl.TableImpl <em>Table</em>}' class.

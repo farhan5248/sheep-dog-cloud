@@ -20,14 +20,14 @@ public class StepParametersFormatter extends Formatter {
 		formatKeywordTrailingSpace(df.getRegion(theStepParameters, a.getStepParametersKeyword_1()), doc);
 		formatTitle(df.getRegion(theStepParameters, a.getNameTitleParserRuleCall_2_0()), doc);
 
-		if (theStepParameters.getTable() != null || theStepParameters.getNestedDescription() != null) {
+		if (theStepParameters.getTable() != null || theStepParameters.getDescription() != null) {
 			formatEOL1RuleCall(df.getRegion(theStepParameters, a.getEOLTerminalRuleCall_3()), doc);
 		} else {
 			formatEOL2RuleCall(df.getRegion(theStepParameters, a.getEOLTerminalRuleCall_3()), doc);
 		}
 
-		if (theStepParameters.getNestedDescription() != null) {
-			NestedStatementListFormatter formatter = new NestedStatementListFormatter(theStepParameters.getNestedDescription());
+		if (theStepParameters.getDescription() != null) {
+			NestedStatementListFormatter formatter = new NestedStatementListFormatter(theStepParameters.getDescription());
 			formatter.format(doc, ga, df);
 		}
 

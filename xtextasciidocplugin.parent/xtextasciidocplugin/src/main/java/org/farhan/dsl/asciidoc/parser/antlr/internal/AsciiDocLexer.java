@@ -80,9 +80,9 @@ public class AsciiDocLexer extends InternalAsciiDocLexer {
 		// implemented.
 		// They automatically handle the greedy collection of tokens
 
-		// Other rules are single line, like +, = or Given
+		// Other rules are single line, like = or Given
 		// These are broken up into 5. Anything after the token
-		// 1. is not a WORD like +, |===, * And or = Test-Suite
+		// 1. is not a WORD like |===, * And or = Test-Suite
 		// 2. is anything until a newline like with #
 		// 3. is a WORD like Test-Suite. These are list elements which have no delimiter
 		// keywords
@@ -108,17 +108,15 @@ public class AsciiDocLexer extends InternalAsciiDocLexer {
 			mRULE_WORD();
 		} else if (hasConstantDelimiter) {
 			if (isKeyword("|")) {
-				mT__25();// '|'
+				mT__24();// '|'
 			} else {
 				mRULE_WORD();
 			}
 		} else if (hasVariableDelimiter) {
 			super.mTokens();
 			// single line no collection
-		} else if (isKeyword("+")) {
-			mT__23();// '+'
 		} else if (isKeyword("|===")) {
-			mT__24();// '|==='
+			mT__23();// '|==='
 		} else if (isKeyword("===")) {
 			mT__13();// '==='
 		} else if (isKeyword("==")) {
@@ -152,7 +150,7 @@ public class AsciiDocLexer extends InternalAsciiDocLexer {
 			hasNoDelimiter = true;
 			// single line constant delimiter collection
 		} else if (isKeyword("|")) {
-			mT__25();// '|'
+			mT__24();// '|'
 			hasConstantDelimiter = true;
 			// single line variable delimiter collection
 		} else if (isKeyword("Given:")) {

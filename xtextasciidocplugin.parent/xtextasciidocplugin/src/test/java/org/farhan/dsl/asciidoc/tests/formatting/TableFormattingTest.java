@@ -19,7 +19,6 @@ public class TableFormattingTest extends FormattingTest {
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2\n");
 		sb.append("| data1   | data2  \n");
@@ -48,7 +47,6 @@ public class TableFormattingTest extends FormattingTest {
 			sb.append("== Test-Case: Submit a drug claim\n");
 			sb.append("\n");
 			sb.append("* Given: The one service, one file is valid\n");
-			sb.append("+\n");
 			sb.append(" |=== \n");
 			sb.append(" |  Header1  |  Header2   \n");
 			sb.append(" |  data1   |  data2     \n");

@@ -38,8 +38,8 @@ public class AsciiDocContentAssistLexer extends InternalAsciiDocLexer {
 	// T__25 = 'Step-Definition:'  T__26 = '==='         T__27 = 'Step-Parameters:'
 	// T__28 = 'Test-Suite:'       T__29 = 'Test-Setup:'   T__30 = 'Test-Case:'
 	// T__31 = 'Test-Data:'        T__32 = 'Given:'        T__33 = 'When:'
-	// T__34 = 'Then:'             T__35 = 'And:'          T__36 = '+'
-	// T__37 = '|==='             T__38 = '|'
+	// T__34 = 'Then:'             T__35 = 'And:'
+	// T__36 = '|==='             T__37 = '|'
 
 	@Override
 	public void mTokens() throws RecognitionException {
@@ -60,17 +60,15 @@ public class AsciiDocContentAssistLexer extends InternalAsciiDocLexer {
 			mRULE_WORD();
 		} else if (hasConstantDelimiter) {
 			if (isKeyword("|")) {
-				mT__38(); // '|'
+				mT__37(); // '|'
 			} else {
 				mRULE_WORD();
 			}
 		} else if (hasVariableDelimiter) {
 			super.mTokens();
 			// single line no collection
-		} else if (isKeyword("+")) {
-			mT__36(); // '+'
 		} else if (isKeyword("|===")) {
-			mT__37(); // '|==='
+			mT__36(); // '|==='
 		} else if (isKeyword("===")) {
 			mT__26(); // '==='
 		} else if (isKeyword("==")) {
@@ -104,7 +102,7 @@ public class AsciiDocContentAssistLexer extends InternalAsciiDocLexer {
 			hasNoDelimiter = true;
 			// single line constant delimiter collection
 		} else if (isKeyword("|")) {
-			mT__38(); // '|'
+			mT__37(); // '|'
 			hasConstantDelimiter = true;
 			// single line variable delimiter collection
 		} else if (isKeyword("Given:")) {

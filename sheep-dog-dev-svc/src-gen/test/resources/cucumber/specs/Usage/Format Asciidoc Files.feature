@@ -31,7 +31,6 @@ Feature: Format Asciidoc Files
           === Given: The blah application Object page is valid
           
           === Then: The blah application Object page is created as follows
-          +
           ----
             text1
           
@@ -46,21 +45,18 @@ Feature: Format Asciidoc Files
           === Given: The blah application Object page is invalid
           
           === When: The blah application Object page is created as follows
-          +
           |===
           | grp | ins
           | 8 | {ins}
           |===
           
           === Test-Data: Some data
-          +
           |===
           | ins
           | 4
           |===
           
           === Test-Data: Dataset 2
-          +
           |===
           | ins
           | 5
@@ -78,13 +74,11 @@ Feature: Format Asciidoc Files
           == Step-Definition: is created as follows
           
           === Step-Parameters: 1
-          +
           |===
           | grp | ins
           |===
           
           === Step-Parameters: 2
-          +
           |===
           | Content
           |===
@@ -105,7 +99,6 @@ Feature: Format Asciidoc Files
           === Given: The blah application Object page is valid
           
           === Then: The blah application Object page is created as follows
-          +
           ----
             text1
           
@@ -120,21 +113,18 @@ Feature: Format Asciidoc Files
           === Given: The blah application Object page is invalid
           
           === When: The blah application Object page is created as follows
-          +
           |===
           | grp | ins  
           | 8   | {ins}
           |===
           
           === Test-Data: Some data
-          +
           |===
           | ins
           | 4  
           |===
           
           === Test-Data: Dataset 2
-          +
           |===
           | ins
           | 5  
@@ -148,13 +138,11 @@ Feature: Format Asciidoc Files
           == Step-Definition: is created as follows
           
           === Step-Parameters: 1
-          +
           |===
           | grp | ins
           |===
           
           === Step-Parameters: 2
-          +
           |===
           | Content
           |===

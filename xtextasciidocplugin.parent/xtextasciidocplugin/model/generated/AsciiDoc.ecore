@@ -20,7 +20,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StepParameters">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedDescription" eType="#//NestedDescription"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//Description"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//Table"
         containment="true"/>
@@ -43,7 +43,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TestData">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedDescription" eType="#//NestedDescription"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//Description"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//Table"
         containment="true"/>
@@ -63,10 +63,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Description">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lineList" upperBound="-1"
-        eType="#//Line" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NestedDescription">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lineList" upperBound="-1"
         eType="#//Line" containment="true"/>
   </eClassifiers>

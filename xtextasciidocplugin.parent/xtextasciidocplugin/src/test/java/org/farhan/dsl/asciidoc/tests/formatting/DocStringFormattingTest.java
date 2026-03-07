@@ -19,7 +19,6 @@ public class DocStringFormattingTest extends FormattingTest {
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1 \n");
 		sb.append("\n");
@@ -53,7 +52,6 @@ public class DocStringFormattingTest extends FormattingTest {
 			sb.append("\n");
 			sb.append("* Given: The one service, one file is valid\n");
 			sb.append("\n");
-			sb.append("+\n");
 			sb.append("----\n");
 			sb.append("Line1 \n");
 			sb.append("\n");

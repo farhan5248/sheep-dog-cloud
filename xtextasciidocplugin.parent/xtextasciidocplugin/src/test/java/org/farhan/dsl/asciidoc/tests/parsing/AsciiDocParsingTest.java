@@ -30,7 +30,6 @@ public class AsciiDocParsingTest extends ParsingTest {
 		sb.append("\n");
 
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1\n");
 		sb.append("Line2\n");
@@ -39,7 +38,6 @@ public class AsciiDocParsingTest extends ParsingTest {
 
 		sb.append("* And: The two service, two file is valid\n");
 
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
@@ -47,7 +45,6 @@ public class AsciiDocParsingTest extends ParsingTest {
 
 		sb.append("* When: The three service, three file is valid\n");
 
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
@@ -55,7 +52,6 @@ public class AsciiDocParsingTest extends ParsingTest {
 
 		sb.append("* Then: The four service, four file is valid\n");
 
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
@@ -75,7 +71,6 @@ public class AsciiDocParsingTest extends ParsingTest {
 		sb.append("* When: The three service, three file is valid\n");
 		sb.append("* Then: The four service, four file is valid\n");
 		sb.append("* Given: The six service, six file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append(" Line1\n");
 		sb.append(" Line2 \n");
@@ -87,7 +82,6 @@ public class AsciiDocParsingTest extends ParsingTest {
 		sb.append("\n");
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* And: The two service, two file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
@@ -97,11 +91,9 @@ public class AsciiDocParsingTest extends ParsingTest {
 		sb.append("\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
 		sb.append("\n");
-		sb.append("+\n");
 		sb.append("@tag1,@tag2,@tag3\n");
 		sb.append("Put some explanation here.\n");
 		sb.append("\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
@@ -118,11 +110,9 @@ public class AsciiDocParsingTest extends ParsingTest {
 		sb.append("\n");
 		sb.append("* Test-Data: Describe what this data is about as well\n");
 		sb.append("\n");
-		sb.append("+\n");
 		sb.append("@tag1,@tag2,@tag3\n");
 		sb.append("Put some explanation here.\n");
 		sb.append("\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
@@ -130,9 +120,7 @@ public class AsciiDocParsingTest extends ParsingTest {
 		sb.append("|===\n");
 		sb.append("\n");
 		sb.append("* Test-Data: Describe this data too\n");
-		sb.append("+\n");
 		sb.append("@tag1,@tag2,@tag3\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");

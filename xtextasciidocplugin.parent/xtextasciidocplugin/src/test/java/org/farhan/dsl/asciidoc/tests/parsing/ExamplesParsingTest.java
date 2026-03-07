@@ -21,7 +21,6 @@ public class ExamplesParsingTest extends ParsingTest {
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
 
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -36,7 +35,6 @@ public class ExamplesParsingTest extends ParsingTest {
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* Test-Data:\n");
 
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -60,9 +58,7 @@ public class ExamplesParsingTest extends ParsingTest {
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("@tag1\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -76,9 +72,7 @@ public class ExamplesParsingTest extends ParsingTest {
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("Basic EDI claim\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -92,10 +86,8 @@ public class ExamplesParsingTest extends ParsingTest {
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("Basic EDI claim\n");
 		sb.append("No deductible\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -109,7 +101,6 @@ public class ExamplesParsingTest extends ParsingTest {
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("Basic EDI claim");
 		assertFeatureErrors(sb);
 	}
@@ -121,9 +112,7 @@ public class ExamplesParsingTest extends ParsingTest {
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("Basic EDI claim\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
@@ -139,11 +128,9 @@ public class ExamplesParsingTest extends ParsingTest {
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("@tag1\n");
 		sb.append("Basic EDI claim\n");
 		sb.append("No deductible\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");

@@ -81,7 +81,6 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
       case AsciiDocPackage.AND: return createAnd();
       case AsciiDocPackage.TEXT: return createText();
       case AsciiDocPackage.DESCRIPTION: return createDescription();
-      case AsciiDocPackage.NESTED_DESCRIPTION: return createNestedDescription();
       case AsciiDocPackage.TABLE: return createTable();
       case AsciiDocPackage.ROW: return createRow();
       case AsciiDocPackage.CELL: return createCell();
@@ -281,18 +280,6 @@ public class AsciiDocFactoryImpl extends EFactoryImpl implements AsciiDocFactory
   {
     DescriptionImpl description = new DescriptionImpl();
     return description;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public NestedDescription createNestedDescription()
-  {
-    NestedDescriptionImpl nestedDescription = new NestedDescriptionImpl();
-    return nestedDescription;
   }
 
   /**

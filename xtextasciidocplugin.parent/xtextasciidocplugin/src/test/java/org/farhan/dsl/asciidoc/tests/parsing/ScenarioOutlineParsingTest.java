@@ -19,7 +19,6 @@ public class ScenarioOutlineParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -49,7 +48,6 @@ public class ScenarioOutlineParsingTest extends ParsingTest {
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("@tag1\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -63,7 +61,6 @@ public class ScenarioOutlineParsingTest extends ParsingTest {
 		sb.append("== Test-Case: Submit a claim\n");
 		sb.append("Basic EDI claim\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -78,7 +75,6 @@ public class ScenarioOutlineParsingTest extends ParsingTest {
 		sb.append("Basic EDI claim\n");
 		sb.append("No deductible\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -102,7 +98,6 @@ public class ScenarioOutlineParsingTest extends ParsingTest {
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* When: The three service, three file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -120,7 +115,6 @@ public class ScenarioOutlineParsingTest extends ParsingTest {
 		sb.append("* Given: The one service, one file is valid\n");
 		sb.append("* When: The three service, three file is valid\n");
 		sb.append("* Test-Data: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");

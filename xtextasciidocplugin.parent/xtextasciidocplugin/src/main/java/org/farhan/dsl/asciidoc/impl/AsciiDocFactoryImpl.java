@@ -3,7 +3,6 @@ package org.farhan.dsl.asciidoc.impl;
 import org.farhan.dsl.grammar.ICell;
 import org.farhan.dsl.grammar.IDescription;
 import org.farhan.dsl.grammar.ILine;
-import org.farhan.dsl.grammar.INestedDescription;
 import org.farhan.dsl.grammar.IResourceRepository;
 import org.farhan.dsl.grammar.IRow;
 import org.farhan.dsl.grammar.ISheepDogFactory;
@@ -20,7 +19,6 @@ import org.farhan.dsl.grammar.ITestSuite;
 import org.farhan.dsl.asciidoc.asciiDoc.AsciiDocFactory;
 import org.farhan.dsl.asciidoc.asciiDoc.Cell;
 import org.farhan.dsl.asciidoc.asciiDoc.Description;
-import org.farhan.dsl.asciidoc.asciiDoc.NestedDescription;
 import org.farhan.dsl.asciidoc.asciiDoc.Row;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
@@ -41,12 +39,6 @@ public class AsciiDocFactoryImpl implements ISheepDogFactory {
 	public IDescription createDescription() {
 		Description description = AsciiDocFactory.eINSTANCE.createDescription();
 		return new DescriptionImpl(description);
-	}
-
-	@Override
-	public INestedDescription createNestedDescription() {
-		NestedDescription nestedDescription = AsciiDocFactory.eINSTANCE.createNestedDescription();
-		return new NestedDescriptionImpl(nestedDescription);
 	}
 
 	@Override

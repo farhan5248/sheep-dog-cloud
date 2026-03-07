@@ -20,7 +20,7 @@
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//StepParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//StepParameters/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepParameters/nestedDescription"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepParameters/description"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//StepParameters/table"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestSuite">
@@ -37,7 +37,7 @@
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AsciiDoc.ecore#//TestData/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestData/nestedDescription"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestData/description"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//TestData/table"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//TestStep">
@@ -55,9 +55,6 @@
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//Description">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//Description/lineList"/>
-    </genClasses>
-    <genClasses ecoreClass="AsciiDoc.ecore#//NestedDescription">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//NestedDescription/lineList"/>
     </genClasses>
     <genClasses ecoreClass="AsciiDoc.ecore#//Table">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AsciiDoc.ecore#//Table/rowList"/>

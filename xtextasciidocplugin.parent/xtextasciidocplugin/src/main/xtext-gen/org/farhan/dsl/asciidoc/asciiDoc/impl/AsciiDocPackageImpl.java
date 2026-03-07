@@ -18,7 +18,6 @@ import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.Given;
 import org.farhan.dsl.asciidoc.asciiDoc.Line;
 import org.farhan.dsl.asciidoc.asciiDoc.Model;
-import org.farhan.dsl.asciidoc.asciiDoc.NestedDescription;
 import org.farhan.dsl.asciidoc.asciiDoc.Row;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
@@ -153,13 +152,6 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   private EClass descriptionEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass nestedDescriptionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -378,7 +370,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
-  public EReference getStepParameters_NestedDescription()
+  public EReference getStepParameters_Description()
   {
     return (EReference)stepParametersEClass.getEStructuralFeatures().get(1);
   }
@@ -521,7 +513,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
-  public EReference getTestData_NestedDescription()
+  public EReference getTestData_Description()
   {
     return (EReference)testDataEClass.getEStructuralFeatures().get(1);
   }
@@ -686,28 +678,6 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
    * @generated
    */
   @Override
-  public EClass getNestedDescription()
-  {
-    return nestedDescriptionEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getNestedDescription_LineList()
-  {
-    return (EReference)nestedDescriptionEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EClass getTable()
   {
     return tableEClass;
@@ -835,7 +805,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
 
     stepParametersEClass = createEClass(STEP_PARAMETERS);
     createEAttribute(stepParametersEClass, STEP_PARAMETERS__NAME);
-    createEReference(stepParametersEClass, STEP_PARAMETERS__NESTED_DESCRIPTION);
+    createEReference(stepParametersEClass, STEP_PARAMETERS__DESCRIPTION);
     createEReference(stepParametersEClass, STEP_PARAMETERS__TABLE);
 
     testSuiteEClass = createEClass(TEST_SUITE);
@@ -853,7 +823,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
 
     testDataEClass = createEClass(TEST_DATA);
     createEAttribute(testDataEClass, TEST_DATA__NAME);
-    createEReference(testDataEClass, TEST_DATA__NESTED_DESCRIPTION);
+    createEReference(testDataEClass, TEST_DATA__DESCRIPTION);
     createEReference(testDataEClass, TEST_DATA__TABLE);
 
     testStepEClass = createEClass(TEST_STEP);
@@ -875,9 +845,6 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
 
     descriptionEClass = createEClass(DESCRIPTION);
     createEReference(descriptionEClass, DESCRIPTION__LINE_LIST);
-
-    nestedDescriptionEClass = createEClass(NESTED_DESCRIPTION);
-    createEReference(nestedDescriptionEClass, NESTED_DESCRIPTION__LINE_LIST);
 
     tableEClass = createEClass(TABLE);
     createEReference(tableEClass, TABLE__ROW_LIST);
@@ -945,7 +912,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
 
     initEClass(stepParametersEClass, StepParameters.class, "StepParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getStepParameters_Name(), ecorePackage.getEString(), "name", null, 0, 1, StepParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getStepParameters_NestedDescription(), this.getNestedDescription(), null, "nestedDescription", null, 0, 1, StepParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getStepParameters_Description(), this.getDescription(), null, "description", null, 0, 1, StepParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStepParameters_Table(), this.getTable(), null, "table", null, 0, 1, StepParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(testSuiteEClass, TestSuite.class, "TestSuite", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -963,7 +930,7 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
 
     initEClass(testDataEClass, TestData.class, "TestData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTestData_Name(), ecorePackage.getEString(), "name", null, 0, 1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTestData_NestedDescription(), this.getNestedDescription(), null, "nestedDescription", null, 0, 1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTestData_Description(), this.getDescription(), null, "description", null, 0, 1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTestData_Table(), this.getTable(), null, "table", null, 0, 1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(testStepEClass, TestStep.class, "TestStep", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -985,9 +952,6 @@ public class AsciiDocPackageImpl extends EPackageImpl implements AsciiDocPackage
 
     initEClass(descriptionEClass, Description.class, "Description", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getDescription_LineList(), this.getLine(), null, "lineList", null, 0, -1, Description.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(nestedDescriptionEClass, NestedDescription.class, "NestedDescription", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getNestedDescription_LineList(), this.getLine(), null, "lineList", null, 0, -1, NestedDescription.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(tableEClass, Table.class, "Table", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTable_RowList(), this.getRow(), null, "rowList", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

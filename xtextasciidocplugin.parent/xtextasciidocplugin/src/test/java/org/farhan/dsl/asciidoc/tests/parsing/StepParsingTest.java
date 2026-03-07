@@ -49,7 +49,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|===\n");
@@ -62,7 +61,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
@@ -76,7 +74,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2");
 		sb.append("|===\n");
@@ -89,7 +86,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This\n");
 		sb.append("== Test-Case: Submit\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Suggestion | Suggestion Name\n");
 		sb.append("| \\| H1 \\| | \\| H1 \\|\n");
@@ -103,7 +99,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1\n");
 		sb.append("----\n");
@@ -116,7 +111,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1\n");
 		sb.append("----\n");
@@ -129,7 +123,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1\n");
 		sb.append("Line2\n\n\n");
@@ -144,7 +137,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1");
 		sb.append("----\n");
@@ -157,7 +149,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("----\n");
 		assertFeatureErrors(sb);
@@ -171,7 +162,6 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		assertFeatureErrors(sb);
 	}
@@ -182,46 +172,38 @@ public class StepParsingTest extends ParsingTest {
 		sb.append("= Test-Suite: This is a test feature\n");
 		sb.append("== Test-Case: Submit a drug claim\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
 		sb.append("|===\n");
 		sb.append("* When: The three service, three file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
 		sb.append("|===\n");
 		sb.append("* Then: The four service, four file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
 		sb.append("|===\n");
 		sb.append("* And: The two service, two file is valid\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2 \n");
 		sb.append("|   data1 |   data2 \n");
 		sb.append("|===\n");
 		sb.append("* Given: The one service, one file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1\n");
 		sb.append("----\n");
 		sb.append("* When: The three service, three file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1\n");
 		sb.append("----\n");
 		sb.append("* Then: The four service, four file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1\n");
 		sb.append("----\n");
 		sb.append("* And: The two service, two file is valid\n");
-		sb.append("+\n");
 		sb.append("----\n");
 		sb.append("Line1\n");
 		sb.append("----\n");

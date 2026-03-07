@@ -19,7 +19,7 @@ StepDefinition:
 
 StepParameters:
 	'===' 'Step-Parameters:' name=Title EOL
-	nestedDescription=NestedDescription?
+	description=Description?
 	table=Table;
 
 TestSuite:
@@ -43,7 +43,7 @@ TestCase:
 
 TestData:
 	'===' 'Test-Data:' name=Title EOL
-	nestedDescription=NestedDescription?
+	description=Description?
 	table=Table;
 
 TestStep:
@@ -66,18 +66,12 @@ And:
 	(table=Table | text=Text)?;
 
 Text:
-	'+' EOL
 	content=TEXT_BLOCK EOL;
 
 Description:
 	lineList+=Line+;
 
-NestedDescription:
-	'+' EOL
-	lineList+=Line+;
-
 Table:
-	'+' EOL
 	'|===' EOL
 	rowList+=Row+
 	'|===' EOL;

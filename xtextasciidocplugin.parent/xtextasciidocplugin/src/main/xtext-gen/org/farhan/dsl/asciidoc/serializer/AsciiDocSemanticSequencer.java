@@ -20,7 +20,6 @@ import org.farhan.dsl.asciidoc.asciiDoc.Cell;
 import org.farhan.dsl.asciidoc.asciiDoc.Description;
 import org.farhan.dsl.asciidoc.asciiDoc.Given;
 import org.farhan.dsl.asciidoc.asciiDoc.Line;
-import org.farhan.dsl.asciidoc.asciiDoc.NestedDescription;
 import org.farhan.dsl.asciidoc.asciiDoc.Row;
 import org.farhan.dsl.asciidoc.asciiDoc.StepDefinition;
 import org.farhan.dsl.asciidoc.asciiDoc.StepObject;
@@ -63,9 +62,6 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 				return; 
 			case AsciiDocPackage.LINE:
 				sequence_Line(context, (Line) semanticObject); 
-				return; 
-			case AsciiDocPackage.NESTED_DESCRIPTION:
-				sequence_NestedDescription(context, (NestedDescription) semanticObject); 
 				return; 
 			case AsciiDocPackage.ROW:
 				sequence_Row(context, (Row) semanticObject); 
@@ -195,20 +191,6 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	/**
 	 * <pre>
 	 * Contexts:
-	 *     NestedDescription returns NestedDescription
-	 *
-	 * Constraint:
-	 *     lineList+=Line+
-	 * </pre>
-	 */
-	protected void sequence_NestedDescription(ISerializationContext context, NestedDescription semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * <pre>
-	 * Contexts:
 	 *     Row returns Row
 	 *
 	 * Constraint:
@@ -255,7 +237,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     StepParameters returns StepParameters
 	 *
 	 * Constraint:
-	 *     (name=Title nestedDescription=NestedDescription? table=Table)
+	 *     (name=Title description=Description? table=Table)
 	 * </pre>
 	 */
 	protected void sequence_StepParameters(ISerializationContext context, StepParameters semanticObject) {
@@ -298,7 +280,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     TestData returns TestData
 	 *
 	 * Constraint:
-	 *     (name=Title nestedDescription=NestedDescription? table=Table)
+	 *     (name=Title description=Description? table=Table)
 	 * </pre>
 	 */
 	protected void sequence_TestData(ISerializationContext context, TestData semanticObject) {
@@ -351,7 +333,7 @@ public class AsciiDocSemanticSequencer extends AbstractDelegatingSemanticSequenc
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AsciiDocPackage.Literals.TEXT__CONTENT));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getTextAccess().getContentTEXT_BLOCKTerminalRuleCall_2_0(), semanticObject.getContent());
+		feeder.accept(grammarAccess.getTextAccess().getContentTEXT_BLOCKTerminalRuleCall_0_0(), semanticObject.getContent());
 		feeder.finish();
 	}
 	

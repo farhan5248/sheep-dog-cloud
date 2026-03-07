@@ -168,15 +168,6 @@ public interface AsciiDocFactory extends EFactory
   Description createDescription();
 
   /**
-   * Returns a new object of class '<em>Nested Description</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Nested Description</em>'.
-   * @generated
-   */
-  NestedDescription createNestedDescription();
-
-  /**
    * Returns a new object of class '<em>Table</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

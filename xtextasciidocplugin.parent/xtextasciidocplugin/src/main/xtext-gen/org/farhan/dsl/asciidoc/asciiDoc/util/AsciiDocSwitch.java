@@ -193,13 +193,6 @@ public class AsciiDocSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case AsciiDocPackage.NESTED_DESCRIPTION:
-      {
-        NestedDescription nestedDescription = (NestedDescription)theEObject;
-        T result = caseNestedDescription(nestedDescription);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case AsciiDocPackage.TABLE:
       {
         Table table = (Table)theEObject;
@@ -484,22 +477,6 @@ public class AsciiDocSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseDescription(Description object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Nested Description</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Nested Description</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseNestedDescription(NestedDescription object)
   {
     return null;
   }

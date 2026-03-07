@@ -26,9 +26,6 @@
                     "include": "#text-blocks"
                 },
                 {
-                    "include": "#statement-lists"
-                },
-                {
                     "include": "#statements"
                 }
             ]
@@ -116,23 +113,19 @@
             "patterns": [
                 {
                     "name": "markup.table.sheepdog-asciidoc",
-                    "begin": "^\\+$",
-                    "end": "^(?!\\|===|\\|)",
+                    "begin": "^\\|===$",
+                    "end": "^\\|===$",
                     "beginCaptures": {
                         "0": {
-                            "name": "punctuation.definition.table.start.sheepdog-asciidoc"
+                            "name": "punctuation.definition.table.delimiter.sheepdog-asciidoc"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.table.delimiter.sheepdog-asciidoc"
                         }
                     },
                     "patterns": [
-                        {
-                            "name": "markup.table.delimiter.sheepdog-asciidoc",
-                            "match": "^\\|===$",
-                            "captures": {
-                                "0": {
-                                    "name": "punctuation.definition.table.delimiter.sheepdog-asciidoc"
-                                }
-                            }
-                        },
                         {
                             "name": "string.unquoted.table.cell.sheepdog-asciidoc",
                             "match": "^\\|.+$"
@@ -161,30 +154,11 @@
                 }
             ]
         },
-        "statement-lists": {
-            "patterns": [
-                {
-                    "name": "markup.list.sheepdog-asciidoc",
-                    "begin": "^\\+$",
-                    "end": "^(?![^#=|+\\n])",
-                    "beginCaptures": {
-                        "0": {
-                            "name": "punctuation.definition.list.start.sheepdog-asciidoc"
-                        }
-                    },
-                    "patterns": [
-                        {
-                            "include": "#statements"
-                        }
-                    ]
-                }
-            ]
-        },
         "statements": {
             "patterns": [
                 {
                     "name": "markup.other.statement.sheepdog-asciidoc",
-                    "match": "^([^#=|+\\n].*)$",
+                    "match": "^([^#=|\\n].*)$",
                     "captures": {
                         "1": {
                             "name": "string.unquoted.statement.sheepdog-asciidoc",

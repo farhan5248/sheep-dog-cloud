@@ -19,11 +19,9 @@ public class ParametersFormattingTest extends FormattingTest {
 		sb.append("== Step-Definition: Submit a claim\n");
 		sb.append("\n");
 		sb.append("* Step-Parameters: Describe what this data is about\n");
-		sb.append("+\n");
 		sb.append("Basic EDI claim\n");
 		sb.append("No deductible\n");
 		sb.append("\n");
-		sb.append("+\n");
 		sb.append("|===\n");
 		sb.append("| Header1 | Header2\n");
 		sb.append("| data1   | data2  \n");
@@ -52,10 +50,8 @@ public class ParametersFormattingTest extends FormattingTest {
 			sb.append("== Step-Definition: Submit a claim\n");
 			sb.append("\n");
 			sb.append(" *  Step-Parameters:  Describe what this data is about \n");
-			sb.append("+\n");
 			sb.append(" Basic EDI claim \n");
 			sb.append(" No deductible \n");
-			sb.append(" + \n");
 			sb.append(" |=== \n");
 			sb.append(" | Header1 | Header2 \n");
 			sb.append(" | data1   | data2   \n");
@@ -77,11 +73,9 @@ public class ParametersFormattingTest extends FormattingTest {
 			sb.append("== Step-Definition: Submit a claim\n");
 			sb.append("\n");
 			sb.append("*Step-Parameters:Describe what this data is about\n");
-			sb.append("+\n");
 			sb.append("Basic EDI claim\n");
 			sb.append("No deductible\n");
 			sb.append("\n");
-			sb.append("+\n");
 			sb.append("|===\n");
 			sb.append("|Header1 |Header2\n");
 			sb.append("|data1 |data2\n");
@@ -104,14 +98,12 @@ public class ParametersFormattingTest extends FormattingTest {
 			sb.append("\n");
 			sb.append("* Step-Parameters: Describe what this data is about\n");
 			sb.append("\n");
-			sb.append("+\n");
 			sb.append("Basic EDI claim\n");
 			sb.append("No deductible\n");
 			sb.append("\n");
 			sb.append("\n");
 
 			sb.append("\n");
-			sb.append("+\n");
 			sb.append("|===\n");
 			sb.append("\n");
 			sb.append("| Header1 | Header2\n");

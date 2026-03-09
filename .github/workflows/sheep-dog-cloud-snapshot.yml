@@ -3,7 +3,7 @@ name: Publish Sheep Dog Cloud Snapshot
 on:
   workflow_dispatch:
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
     paths:
       - '.github/**'
       - '**/kubernetes/**'

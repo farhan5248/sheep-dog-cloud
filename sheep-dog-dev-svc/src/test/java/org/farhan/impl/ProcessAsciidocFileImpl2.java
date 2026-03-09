@@ -17,4 +17,9 @@ public class ProcessAsciidocFileImpl2 extends FileObject implements ProcessAscii
 		setContent(keyMap.get("Content"));
 	}
 
+	@Override
+	public void setCreatedAsFollows(HashMap<String, String> keyMap) {
+		// TODO implement later
+	}
+
 }

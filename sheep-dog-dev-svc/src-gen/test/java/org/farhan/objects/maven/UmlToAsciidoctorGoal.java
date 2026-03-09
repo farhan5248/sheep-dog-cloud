@@ -6,5 +6,9 @@ public interface UmlToAsciidoctorGoal {
 
     public void transition();
 
+    public void setExecuted(HashMap<String, String> keyMap);
+
+    public void setExecutedWith(HashMap<String, String> keyMap);
+
     public void setTags(HashMap<String, String> keyMap);
 }

@@ -55,6 +55,18 @@ public abstract class TestObject {
         attributes.put("component", component);
     }
 
+    public void setInputOutputsState(String key) {
+        HashMap<String, String> row = new HashMap<String, String>();
+        row.put(key, "true");
+        processInputOutputs(row, "set", "");
+    }
+
+    public void setInputOutputsState(String key, boolean negativeTest) {
+        HashMap<String, String> row = new HashMap<String, String>();
+        row.put(key, Boolean.toString(negativeTest));
+        processInputOutputs(row, "set", "");
+    }
+
     public void setInputOutputsDataTable(DataTable dataTable) {
         processInputOutputs(dataTable, "set", "");
     }
@@ -80,8 +92,17 @@ public abstract class TestObject {
     public void transition() {
     }
 
-    private String cleanName(String name) {
-        return name.replaceAll("[ \\-\\(\\)/]", "");
+    private String convertToPascalCase(String s) {
+        StringBuilder result = new StringBuilder();
+        for (String word : s.split("[ \\-\\(\\)/]+")) {
+            if (!word.isEmpty()) {
+                result.append(Character.toUpperCase(word.charAt(0)));
+                if (word.length() > 1) {
+                    result.append(word.substring(1));
+                }
+            }
+        }
+        return result.toString();
     }
 
     private void processInputOutputs(DataTable dataTable, String operation, String sectionName) {
@@ -103,7 +124,7 @@ public abstract class TestObject {
     private void processInputOutputs(HashMap<String, String> row, String operation, String sectionName) {
         try {
             for (String s : row.keySet()) {
-                this.getClass().getMethod(operation + cleanName(sectionName) + cleanName(s), HashMap.class).invoke(this,
+                this.getClass().getMethod(operation + convertToPascalCase(sectionName) + convertToPascalCase(s), HashMap.class).invoke(this,
                         row);
             }
         } catch (Exception e) {

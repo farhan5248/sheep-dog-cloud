@@ -12,6 +12,7 @@ public class MavenUmlToCucumberGuiceGoalSteps extends TestSteps {
 
     @Given("^The maven plugin uml-to-cucumber-guice goal is executed$")
     public void isExecuted() {
+        object.setInputOutputsState("Executed");
         object.transition();
     }
 }

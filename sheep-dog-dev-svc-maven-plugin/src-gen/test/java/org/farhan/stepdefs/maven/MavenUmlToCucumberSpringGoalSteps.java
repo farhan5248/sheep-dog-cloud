@@ -12,6 +12,7 @@ public class MavenUmlToCucumberSpringGoalSteps extends TestSteps {
 
     @Given("^The maven plugin uml-to-cucumber-spring goal is executed$")
     public void isExecuted() {
+        object.setInputOutputsState("Executed");
         object.transition();
     }
 }

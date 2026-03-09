@@ -21,4 +21,14 @@ public class ObjectPageJavaFileImpl extends FileObject implements ObjectPageJava
 	public void setContent(HashMap<String, String> keyMap) {
 		setContent(keyMap.get("Content"));
 	}
+
+    @Override
+    public void setCreatedAsFollows(HashMap<String, String> keyMap) {
+        // TODO implement later
+    }
+
+    @Override
+    public void assertCreatedAsFollows(HashMap<String, String> keyMap) {
+        // TODO implement later
+    }
 }

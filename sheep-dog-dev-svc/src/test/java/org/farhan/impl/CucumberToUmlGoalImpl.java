@@ -20,4 +20,9 @@ public class CucumberToUmlGoalImpl extends GoalObject implements CucumberToUmlGo
 	public void transition() {
 		runGoal("cucumber", "ConvertCucumberToUML");
 	}
+
+	@Override
+	public void setExecutedWith(HashMap<String, String> keyMap) {
+		// TODO implement later
+	}
 }

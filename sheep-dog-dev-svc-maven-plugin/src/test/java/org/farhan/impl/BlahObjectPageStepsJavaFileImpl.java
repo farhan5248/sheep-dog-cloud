@@ -22,4 +22,14 @@ public class BlahObjectPageStepsJavaFileImpl extends FileObject implements BlahO
 		setContent(keyMap.get("Content"));
 	}
 
+    @Override
+    public void setCreatedAsFollows(HashMap<String, String> keyMap) {
+        // TODO implement later
+    }
+
+    @Override
+    public void assertCreatedAsFollows(HashMap<String, String> keyMap) {
+        // TODO implement later
+    }
+
 }

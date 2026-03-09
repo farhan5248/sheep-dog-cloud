@@ -31,6 +31,11 @@ public class CucumberInterface extends CucumberJava {
         String stepDefinitionName = name.replace(stepObjectName, "").trim();
         if (!StepObjectRefFragments.getObjectEdgeType(name).isEmpty()) {
             addMethod("transition", false);
+            addMethod(
+                    getSetOrAssert(name)
+                            + convertToPascalCase(StepDefinitionRefFragments.getPart(stepDefinitionName))
+                            + convertToPascalCase(StepDefinitionRefFragments.getStateDesc(stepDefinitionName)),
+                    true);
             for (String param : paramList) {
                 addMethod(getSetOrAssert(name)
                         + convertToPascalCase(StepDefinitionRefFragments.getPart(stepDefinitionName))
@@ -42,18 +47,15 @@ public class CucumberInterface extends CucumberJava {
                         + convertToPascalCase(StepDefinitionRefFragments.getPart(stepDefinitionName)) + "Negative",
                         true);
             } else {
-                if (paramList.size() == 0) {
-                    addMethod(
-                            getSetOrAssert(name)
-                                    + convertToPascalCase(StepDefinitionRefFragments.getPart(stepDefinitionName))
-                                    + convertToPascalCase(StepDefinitionRefFragments.getStateDesc(stepDefinitionName)),
-                            true);
-                } else {
-                    for (String param : paramList) {
-                        addMethod(getSetOrAssert(name)
+                addMethod(
+                        getSetOrAssert(name)
                                 + convertToPascalCase(StepDefinitionRefFragments.getPart(stepDefinitionName))
-                                + StringUtils.capitalize(convertToCamelCase(param)), true);
-                    }
+                                + convertToPascalCase(StepDefinitionRefFragments.getStateDesc(stepDefinitionName)),
+                        true);
+                for (String param : paramList) {
+                    addMethod(getSetOrAssert(name)
+                            + convertToPascalCase(StepDefinitionRefFragments.getPart(stepDefinitionName))
+                            + StringUtils.capitalize(convertToCamelCase(param)), true);
                 }
             }
         }

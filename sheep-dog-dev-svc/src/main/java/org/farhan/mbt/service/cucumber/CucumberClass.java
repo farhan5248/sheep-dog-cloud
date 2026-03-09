@@ -43,9 +43,8 @@ public class CucumberClass extends CucumberJava {
                 aMethod.addSingleMemberAnnotation("Given", "\"^" + name + "$\"");
             }
             body = aMethod.createBody();
-            if (paramList.size() == 0 && StepObjectRefFragments.getObjectEdgeType(name).isEmpty()) {
-                body.addStatement("object" + getCallForInputOutputsForState(name) + ";");
-            } else if (paramList.size() == 1 && paramList.get(0).contentEquals("Content")) {
+            body.addStatement("object" + getCallForInputOutputsForState(name) + ";");
+            if (paramList.size() == 1 && paramList.get(0).contentEquals("Content")) {
                 addParameter(aMethod, "String", "docString");
                 body.addStatement("object" + getCallForInputOutputsForDocString(name) + ";");
             } else if (paramList.size() >= 1) {

@@ -22,4 +22,14 @@ public class ProcessFeatureFileImpl extends FileObject implements ProcessFeature
 		setContent(keyMap.get("Content"));
 	}
 
+	@Override
+	public void setCreatedAsFollows(HashMap<String, String> keyMap) {
+		// TODO implement later
+	}
+
+	@Override
+	public void assertCreatedAsFollows(HashMap<String, String> keyMap) {
+		// TODO implement later
+	}
+
 }

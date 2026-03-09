@@ -139,6 +139,8 @@ Feature: Create Code From Documentation
           
           public interface ObjectPage {
           
+              public void setCreatedAsFollows(HashMap<String, String> keyMap);
+          
               public void setGrp(HashMap<String, String> keyMap);
           
               public void setIns(HashMap<String, String> keyMap);
@@ -166,6 +168,7 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
+                  object.setInputOutputsState("Created as follows");
                   object.setInputOutputsDataTable(dataTable);
               }
           
@@ -203,6 +206,7 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
+                  object.setInputOutputsState("Created as follows");
                   object.setInputOutputsDataTable(dataTable);
               }
           
@@ -244,6 +248,7 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
+                  object.setInputOutputsState("Created as follows");
                   object.setInputOutputsDataTable(dataTable);
               }
           

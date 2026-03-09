@@ -1,5 +1,7 @@
 package org.farhan.impl;
 
+import java.util.HashMap;
+
 import org.farhan.common.GoalObject;
 import org.farhan.objects.maven.UmlToCucumberGuiceGoal;
 import org.springframework.context.annotation.Scope;
@@ -13,4 +15,9 @@ public class UmlToCucumberGoalGuiceImpl extends GoalObject implements UmlToCucum
 	public void transition() {
 		runGoal("org.farhan.mbt.maven.UMLToCucumberGuiceMojo", "target/src-gen/" + "code-prj/");
 	}
+
+    @Override
+    public void setExecuted(HashMap<String, String> keyMap) {
+        // TODO implement later
+    }
 }

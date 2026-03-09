@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.farhan.common.GoalObject;
 import org.farhan.objects.maven.AsciidoctorToUmlGoal;
+import org.farhan.runners.failsafe.TestConfig;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Component;
 public class AsciidoctorToUmlGoalImpl extends GoalObject implements AsciidoctorToUmlGoal {
 
 	public void transition() {
-		runGoal("org.farhan.mbt.maven.AsciiDoctorToUMLMojo", "target/src-gen/" + "spec-prj/");
+		runGoal("org.farhan.mbt.maven.AsciiDoctorToUMLMojo", TestConfig.getWorkingDir() + "spec-prj/");
 	}
 
 	@Override
 	public void setTags(HashMap<String, String> keyMap) {
-		attributes.put("tags", keyMap.get("Tags"));
+		properties.put("tags", keyMap.get("Tags"));
 	}
 
     @Override

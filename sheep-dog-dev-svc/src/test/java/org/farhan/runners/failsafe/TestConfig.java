@@ -19,6 +19,10 @@ import org.springframework.context.annotation.ComponentScan;
 @TestPropertySource("classpath:application-failsafe.properties")
 public class TestConfig {
 
+	public static String getWorkingDir() {
+		return "target/src-gen/";
+	}
+
 	public void deleteDir(File aDir) {
 		if (aDir.exists()) {
 			for (String s : aDir.list()) {
@@ -32,8 +36,8 @@ public class TestConfig {
 	}
 
 	@Before
-	public void before() {
-		deleteDir(new File("target/src-gen/"));
+	public void resetTestProject() {
+		deleteDir(new File(getWorkingDir()));
 	}
 
 }

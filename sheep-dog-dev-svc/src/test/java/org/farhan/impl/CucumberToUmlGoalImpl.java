@@ -13,7 +13,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 public class CucumberToUmlGoalImpl extends GoalObject implements CucumberToUmlGoal {
 
 	public void setTags(HashMap<String, String> keyMap) {
-		attributes.put("tags", keyMap.get("Tags"));
+		properties.put("tags", keyMap.get("Tags"));
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.farhan.common.GoalObject;
 import org.farhan.objects.maven.UmlToCucumberGoal;
+import org.farhan.runners.failsafe.TestConfig;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 @Component
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Component;
 public class UmlToCucumberGoalImpl extends GoalObject implements UmlToCucumberGoal {
 
 	public void transition() {
-		runGoal("org.farhan.mbt.maven.UMLToCucumberMojo", "target/src-gen/" + "code-prj/");
+		runGoal("org.farhan.mbt.maven.UMLToCucumberMojo", TestConfig.getWorkingDir() + "code-prj/");
 	}
 
 	@Override
 	public void setTags(HashMap<String, String> keyMap) {
-		attributes.put("tags", keyMap.get("Tags"));
+		properties.put("tags", keyMap.get("Tags"));
 	}
 
     @Override

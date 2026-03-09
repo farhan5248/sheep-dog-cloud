@@ -19,7 +19,7 @@ import io.cucumber.spring.CucumberContextConfiguration;
 
 @ComponentScan(basePackages = { "org.farhan.impl" })
 @EnableAutoConfiguration
-@ActiveProfiles("failsafe")
+@ActiveProfiles("surefire")
 @CucumberContextConfiguration
 @ContextConfiguration(classes = TestConfig.class)
 @TestPropertySource("classpath:application-surefire.properties")
@@ -30,6 +30,10 @@ import io.cucumber.spring.CucumberContextConfiguration;
 public class TestConfig {
 
 	public static String scenarioId = null;
+
+	public static String getWorkingDir() {
+		return "target/src-gen/";
+	}
 
 	public void deleteDir(File aDir) {
 		if (aDir.exists()) {
@@ -44,8 +48,8 @@ public class TestConfig {
 	}
 
 	@Before
-	public void before(Scenario scenario) {
-		deleteDir(new File("target/src-gen/"));
+	public void resetTestProject(Scenario scenario) {
+		deleteDir(new File(getWorkingDir()));
 		scenarioId = scenario.getName();
 	}
 }

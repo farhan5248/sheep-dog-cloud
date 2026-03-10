@@ -2,7 +2,7 @@ package org.farhan.impl;
 
 import java.util.HashMap;
 
-import org.farhan.common.FileObject;
+import org.farhan.common.TestObjectFile;
 import org.farhan.objects.codeprj.srcgen.test.java.org.farhan.objects.blah.ObjectPageJavaFile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,11 +10,11 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class ObjectPageJavaFileImpl extends FileObject implements ObjectPageJavaFile {
+public class ObjectPageJavaFileImpl extends TestObjectFile implements ObjectPageJavaFile {
 
 	@Override
-	public void assertContent(HashMap<String, String> keyMap) {
-		assertContent(keyMap.get("Content"));
+	public String getContent(HashMap<String, String> keyMap) {
+		return getContent();
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class ObjectPageJavaFileImpl extends FileObject implements ObjectPageJava
     }
 
     @Override
-    public void assertCreatedAsFollows(HashMap<String, String> keyMap) {
-        // TODO implement later
+    public String getCreatedAsFollows(HashMap<String, String> keyMap) {
+        return getObjectExists();
     }
 }

@@ -4,14 +4,14 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 import java.util.HashMap;
 
-import org.farhan.common.GoalObject;
+import org.farhan.common.TestObjectGoal;
 import org.farhan.objects.maven.UmlToCucumberGoal;
 import org.farhan.runners.failsafe.TestConfig;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class UmlToCucumberGoalImpl extends GoalObject implements UmlToCucumberGoal {
+public class UmlToCucumberGoalImpl extends TestObjectGoal implements UmlToCucumberGoal {
 
 	public void transition() {
 		runGoal("org.farhan.mbt.maven.UMLToCucumberMojo", TestConfig.getWorkingDir() + "code-prj/");

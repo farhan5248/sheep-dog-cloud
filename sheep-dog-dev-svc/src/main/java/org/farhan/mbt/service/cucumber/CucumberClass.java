@@ -107,7 +107,7 @@ public class CucumberClass extends CucumberJava {
 
     private String getSectionArg(String step) {
         String stepObjectName = StepObjectRefFragments.getAll(step);
-        String section = convertToPascalCase(StepDefinitionRefFragments.getPart(step.replace(stepObjectName, "")));
+        String section = StepDefinitionRefFragments.getPart(step.replace(stepObjectName, ""));
         if (!section.isEmpty()) {
             section = ", \"" + section + "\"";
         }

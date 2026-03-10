@@ -3,6 +3,7 @@ package org.farhan.common;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 
 import com.google.inject.Injector;
@@ -16,39 +17,39 @@ public abstract class TestObject {
     protected HashMap<String, Object> properties = new HashMap<String, Object>();
 
     public void assertInputOutputsDataTable(DataTable dataTable) {
-        processInputOutputs(dataTable, "assert", "", false);
+        processInputOutputs(dataTable, "get", "", false);
     }
 
     public void assertInputOutputsDataTable(DataTable dataTable, String sectionName) {
-        processInputOutputs(dataTable, "assert", sectionName, false);
+        processInputOutputs(dataTable, "get", sectionName, false);
     }
 
     public void assertInputOutputsDataTable(DataTable dataTable, String sectionName, boolean negativeTest) {
-        processInputOutputs(dataTable, "assert", sectionName, negativeTest);
+        processInputOutputs(dataTable, "get", sectionName, negativeTest);
     }
 
     public void assertInputOutputsDocString(String key, String value) {
-        processInputOutputs(key, value, "assert", "", false);
+        processInputOutputs(key, value, "get", "", false);
     }
 
     public void assertInputOutputsState(String key) {
-        processInputOutputs(key, "true", "assert", "", false);
+        processInputOutputs(key, "true", "get", "", false);
     }
 
     public void assertInputOutputsState(String key, boolean negativeTest) {
-        processInputOutputs(key, "true", "assert", "", negativeTest);
+        processInputOutputs(key, "true", "get", "", negativeTest);
     }
 
     public void assertInputOutputsState(String key, String sectionName) {
-        processInputOutputs(key, "", "assert", sectionName, false);
+        processInputOutputs(key, "", "get", sectionName, false);
     }
 
     public void assertInputOutputsState(String key, String value, String sectionName) {
-        processInputOutputs(key, value, "assert", sectionName, false);
+        processInputOutputs(key, value, "get", sectionName, false);
     }
 
     public void assertInputOutputsState(String key, String sectionName, boolean negativeTest) {
-        processInputOutputs(key, "", "assert", sectionName, negativeTest);
+        processInputOutputs(key, "", "get", sectionName, negativeTest);
     }
 
     public void setInputOutputsDataTable(DataTable dataTable) {
@@ -95,13 +96,12 @@ public abstract class TestObject {
         return null;
     }
 
-    protected String listToString(ArrayList<?> proposals) {
-        StringBuilder sb = new StringBuilder();
-        for (Object p : proposals) {
-            sb.append("\n").append(p.toString());
-        }
-        return sb.toString();
+    protected String listToString(List<?> list) {
+        if (list == null) return null;
+        if (list.isEmpty()) return "";
+        return list.toString();
     }
+
 
     protected void processInputOutputs(DataTable dataTable, String operation, String sectionName,
             boolean negativeTest) {
@@ -126,8 +126,21 @@ public abstract class TestObject {
             } else {
                 for (String fieldName : headers) {
                     try {
-                        this.getClass().getMethod(operation + convertToPascalCase(sectionName)
+                        Object returnValue = this.getClass().getMethod(operation + convertToPascalCase(sectionName)
                                 + convertToPascalCase(fieldName), HashMap.class).invoke(this, row);
+                        if (operation.equals("get") && !fieldName.contains("Node Path") && !fieldName.equals("Tag List")) {
+                            String expected = replaceKeyword(row.get(fieldName));
+                            String actual = returnValue == null ? null : returnValue.toString();
+                            if (fieldName.equals("State") && (expected.equals("Absent") || expected.equals("Empty") || expected.equals("Present"))) {
+                                String mappedActual;
+                                if (actual == null) mappedActual = "Absent";
+                                else if (actual.isEmpty()) mappedActual = "Empty";
+                                else mappedActual = "Present";
+                                Assertions.assertEquals(expected, mappedActual);
+                            } else {
+                                Assertions.assertEquals(expected, actual);
+                            }
+                        }
                     } catch (Exception e) {
                         Assertions.fail(e);
                     }
@@ -147,9 +160,17 @@ public abstract class TestObject {
                         operation + convertToPascalCase(sectionName) + "Negative",
                         HashMap.class).invoke(this, row);
             } else {
-                this.getClass().getMethod(
+                Object returnValue = this.getClass().getMethod(
                         operation + convertToPascalCase(sectionName) + convertToPascalCase(key),
                         HashMap.class).invoke(this, row);
+                if (operation.equals("get")) {
+                    String actual = returnValue == null ? null : returnValue.toString();
+                    if (value.equals("true")) {
+                        Assertions.assertNotNull(actual);
+                    } else if (!value.isEmpty()) {
+                        Assertions.assertEquals(replaceKeyword(value), actual);
+                    }
+                }
             }
         } catch (Exception e) {
             Assertions.fail(e);

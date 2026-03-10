@@ -18,11 +18,23 @@ public class CucumberInterface extends CucumberJava {
     public MethodDeclaration addMethod(String methodName, boolean hasParams) {
         MethodDeclaration aMethod = super.addMethod(methodName);
         aMethod.removeBody();
+        if (methodName.startsWith("get")) {
+            aMethod.setType("String");
+        }
         if (hasParams) {
             theJavaClass.addImport("java.util.HashMap");
             addParameter(aMethod, "HashMap<String, String>", "keyMap");
         }
         return aMethod;
+    }
+
+    @Override
+    protected String getSetOrAssert(String stepName) throws Exception {
+        String result = super.getSetOrAssert(stepName);
+        if (result.equals("assert")) {
+            return "get";
+        }
+        return result;
     }
 
     public void addStepDefinition(String name, ArrayList<String> paramList) throws Exception {

@@ -118,8 +118,11 @@ public abstract class TestObject {
             }
             if (negativeTest) {
                 try {
-                    this.getClass().getMethod(operation + convertToPascalCase(sectionName)
+                    Object returnValue = this.getClass().getMethod(operation + convertToPascalCase(sectionName)
                             + "Negative", HashMap.class).invoke(this, row);
+                    if (operation.equals("get")) {
+                        Assertions.assertNotNull(returnValue == null ? null : returnValue.toString());
+                    }
                 } catch (Exception e) {
                     Assertions.fail(e);
                 }

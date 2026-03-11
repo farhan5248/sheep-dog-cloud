@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.StringUtils;
 import org.farhan.dsl.grammar.StepDefinitionRefFragments;
 import org.farhan.dsl.grammar.StepObjectRefFragments;
-import org.farhan.dsl.grammar.StepDefinitionRefStateTypes;
+
 import org.farhan.mbt.core.IConvertibleObject;
 
 import com.github.javaparser.JavaParser;
@@ -137,11 +137,6 @@ public abstract class CucumberJava implements IConvertibleObject {
 
     protected ClassOrInterfaceDeclaration getType() {
         return (ClassOrInterfaceDeclaration) theJavaClass.getType(0);
-    }
-
-    protected boolean isNegativeStep(String text) {
-        return StepDefinitionRefFragments.getState(text).contains(StepDefinitionRefStateTypes.ISNT.value)
-                || StepDefinitionRefFragments.getState(text).contains(StepDefinitionRefStateTypes.WONT_BE.value);
     }
 
 }

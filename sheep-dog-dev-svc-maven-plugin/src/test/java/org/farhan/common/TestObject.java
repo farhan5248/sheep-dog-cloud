@@ -152,46 +152,41 @@ public abstract class TestObject {
             for (int j = 0; j < headers.size(); j++) {
                 row.put(headers.get(j), data.get(i).get(j));
             }
-            if (negativeTest) {
+            for (String fieldName : headers) {
                 try {
                     Object returnValue = this.getClass()
-                            .getMethod(operation + convertToPascalCase(sectionName) + "Negative", HashMap.class)
+                            .getMethod(
+                                    operation + convertToPascalCase(sectionName) + convertToPascalCase(fieldName),
+                                    HashMap.class)
                             .invoke(this, row);
-                    if (operation.equals("get")) {
-                        Assertions.assertNotNull(returnValue == null ? null : returnValue.toString());
-                    }
-                } catch (Exception e) {
-                    Assertions.fail(e);
-                }
-            } else {
-                for (String fieldName : headers) {
-                    try {
-                        Object returnValue = this.getClass()
-                                .getMethod(
-                                        operation + convertToPascalCase(sectionName) + convertToPascalCase(fieldName),
-                                        HashMap.class)
-                                .invoke(this, row);
-                        if (operation.equals("get") && !fieldName.contains("Node Path")
-                                && !fieldName.equals("Tag List")) {
-                            String expected = replaceKeyword(row.get(fieldName));
-                            String actual = returnValue == null ? null : returnValue.toString();
-                            if (fieldName.equals("State") && (expected.equals("Absent") || expected.equals("Empty")
-                                    || expected.equals("Present"))) {
-                                String mappedActual;
-                                if (actual == null)
-                                    mappedActual = "Absent";
-                                else if (actual.isEmpty())
-                                    mappedActual = "Empty";
-                                else
-                                    mappedActual = "Present";
+                    if (operation.equals("get") && !fieldName.contains("Node Path")
+                            && !fieldName.equals("Tag List")) {
+                        String expected = replaceKeyword(row.get(fieldName));
+                        String actual = returnValue == null ? null : returnValue.toString();
+                        if (fieldName.equals("State") && (expected.equals("Absent") || expected.equals("Empty")
+                                || expected.equals("Present"))) {
+                            String mappedActual;
+                            if (actual == null)
+                                mappedActual = "Absent";
+                            else if (actual.isEmpty())
+                                mappedActual = "Empty";
+                            else
+                                mappedActual = "Present";
+                            if (negativeTest) {
+                                Assertions.assertNotEquals(expected, mappedActual);
+                            } else {
                                 Assertions.assertEquals(expected, mappedActual);
+                            }
+                        } else {
+                            if (negativeTest) {
+                                Assertions.assertNotEquals(expected, actual);
                             } else {
                                 Assertions.assertEquals(expected, actual);
                             }
                         }
-                    } catch (Exception e) {
-                        Assertions.fail(e);
                     }
+                } catch (Exception e) {
+                    Assertions.fail(e);
                 }
             }
         }
@@ -203,16 +198,19 @@ public abstract class TestObject {
         HashMap<String, String> row = new HashMap<String, String>();
         row.put(key, value);
         try {
-            if (negativeTest) {
-                this.getClass().getMethod(operation + convertToPascalCase(sectionName) + "Negative", HashMap.class)
-                        .invoke(this, row);
-            } else {
-                Object returnValue = this.getClass()
-                        .getMethod(operation + convertToPascalCase(sectionName) + convertToPascalCase(key),
-                                HashMap.class)
-                        .invoke(this, row);
-                if (operation.equals("get")) {
-                    String actual = returnValue == null ? null : returnValue.toString();
+            Object returnValue = this.getClass()
+                    .getMethod(operation + convertToPascalCase(sectionName) + convertToPascalCase(key),
+                            HashMap.class)
+                    .invoke(this, row);
+            if (operation.equals("get")) {
+                String actual = returnValue == null ? null : returnValue.toString();
+                if (negativeTest) {
+                    if (value.equals("true")) {
+                        Assertions.assertNull(actual);
+                    } else if (!value.isEmpty()) {
+                        Assertions.assertNotEquals(replaceKeyword(value), actual);
+                    }
+                } else {
                     if (value.equals("true")) {
                         Assertions.assertNotNull(actual);
                     } else if (!value.isEmpty()) {

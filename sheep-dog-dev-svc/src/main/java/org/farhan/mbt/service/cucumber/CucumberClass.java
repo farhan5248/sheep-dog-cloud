@@ -43,54 +43,31 @@ public class CucumberClass extends CucumberJava {
                 aMethod.addSingleMemberAnnotation("Given", "\"^" + name + "$\"");
             }
             body = aMethod.createBody();
-            body.addStatement("object" + getCallForInputOutputsForState(name) + ";");
+            boolean isEdge = !StepObjectRefFragments.getObjectEdgeType(name).isEmpty();
+            String stepType = isEdge ? "EdgeStep" : "VertexStep";
+            String setOrAssert = isEdge ? "do" : getSetOrAssert(name);
+            String partDesc = StepDefinitionRefFragments.getPartDesc(stepDefinitionName);
+            String partType = StepDefinitionRefFragments.getPartType(stepDefinitionName);
+            String stateType = StepDefinitionRefFragments.getStateType(stepDefinitionName);
+            String stateDesc = StepDefinitionRefFragments.getStateDesc(stepDefinitionName);
+            String args = "\"" + partDesc + "\", \"" + partType + "\", \"" + stateType + "\", \"" + stateDesc + "\"";
             if (paramList.size() == 1 && paramList.get(0).contentEquals("Content")) {
                 addParameter(aMethod, "String", "docString");
-                body.addStatement("object" + getCallForInputOutputsForDocString(name) + ";");
+                body.addStatement("object." + setOrAssert + stepType + "(" + args + ", docString);");
             } else if (paramList.size() >= 1) {
                 theJavaClass.addImport("io.cucumber.datatable.DataTable");
                 addParameter(aMethod, "DataTable", "dataTable");
-                body.addStatement("object" + getCallForInputOutputsForDataTable(name) + ";");
-            }
-            if (!StepObjectRefFragments.getObjectEdgeType(name).isEmpty()) {
-                body.addStatement("object" + getCallForTransition() + ";");
+                body.addStatement("object." + setOrAssert + stepType + "(" + args + ", dataTable);");
+            } else {
+                body.addStatement("object." + setOrAssert + stepType + "(" + args + ");");
             }
         }
-    }
-
-    private String getCallForInputOutputsForDataTable(String step) throws Exception {
-        return "." + getSetOrAssert(step) + "InputOutputsDataTable(" + "dataTable" + getSectionArg(step) + getNegativeArg(step)
-                + ")";
-    }
-
-    private String getCallForInputOutputsForDocString(String step) throws Exception {
-        return "." + getSetOrAssert(step) + "InputOutputsDocString(" + "\"Content\", docString" + getSectionArg(step)
-                + getNegativeArg(step) + ")";
-    }
-
-    private String getCallForInputOutputsForState(String step) throws Exception {
-        String stepObjectName = StepObjectRefFragments.getAll(step);
-        return "." + getSetOrAssert(step) + "InputOutputsState(\""
-                + StringUtils.capitalize(StepDefinitionRefFragments.getStateDesc(step.replace(stepObjectName, "")))
-                + "\"" + getSectionArg(step) + getNegativeArg(step) + ")";
-    }
-
-    private String getCallForTransition() {
-        return ".transition()";
     }
 
     protected String getInterfaceName(String step) {
         String nameParts[] = StepObjectRefFragments.getObjectName(step).split("/");
         String name = nameParts[nameParts.length - 1];
         return convertToPascalCase(name) + StringUtils.capitalize(StepObjectRefFragments.getObjectType(step));
-    }
-
-    private String getNegativeArg(String step) {
-        if (isNegativeStep(step)) {
-            return ", true";
-        } else {
-            return "";
-        }
     }
 
     protected String getObjectNameFromPath(String thePath) {
@@ -105,12 +82,4 @@ public class CucumberClass extends CucumberJava {
         return objectName;
     }
 
-    private String getSectionArg(String step) {
-        String stepObjectName = StepObjectRefFragments.getAll(step);
-        String section = StepDefinitionRefFragments.getPart(step.replace(stepObjectName, ""));
-        if (!section.isEmpty()) {
-            section = ", \"" + section + "\"";
-        }
-        return section;
-    }
 }

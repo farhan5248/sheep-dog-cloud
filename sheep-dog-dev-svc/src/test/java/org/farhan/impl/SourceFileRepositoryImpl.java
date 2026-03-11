@@ -1,4 +1,4 @@
-package org.farhan.common;
+package org.farhan.impl;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -9,15 +9,15 @@ import java.util.ArrayList;
 
 import org.farhan.dsl.grammar.IResourceRepository;
 
-public class SourceFileRepository implements IResourceRepository {
+public class SourceFileRepositoryImpl implements IResourceRepository {
 
 	private final String BASEDIR;
 
-	public SourceFileRepository() {
+	public SourceFileRepositoryImpl() {
 		BASEDIR = "target/src-gen/";
 	}
 
-	public SourceFileRepository(String baseDir) {
+	public SourceFileRepositoryImpl(String baseDir) {
 		BASEDIR = baseDir;
 	}
 
@@ -28,7 +28,7 @@ public class SourceFileRepository implements IResourceRepository {
 
 	@Override
 	public boolean contains(String tags, String path) {
-		path = BASEDIR + "/" + path;
+		path = BASEDIR + path;
 		return new File(path).exists();
 	}
 
@@ -51,7 +51,7 @@ public class SourceFileRepository implements IResourceRepository {
 
 	@Override
 	public String get(String tags, String path) throws Exception {
-		path = BASEDIR + "/" + path;
+		path = BASEDIR + path;
 		return new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 	}
 
@@ -76,7 +76,7 @@ public class SourceFileRepository implements IResourceRepository {
 
 	@Override
 	public void put(String tags, String path, String content) throws Exception {
-		path = BASEDIR + "/" + path;
+		path = BASEDIR + path;
 		new File(path).getParentFile().mkdirs();
 		PrintWriter pw = new PrintWriter(path, StandardCharsets.UTF_8);
 		pw.write(content);

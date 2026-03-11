@@ -12,13 +12,11 @@ public class SpecPrjProcessAsciidocFileSteps extends TestSteps {
 
     @Given("^The spec-prj project src/test/resources/asciidoc/specs/app/Process.asciidoc file is created as follows$")
     public void isCreatedAsFollows(String docString) {
-        object.setInputOutputsState("Created as follows");
-        object.setInputOutputsDocString("Content", docString);
+        object.setVertexStep("", "", "is", "created as follows", docString);
     }
 
     @Given("^The spec-prj project src/test/resources/asciidoc/specs/app/Process.asciidoc file will be created as follows$")
     public void willBeCreatedAsFollows(String docString) {
-        object.assertInputOutputsState("Created as follows");
-        object.assertInputOutputsDocString("Content", docString);
+        object.assertVertexStep("", "", "will be", "created as follows", docString);
     }
 }

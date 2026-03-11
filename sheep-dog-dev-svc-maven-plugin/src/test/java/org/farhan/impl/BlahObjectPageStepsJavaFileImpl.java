@@ -2,7 +2,6 @@ package org.farhan.impl;
 
 import java.util.HashMap;
 
-import org.farhan.common.TestObjectFile;
 import org.farhan.objects.codeprj.srcgen.test.java.org.farhan.stepdefs.blah.BlahObjectPageStepsJavaFile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class BlahObjectPageStepsJavaFileImpl extends TestObjectFile implements BlahObjectPageStepsJavaFile {
+public class BlahObjectPageStepsJavaFileImpl extends TestObjectFileImpl implements BlahObjectPageStepsJavaFile {
 
 	@Override
 	public String getContent(HashMap<String, String> keyMap) {

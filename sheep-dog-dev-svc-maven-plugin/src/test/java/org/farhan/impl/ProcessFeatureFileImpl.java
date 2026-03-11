@@ -2,7 +2,6 @@ package org.farhan.impl;
 
 import java.util.HashMap;
 
-import org.farhan.common.TestObjectFile;
 import org.farhan.objects.codeprj.srcgen.test.resources.cucumber.specs.app.ProcessFeatureFile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class ProcessFeatureFileImpl extends TestObjectFile implements ProcessFeatureFile {
+public class ProcessFeatureFileImpl extends TestObjectFileImpl implements ProcessFeatureFile {
 
 	@Override
 	public String getContent(HashMap<String, String> keyMap) {

@@ -1,11 +1,12 @@
-package org.farhan.common;
+package org.farhan.impl;
 
+import org.farhan.common.TestObject;
 import org.farhan.mbt.maven.MBTMojo;
 import org.farhan.runners.surefire.TestConfig;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Value;
 
-public abstract class TestObjectGoal extends TestObject {
+public abstract class TestObjectGoalImpl extends TestObject {
 
 	@Value("${sheepdog.host:dev.sheepdogdev.io}")
 	private String serverHost;
@@ -16,7 +17,7 @@ public abstract class TestObjectGoal extends TestObject {
 	@Value("${sheepdog.timeout:120000}")
 	private int timeout;
 
-	public TestObjectGoal() {
+	public TestObjectGoalImpl() {
 		properties.put("tags", "");
 	}
 

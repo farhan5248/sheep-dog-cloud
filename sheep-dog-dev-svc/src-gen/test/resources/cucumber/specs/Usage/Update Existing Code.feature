@@ -78,7 +78,7 @@ Feature: Update Existing Code
           
               @Given("^The blah application Object page is empty$")
               public void isEmpty() {
-                  object.setInputOutputsState("Empty");
+                  object.setVertexStep("", "", "is", "empty");
               }
           }
           """

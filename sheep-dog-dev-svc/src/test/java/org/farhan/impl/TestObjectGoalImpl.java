@@ -1,9 +1,10 @@
-package org.farhan.common;
+package org.farhan.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.farhan.common.TestObject;
 import org.farhan.mbt.model.TransformableFile;
 import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
@@ -15,13 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-public class TestObjectGoal extends TestObject {
-	private static final Logger logger = LoggerFactory.getLogger(TestObjectGoal.class);
+public class TestObjectGoalImpl extends TestObject {
+	private static final Logger logger = LoggerFactory.getLogger(TestObjectGoalImpl.class);
 	private final RestTemplate restTemplate;
 	// TODO make this a property
 	private final int RETRY_COUNT = 60;
 
-	public TestObjectGoal() {
+	public TestObjectGoalImpl() {
 		properties.put("tags", "");
 		restTemplate = new RestTemplate();
 		// TODO add a property for this
@@ -125,7 +126,7 @@ public class TestObjectGoal extends TestObject {
 
 	protected void runGoal(String resource, String goal) {
 
-		SourceFileRepository sr = new SourceFileRepository();
+		SourceFileRepositoryImpl sr = new SourceFileRepositoryImpl();
 		String[] dirs = { "src/test/resources/asciidoc/", "src-gen/test/resources/cucumber/" };
 		try {
 			waitForService();

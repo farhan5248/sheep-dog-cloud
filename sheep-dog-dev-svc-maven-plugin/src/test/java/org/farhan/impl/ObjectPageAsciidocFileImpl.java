@@ -2,7 +2,6 @@ package org.farhan.impl;
 
 import java.util.HashMap;
 
-import org.farhan.common.TestObjectFile;
 import org.farhan.objects.specprj.src.test.resources.asciidoc.stepdefs.blahapplication.ObjectPageAsciidocFile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class ObjectPageAsciidocFileImpl extends TestObjectFile implements ObjectPageAsciidocFile {
+public class ObjectPageAsciidocFileImpl extends TestObjectFileImpl implements ObjectPageAsciidocFile {
 
 	@Override
 	public String getContent(HashMap<String, String> keyMap) {

@@ -4,7 +4,5 @@ import java.util.HashMap;
 
 public interface UmlToCucumberGuiceGoal {
 
-    public void transition();
-
     public void setExecuted(HashMap<String, String> keyMap);
 }

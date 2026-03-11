@@ -168,18 +168,17 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
-                  object.setInputOutputsState("Created as follows");
-                  object.setInputOutputsDataTable(dataTable);
+                  object.setVertexStep("", "", "is", "created as follows", dataTable);
               }
           
               @Given("^The blah application Object page is invalid$")
               public void isInvalid() {
-                  object.setInputOutputsState("Invalid");
+                  object.setVertexStep("", "", "is", "invalid");
               }
           
               @Given("^The blah application Object page is valid$")
               public void isValid() {
-                  object.setInputOutputsState("Valid");
+                  object.setVertexStep("", "", "is", "valid");
               }
           }
           """
@@ -206,18 +205,17 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
-                  object.setInputOutputsState("Created as follows");
-                  object.setInputOutputsDataTable(dataTable);
+                  object.setVertexStep("", "", "is", "created as follows", dataTable);
               }
           
               @Given("^The blah application Object page is invalid$")
               public void isInvalid() {
-                  object.setInputOutputsState("Invalid");
+                  object.setVertexStep("", "", "is", "invalid");
               }
           
               @Given("^The blah application Object page is valid$")
               public void isValid() {
-                  object.setInputOutputsState("Valid");
+                  object.setVertexStep("", "", "is", "valid");
               }
           }
           """
@@ -248,18 +246,17 @@ Feature: Create Code From Documentation
           
               @Given("^The blah application Object page is created as follows$")
               public void isCreatedAsFollows(DataTable dataTable) {
-                  object.setInputOutputsState("Created as follows");
-                  object.setInputOutputsDataTable(dataTable);
+                  object.setVertexStep("", "", "is", "created as follows", dataTable);
               }
           
               @Given("^The blah application Object page is invalid$")
               public void isInvalid() {
-                  object.setInputOutputsState("Invalid");
+                  object.setVertexStep("", "", "is", "invalid");
               }
           
               @Given("^The blah application Object page is valid$")
               public void isValid() {
-                  object.setInputOutputsState("Valid");
+                  object.setVertexStep("", "", "is", "valid");
               }
           }
           """

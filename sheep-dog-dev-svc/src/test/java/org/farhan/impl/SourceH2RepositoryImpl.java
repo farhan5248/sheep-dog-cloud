@@ -1,4 +1,4 @@
-package org.farhan.common;
+package org.farhan.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Profile("surefire")
-public class SourceH2Repository implements IResourceRepository {
+public class SourceH2RepositoryImpl implements IResourceRepository {
 
 	private final ModelSourceFileRepository repository;
 
-	public SourceH2Repository(ModelSourceFileRepository repository) {
+	public SourceH2RepositoryImpl(ModelSourceFileRepository repository) {
 		this.repository = repository;
 	}
 

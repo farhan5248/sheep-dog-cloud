@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 public interface UmlToCucumberGoal {
 
-    public void transition();
-
     public void setExecuted(HashMap<String, String> keyMap);
 
     public void setExecutedWith(HashMap<String, String> keyMap);

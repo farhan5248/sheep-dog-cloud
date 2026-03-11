@@ -14,73 +14,108 @@ import io.cucumber.datatable.DataTable;
 public abstract class TestObject {
 
     protected static Injector injector;
-    protected HashMap<String, Object> properties = new HashMap<String, Object>();
+    public HashMap<String, Object> properties = new HashMap<String, Object>();
 
-    public void assertInputOutputsDataTable(DataTable dataTable) {
-        processInputOutputs(dataTable, "get", "", false);
+    public void assertVertexStep(String partDesc, String partType, String stateType, String stateDesc) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsStepDefinitionRef(stateDesc, "get", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void assertInputOutputsDataTable(DataTable dataTable, String sectionName) {
-        processInputOutputs(dataTable, "get", sectionName, false);
+    public void assertVertexStep(String partDesc, String partType, String stateType, String stateDesc,
+            DataTable dataTable) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsStepDefinitionRef(stateDesc, "get", partDesc, partType, stateType);
+        processInputOutputsTable(dataTable, "get", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void assertInputOutputsDataTable(DataTable dataTable, String sectionName, boolean negativeTest) {
-        processInputOutputs(dataTable, "get", sectionName, negativeTest);
+    public void assertVertexStep(String partDesc, String partType, String stateType, String stateDesc, String text) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsStepDefinitionRef(stateDesc, "get", partDesc, partType, stateType);
+        processInputOutputsText(text, "get", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void assertInputOutputsDocString(String key, String value) {
-        processInputOutputs(key, value, "get", "", false);
+    public void doEdgeStep(String partDesc, String partType, String stateType, String stateDesc) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsStepDefinitionRef(stateDesc, "set", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void assertInputOutputsState(String key) {
-        processInputOutputs(key, "true", "get", "", false);
+    public void doEdgeStep(String partDesc, String partType, String stateType, String stateDesc, DataTable dataTable) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsTable(dataTable, "set", partDesc, partType, stateType);
+        processInputOutputsStepDefinitionRef(stateDesc, "set", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void assertInputOutputsState(String key, boolean negativeTest) {
-        processInputOutputs(key, "true", "get", "", negativeTest);
+    public void doEdgeStep(String partDesc, String partType, String stateType, String stateDesc, String text) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsText(text, "set", partDesc, partType, stateType);
+        processInputOutputsStepDefinitionRef(stateDesc, "set", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void assertInputOutputsState(String key, String sectionName) {
-        processInputOutputs(key, "", "get", sectionName, false);
+    public void setVertexStep(String partDesc, String partType, String stateType, String stateDesc) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsStepDefinitionRef(stateDesc, "set", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void assertInputOutputsState(String key, String value, String sectionName) {
-        processInputOutputs(key, value, "get", sectionName, false);
+    public void setVertexStep(String partDesc, String partType, String stateType, String stateDesc,
+            DataTable dataTable) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsStepDefinitionRef(stateDesc, "set", partDesc, partType, stateType);
+        processInputOutputsTable(dataTable, "set", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void assertInputOutputsState(String key, String sectionName, boolean negativeTest) {
-        processInputOutputs(key, "", "get", sectionName, negativeTest);
+    public void setVertexStep(String partDesc, String partType, String stateType, String stateDesc, String text) {
+        putProperties(partDesc, partType, stateType, stateDesc);
+        processInputOutputsStepDefinitionRef(stateDesc, "set", partDesc, partType, stateType);
+        processInputOutputsText(text, "set", partDesc, partType, stateType);
+        removeProperties();
     }
 
-    public void setInputOutputsDataTable(DataTable dataTable) {
-        processInputOutputs(dataTable, "set", "", false);
+    private String convertToPascalCase(String s) {
+        StringBuilder result = new StringBuilder();
+        for (String word : s.split("[ \\-\\(\\)/]+")) {
+            if (!word.isEmpty()) {
+                result.append(Character.toUpperCase(word.charAt(0)));
+                if (word.length() > 1) {
+                    result.append(word.substring(1));
+                }
+            }
+        }
+        return result.toString();
     }
 
-    public void setInputOutputsDataTable(DataTable dataTable, String sectionName) {
-        processInputOutputs(dataTable, "set", sectionName, false);
+    private void processInputOutputsStepDefinitionRef(String stateDesc, String operation, String partDesc,
+            String partType, String stateType) {
+        boolean negativeTest = false;
+        if (stateType.contentEquals("isn't") || stateType.contentEquals("won't be")) {
+            negativeTest = true;
+        }
+        processInputOutputs(stateDesc, "", operation, (partDesc + " " + partType).trim(), negativeTest);
     }
 
-    public void setInputOutputsDataTable(DataTable dataTable, String sectionName, boolean negativeTest) {
-        processInputOutputs(dataTable, "set", sectionName, negativeTest);
+    private void processInputOutputsTable(DataTable dataTable, String operation, String partDesc, String partType,
+            String stateType) {
+        boolean negativeTest = false;
+        if (stateType.contentEquals("isn't") || stateType.contentEquals("won't be")) {
+            negativeTest = true;
+        }
+        processInputOutputs(dataTable, operation, (partDesc + " " + partType).trim(), negativeTest);
     }
 
-    public void setInputOutputsDocString(String key, String value) {
-        processInputOutputs(key, value, "set", "", false);
-    }
-
-    public void setInputOutputsState(String key) {
-        processInputOutputs(key, "true", "set", "", false);
-    }
-
-    public void setInputOutputsState(String key, boolean negativeTest) {
-        processInputOutputs(key, "true", "set", "", negativeTest);
-    }
-
-    public void setPart(String part) {
-        properties.put("part", part);
-    }
-
-    public void transition() {
+    private void processInputOutputsText(String text, String operation, String partDesc, String partType,
+            String stateType) {
+        boolean negativeTest = false;
+        if (stateType.contentEquals("isn't") || stateType.contentEquals("won't be")) {
+            negativeTest = true;
+        }
+        processInputOutputs("Content", text, operation, (partDesc + " " + partType).trim(), negativeTest);
     }
 
     protected TestObject getTestObjectClass(String contains, String startsWith) throws Exception {
@@ -97,11 +132,12 @@ public abstract class TestObject {
     }
 
     protected String listToString(List<?> list) {
-        if (list == null) return null;
-        if (list.isEmpty()) return "";
+        if (list == null)
+            return null;
+        if (list.isEmpty())
+            return "";
         return list.toString();
     }
-
 
     protected void processInputOutputs(DataTable dataTable, String operation, String sectionName,
             boolean negativeTest) {
@@ -118,8 +154,9 @@ public abstract class TestObject {
             }
             if (negativeTest) {
                 try {
-                    Object returnValue = this.getClass().getMethod(operation + convertToPascalCase(sectionName)
-                            + "Negative", HashMap.class).invoke(this, row);
+                    Object returnValue = this.getClass()
+                            .getMethod(operation + convertToPascalCase(sectionName) + "Negative", HashMap.class)
+                            .invoke(this, row);
                     if (operation.equals("get")) {
                         Assertions.assertNotNull(returnValue == null ? null : returnValue.toString());
                     }
@@ -129,16 +166,24 @@ public abstract class TestObject {
             } else {
                 for (String fieldName : headers) {
                     try {
-                        Object returnValue = this.getClass().getMethod(operation + convertToPascalCase(sectionName)
-                                + convertToPascalCase(fieldName), HashMap.class).invoke(this, row);
-                        if (operation.equals("get") && !fieldName.contains("Node Path") && !fieldName.equals("Tag List")) {
+                        Object returnValue = this.getClass()
+                                .getMethod(
+                                        operation + convertToPascalCase(sectionName) + convertToPascalCase(fieldName),
+                                        HashMap.class)
+                                .invoke(this, row);
+                        if (operation.equals("get") && !fieldName.contains("Node Path")
+                                && !fieldName.equals("Tag List")) {
                             String expected = replaceKeyword(row.get(fieldName));
                             String actual = returnValue == null ? null : returnValue.toString();
-                            if (fieldName.equals("State") && (expected.equals("Absent") || expected.equals("Empty") || expected.equals("Present"))) {
+                            if (fieldName.equals("State") && (expected.equals("Absent") || expected.equals("Empty")
+                                    || expected.equals("Present"))) {
                                 String mappedActual;
-                                if (actual == null) mappedActual = "Absent";
-                                else if (actual.isEmpty()) mappedActual = "Empty";
-                                else mappedActual = "Present";
+                                if (actual == null)
+                                    mappedActual = "Absent";
+                                else if (actual.isEmpty())
+                                    mappedActual = "Empty";
+                                else
+                                    mappedActual = "Present";
                                 Assertions.assertEquals(expected, mappedActual);
                             } else {
                                 Assertions.assertEquals(expected, actual);
@@ -159,13 +204,13 @@ public abstract class TestObject {
         row.put(key, value);
         try {
             if (negativeTest) {
-                this.getClass().getMethod(
-                        operation + convertToPascalCase(sectionName) + "Negative",
-                        HashMap.class).invoke(this, row);
+                this.getClass().getMethod(operation + convertToPascalCase(sectionName) + "Negative", HashMap.class)
+                        .invoke(this, row);
             } else {
-                Object returnValue = this.getClass().getMethod(
-                        operation + convertToPascalCase(sectionName) + convertToPascalCase(key),
-                        HashMap.class).invoke(this, row);
+                Object returnValue = this.getClass()
+                        .getMethod(operation + convertToPascalCase(sectionName) + convertToPascalCase(key),
+                                HashMap.class)
+                        .invoke(this, row);
                 if (operation.equals("get")) {
                     String actual = returnValue == null ? null : returnValue.toString();
                     if (value.equals("true")) {
@@ -180,19 +225,6 @@ public abstract class TestObject {
         }
     }
 
-    private String convertToPascalCase(String s) {
-        StringBuilder result = new StringBuilder();
-        for (String word : s.split("[ \\-\\(\\)/]+")) {
-            if (!word.isEmpty()) {
-                result.append(Character.toUpperCase(word.charAt(0)));
-                if (word.length() > 1) {
-                    result.append(word.substring(1));
-                }
-            }
-        }
-        return result.toString();
-    }
-
     protected String replaceKeyword(String value) {
         if (value.contentEquals("empty")) {
             return "";
@@ -205,15 +237,21 @@ public abstract class TestObject {
         properties.put("component", component);
     }
 
-    protected void setPath(String path) {
-        properties.put("path", path);
+    protected void setObject(String object) {
+        properties.put("object", object);
     }
 
-    public void setInputOutputsState(String key, String sectionName) {
-        processInputOutputs(key, "", "set", sectionName, false);
+    private void putProperties(String partDesc, String partType, String stateType, String stateDesc) {
+        properties.put("partDesc", partDesc);
+        properties.put("partType", partType);
+        properties.put("stateType", stateType);
+        properties.put("stateDesc", stateDesc);
     }
 
-    public void setInputOutputsState(String key, String sectionName, boolean negativeTest) {
-        processInputOutputs(key, "", "set", sectionName, negativeTest);
+    private void removeProperties() {
+        properties.remove("partDesc");
+        properties.remove("partType");
+        properties.remove("stateType");
+        properties.remove("stateDesc");
     }
 }

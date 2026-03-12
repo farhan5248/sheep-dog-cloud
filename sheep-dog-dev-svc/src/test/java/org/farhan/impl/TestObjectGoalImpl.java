@@ -23,7 +23,7 @@ public class TestObjectGoalImpl extends TestObject {
 	private final int RETRY_COUNT = 60;
 
 	public TestObjectGoalImpl() {
-		properties.put("tags", "");
+		setProperty("tags", "");
 		restTemplate = new RestTemplate();
 		// TODO add a property for this
 		// restTemplate.getInterceptors().add(new CaptureInterceptor());
@@ -44,7 +44,7 @@ public class TestObjectGoalImpl extends TestObject {
 
 	private void clearObjects(String resource, String goal) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		parameters.put("tags", properties.get("tags").toString());
+		parameters.put("tags", getProperty("tags").toString());
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {
@@ -60,7 +60,7 @@ public class TestObjectGoalImpl extends TestObject {
 
 	private String convertObject(String resource, String goal, String fileName, String contents) throws Exception {
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		parameters.put("tags", properties.get("tags").toString());
+		parameters.put("tags", getProperty("tags").toString());
 		parameters.put("fileName", fileName);
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
@@ -80,7 +80,7 @@ public class TestObjectGoalImpl extends TestObject {
 	private List<TransformableFile> getObjectNames(String resource, String goal) throws Exception {
 
 		TreeMap<String, String> parameters = new TreeMap<String, String>();
-		parameters.put("tags", properties.get("tags").toString());
+		parameters.put("tags", getProperty("tags").toString());
 		int retryCount = 0;
 		while (retryCount < RETRY_COUNT) {
 			try {

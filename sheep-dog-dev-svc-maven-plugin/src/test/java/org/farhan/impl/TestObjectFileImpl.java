@@ -10,7 +10,7 @@ public abstract class TestObjectFileImpl extends TestObject {
 
 	protected String getObjectExists() {
 		try {
-			boolean exists = sr.contains("", properties.get("component").toString() + "/" + properties.get("object").toString());
+			boolean exists = sr.contains("", component + "/" + object);
 			return exists ? "true" : null;
 		} catch (Exception e) {
 			Assertions.fail(e);
@@ -20,7 +20,7 @@ public abstract class TestObjectFileImpl extends TestObject {
 
 	protected void setContent(String docString) {
 		try {
-			sr.put("", properties.get("component").toString() + "/" + properties.get("object").toString(), docString);
+			sr.put("", component + "/" + object, docString);
 		} catch (Exception e) {
 			Assertions.fail(e);
 		}
@@ -28,7 +28,7 @@ public abstract class TestObjectFileImpl extends TestObject {
 
 	protected String getContent() {
 		try {
-			String contents = sr.get("", properties.get("component").toString() + "/" + properties.get("object").toString());
+			String contents = sr.get("", component + "/" + object);
 			return contents.replaceAll("\r", "").trim();
 		} catch (Exception e) {
 			Assertions.fail(e);

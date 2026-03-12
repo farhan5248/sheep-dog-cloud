@@ -9,7 +9,7 @@ public abstract class TestObjectFileImpl extends TestObject {
 
 	protected String getObjectExists() {
 		try {
-			boolean exists = sr.contains("", properties.get("object").toString());
+			boolean exists = sr.contains("", object);
 			return exists ? "true" : null;
 		} catch (Exception e) {
 			Assertions.fail(e);
@@ -19,7 +19,7 @@ public abstract class TestObjectFileImpl extends TestObject {
 
 	protected void setContent(String docString) {
 		try {
-			sr.put("", properties.get("object").toString(), docString);
+			sr.put("", object, docString);
 		} catch (Exception e) {
 			Assertions.fail(e);
 		}
@@ -27,7 +27,7 @@ public abstract class TestObjectFileImpl extends TestObject {
 
 	protected String getContent() {
 		try {
-			String contents = sr.get("", properties.get("object").toString());
+			String contents = sr.get("", object);
 			return contents.replaceAll("\r", "").trim();
 		} catch (Exception e) {
 			Assertions.fail(e);

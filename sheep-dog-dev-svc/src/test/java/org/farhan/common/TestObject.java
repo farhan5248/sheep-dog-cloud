@@ -6,15 +6,21 @@ import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 
-import com.google.inject.Injector;
-import com.google.inject.Key;
-
 import io.cucumber.datatable.DataTable;
 
 public abstract class TestObject {
 
-    protected static Injector injector;
-    public HashMap<String, Object> properties = new HashMap<String, Object>();
+    public static HashMap<String, Object> properties = new HashMap<String, Object>();
+    protected String component;
+    protected String object;
+
+    protected static Object getProperty(String key) {
+        return properties.get(key);
+    }
+
+    protected static void setProperty(String key, Object value) {
+        properties.put(key, value);
+    }
 
     public void assertVertexStep(String partDesc, String partType, String stateType, String stateDesc) {
         putProperties(partDesc, partType, stateType, stateDesc);
@@ -118,19 +124,6 @@ public abstract class TestObject {
         processInputOutputs("Content", text, operation, (partDesc + " " + partType).trim(), negativeTest);
     }
 
-    protected TestObject getTestObjectClass(String contains, String startsWith) throws Exception {
-        for (Key<?> b : injector.getBindings().keySet()) {
-            if (b.getTypeLiteral().toString().contains(contains)
-                    && b.getTypeLiteral().toString().startsWith(startsWith)) {
-                TestObject object = (TestObject) injector.getInstance(b);
-                if (object.properties.size() > 1) {
-                    return object;
-                }
-            }
-        }
-        return null;
-    }
-
     protected String listToString(List<?> list) {
         if (list == null)
             return null;
@@ -232,11 +225,11 @@ public abstract class TestObject {
     }
 
     protected void setComponent(String component) {
-        properties.put("component", component);
+        this.component = component;
     }
 
     protected void setObject(String object) {
-        properties.put("object", object);
+        this.object = object;
     }
 
     private void putProperties(String partDesc, String partType, String stateType, String stateDesc) {

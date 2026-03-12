@@ -13,7 +13,7 @@ public class UmlToAsciidoctorGoalImpl extends TestObjectGoalImpl implements UmlT
 
 	@Override
 	public void setTags(HashMap<String, String> keyMap) {
-		properties.put("tags", keyMap.get("Tags"));
+		setProperty("tags", keyMap.get("Tags"));
 	}
 
 	@Override

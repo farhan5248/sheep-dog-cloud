@@ -18,14 +18,14 @@ public abstract class TestObjectGoalImpl extends TestObject {
 	private int timeout;
 
 	public TestObjectGoalImpl() {
-		properties.put("tags", "");
+		setProperty("tags", "");
 	}
 
 	protected void runGoal(String goal, String baseDir) {
 		try {
 			Class<?> mojoClass = Class.forName(goal);
 			MBTMojo mojo = (MBTMojo) mojoClass.getConstructor().newInstance();
-			mojo.tags = properties.get("tags").toString();
+			mojo.tags = getProperty("tags").toString();
 			mojo.baseDir = baseDir;
 			mojo.host = serverHost;
 			mojo.port = serverPort;

@@ -15,7 +15,7 @@ public class AsciidoctorToUmlGoalImpl extends TestObjectGoalImpl implements Asci
 
 	@Override
 	public void setTags(HashMap<String, String> keyMap) {
-		properties.put("tags", keyMap.get("Tags"));
+		setProperty("tags", keyMap.get("Tags"));
 	}
 
 	@Override

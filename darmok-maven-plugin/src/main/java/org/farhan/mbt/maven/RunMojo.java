@@ -27,7 +27,7 @@ public class RunMojo extends AbstractMojo {
 	@Parameter(property = "specsDir", defaultValue = "../../sheep-dog-qa/sheep-dog-specs")
 	public String specsDir;
 
-	@Parameter(property = "asciidocDir", defaultValue = "../../sheep-dog-qa/sheep-dog-specs/src/test/resources/asciidoc/specs/Ubiquitous Language")
+	@Parameter(property = "asciidocDir", defaultValue = "../../sheep-dog-qa/sheep-dog-specs/src/test/resources/asciidoc/specs")
 	public String asciidocDir;
 
 	@Parameter(property = "scenariosFile", defaultValue = "scenarios-list.txt")

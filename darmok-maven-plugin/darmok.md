@@ -19,7 +19,7 @@ mvn org.farhan:darmok-maven-plugin:run
 | Property | Default | Description |
 |---|---|---|
 | specsDir | ../../sheep-dog-qa/sheep-dog-specs | Path to specs project (relative to baseDir) |
-| asciidocDir | ../../sheep-dog-qa/sheep-dog-specs/src/test/resources/asciidoc/specs/Ubiquitous Language | Path to asciidoc files |
+| asciidocDir | ../../sheep-dog-qa/sheep-dog-specs/src/test/resources/asciidoc/specs | Path to asciidoc files |
 | scenariosFile | scenarios-list.txt | Scenarios list file in baseDir |
 | host | dev.sheepdogdev.io | Service host |
 | port | 80 | Service port |

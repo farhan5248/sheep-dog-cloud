@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import org.farhan.common.TestObject;
 import org.farhan.mbt.model.TransformableFile;
 import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-public class TestObjectGoalImpl extends TestObject {
+public class TestObjectGoalImpl extends TestObjectSheepDogImpl {
 	private static final Logger logger = LoggerFactory.getLogger(TestObjectGoalImpl.class);
 	private final RestTemplate restTemplate;
 	// TODO make this a property
